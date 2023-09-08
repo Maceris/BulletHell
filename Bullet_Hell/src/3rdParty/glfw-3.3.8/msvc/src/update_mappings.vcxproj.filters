@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Documents\Programming\shmup\Bullet_Hell\Bullet_Hell\src\3rdParty\glfw-3.3.8\msvc\CMakeFiles\b70a11b7b30b45f035af8baae7c7d9f1\update_mappings.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Documents\Programming\shmup\Bullet_Hell\Bullet_Hell\src\3rdParty\glfw-3.3.8\src\mappings.h.in">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="D:\Documents\Programming\shmup\Bullet_Hell\Bullet_Hell\src\3rdParty\glfw-3.3.8\CMake\GenerateMappings.cmake" />
+    <None Include="D:\Documents\Programming\shmup\Bullet_Hell\Bullet_Hell\src\3rdParty\glfw-3.3.8\msvc\src\CMakeFiles\update_mappings" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{6BA987FD-5370-3894-9194-B60B4AEC8C23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{6D87F718-DBCB-3593-B4FD-C794145D1DE3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
