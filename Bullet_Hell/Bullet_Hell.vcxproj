@@ -112,6 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glm/glm/ext;$(ProjectDir)/src/3rdParty/glm/glm/gtc;$(ProjectDir)/src/3rdParty/glm/glm/gtx;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,11 +138,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
+    <ClCompile Include="src\Graphics\Graph\RenderBuffers.cpp" />
+    <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\LightRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\Render.cpp" />
+    <ClCompile Include="src\Graphics\Render\SceneRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\ShadowRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\SkyBoxRender.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Scene.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
     <ClCompile Include="src\Main\Main.cpp" />
     <ClCompile Include="src\Utilities\OpenGLUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics\Graph\GBuffer.h" />
+    <ClInclude Include="src\Graphics\Graph\RenderBuffers.h" />
+    <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
+    <ClInclude Include="src\Graphics\Render\FilterRender.h" />
+    <ClInclude Include="src\Graphics\Render\GuiRender.h" />
+    <ClInclude Include="src\Graphics\Render\LightRender.h" />
+    <ClInclude Include="src\Graphics\Render\Render.h" />
+    <ClInclude Include="src\Graphics\Render\SceneRender.h" />
+    <ClInclude Include="src\Graphics\Render\ShadowRender.h" />
+    <ClInclude Include="src\Graphics\Render\SkyBoxRender.h" />
+    <ClInclude Include="src\Graphics\Scene\Scene.h" />
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Main\Main.h" />
     <ClInclude Include="src\Utilities\Globals.h" />

@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "../3rdParty/glad/include/glad/glad.h"
+#include "glad.h"
 #define GLFW_INCLUDE_NONE
-#include "../3rdParty/glfw-3.3.8/include/GLFW/glfw3.h"
+#include "glfw3.h"
 
 // Used to create, track, and interact with an OpenGL window
 class Window

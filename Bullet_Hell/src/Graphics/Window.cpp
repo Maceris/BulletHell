@@ -1,15 +1,15 @@
 #include "Window.h"
 
-#include "../Utilities/Globals.h"
-#include "../Utilities/OpenGLUtil.h"
+#include "Globals.h"
+#include "OpenGLUtil.h"
 
-#include "../3rdParty/glm/glm/glm.hpp"
-#include "../3rdParty/glm/glm/ext/matrix_clip_space.hpp"
-#include "../3rdParty/glm/glm/ext/vector_float2.hpp"
-#include "../3rdParty/glm/glm/ext/vector_float3.hpp"
-#include "../3rdParty/glm/glm/ext/matrix_float4x4.hpp"
-#include "../3rdParty/glm/glm/ext/matrix_transform.hpp"
-#include "../3rdParty/glm/glm/gtc/type_ptr.hpp"
+#include "glm.hpp"
+#include "matrix_clip_space.hpp"
+#include "vector_float2.hpp"
+#include "vector_float3.hpp"
+#include "matrix_float4x4.hpp"
+#include "matrix_transform.hpp"
+#include "type_ptr.hpp"
 
 #include <iostream>
 #include <vector>
