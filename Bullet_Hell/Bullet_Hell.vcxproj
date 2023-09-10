@@ -112,7 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glm/glm/ext;$(ProjectDir)/src/3rdParty/glm/glm/gtc;$(ProjectDir)/src/3rdParty/glm/glm/gtx;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glm/glm/ext;$(ProjectDir)/src/3rdParty/glm/glm/gtc;$(ProjectDir)/src/3rdParty/glm/glm/gtx;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +138,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
+    <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp" />
+    <ClCompile Include="src\Graphics\Graph\CascadeShadow.cpp" />
+    <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
+    <ClCompile Include="src\Graphics\Graph\Material.cpp" />
+    <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />
+    <ClCompile Include="src\Graphics\Graph\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
+    <ClCompile Include="src\Graphics\Graph\Model.cpp" />
+    <ClCompile Include="src\Graphics\Graph\QuadMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\RenderBuffers.cpp" />
+    <ClCompile Include="src\Graphics\Graph\ShaderProgram.cpp" />
+    <ClCompile Include="src\Graphics\Graph\ShadowBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Graph\Texture.cpp" />
+    <ClCompile Include="src\Graphics\Graph\TextureCache.cpp" />
+    <ClCompile Include="src\Graphics\Graph\UniformsMap.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
@@ -147,14 +161,41 @@
     <ClCompile Include="src\Graphics\Render\SceneRender.cpp" />
     <ClCompile Include="src\Graphics\Render\ShadowRender.cpp" />
     <ClCompile Include="src\Graphics\Render\SkyBoxRender.cpp" />
+    <ClCompile Include="src\Graphics\Scene\AnimationData.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Camera.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Entity.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Fog.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Lights\AmbientLight.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Lights\DirectionalLight.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Lights\PointLight.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Lights\SceneLights.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Lights\SpotLight.cpp" />
+    <ClCompile Include="src\Graphics\Scene\ModelLoader.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Node.cpp" />
+    <ClCompile Include="src\Graphics\Scene\Projection.cpp" />
     <ClCompile Include="src\Graphics\Scene\Scene.cpp" />
+    <ClCompile Include="src\Graphics\Scene\SkyBox.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
     <ClCompile Include="src\Main\Main.cpp" />
     <ClCompile Include="src\Utilities\OpenGLUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics\Graph\ArrayOfTextures.h" />
+    <ClInclude Include="src\Graphics\Graph\CascadeShadow.h" />
     <ClInclude Include="src\Graphics\Graph\GBuffer.h" />
+    <ClInclude Include="src\Graphics\Graph\GuiMesh.h" />
+    <ClInclude Include="src\Graphics\Graph\Material.h" />
+    <ClInclude Include="src\Graphics\Graph\MaterialCache.h" />
+    <ClInclude Include="src\Graphics\Graph\Mesh.h" />
+    <ClInclude Include="src\Graphics\Graph\MeshData.h" />
+    <ClInclude Include="src\Graphics\Graph\Model.h" />
+    <ClInclude Include="src\Graphics\Graph\QuadMesh.h" />
     <ClInclude Include="src\Graphics\Graph\RenderBuffers.h" />
+    <ClInclude Include="src\Graphics\Graph\ShaderProgram.h" />
+    <ClInclude Include="src\Graphics\Graph\ShadowBuffer.h" />
+    <ClInclude Include="src\Graphics\Graph\Texture.h" />
+    <ClInclude Include="src\Graphics\Graph\TextureCache.h" />
+    <ClInclude Include="src\Graphics\Graph\UniformsMap.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
     <ClInclude Include="src\Graphics\Render\FilterRender.h" />
     <ClInclude Include="src\Graphics\Render\GuiRender.h" />
@@ -163,7 +204,20 @@
     <ClInclude Include="src\Graphics\Render\SceneRender.h" />
     <ClInclude Include="src\Graphics\Render\ShadowRender.h" />
     <ClInclude Include="src\Graphics\Render\SkyBoxRender.h" />
+    <ClInclude Include="src\Graphics\Scene\AnimationData.h" />
+    <ClInclude Include="src\Graphics\Scene\Camera.h" />
+    <ClInclude Include="src\Graphics\Scene\Entity.h" />
+    <ClInclude Include="src\Graphics\Scene\Fog.h" />
+    <ClInclude Include="src\Graphics\Scene\Lights\AmbientLight.h" />
+    <ClInclude Include="src\Graphics\Scene\Lights\DirectionalLight.h" />
+    <ClInclude Include="src\Graphics\Scene\Lights\PointLight.h" />
+    <ClInclude Include="src\Graphics\Scene\Lights\SceneLights.h" />
+    <ClInclude Include="src\Graphics\Scene\Lights\SpotLight.h" />
+    <ClInclude Include="src\Graphics\Scene\ModelLoader.h" />
+    <ClInclude Include="src\Graphics\Scene\Node.h" />
+    <ClInclude Include="src\Graphics\Scene\Projection.h" />
     <ClInclude Include="src\Graphics\Scene\Scene.h" />
+    <ClInclude Include="src\Graphics\Scene\SkyBox.h" />
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Main\Main.h" />
     <ClInclude Include="src\Utilities\Globals.h" />
