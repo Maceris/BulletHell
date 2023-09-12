@@ -48,13 +48,25 @@ static const char* fragment_shader_text =
 "}\n";
 
 
-// The callback to register for handling errors.
+/// <summary>
+/// The callback to register for handling errors.
+/// </summary>
+/// <param name="error">The error code.</param>
+/// <param name="description">The text description of the error.</param>
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error: %s\n", description);
 }
 
-// The callback to register for handling key presses.
+/// <summary>
+/// The callback to register for handling key presses.
+/// </summary>
+/// <param name="window">The window that received the event.</param>
+/// <param name="key">The keyboard key that was pressed or released.</param>
+/// <param name="scancode">The system-specific scancode of the key.</param>
+/// <param name="action">GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT.</param>
+/// <param name="mods">Bit field describing which modifier keys were
+/// held down.</param>
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)

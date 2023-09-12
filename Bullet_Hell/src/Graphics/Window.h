@@ -6,66 +6,101 @@
 #define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 
-// Used to create, track, and interact with an OpenGL window
+/// <summary>
+/// Used to create, track, and interact with an OpenGL window.
+/// </summary>
 class Window
 {
 public:
-	// Used to create and run a window.
+	/// <summary>
+	/// Used to create and run a window.
+	/// </summary>
 	void initialize();
 
-	// Render one frame
+	/// <summary>
+	/// Render one frame.
+	/// </summary>
 	void render();
 
-	// Whether we should close the window
+	/// <summary>
+	/// Whether we should close the window, like if the user pressed the 
+	/// close button on the window.
+	/// </summary>
 	bool should_close();
 
-	// Terminate the window and clean up
+	/// <summary>
+	/// Terminate the window and clean up.
+	/// </summary>
 	void terminate();
 	
-	// Set up the object used to handle the OpenGL window
+	/// <summary>
+	/// Set up the object used to handle the OpenGL window.
+	/// </summary>
 	Window() = default;
 
-	// Windows cannot be copied, there is only ever one
+	/// <summary>
+	/// Windows cannot be copied, we only ever use one.
+	/// </summary>
 	Window(const Window&) = delete;
 
-	// Windows cannot be assigned, there is only ever one
+	/// <summary>
+	/// Windows cannot be assigned, we only ever use one.
+	/// </summary>
 	Window& operator=(const Window&) = delete;
 
 	~Window() = default;
 
-	// Used to configure the window before setting it up
+	/// <summary>
+	/// Used to configure the window before setting it up.
+	/// </summary>
 	struct WindowOptions
 	{
-		// Whether anti-aliasing is enabled
+		/// <summary>
+		/// Whether anti-aliasing is enabled.
+		/// </summary>
 		bool anti_aliasing = true;
 
-		// Whether we want to use a compatible profile instead of the core one
+		/// <summary>
+		/// Whether we want to use a compatible profile instead of the core
+		/// one.
+		/// </summary>
 		bool compatible_profile = true;
 
-		// The maximum number of frames per second we are trying to render
+		/// <summary>
+		/// The maximum number of frames per second we are trying to render.
+		/// </summary>
 		unsigned int target_fps = 144;
 		
-		/*
-		The desired height in pixels. If width and height are both set to 0, 
-		we will make the window full screen.
-		*/
+		/// <summary>
+		/// The desired height in pixels. If width and height are both set to
+		/// 0, we will make the window full screen.
+		/// </summary>
 		unsigned int height = 480;
 
-		/*
-		The desired width in pixels. If width and height are both set to 0,
-		we will make the window full screen.
-		*/
+		/// <summary>
+		/// The desired width in pixels. If width and height are both set to 0,
+		/// we will make the window full screen.
+		/// </summary>
 		unsigned int width = 640;
 	} options;
 
 private:
-	// The window handle
+	/// <summary>
+	/// The window handle.
+	/// </summary>
 	GLFWwindow* window;
+
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
 	GLint mvp_location, vpos_location, vcol_location;
 
-	// The width of the window in pixels
+	// 
+	/// <summary>
+	/// The width of the window in pixels.
+	/// </summary>
 	unsigned int width;
-	// The height of the window in pixels
+
+	/// <summary>
+	/// The height of the window in pixels.
+	/// </summary>
 	unsigned int height;
 };
