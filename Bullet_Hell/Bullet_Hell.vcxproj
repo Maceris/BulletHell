@@ -138,8 +138,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
-    <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp" />
-    <ClCompile Include="src\Graphics\Graph\CascadeShadow.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
     <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />

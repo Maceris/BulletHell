@@ -96,12 +96,6 @@
     <ClCompile Include="src\Graphics\Scene\SkyBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Graph\CascadeShadow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

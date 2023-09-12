@@ -2,6 +2,6 @@
 
 #include "Globals.h"
 
-class CascadeShadow
+struct CascadeShadow
 {
 };
