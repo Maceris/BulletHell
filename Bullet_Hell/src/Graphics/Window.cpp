@@ -4,12 +4,12 @@
 #include "OpenGLUtil.h"
 
 #include "glm.hpp"
-#include "matrix_clip_space.hpp"
-#include "vector_float2.hpp"
-#include "vector_float3.hpp"
-#include "matrix_float4x4.hpp"
-#include "matrix_transform.hpp"
-#include "type_ptr.hpp"
+#include "ext/matrix_clip_space.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "mat4x4.hpp"
+#include "ext/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 
 #include <iostream>
 #include <vector>

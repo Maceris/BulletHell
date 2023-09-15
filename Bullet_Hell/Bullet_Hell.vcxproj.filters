@@ -132,6 +132,9 @@
     <ClCompile Include="src\Graphics\Graph\UniformsMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Main\Main.h">
@@ -221,9 +224,6 @@
     <ClInclude Include="src\Graphics\Graph\ArrayOfTextures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Graph\CascadeShadow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Graph\GuiMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -258,6 +258,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Graph\UniformsMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Graph\CascadeShadowSlice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Graph\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Graph\MeshDrawData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
