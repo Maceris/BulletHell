@@ -2,10 +2,7 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#define GLFW_INCLUDE_NONE
 #include "glm.hpp"
-#include "mat4x4.hpp"
 
 #include "Scene.h"
 

@@ -176,6 +176,7 @@
     <ClCompile Include="src\Graphics\Scene\SkyBox.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
     <ClCompile Include="src\Main\Main.cpp" />
+    <ClCompile Include="src\Utilities\MathUtil.cpp" />
     <ClCompile Include="src\Utilities\OpenGLUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +223,7 @@
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Main\Main.h" />
     <ClInclude Include="src\Utilities\Globals.h" />
+    <ClInclude Include="src\Utilities\MathUtil.h" />
     <ClInclude Include="src\Utilities\OpenGLUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

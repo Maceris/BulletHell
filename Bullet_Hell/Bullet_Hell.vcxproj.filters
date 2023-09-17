@@ -135,6 +135,9 @@
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utilities\MathUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Main\Main.h">
@@ -267,6 +270,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Graph\MeshDrawData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilities\MathUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
