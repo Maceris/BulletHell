@@ -3,7 +3,6 @@
 #include "Globals.h"
 
 #include "glad.h"
-#define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 
 #include "AnimationRender.h"
@@ -13,6 +12,7 @@
 #include "SceneRender.h"
 #include "ShadowRender.h"
 #include "SkyBoxRender.h"
+#include "Window.h"
 
 #include "GBuffer.h"
 
@@ -21,7 +21,7 @@ class Render
 {
 public:
 	// Set up a rendering pipeline for the given window
-	Render(const GLFWwindow* window);
+	Render(const Window& window);
 private:
 	AnimationRender animation_render;
 	GBuffer gBuffer;

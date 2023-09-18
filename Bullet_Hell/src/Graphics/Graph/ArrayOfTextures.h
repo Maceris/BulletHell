@@ -3,7 +3,6 @@
 #include "Globals.h"
 
 #include "glad.h"
-#define GLFW_INCLUDE_NONE
 
 /// <summary>
 /// An array of textures, all of the same size and pixel format.

@@ -51,6 +51,16 @@ public:
 	~Window() = default;
 
 	/// <summary>
+	/// The width of the window in pixels.
+	/// </summary>
+	unsigned int width;
+
+	/// <summary>
+	/// The height of the window in pixels.
+	/// </summary>
+	unsigned int height;
+
+	/// <summary>
 	/// Used to configure the window before setting it up.
 	/// </summary>
 	struct WindowOptions
@@ -92,15 +102,4 @@ private:
 
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
 	GLint mvp_location, vpos_location, vcol_location;
-
-	// 
-	/// <summary>
-	/// The width of the window in pixels.
-	/// </summary>
-	unsigned int width;
-
-	/// <summary>
-	/// The height of the window in pixels.
-	/// </summary>
-	unsigned int height;
 };

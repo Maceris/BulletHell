@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />
+    <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
     <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />
