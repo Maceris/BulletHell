@@ -3,6 +3,15 @@
 #include "Globals.h"
 #include "OpenGLUtil.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
+#define GL_SILENCE_DEPRECATION
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <GLES2/gl2.h>
+#endif
+
 #include "glm.hpp"
 #include "ext/matrix_clip_space.hpp"
 #include "vec2.hpp"
@@ -92,8 +101,26 @@ void Window::initialize()
         glfwWindowHint(GLFW_SAMPLES, 4);
     }
 
+    // Decide GL+GLSL versions
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+    // GL ES 2.0 + GLSL 100
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+    // GL 3.2 + GLSL 150
+    const char* glsl_version = "#version 150";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+    // GL 3.0 + GLSL 130
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+#endif
 
     if (options.compatible_profile)
     {
@@ -119,16 +146,16 @@ void Window::initialize()
         height = video_mode->height;
     }
 
-    window = glfwCreateWindow(width, height, "Title TBD", NULL, NULL);
-    if (!window)
+    handle = glfwCreateWindow(width, height, "Title TBD", NULL, NULL);
+    if (!handle)
     {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(handle, key_callback);
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(handle);
     gladLoadGL();
     glfwSwapInterval(1);
 
@@ -178,7 +205,7 @@ void Window::initialize()
 
 bool Window::should_close()
 {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(handle);
 }
 
 void Window::render()
@@ -187,7 +214,7 @@ void Window::render()
     int width, height;
     glm::fmat4x4 m, screen_projection, transformed;
 
-    glfwGetFramebufferSize(window, &width, &height);
+    glfwGetFramebufferSize(handle, &width, &height);
     ratio = width / (float)height;
 
     glViewport(0, 0, width, height);
@@ -202,12 +229,12 @@ void Window::render()
     glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(transformed));
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(handle);
     glfwPollEvents();
 }
 
 void Window::terminate()
 {
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(handle);
     glfwTerminate();
 }

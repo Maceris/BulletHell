@@ -94,12 +94,12 @@ public:
 		unsigned int width = 640;
 	} options;
 
-private:
 	/// <summary>
 	/// The window handle.
 	/// </summary>
-	GLFWwindow* window;
+	GLFWwindow* handle;
 
+private:
 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
 	GLint mvp_location, vpos_location, vcol_location;
 };
