@@ -7,7 +7,6 @@
 /// </summary>
 using texture_id = unsigned int;
 
-
 class Texture
 {
 };

@@ -2,6 +2,8 @@
 
 #include "Globals.h"
 
+#include <numbers>
+
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 
@@ -121,5 +123,5 @@ private:
 	/// <summary>
 	/// A constant value used to clamp rotation, precomputed for convenience.
 	/// </summary>
-	static inline constexpr float TWO_PI = 2 * 3.14159265358979323846;
+	static inline constexpr float TWO_PI = 2 * std::numbers::pi;
 };

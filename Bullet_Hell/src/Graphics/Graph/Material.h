@@ -6,6 +6,11 @@
 
 #include "Texture.h"
 
+/// <summary>
+/// Used to identify materials in the cache.
+/// </summary>
+using material_id = int;
+
 struct Material
 {
 	/// <summary>
@@ -32,13 +37,6 @@ struct Material
 	/// The reflectance value of the material.
 	/// </summary>
 	float reflectance;
-
-	/// <summary>
-	/// A mesh uses only a single material, so if an imported model uses
-	/// multiple materials, the import splits up the mesh. This value is used
-	/// as an index into the scene's material list.
-	/// </summary>
-	int material_index;
 
 	/// <summary>
 	/// The ID of the texture for this material.
