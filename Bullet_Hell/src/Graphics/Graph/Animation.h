@@ -29,7 +29,7 @@ struct AnimatedFrame
 	/// <param name="bones_matrices">The bone transformation matrices
 	/// </param>
 	AnimatedFrame(std::vector<glm::mat4> bones_matrices)
-		: bones_matrices(bones_matrices)
+		: bones_matrices(std::move(bones_matrices))
 		, offset(0)
 	{}
 
@@ -78,9 +78,9 @@ struct Animation
 	/// <param name="frames">The frames that make up the animation.</param>
 	Animation(std::string name, double duration,
 		std::vector<AnimatedFrame> frames)
-		: name(name)
+		: name(std::move(name))
 		, duration(duration)
-		, frames(frames)
+		, frames(std::move(frames))
 	{}
 
 	/// <summary>
