@@ -1,5 +1,7 @@
 #include "Main.h"
 
+#include "Globals.h"
+
 #include <windows.h>
 #include <iostream>
 
@@ -9,7 +11,8 @@
 /// The entry point to the program, and main loop.
 /// </summary>
 /// <returns>The exit code for the program.</returns>
-int main() {
+int main()
+{
     Window window = Window();
     window.initialize();
     

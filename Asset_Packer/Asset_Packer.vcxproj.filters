@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\detail\EndOfCentralDirectoryBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\detail\ZipCentralDirectoryFileHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\detail\ZipGenericExtraField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\detail\ZipLocalFileHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\blocksort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\bzerror.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\bzlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\compress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\crctable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\decompress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\huffman.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\bzip2\randtable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzmaUtil\Lzma86Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzmaUtil\Lzma86Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\7zBuf2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\7zCrc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\7zCrcOpt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\7zStream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Aes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Alloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Bra.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Bra86.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\BraIA64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\BwtSort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\CpuArch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Delta.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\HuffEnc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzFind.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzFindMt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Lzma2Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Lzma2Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzmaDec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\LzmaEnc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\MtCoder.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd7.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd7Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd7Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd8.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd8Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Ppmd8Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Sha256.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Sort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Threads.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\Xz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\XzCrc64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\XzDec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\XzEnc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\unix\XzIn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zAlloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zBuf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zBuf2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zCrc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zCrcOpt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zDec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zIn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\7zStream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Alloc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Bcj2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Bra.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Bra86.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\BraIA64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\CpuArch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Delta.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\LzFind.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\LzFindMt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Lzma2Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Lzma2Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Lzma86Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Lzma86Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\LzmaDec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\LzmaEnc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\LzmaLib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\MtCoder.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Ppmd7.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Ppmd7Dec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Ppmd7Enc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Sha256.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Threads.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\Xz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\XzCrc64.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\XzDec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\XzEnc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\lzma\XzIn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\adler32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\compress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\crc32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\deflate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\infback.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\inffast.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\inflate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\inftrees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\trees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\uncompr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\extlibs\zlib\zutil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\ZipArchive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\ZipArchiveEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdParty\ziplib\Source\ZipLib\ZipFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

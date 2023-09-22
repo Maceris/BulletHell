@@ -367,4 +367,7 @@ dist/
 
 # Intermediate build directory
 Bullet_Hell/build
+Asset_Packer/build
 
+Assets/
+Asset_Temp/

@@ -76,6 +76,10 @@
     <SourcePath>$(VC_SourcePath);</SourcePath>
     <ExcludePath>$(ExcludePath);</ExcludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\dist\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -128,6 +132,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +158,6 @@
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
     <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />
-    <ClCompile Include="src\Graphics\Graph\Mesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
     <ClCompile Include="src\Graphics\Graph\Model.cpp" />
     <ClCompile Include="src\Graphics\Graph\QuadMesh.cpp" />
@@ -207,7 +213,6 @@
     <ClInclude Include="src\Graphics\Graph\GuiMesh.h" />
     <ClInclude Include="src\Graphics\Graph\Material.h" />
     <ClInclude Include="src\Graphics\Graph\MaterialCache.h" />
-    <ClInclude Include="src\Graphics\Graph\Mesh.h" />
     <ClInclude Include="src\Graphics\Graph\MeshData.h" />
     <ClInclude Include="src\Graphics\Graph\MeshDrawData.h" />
     <ClInclude Include="src\Graphics\Graph\Model.h" />
