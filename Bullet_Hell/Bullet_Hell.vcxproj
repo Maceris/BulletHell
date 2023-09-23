@@ -159,6 +159,7 @@
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
     <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
+    <ClCompile Include="src\Graphics\Graph\MeshDrawData.cpp" />
     <ClCompile Include="src\Graphics\Graph\Model.cpp" />
     <ClCompile Include="src\Graphics\Graph\QuadMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\RenderBuffers.cpp" />
