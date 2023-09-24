@@ -11,7 +11,7 @@
 #endif
 
 const char fragment_shader_source[] = R"glsl(
-#version 330
+#version 460
 
 in vec2 texture_coordinates;
 in vec4 color_in;
@@ -27,7 +27,7 @@ void main()
 )glsl";
 
 const char vertex_shader_source[] = R"glsl(
-#version 330
+#version 460
 
 layout (location=0) in vec2 position_in;
 layout (location=1) in vec2 texture_coordinates_in;

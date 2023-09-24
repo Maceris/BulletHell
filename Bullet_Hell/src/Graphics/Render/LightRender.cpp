@@ -2,7 +2,7 @@
 #include "LightRender.h"
 
 const char vertex_shader_source[] = R"glsl(
-#version 330
+#version 460
 
 layout (location=0) in vec3 position_in;
 layout (location=1) in vec2 coordinate_in;
@@ -17,7 +17,7 @@ void main()
 )glsl";
 
 const char fragment_shader_source[] = R"glsl(
-#version 330
+#version 460
 
 const int MAX_POINT_LIGHTS = 50;
 const int MAX_SPOT_LIGHTS = 50;

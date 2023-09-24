@@ -2,7 +2,7 @@
 #include "SceneRender.h"
 
 const char fragment_shader_source[] = R"glsl(
-#version 400
+#version 460
 
 const int MAX_MATERIALS = 30;
 const int MAX_TEXTURES = 16;
