@@ -13,6 +13,8 @@
 #include <memory>
 #include <vector>
 
+using EntityList = std::vector<std::shared_ptr<Entity>>;
+
 struct Model
 {
 	/// <summary>
@@ -28,7 +30,7 @@ struct Model
 	/// <summary>
 	/// A list of entities that use this model.
 	/// </summary>
-	std::vector<std::shared_ptr<Entity>> entity_list;
+	EntityList entity_list;
 
 	/// <summary>
 	/// A list of mesh data for this model.

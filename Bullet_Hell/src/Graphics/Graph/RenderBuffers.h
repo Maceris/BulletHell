@@ -10,6 +10,8 @@
 #include "MeshDrawData.h"
 #include "Scene.h"
 
+using ModelList = std::vector<std::shared_ptr<Model>>;
+
 class RenderBuffers
 {
 public:
@@ -26,7 +28,8 @@ public:
 
 	/// <summary>
 	/// Clean up all the buffers and data. Should be called every time we need
-	/// to reload the scene data into the buffers.
+	/// to reload the scene data into the buffers. Will not do anything if
+	/// we know that the buffers are empty.
 	/// </summary>
 	void cleanup();
 
@@ -48,37 +51,79 @@ private:
 	/// <summary>
 	/// The Vertex Array Object ID for animated models.
 	/// </summary>
-	GLuint animated_VAO;
+	GLuint animated_vao;
+
+	/// <summary>
+	/// The Vertex Array Object ID for static models.
+	/// </summary>
+	GLuint static_vao;
+
+	/// <summary>
+	/// A list of all the VBOs that have been set up.
+	/// </summary>
+	std::vector<GLuint> vbo_list;
 	
 	/// <summary>
 	/// The Vertex Buffer Object ID for binding poses of animated models.
 	/// </summary>
-	GLuint binding_poses_VBO;
+	GLuint binding_poses_vbo;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for indices and weights of the bones of
 	/// animated models.
 	/// </summary>
-	GLuint bones_indices_weights_VBO;
+	GLuint bones_indices_weights_vbo;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for bones matrices of animated models.
 	/// </summary>
-	GLuint bones_matrices_VBO;
+	GLuint bones_matrices_vbo;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for the transformed animation vertices
 	/// after processing of animated models.
 	/// </summary>
-	GLuint dest_animation_VBO;
+	GLuint dest_animation_vbo;
 
 	/// <summary>
-	/// The Vertex Array Object ID for static models.
+	/// If we have populated any buffer since the last time we cleared them
+	/// out.
 	/// </summary>
-	GLuint static_VAO;
+	bool buffers_populated;
+	
+	/// <summary>
+	/// Used to define the vertex attribute arrays.
+	/// </summary>
+	void define_vertex_attributes();
 
 	/// <summary>
-	/// A list of all the VBOs that have been set up.
+	/// Store binding pose information for all of the meshes that are
+	/// associated with the animated models.
 	/// </summary>
-	std::vector<GLuint> VBO_list;
+	/// <param name="models">The models to load binding pose information for.
+	/// </param>
+	void load_binding_poses(const ModelList& models);
+
+	/// <summary>
+	/// Store all of the bone index and weight information for the animated 
+	/// models.
+	/// </summary>
+	/// <param name="models">The list of models to load bone index and weight
+	/// information for.</param>
+	void load_bones_indices_weights(const ModelList& models);
+
+	/// <summary>
+	/// Store the bone matrices for all animations of the animated models.
+	/// </summary>
+	/// <param name="models">The list of models to store bone matrices
+	/// information for.</param>
+	void load_bones_matrices_buffer(const ModelList& models);
+
+	/// <summary>
+	/// Populate the meshes buffer from mesh data.
+	/// </summary>
+	/// <param name="meshes_buffer">The buffer to populate.</param>
+	/// <param name="mesh_data">The data to fill the buffer with.</param>
+	void populate_mesh_buffer(std::vector<float>& meshes_buffer, 
+		const MeshData& mesh_data);
 };
