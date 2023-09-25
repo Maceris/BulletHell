@@ -2,10 +2,10 @@
 
 #include "Globals.h"
 
+#include "Window.h"
+
 #include <windows.h>
 #include <iostream>
-
-#include "Window.h"
 
 /// <summary>
 /// The entry point to the program, and main loop.

@@ -165,6 +165,12 @@
     <ClCompile Include="src\Graphics\Graph\MeshDrawData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ResourceCache\ResourceCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utilities\StringUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Main\Main.h">
@@ -333,6 +339,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Graph\MaterialCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceCache\ResourceCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilities\StringUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
