@@ -79,6 +79,11 @@ public:
 	/// systems in reverse order from which they were created.
 	/// </summary>
 	void on_close();
+
+	/// <summary>
+	/// Called when we need to shut down.
+	/// </summary>
+	void request_close();
 };
 
 /// <summary>

@@ -38,6 +38,14 @@ void GameLogic::run_game()
 	
 }
 
+void GameLogic::request_close()
+{
+	if (current_state == running || current_state == starting_up)
+	{
+		current_state = quit_requested;
+	}
+}
+
 void GameLogic::on_close()
 {
 	current_state = quitting;

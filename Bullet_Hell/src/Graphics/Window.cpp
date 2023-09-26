@@ -35,26 +35,31 @@ static const struct
     {   0.f,  0.6f, 0.f, 0.f, 1.f }
 };
 
-static const char* vertex_shader_text =
-"#version 330\n"
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
-"}\n";
+static const char* vertex_shader_text = R"glsl(
+#version 330
 
-static const char* fragment_shader_text =
-"#version 330\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
-"}\n";
+uniform mat4 MVP;
+attribute vec3 vCol;
+attribute vec2 vPos;
+varying vec3 color;
 
+void main()
+{
+    gl_Position = MVP * vec4(vPos, 0.0, 1.0);
+    color = vCol;
+}
+)glsl";
+
+static const char* fragment_shader_text = R"glsl(
+#version 330
+
+varying vec3 color;
+
+void main()
+{
+    gl_FragColor = vec4(color, 1.0);
+}
+)glsl";
 
 /// <summary>
 /// The callback to register for handling errors.
@@ -80,6 +85,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+        g_game_logic->request_close();
     }
 }
 
