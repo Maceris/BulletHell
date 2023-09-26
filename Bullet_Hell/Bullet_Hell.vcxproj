@@ -116,7 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -153,6 +153,7 @@
     <ClCompile Include="src\3rdParty\imgui-1.89.9\imgui_tables.cpp" />
     <ClCompile Include="src\3rdParty\imgui-1.89.9\imgui_widgets.cpp" />
     <ClCompile Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="src\3rdParty\imgui-1.89.9\imstb_textedit.h" />
     <ClInclude Include="src\3rdParty\imgui-1.89.9\imstb_truetype.h" />
     <ClInclude Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Graphics\Graph\Animation.h" />
     <ClInclude Include="src\Graphics\Graph\ArrayOfTextures.h" />
     <ClInclude Include="src\Graphics\Graph\CascadeShadowSlice.h" />
@@ -255,6 +257,7 @@
     <ClInclude Include="src\Main\GameLogic.h" />
     <ClInclude Include="src\Main\GameOptions.h" />
     <ClInclude Include="src\Main\Main.h" />
+    <ClInclude Include="src\Memory\CriticalSection.h" />
     <ClInclude Include="src\ResourceCache\ResourceCache.h" />
     <ClInclude Include="src\Utilities\Globals.h" />
     <ClInclude Include="src\Utilities\MathUtil.h" />
