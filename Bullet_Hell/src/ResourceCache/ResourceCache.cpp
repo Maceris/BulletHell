@@ -248,7 +248,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 	if (!loader)
 	{
-		//TODO log this, we should have at least the default loader
+		//TODO(ches) log this, we should have at least the default loader
 		return handle;
 	}
 
@@ -256,7 +256,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 	if (raw_size < 0)
 	{
-		//TODO log this
+		//TODO(ches) log this
 		return std::shared_ptr<ResourceHandle>();
 	}
 
@@ -314,7 +314,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 		resources[resource->name] = handle;
 	}
 
-	//TODO log this, we are out of memory or don't have a default loader
+	//TODO(ches) log this, we are out of memory or don't have a default loader
 	return handle;
 }
 
@@ -387,7 +387,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::get_handle(Resource* resource)
 	if (!handle)
 	{
 		handle = load(resource);
-		//TODO double check we actually loaded anything
+		//TODO(ches) double check we actually loaded anything
 	}
 	else
 	{

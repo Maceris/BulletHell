@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "Window.h"
+#include "GameLogic.h"
 
 #include <windows.h>
 #include <iostream>
@@ -13,15 +13,17 @@
 /// <returns>The exit code for the program.</returns>
 int main()
 {
-    Window window = Window();
-    window.initialize();
-    
-    while (!window.should_close())
+
+    GameLogic game_logic;
+    if (!game_logic.initialize())
     {
-        window.render();
+        //TODO(ches) might want to log this
+        exit(EXIT_FAILURE);
     }
-    
-    window.terminate();
+    game_logic.run_game();
+
+    //TODO(ches) do we need to call this here or in a callback?
+    game_logic.on_close();
 
     exit(EXIT_SUCCESS);
     return 0;

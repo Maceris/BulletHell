@@ -49,7 +49,7 @@ void main()
 GuiRender::GuiRender(const Window& window)
 	: scale(glm::vec2(window.width, window.height))
 {
-	//TODO setup shaders
+	//TODO(ches) setup shaders
 	create_uniforms();
 	create_ui_resources(window);
 }
@@ -69,7 +69,7 @@ void GuiRender::create_ui_resources(const Window& window)
 
 void GuiRender::create_uniforms()
 {
-	//TODO setup uniforms
+	//TODO(ches) setup uniforms
 }
 
 void GuiRender::render(const Scene& scene)
@@ -84,12 +84,12 @@ void GuiRender::render(const Scene& scene)
 
 void GuiRender::resize(const unsigned int width, const unsigned int height)
 {
-	//TODO resize
+	//TODO(ches) resize
 }
 
 void GuiRender::setup_imgui_keys()
 {
-	//TODO setup keys
+	//TODO(ches) setup keys
 }
 
 GuiRender::~GuiRender()

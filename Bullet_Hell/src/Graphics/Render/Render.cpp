@@ -87,42 +87,42 @@ void Render::light_render_start(const unsigned int width,
 
 void Render::recalculate_materials(const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::render(const Window& window, const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 	update_model_matrices(scene);
 }
 
 void Render::resize(const unsigned int width, const unsigned int height)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::setup_data(const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::setup_animated_command_buffer(const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::setup_static_command_buffer(const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::update_model_buffer(const std::vector<std::shared_ptr<Model>> models,
 	GLuint buffer_id)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }
 
 void Render::update_model_matrices(const Scene& scene)
 {
-	//TODO complete this
+	//TODO(ches) complete this
 }

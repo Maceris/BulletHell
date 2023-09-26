@@ -1,6 +1,8 @@
 #include "Window.h"
 
 #include "Globals.h"
+
+#include "GameLogic.h"
 #include "OpenGLUtil.h"
 
 #include "imgui.h"
@@ -14,9 +16,6 @@
 
 #include "glm.hpp"
 #include "ext/matrix_clip_space.hpp"
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "mat4x4.hpp"
 #include "ext/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
@@ -136,7 +135,8 @@ void Window::initialize()
         height = video_mode->height;
     }
 
-    handle = glfwCreateWindow(width, height, "Title TBD", NULL, NULL);
+    handle = glfwCreateWindow(width, height, 
+        g_game_logic->options.window_title.c_str(), NULL, NULL);
     if (!handle)
     {
         glfwTerminate();

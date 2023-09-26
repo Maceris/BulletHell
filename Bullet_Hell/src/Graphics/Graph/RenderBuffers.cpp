@@ -261,7 +261,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 
 	std::vector<float> data_buffer(buffer_size);
 
-	// TODO don't have a buck wild cognitive complexity
+	//TODO(ches) don't have a buck wild cognitive complexity
 	for (auto model : models)
 	{
 		for (auto animation : model.get()->animation_list)
