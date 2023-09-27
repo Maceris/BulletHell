@@ -2,7 +2,10 @@
 
 #include "Globals.h"
 
+#include "Logger.h"
+
 #include "glad.h"
+
 
 /// <summary>
 /// An array of textures, all of the same size and pixel format.
@@ -55,6 +58,18 @@ struct ArrayOfTextures
 	/// Texture arrays cannot be copied.
 	/// </summary>
 	ArrayOfTextures& operator=(const ArrayOfTextures&) = delete;
+
+	/// <summary>
+	/// Index directly into the textures.
+	/// </summary>
+	/// <param name="index">The texture of the index.</param>
+	/// <returns>The texture at the supplied index.</returns>
+	GLuint operator[](const unsigned int index)
+	{
+		LOG_ASSERT(index >= 0 && index < texture_count);
+
+		return textures[index];
+	}
 
 	/// <summary>
 	/// Delete the textures and clean up memory.
