@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "glad.h"
-#define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 
 /// <summary>

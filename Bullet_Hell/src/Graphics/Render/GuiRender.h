@@ -10,6 +10,8 @@
 #include "UniformsMap.h"
 #include "Window.h"
 
+#include <memory>
+
 /// <summary>
 /// Handles Graphical User Interface rendering
 /// </summary>
@@ -25,7 +27,7 @@ public:
 	void resize(const unsigned int width, const unsigned int height);
 private:
 	glm::vec2 scale;
-	ShaderProgram shader_program;
+	std::unique_ptr<ShaderProgram> shader_program;
 	Texture font;
 	UniformsMap uniforms_map;
 

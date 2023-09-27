@@ -49,7 +49,13 @@ void main()
 GuiRender::GuiRender(const Window& window)
 	: scale(glm::vec2(window.width, window.height))
 {
-	//TODO(ches) setup shaders
+	std::vector<ShaderModuleData> shader_modules;
+	shader_modules.emplace_back(vertex_shader_source,
+		sizeof(vertex_shader_source), GL_VERTEX_SHADER);
+	shader_modules.emplace_back(fragment_shader_source, 
+		sizeof(fragment_shader_source), GL_FRAGMENT_SHADER);
+	shader_program = std::make_unique<ShaderProgram>(shader_modules);
+
 	create_uniforms();
 	create_ui_resources(window);
 }
