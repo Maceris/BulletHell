@@ -10,8 +10,14 @@
 #include "MeshDrawData.h"
 #include "Scene.h"
 
+/// <summary>
+/// A list of pointers to models.
+/// </summary>
 using ModelList = std::vector<std::shared_ptr<Model>>;
 
+/// <summary>
+/// Buffers for indirect drawing of models.
+/// </summary>
 class RenderBuffers
 {
 public:

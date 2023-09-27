@@ -13,8 +13,14 @@
 #include <memory>
 #include <vector>
 
+/// <summary>
+/// A list of pointers to entities.
+/// </summary>
 using EntityList = std::vector<std::shared_ptr<Entity>>;
 
+/// <summary>
+/// A 3D model that can be rendered.
+/// </summary>
 struct Model
 {
 	/// <summary>

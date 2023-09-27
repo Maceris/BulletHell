@@ -11,6 +11,9 @@
 /// </summary>
 using material_id = int;
 
+/// <summary>
+/// A material that describes details about a mesh, like color.
+/// </summary>
 struct Material
 {
 	/// <summary>

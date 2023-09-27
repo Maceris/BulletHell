@@ -6,6 +6,10 @@
 
 #include "Scene.h"
 
+/// <summary>
+/// Used for cascaded shadow mapping, defines details for each slice like the 
+/// view matrix and distance to this split.
+/// </summary>
 struct CascadeShadowSlice
 {
 	/// <summary>

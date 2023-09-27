@@ -8,6 +8,9 @@
 
 #include "Material.h"
 
+/// <summary>
+/// Raw mesh data that is loaded from a file, after some processing.
+/// </summary>
 struct MeshData
 {
 	/// <summary>
