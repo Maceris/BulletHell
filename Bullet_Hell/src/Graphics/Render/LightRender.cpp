@@ -91,7 +91,7 @@ vec4 calculate_ambient(AmbientLight ambient_light, vec4 ambient) {
     return vec4(ambient_light.intensity * ambient_light.color, 1) * ambient;
 }
 
-vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 light_color, float light_intensity, vec3 position, vec3 direction_to_light, vec3 normal) {
+vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 light_color, float light_intensity, vec3 view_position, vec3 direction_to_light, vec3 normal) {
     vec4 diffuse_color = vec4(0, 0, 0, 1);
     vec4 specular_color = vec4(0, 0, 0, 1);
 
@@ -100,7 +100,7 @@ vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 
     diffuse_color = diffuse * vec4(light_color, 1.0) * light_intensity * diffuse_factor;
 
     // Specular Light
-    vec3 camera_direction = normalize(-position);
+    vec3 camera_direction = normalize(-view_position);
     vec3 direction_from_light = -direction_to_light;
     vec3 reflected_light = normalize(reflect(direction_from_light, normal));
     float specular_factor = max(dot(camera_direction, reflected_light), 0.0);
@@ -110,9 +110,9 @@ vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 
     return (diffuse_color + specular_color);
 }
 
-vec4 calculate_point_light(vec4 diffuse, vec4 specular, float reflectance, PointLight light, vec3 position, vec3 normal) {
-    vec3 direction_to_light = normalize(light.position - position);
-    vec4 light_color = calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, position, direction_to_light, normal);
+vec4 calculate_point_light(vec4 diffuse, vec4 specular, float reflectance, PointLight light, vec3 view_position, vec3 normal) {
+    vec3 direction_to_light = normalize(light.position - view_position);
+    vec4 light_color = calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, view_position, direction_to_light, normal);
 
     // Apply Attenuation
     float distance = length(direction_to_light);
@@ -121,22 +121,22 @@ vec4 calculate_point_light(vec4 diffuse, vec4 specular, float reflectance, Point
     return light_color / attenuationInv;
 }
 
-vec4 calculate_spot_light(vec4 diffuse, vec4 specular, float reflectance, SpotLight light, vec3 position, vec3 normal) {
-    vec3 direction_from_light = -normalize(light.point_light.position - position);
+vec4 calculate_spot_light(vec4 diffuse, vec4 specular, float reflectance, SpotLight light, vec3 view_position, vec3 normal) {
+    vec3 direction_from_light = -normalize(light.point_light.position - view_position);
     float spot_light_alpha = dot(direction_from_light, normalize(light.cone_direction));
 
     vec4 color = vec4(0, 0, 0, 0);
 
     if (spot_light_alpha > light.cutoff)
     {
-        color = calculate_point_light(diffuse, specular, reflectance, light.point_light, position, normal);
+        color = calculate_point_light(diffuse, specular, reflectance, light.point_light, view_position, normal);
         color *= (1.0 - (1.0 - spot_light_alpha)/(1.0 - light.cutoff));
     }
     return color;
 }
 
-vec4 calculate_directional_light(vec4 diffuse, vec4 specular, float reflectance, DirectionalLight light, vec3 position, vec3 normal) {
-    return calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, position, normalize(light.direction), normal);
+vec4 calculate_directional_light(vec4 diffuse, vec4 specular, float reflectance, DirectionalLight light, vec3 view_position, vec3 normal) {
+    return calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, view_position, normalize(light.direction), normal);
 }
 
 vec4 calculate_fog(vec3 pos, vec4 color, Fog fog, vec3 ambient_light, DirectionalLight directional_light) {
