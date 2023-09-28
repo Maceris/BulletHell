@@ -75,7 +75,8 @@ void GuiRender::create_ui_resources(const Window& window)
 
 void GuiRender::create_uniforms()
 {
-	//TODO(ches) setup uniforms
+	uniforms_map = ALLOC UniformsMap(shader_program->program_id);
+	uniforms_map->create_uniform("scale");
 }
 
 void GuiRender::render(const Scene& scene)

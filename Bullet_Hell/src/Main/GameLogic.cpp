@@ -1,5 +1,7 @@
 #include "GameLogic.h"
 
+#include "Logger.h"
+
 GameLogic* g_game_logic = nullptr;
 
 GameLogic::GameLogic()
@@ -16,7 +18,7 @@ bool GameLogic::initialize()
 
 	if (!resource_cache->init())
 	{
-		//TODO(ches) log this error
+		LOG_FATAL("Failed to initialize the resource cache. Is there enough memory?");
 		return false;
 	}
 
@@ -28,7 +30,6 @@ bool GameLogic::initialize()
 
 void GameLogic::run_game()
 {
-
 	current_state = running;
 
 	while (current_state == running)

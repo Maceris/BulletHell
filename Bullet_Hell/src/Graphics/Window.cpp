@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include "GameLogic.h"
+#include "Logger.h"
 #include "OpenGLUtil.h"
 
 #include "imgui.h"
@@ -155,9 +156,8 @@ void Window::initialize()
     gladLoadGL();
     glfwSwapInterval(1);
 
-#ifdef DEBUG
-    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-#endif // DEBUG
+    std::string version = (const char*)glGetString(GL_VERSION);
+    LOG_INFO("OpenGL Version: " + version);
 
     OpenGLUtil::check_gl_errors();
 

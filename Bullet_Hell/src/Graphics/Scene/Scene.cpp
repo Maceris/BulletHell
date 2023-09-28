@@ -10,7 +10,6 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, model_map(std::map<const std::string, std::shared_ptr<Model>>())
 	, scene_lights(SceneLights())
 	, sky_box(SkyBox())
-	, texture_cache(TextureCache())
 {}
 
 void Scene::add_entity(std::shared_ptr<Entity> entity)

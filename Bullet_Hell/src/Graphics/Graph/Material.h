@@ -4,10 +4,12 @@
 
 #include "glm.hpp"
 
+#include <memory>
+
 #include "Texture.h"
 
 /// <summary>
-/// Used to identify materials in the cache.
+/// Used to identify materials in the material cache.
 /// </summary>
 using material_id = int;
 
@@ -42,14 +44,14 @@ struct Material
 	float reflectance;
 
 	/// <summary>
-	/// The ID of the texture for this material.
+	/// The texture for this material.
 	/// </summary>
-	texture_id texture;
+	std::shared_ptr<Texture> texture;
 	
 	/// <summary>
-	/// The ID of the normal map texture for this material.
+	/// The normal map texture for this material.
 	/// </summary>
-	texture_id normal_map;
+	std::shared_ptr<Texture> normal_map;
 
 	/// <summary>
 	/// Create a material with all default values.

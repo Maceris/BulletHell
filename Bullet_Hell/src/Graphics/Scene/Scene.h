@@ -10,7 +10,6 @@
 #include "Projection.h"
 #include "SceneLights.h"
 #include "SkyBox.h"
-#include "TextureCache.h"
 
 #include <map>
 #include <memory>
@@ -58,11 +57,6 @@ public:
 	/// The backdrop.
 	/// </summary>
 	SkyBox sky_box;
-
-	/// <summary>
-	/// A cache of textures.
-	/// </summary>
-	TextureCache texture_cache;
 
 	/// <summary>
 	/// Set up a new scene.

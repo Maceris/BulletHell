@@ -167,7 +167,6 @@
     <ClCompile Include="src\Graphics\Graph\ShaderProgram.cpp" />
     <ClCompile Include="src\Graphics\Graph\ShadowBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\Texture.cpp" />
-    <ClCompile Include="src\Graphics\Graph\TextureCache.cpp" />
     <ClCompile Include="src\Graphics\Graph\UniformsMap.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
@@ -228,7 +227,6 @@
     <ClInclude Include="src\Graphics\Graph\ShaderProgram.h" />
     <ClInclude Include="src\Graphics\Graph\ShadowBuffer.h" />
     <ClInclude Include="src\Graphics\Graph\Texture.h" />
-    <ClInclude Include="src\Graphics\Graph\TextureCache.h" />
     <ClInclude Include="src\Graphics\Graph\UniformsMap.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
     <ClInclude Include="src\Graphics\Render\CommandBuffer.h" />
@@ -256,7 +254,6 @@
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Main\GameLogic.h" />
     <ClInclude Include="src\Main\GameOptions.h" />
-    <ClInclude Include="src\Main\Main.h" />
     <ClInclude Include="src\Memory\CriticalSection.h" />
     <ClInclude Include="src\ResourceCache\ResourceCache.h" />
     <ClInclude Include="src\Utilities\Globals.h" />

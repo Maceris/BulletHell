@@ -28,8 +28,8 @@ public:
 private:
 	glm::vec2 scale;
 	std::unique_ptr<ShaderProgram> shader_program;
-	Texture font;
-	UniformsMap uniforms_map;
+	std::shared_ptr<Texture> font;
+	UniformsMap* uniforms_map;
 
 	void create_ui_resources(const Window& window);
 	void create_uniforms();

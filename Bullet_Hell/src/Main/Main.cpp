@@ -1,8 +1,7 @@
-#include "Main.h"
-
 #include "Globals.h"
 
 #include "GameLogic.h"
+#include "Logger.h"
 
 #include <windows.h>
 #include <iostream>
@@ -13,17 +12,20 @@
 /// <returns>The exit code for the program.</returns>
 int main()
 {
+    Logger::init();
 
     GameLogic game_logic;
     if (!game_logic.initialize())
     {
-        //TODO(ches) might want to log this
+        LOG_FATAL("Failed to initialize the game logic.");
         exit(EXIT_FAILURE);
     }
     game_logic.run_game();
 
     //TODO(ches) do we need to call this here or in a callback?
     game_logic.on_close();
+
+    Logger::destroy();
 
     exit(EXIT_SUCCESS);
     return 0;
