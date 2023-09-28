@@ -10,13 +10,13 @@
 struct AmbientLight
 {
 	/// <summary>
-	/// The base color of the ambient light. Values should all be between 0 
-	/// and 1, inclusive.
+	/// The base color of the light. Values should all be between 0 and 1,
+	/// inclusive.
 	/// </summary>
 	glm::vec3 color;
 	
 	/// <summary>
-	/// How bright the ambient light is. Should be between 0 and 1, inclusive.
+	/// How bright the light is. Should be between 0 and 1, inclusive.
 	/// </summary>
 	float intensity;
 
