@@ -371,5 +371,6 @@ Asset_Packer/build
 
 Assets/
 Asset_Temp/
+Raw_Assets/
 
 log.txt
