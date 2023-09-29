@@ -10,7 +10,7 @@ void SkyBox::populate_buffers(const MeshData& mesh_data)
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glGenBuffers(3, vbo_list);
+	glGenBuffers(SKYBOX_VBO_COUNT, vbo_list);
 
 	const GLuint vbo_positions = vbo_list[0];
 	const GLuint vbo_texture_coordinates = vbo_list[1];
@@ -38,6 +38,6 @@ void SkyBox::populate_buffers(const MeshData& mesh_data)
 
 SkyBox::~SkyBox()
 {
-	glDeleteBuffers(3, vbo_list);
+	glDeleteBuffers(SKYBOX_VBO_COUNT, vbo_list);
 	glDeleteVertexArrays(1, &vao);
 }

@@ -8,6 +8,8 @@
 #include "Material.h"
 #include "Model.h"
 
+constexpr auto SKYBOX_VBO_COUNT = 3;
+
 class SkyBox
 {
 private:
@@ -35,7 +37,7 @@ public:
 	/// 2) texture coordinates
 	/// 3) indices
 	/// </summary>
-	GLuint vbo_list[3];
+	GLuint vbo_list[SKYBOX_VBO_COUNT];
 
 	material_id material;
 
