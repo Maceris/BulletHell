@@ -14,15 +14,15 @@
 using material_id = int;
 
 /// <summary>
+/// The default color for materials.
+/// </summary>
+extern const glm::vec4 MATERIAL_DEFAULT_COLOR;
+
+/// <summary>
 /// A material that describes details about a mesh, like color.
 /// </summary>
 struct Material
 {
-	/// <summary>
-	/// The default color for materials.
-	/// </summary>
-	static const glm::vec4 DEFAULT_COLOR;
-
 	/// <summary>
 	/// The ambient color of the material.
 	/// </summary>

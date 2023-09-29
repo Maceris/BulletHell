@@ -77,6 +77,13 @@ public:
 	void set_uniform(const std::string& name, int value);
 
 	/// <summary>
+	/// Set an unsigned int uniform.
+	/// </summary>
+	/// <param name="name">The name of the uniform.</param>
+	/// <param name="value">The value to set.</param>
+	void set_uniform(const std::string& name, unsigned int value);
+
+	/// <summary>
 	/// Set a 4x4 matrix uniform.
 	/// </summary>
 	/// <param name="name">The name of the uniform.</param>

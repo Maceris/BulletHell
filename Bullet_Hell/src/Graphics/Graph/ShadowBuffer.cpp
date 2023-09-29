@@ -2,8 +2,11 @@
 
 #include "CascadeShadowSlice.h"
 
+const unsigned int SHADOW_MAP_WIDTH = 4096;
+const unsigned int SHADOW_MAP_HEIGHT = 4096;
+
 ShadowBuffer::ShadowBuffer()
-	: depth_map(CascadeShadowSlice::SHADOW_MAP_CASCADE_COUNT, SHADOW_MAP_WIDTH,
+	: depth_map(SHADOW_MAP_CASCADE_COUNT, SHADOW_MAP_WIDTH,
 		SHADOW_MAP_HEIGHT, GL_DEPTH_COMPONENT)
 	, depth_map_fbo(0)
 {
@@ -35,7 +38,7 @@ ShadowBuffer::~ShadowBuffer()
 
 void ShadowBuffer::bind_textures(int start)
 {
-	for (int i = 0; i < CascadeShadowSlice::SHADOW_MAP_CASCADE_COUNT; ++i)
+	for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
 	{
 		glActiveTexture(start + i);
 		glBindTexture(GL_TEXTURE_2D, depth_map[i]);

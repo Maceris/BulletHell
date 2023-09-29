@@ -5,15 +5,17 @@
 #include "glad.h"
 
 /// <summary>
+/// The maximum number of textures, which are used for albedo, normals,
+/// specular, and depth, in that order.
+/// </summary>
+#define G_BUFFER_TOTAL_TEXTURES 3
+
+/// <summary>
 /// A buffer for the deferred shading geometry pass.
 /// </summary>
 struct GBuffer
 {
-	/// <summary>
-	/// The maximum number of textures, which are used for albedo, normals,
-	/// specular, and depth, in that order.
-	/// </summary>
-	static const unsigned int TOTAL_TEXTURES = 4;
+	
 
 	/// <summary>
 	/// The frame buffer to use for geometry.
@@ -29,7 +31,7 @@ struct GBuffer
 	/// The list of textures. These are used for albedo, normals,
 	/// specular, and depth, in that order.
 	/// </summary>
-	GLuint texture_IDs[TOTAL_TEXTURES];
+	GLuint texture_IDs[G_BUFFER_TOTAL_TEXTURES];
 
 	/// <summary>
 	/// The width of each texture.

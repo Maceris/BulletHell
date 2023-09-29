@@ -12,14 +12,6 @@ class SkyBox
 {
 private:
 	/// <summary>
-	/// The number of VBO's that we use. These represent:
-	/// 1) positions
-	/// 2) texture coordinates
-	/// 3) indices
-	/// </summary>
-	static const int VBO_COUNT = 3;
-
-	/// <summary>
 	/// Load the mesh data into buffers for rendering.
 	/// </summary>
 	/// <param name="mesh_data">The data to load.</param>
@@ -38,9 +30,12 @@ public:
 	GLuint vao;
 
 	/// <summary>
-	/// The list of vertex buffer objects for this mesh.
+	/// The list of vertex buffer objects for this mesh. These represent:
+	/// 1) positions
+	/// 2) texture coordinates
+	/// 3) indices
 	/// </summary>
-	GLuint vbo_list[VBO_COUNT];
+	GLuint vbo_list[3];
 
 	material_id material;
 

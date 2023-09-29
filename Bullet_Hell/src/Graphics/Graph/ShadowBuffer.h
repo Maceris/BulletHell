@@ -7,20 +7,22 @@
 #include "glad.h"
 
 /// <summary>
+/// The width of the shadow map in pixels.
+/// </summary>
+extern const unsigned int SHADOW_MAP_WIDTH;
+
+/// <summary>
+/// The height of the shadow map in pixels.
+/// </summary>
+extern const unsigned int SHADOW_MAP_HEIGHT;
+
+/// <summary>
 /// Depth buffers for a cascaded shadow map.
 /// </summary>
 class ShadowBuffer
 {
 public:
-	/// <summary>
-	/// The width of the shadow map in pixels.
-	/// </summary>
-	static const unsigned int SHADOW_MAP_WIDTH = 4096;
-
-	/// <summary>
-	/// The height of the shadow map in pixels.
-	/// </summary>
-	static const unsigned int SHADOW_MAP_HEIGHT = 4096;
+	
 
 	/// <summary>
 	/// The actual depth map textures used for the FBO.

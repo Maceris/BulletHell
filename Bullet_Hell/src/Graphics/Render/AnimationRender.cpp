@@ -1,6 +1,10 @@
 #include "Globals.h"
 #include "AnimationRender.h"
 
+#include <cmath>
+#include <vector>
+
+#pragma region Shader code
 const char compute_shader_source[] = R"glsl(
 #version 460
 
@@ -132,3 +136,70 @@ void main()
     destination_vector.data[destination_buffer_base_index + 1] = texture_coordinates.y;
 }
 )glsl";
+#pragma endregion
+
+
+AnimationRender::AnimationRender()
+{
+    std::vector<ShaderModuleData> shader_modules;
+    shader_modules.emplace_back(compute_shader_source,
+        sizeof(compute_shader_source), GL_COMPUTE_SHADER);
+
+    shader_program = std::make_unique<ShaderProgram>(shader_modules);
+    uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
+
+    uniforms_map->create_uniform("draw_parameters.source_offset");
+    uniforms_map->create_uniform("draw_parameters.source_size");
+    uniforms_map->create_uniform("draw_parameters.weights_offset");
+    uniforms_map->create_uniform("draw_parameters.bones_matrices_offset");
+    uniforms_map->create_uniform("draw_parameters.destination_offset");
+}
+
+void AnimationRender::render(const Scene& scene,
+    const RenderBuffers& render_buffer)
+{
+    shader_program->bind();
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 
+        render_buffer.binding_poses_vbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1,
+        render_buffer.bones_indices_weights_vbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2,
+        render_buffer.bones_matrices_vbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
+        render_buffer.dest_animation_vbo);
+
+    int destination_offset = 0;
+    for (auto entry : scene.model_map)
+    {
+        std::shared_ptr<Model> model = entry.second;
+        if (!model->is_animated())
+        {
+            continue;
+        }
+        for (MeshDrawData mesh_draw_data : model->mesh_draw_data_list)
+        {
+            AnimMeshDrawData anim_mesh_draw_data = 
+                mesh_draw_data.animated_mesh_draw_data;
+            std::shared_ptr<Entity> entity = anim_mesh_draw_data.entity;
+            AnimatedFrame frame = entity->animation_data.get_current_frame();
+            int group_size = std::ceilf(
+                (float) mesh_draw_data.size_in_bytes / (14 * 4));
+            
+            uniforms_map->set_uniform("draw_parameters.source_offset", 
+                anim_mesh_draw_data.binding_pose_offset);
+            uniforms_map->set_uniform("draw_parameters.source_size",
+                mesh_draw_data.size_in_bytes / 4);
+            uniforms_map->set_uniform("draw_parameters.weights_offset",
+                anim_mesh_draw_data.weights_offset);
+            uniforms_map->set_uniform("draw_parameters.bones_matrices_offset",
+               frame.offset);
+            uniforms_map->set_uniform("draw_parameters.destination_offset",
+                destination_offset);
+
+            glDispatchCompute(group_size, 1, 1);
+            destination_offset += mesh_draw_data.size_in_bytes / 4;
+        }
+    }
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    shader_program->unbind();
+}

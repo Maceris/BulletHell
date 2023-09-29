@@ -1,5 +1,7 @@
 #include "MeshData.h"
 
+const int VERTEX_MAX_WEIGHTS = 4;
+
 MeshData::MeshData(std::vector<float> positions, std::vector<float> normals,
 	std::vector<float> tangents, std::vector<float> bitangents,
 	std::vector<float> texture_coordinates, std::vector<int> indices,

@@ -5,6 +5,16 @@
 #include "glm.hpp"
 
 /// <summary>
+/// The near clipping plane distance, in world units.
+/// </summary>
+extern const float Z_NEAR;
+
+/// <summary>
+/// The far clipping plane distance, in world units.
+/// </summary>
+extern const float Z_FAR;
+
+/// <summary>
 /// A symmetric perspective projection frustum transformation for a
 /// right - handed coordinate system using OpenGL's NDC z range of [-1.. + 1],
 /// and its inverse.
@@ -39,17 +49,7 @@ public:
 
 private:
 	/// <summary>
-	/// The far clipping plane distance, in world units.
-	/// </summary>
-	const float Z_FAR = 1000.0f;
-
-	/// <summary>
-	/// The near clipping plane distance, in world units.
-	/// </summary>
-	const float Z_NEAR = 0.01f;
-
-	/// <summary>
 	/// The field of view in radians.
 	/// </summary>
-	const float FOV = glm::radians(60.0f);
+	float FOV = glm::radians(60.0f);
 };

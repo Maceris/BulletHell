@@ -10,28 +10,20 @@
 class QuadMesh
 {
 private:
-	/// <summary>
-	/// The number of VBO's that we use. These represent:
-	/// 1) positions
-	/// 2) texture coordinates
-	/// 3) indices
-	/// </summary>
-	static const int VBO_COUNT = 3;
+	
 public:
-	/// <summary>
-	/// The number of vertices the mesh has.
-	/// </summary>
-	const int vertex_count = 6;
-
 	/// <summary>
 	/// The Vertex Array Object ID for the mesh.
 	/// </summary>
 	GLuint vao;
 
 	/// <summary>
-	/// The list of VBOs created for the mesh.
+	/// The list of VBOs created for the mesh. These represent:
+	/// 1) positions
+	/// 2) texture coordinates
+	/// 3) indices
 	/// </summary>
-	GLuint vbo_list[VBO_COUNT];
+	GLuint vbo_list[3];
 
 	/// <summary>
 	/// Set up a new mesh, which forms a quad from (-1, -1) to (1, 1).

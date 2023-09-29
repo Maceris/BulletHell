@@ -10,6 +10,8 @@
 #include <GLES2/gl2.h>
 #endif
 
+#pragma region Shader code
+
 const char fragment_shader_source[] = R"glsl(
 #version 460
 
@@ -45,6 +47,7 @@ void main()
     gl_Position = vec4(position_in * scale + vec2(-1.0, 1.0), 0.0, 1.0);
 }
 )glsl";
+#pragma endregion
 
 GuiRender::GuiRender(const Window& window)
 	: scale(glm::vec2(window.width, window.height))
@@ -75,7 +78,7 @@ void GuiRender::create_ui_resources(const Window& window)
 
 void GuiRender::create_uniforms()
 {
-	uniforms_map = ALLOC UniformsMap(shader_program->program_id);
+	uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
 	uniforms_map->create_uniform("scale");
 }
 

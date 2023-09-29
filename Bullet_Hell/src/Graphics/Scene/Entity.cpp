@@ -7,6 +7,7 @@ Entity::Entity(const std::string entity_ID, const std::string model_ID)
 	, position(glm::vec3(0))
 	, rotation(glm::quat())
 	, scale(1)
+	, animation_data(std::shared_ptr<Animation>())
 {}
 
 void Entity::add_rotation(const float x, const float y, const float z,

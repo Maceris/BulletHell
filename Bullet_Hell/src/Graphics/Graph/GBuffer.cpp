@@ -1,4 +1,3 @@
-
 #include "GBuffer.h"
 
 GBuffer::GBuffer(const unsigned int width, const unsigned int height)
@@ -9,13 +8,13 @@ GBuffer::GBuffer(const unsigned int width, const unsigned int height)
 {
 	glGenFramebuffers(1, &gBuffer_ID);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer_ID);
-	glGenTextures(TOTAL_TEXTURES, texture_IDs);
+	glGenTextures(G_BUFFER_TOTAL_TEXTURES, texture_IDs);
 
-	for (int i = 0; i < TOTAL_TEXTURES; ++i)
+	for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES; ++i)
 	{
 		glBindTexture(GL_TEXTURE_2D, texture_IDs[i]);
 		int attachment_type;
-		if (i == TOTAL_TEXTURES - 1)
+		if (i == G_BUFFER_TOTAL_TEXTURES - 1)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width,
 				height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
@@ -34,13 +33,13 @@ GBuffer::GBuffer(const unsigned int width, const unsigned int height)
 			texture_IDs[i], 0);
 	}
 
-	GLenum draw_buffers[TOTAL_TEXTURES];
-	for (int i = 0; i < TOTAL_TEXTURES; ++i)
+	GLenum draw_buffers[G_BUFFER_TOTAL_TEXTURES];
+	for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES; ++i)
 	{
 		draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 	}
 
-	glDrawBuffers(TOTAL_TEXTURES, draw_buffers);
+	glDrawBuffers(G_BUFFER_TOTAL_TEXTURES, draw_buffers);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -48,5 +47,5 @@ GBuffer::GBuffer(const unsigned int width, const unsigned int height)
 GBuffer::~GBuffer()
 {
 	glDeleteFramebuffers(1, &gBuffer_ID);
-	glDeleteTextures(TOTAL_TEXTURES, texture_IDs);
+	glDeleteTextures(G_BUFFER_TOTAL_TEXTURES, texture_IDs);
 }

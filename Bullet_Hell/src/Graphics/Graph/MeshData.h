@@ -8,16 +8,17 @@
 
 #include "Material.h"
 
+
+/// <summary>
+/// The maximum number of weights that can affect a vertex.
+/// </summary>
+extern const int VERTEX_MAX_WEIGHTS;
+
 /// <summary>
 /// Raw mesh data that is loaded from a file, after some processing.
 /// </summary>
 struct MeshData
 {
-	/// <summary>
-	/// The maximum number of weights that can affect a vertex.
-	/// </summary>
-	static const int MAX_WEIGHTS = 4;
-
 	/// <summary>
 	/// The maximum value (corner) or the axis-aligned bounding box.
 	/// </summary>

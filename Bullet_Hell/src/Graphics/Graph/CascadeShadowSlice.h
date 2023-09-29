@@ -6,17 +6,19 @@
 
 #include "Scene.h"
 
+#include <vector>
+
+/// <summary>
+/// The number of sections to split the frustum into.
+/// </summary>
+extern const unsigned int SHADOW_MAP_CASCADE_COUNT;
+
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 
 /// view matrix and distance to this split.
 /// </summary>
 struct CascadeShadowSlice
 {
-	/// <summary>
-	/// The number of sections to split the frustum into.
-	/// </summary>
-	static const unsigned int SHADOW_MAP_CASCADE_COUNT = 3;
-
 	/// <summary>
 	/// The combined projection and view matrix for lights.
 	/// </summary>
@@ -32,8 +34,7 @@ struct CascadeShadowSlice
 	/// directional light.
 	/// </summary>
 	/// <param name="shadows">The cascade shadows to update.</param>
-	/// <param name="scene"></param>
-	static void updateCascadeShadows(
-		CascadeShadowSlice (& cascade_shadows)[SHADOW_MAP_CASCADE_COUNT],
+	/// <param name="scene">The scene we are updating shadows for.</param>
+	static void updateCascadeShadows(std::vector<CascadeShadowSlice>& shadows,
 		Scene& scene);
 };

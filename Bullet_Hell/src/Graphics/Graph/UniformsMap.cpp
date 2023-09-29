@@ -38,6 +38,11 @@ void UniformsMap::set_uniform(const std::string& name, int value)
 	glUniform1i(get_uniform_location(name), value);
 }
 
+void UniformsMap::set_uniform(const std::string& name, unsigned int value)
+{
+	glUniform1ui(get_uniform_location(name), value);
+}
+
 void UniformsMap::set_uniform(const std::string& name, const glm::mat4& value)
 {
 	glUniformMatrix4fv(get_uniform_location(name), 1, false,

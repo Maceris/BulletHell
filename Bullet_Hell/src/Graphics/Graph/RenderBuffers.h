@@ -53,7 +53,6 @@ public:
 	/// <param name="scene">The scene to load data from.</param>
 	void load_static_models(const Scene& scene);
 
-private:
 	/// <summary>
 	/// The Vertex Array Object ID for animated models.
 	/// </summary>
@@ -91,6 +90,7 @@ private:
 	/// </summary>
 	GLuint dest_animation_vbo;
 
+private:
 	/// <summary>
 	/// If we have populated any buffer since the last time we cleared them
 	/// out.
