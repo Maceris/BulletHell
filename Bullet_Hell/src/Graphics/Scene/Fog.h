@@ -2,6 +2,64 @@
 
 #include "Globals.h"
 
-class Fog
+#include "glm.hpp"
+
+/// <summary>
+/// Represents the fog in a scene.
+/// </summary>
+struct Fog
 {
+	/// <summary>
+	/// Whether fog is active.
+	/// </summary>
+	bool active;
+
+	/// <summary>
+	/// The base color of the fog. Values should all be between 0 and 1,
+	/// inclusive.
+	/// </summary>
+	glm::vec3 color;
+
+	/// <summary>
+	/// How thick the fog is, modeled as 1/(e^(distance*density)).
+	/// </summary>
+	float density;
+
+	/// <summary>
+	/// Sets up fog as disabled.
+	/// </summary>
+	Fog();
+
+	/// <summary>
+	/// Set up fog.
+	/// </summary>
+	/// <param name="active">Whether fog is active.</param>
+	/// <param name="color">The color of the fog.</param>
+	/// <param name="density">Density of the fog, modeled as 
+	/// 1/(e^(distance*density)).</param>
+	Fog(const bool active, const glm::vec3& color, const float density);
+
+	/// <summary>
+	/// Copy fog.
+	/// </summary>
+	Fog(const Fog&) = default;
+
+	/// <summary>
+	/// Copy fog.
+	/// </summary>
+	Fog& operator=(const Fog&) = default;
+
+	/// <summary>
+	/// Clean up.
+	/// </summary>
+	~Fog() = default;
+
+	/// <summary>
+	/// Set the color of the fog. Values should all be between 0 
+	/// and 1, inclusive.
+	/// </summary>
+	/// <param name="r">The red component.</param>
+	/// <param name="g">The green component.</param>
+	/// <param name="b">The blue component.</param>
+	void set_color(const float r, const float g, const float b);
 };
