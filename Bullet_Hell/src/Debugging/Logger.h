@@ -14,7 +14,7 @@ const LogFlag FLAG_WRITE_TO_LOG_FILE = 1 << 0;
 /// <summary>
 /// Writes the log to the debugger.
 /// </summary>
-const LogFlag FLAG_WRITE_TO_DEBUGGER = 1 << 0;
+const LogFlag FLAG_WRITE_TO_DEBUGGER = 1 << 1;
 
 namespace Logger
 {
