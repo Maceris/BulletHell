@@ -2,6 +2,23 @@
 
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
+/// <summary>
+/// The folder name where assets are stored. 
+/// </summary>
+extern const std::string ASSET_FOLDER;
+
+/// <summary>
+/// The folder where assets are gathered during processing.
+/// </summary>
+extern const std::string TEMP_FOLDER;
+
+/// <summary>
+/// The zip file where we will output everything.
+/// </summary>
+extern const std::string OUTPUT_FILE;
+
 /// <summary>
 /// Utilities for interacting with the file system.
 /// </summary>
@@ -21,22 +38,7 @@ private:
 	/// </summary>
 	/// <param name="file">The file to process.</param>
 	/// <returns>0 on success, nonzero if there are errors.</returns>
-	static int process_file(const std::filesystem::directory_entry& file);
-
-	/// <summary>
-	/// The folder name where assets are stored. 
-	/// </summary>
-	static const std::string asset_folder;
-
-	/// <summary>
-	/// The folder where assets are gathered during processing.
-	/// </summary>
-	static const std::string temp_folder;
-
-	/// <summary>
-	/// The zip file where we will output everything.
-	/// </summary>
-	static const std::string output_file;
+	static int process_file(const fs::directory_entry& file);
 
 	/// <summary>
 	/// Create the temp folder if it doesn't exist.

@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -132,7 +132,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glm/glm;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,9 +144,13 @@
   <ItemGroup>
     <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Models\MeshConverter.cpp" />
+    <ClCompile Include="src\Models\MeshData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileUtils.h" />
+    <ClInclude Include="src\Models\MeshConverter.h" />
+    <ClInclude Include="src\Models\MeshData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
