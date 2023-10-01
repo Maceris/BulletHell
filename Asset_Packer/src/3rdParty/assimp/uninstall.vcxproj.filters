@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Documents\Programming\shmup\Bullet_Hell\Asset_Packer\src\3rdParty\assimp\CMakeFiles\347f398b2cadb783453a4e95e7048b1d\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Documents\Programming\shmup\Bullet_Hell\Asset_Packer\src\3rdParty\assimp\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C69E5861-F72E-3592-B395-243995F5A7DA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

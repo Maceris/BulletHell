@@ -13,3 +13,7 @@ echo f | xcopy /D /y ziplib\Bin\x64\Debug\ZipLib.lib ..\Lib\x64Debug\ZipLib.lib
 echo f | xcopy /D /y ziplib\Bin\x64\Debug\ZipLib.pdb ..\Lib\x64Debug\ZipLib.pdb
 echo f | xcopy /D /y ziplib\Bin\x64\Debug\zlib.lib ..\Lib\x64Debug\zlib.lib
 echo f | xcopy /D /y ziplib\Bin\x64\Debug\zlib.pdb ..\Lib\x64Debug\zlib.pdb
+
+echo f | xcopy /D /y assimp\lib\Debug\assimp-vc143-mtd.lib ..\Lib\x64Debug\assimp-vc143-mtd.lib
+echo f | xcopy /D /y assimp\bin\Debug\assimp-vc143-mtd.pdb ..\Lib\x64Debug\assimp-vc143-mtd.pdb
+
