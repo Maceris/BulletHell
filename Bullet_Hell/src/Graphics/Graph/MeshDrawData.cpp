@@ -8,22 +8,19 @@ AnimMeshDrawData::AnimMeshDrawData(std::shared_ptr<Entity> entity,
 	, weights_offset(weights_offset)
 {}
 
-
-
-MeshDrawData::MeshDrawData(int size_in_bytes, material_id material, int offset,
-	int vertices, AnimMeshDrawData animated_mesh_draw_data)
+MeshDrawData::MeshDrawData(const int size_in_bytes, const material_id material,
+	const int offset, const int vertices,
+	const AnimMeshDrawData& animated_mesh_draw_data)
 	: size_in_bytes(size_in_bytes)
 	, material(material)
 	, offset(offset)
 	, vertices(vertices)
 	, animated_mesh_draw_data(animated_mesh_draw_data)
 	, is_animated(true)
-{
+{}
 
-}
-
-MeshDrawData::MeshDrawData(int size_in_bytes, material_id material, int offset,
-	int vertices)
+MeshDrawData::MeshDrawData(const int size_in_bytes, const material_id material,
+	const int offset, const int vertices)
 	: size_in_bytes(size_in_bytes)
 	, material(material)
 	, offset(offset)

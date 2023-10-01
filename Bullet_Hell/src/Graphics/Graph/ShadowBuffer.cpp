@@ -38,7 +38,7 @@ ShadowBuffer::~ShadowBuffer()
 
 void ShadowBuffer::bind_textures(int start)
 {
-	for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+	for (unsigned int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
 	{
 		glActiveTexture(start + i);
 		glBindTexture(GL_TEXTURE_2D, depth_map[i]);

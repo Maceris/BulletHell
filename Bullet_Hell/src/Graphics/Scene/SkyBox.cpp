@@ -17,16 +17,18 @@ void SkyBox::populate_buffers(const MeshData& mesh_data)
 	const GLuint vbo_indices = vbo_list[2];
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_positions);
-	glBufferData(GL_ARRAY_BUFFER, mesh_data.positions.size(),
-		mesh_data.positions.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh_data.vertices.size() 
+		* sizeof(MeshVertex),
+		mesh_data.vertices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, (3 * 3 + 2) * 4, nullptr);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_texture_coordinates);
-	glBufferData(GL_ARRAY_BUFFER, mesh_data.texture_coordinates.size(),
-		mesh_data.texture_coordinates.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh_data.vertices.size()
+		* sizeof(MeshVertex), mesh_data.vertices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, nullptr);
+	const void* offset = (void*) ((3 * 4) * 4);
+	glVertexAttribPointer(1, 2, GL_FLOAT, false, (3 * 4) * 4, offset);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_data.indices.size(),

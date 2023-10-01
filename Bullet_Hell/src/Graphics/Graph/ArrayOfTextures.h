@@ -36,7 +36,7 @@ struct ArrayOfTextures
 		: texture_count(texture_count), textures(new GLuint[texture_count])
 	{
 		glGenTextures(texture_count, textures);
-		for (int i = 0; i < texture_count; ++i) {
+		for (unsigned int i = 0; i < texture_count; ++i) {
 			glBindTexture(GL_TEXTURE_2D, textures[i]);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height,
 				0, pixel_format, GL_FLOAT, nullptr);

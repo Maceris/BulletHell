@@ -54,6 +54,11 @@ struct Material
 	std::shared_ptr<Texture> normal_map;
 
 	/// <summary>
+	/// Where this material is referenced in the materials uniform.
+	/// </summary>
+	material_id material_id;
+
+	/// <summary>
 	/// Create a material with all default values.
 	/// </summary>
 	Material();

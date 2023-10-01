@@ -169,7 +169,7 @@ void AnimationRender::render(const Scene& scene,
         render_buffer.dest_animation_vbo);
 
     int destination_offset = 0;
-    for (auto entry : scene.model_map)
+    for (auto& entry : scene.model_map)
     {
         std::shared_ptr<Model> model = entry.second;
         if (!model->is_animated())

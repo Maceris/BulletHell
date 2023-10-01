@@ -102,9 +102,6 @@
     <ClCompile Include="src\Graphics\Graph\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Graph\MeshData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Graph\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,6 +172,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Debugging\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Graph\MeshData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Graph\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,9 +272,6 @@
     <ClInclude Include="src\Graphics\Graph\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Graph\MeshData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Graph\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -357,6 +357,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Memory\CriticalSection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Graph\MeshData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

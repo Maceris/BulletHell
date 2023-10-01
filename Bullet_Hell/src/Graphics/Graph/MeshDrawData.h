@@ -15,17 +15,17 @@ struct AnimMeshDrawData
 	/// <summary>
 	/// The entity associated with the animation.
 	/// </summary>
-	std::shared_ptr<Entity> entity;
+	const std::shared_ptr<Entity> entity;
 
 	/// <summary>
 	/// The offset to the binding pose within the data.
 	/// </summary>
-	int binding_pose_offset;
+	const int binding_pose_offset;
 
 	/// <summary>
 	/// The offset to the weight within the data.
 	/// </summary>
-	int weights_offset;
+	const int weights_offset;
 
 	/// <summary>
 	/// Set up new draw data.
@@ -59,33 +59,33 @@ struct MeshDrawData
 	/// <summary>
 	/// The size of the mesh in bytes.
 	/// </summary>
-	int size_in_bytes;
+	const int size_in_bytes;
 
 	/// <summary>
 	/// The material ID that the mesh is associated with.
 	/// </summary>
-	material_id material;
+	const material_id material;
 
 	/// <summary>
 	/// The offset, in rows.
 	/// </summary>
-	int offset;
+	const int offset;
 
 	/// <summary>
 	/// The number of indices.
 	/// </summary>
-	int vertices;
+	const int vertices;
 
 	/// <summary>
 	/// Whether this contains animated mesh draw data. If false, the animated
 	/// mesh draw data is junk and should be ignored.
 	/// </summary>
-	bool is_animated;
+	const bool is_animated;
 
 	/// <summary>
 	/// The animation mesh draw data. Only valid data if is_animated is true.
 	/// </summary>
-	AnimMeshDrawData animated_mesh_draw_data;
+	const AnimMeshDrawData animated_mesh_draw_data;
 
 	/// <summary>
 	/// Set up mesh draw data for a mesh without animation draw data.
@@ -93,10 +93,10 @@ struct MeshDrawData
 	/// <param name="size_in_bytes">The size of the mesh in bytes.</param>
 	/// <param name="material">The material ID that the mesh is associated
 	/// with.</param>
-	/// <param name="offset">The offset, in rows.</param>
+	/// <param name="offset">The offset to the base vertex.</param>
 	/// <param name="vertices">The number of indices.</param>
-	MeshDrawData(int size_in_bytes, material_id material, int offset,
-		int vertices);
+	MeshDrawData(const int size_in_bytes, const material_id material, 
+		const int offset, const int vertices);
 
 	/// <summary>
 	/// Set up mesh draw data for a mesh that does have animation draw data.
@@ -104,12 +104,13 @@ struct MeshDrawData
 	/// <param name="size_in_bytes">The size of the mesh in bytes.</param>
 	/// <param name="material">The material ID that the mesh is associated
 	/// with.</param>
-	/// <param name="offset">The offset, in rows.</param>
+	/// <param name="offset">The offset to the base vertex.</param>
 	/// <param name="vertices">The number of indices.</param>
 	/// <param name="animated_mesh_draw_data">The animation mesh draw data.
 	/// </param>
-	MeshDrawData(int size_in_bytes, material_id material, int offset,
-		int vertices, AnimMeshDrawData animated_mesh_draw_data);
+	MeshDrawData(const int size_in_bytes, const material_id material, 
+		const int offset, const int vertices, 
+		const AnimMeshDrawData& animated_mesh_draw_data);
 
 	/// <summary>
 	/// Copy the struct.

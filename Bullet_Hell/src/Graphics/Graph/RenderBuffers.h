@@ -124,12 +124,4 @@ private:
 	/// <param name="models">The list of models to store bone matrices
 	/// information for.</param>
 	void load_bones_matrices_buffer(const ModelList& models);
-
-	/// <summary>
-	/// Populate the meshes buffer from mesh data.
-	/// </summary>
-	/// <param name="meshes_buffer">The buffer to populate.</param>
-	/// <param name="mesh_data">The data to fill the buffer with.</param>
-	void populate_mesh_buffer(std::vector<float>& meshes_buffer, 
-		const MeshData& mesh_data);
 };

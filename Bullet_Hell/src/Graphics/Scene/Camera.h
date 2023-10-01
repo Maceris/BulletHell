@@ -123,5 +123,5 @@ private:
 	/// <summary>
 	/// A constant value used to clamp rotation, precomputed for convenience.
 	/// </summary>
-	static inline constexpr float TWO_PI = 2 * std::numbers::pi;
+	static inline constexpr float TWO_PI = (float) (2 * std::numbers::pi);
 };

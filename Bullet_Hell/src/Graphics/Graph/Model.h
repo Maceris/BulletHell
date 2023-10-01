@@ -39,7 +39,8 @@ struct Model
 	EntityList entity_list;
 
 	/// <summary>
-	/// A list of mesh data for this model.
+	/// A list of mesh data for this model. Each represents one mesh, since
+	/// a model may have multiple.
 	/// </summary>
 	std::vector<MeshData> mesh_data_list;
 
