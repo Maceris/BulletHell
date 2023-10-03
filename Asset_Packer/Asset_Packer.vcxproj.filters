@@ -24,7 +24,10 @@
     <ClCompile Include="src\Models\MeshConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Models\MeshData.cpp">
+    <ClCompile Include="src\Models\RawMeshData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Models\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClInclude Include="src\Models\MeshConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Models\MeshData.h">
+    <ClInclude Include="src\Models\RawMeshData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Models\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,23 +7,13 @@
 /// <summary>
 /// The maximum number of weights that can affect a vertex.
 /// </summary>
-extern const int VERTEX_MAX_WEIGHTS;
+constexpr int VERTEX_MAX_WEIGHTS = 4;
 
 /// <summary>
 /// Raw mesh data that is loaded from a file, after some processing.
 /// </summary>
-struct MeshData
+struct RawMeshData
 {
-	/// <summary>
-	/// The maximum value (corner) or the axis-aligned bounding box.
-	/// </summary>
-	glm::vec3 aabb_max;
-
-	/// <summary>
-	/// The minimum value (corner) or the axis-aligned bounding box.
-	/// </summary>
-	glm::vec3 aabb_min;
-
 	/// <summary>
 	/// A list of bitangent values, in x, y, z order. Bitangents point in the
 	/// direction of the positive Y texture axis.
@@ -107,24 +97,23 @@ struct MeshData
 	/// bounding box.</param>
 	/// <param name="aabb_max">The maximum value (corner) or the axis-aligned
 	/// bounding box.</param>
-	MeshData(std::vector<float> positions, std::vector<float> normals, 
+	RawMeshData(std::vector<float> positions, std::vector<float> normals,
 		std::vector<float> tangents, std::vector<float> bitangents,
 		std::vector<float> texture_coordinates, std::vector<int> indices,
-		std::vector<int> bone_indices, std::vector<float> weights, 
-		glm::vec3 aabb_min, glm::vec3 aabb_max);
+		std::vector<int> bone_indices, std::vector<float> weights);
 
 	/// <summary>
 	/// We don't copy the mesh data.
 	/// </summary>
-	MeshData(const MeshData&) = default;
+	RawMeshData(const RawMeshData&) = default;
 
 	/// <summary>
 	/// We don't copy the mesh data.
 	/// </summary>
-	MeshData& operator=(const MeshData&) = default;
+	RawMeshData& operator=(const RawMeshData&) = default;
 
 	/// <summary>
 	/// Clean up the data.
 	/// </summary>
-	~MeshData() = default;
+	~RawMeshData() = default;
 };
