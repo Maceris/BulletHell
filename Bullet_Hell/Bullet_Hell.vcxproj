@@ -187,7 +187,6 @@
     <ClCompile Include="src\Graphics\Scene\Lights\SceneLights.cpp" />
     <ClCompile Include="src\Graphics\Scene\Lights\SpotLight.cpp" />
     <ClCompile Include="src\Graphics\Scene\ModelLoader.cpp" />
-    <ClCompile Include="src\Graphics\Scene\Node.cpp" />
     <ClCompile Include="src\Graphics\Scene\Projection.cpp" />
     <ClCompile Include="src\Graphics\Scene\Scene.cpp" />
     <ClCompile Include="src\Graphics\Scene\SkyBox.cpp" />
@@ -248,7 +247,6 @@
     <ClInclude Include="src\Graphics\Scene\Lights\SceneLights.h" />
     <ClInclude Include="src\Graphics\Scene\Lights\SpotLight.h" />
     <ClInclude Include="src\Graphics\Scene\ModelLoader.h" />
-    <ClInclude Include="src\Graphics\Scene\Node.h" />
     <ClInclude Include="src\Graphics\Scene\Projection.h" />
     <ClInclude Include="src\Graphics\Scene\Scene.h" />
     <ClInclude Include="src\Graphics\Scene\SkyBox.h" />
