@@ -83,6 +83,16 @@ struct ModelResults
 #pragma endregion
 
 #pragma region Function definitions
+
+/// <summary>
+/// Append a an assimp vector array to a vector of floats, in x, y, z order.
+/// </summary>
+/// <param name="target">The array of vectors to append.</param>
+/// <param name="length">The length of the vector array.</param>
+/// <param name="vector">The destination float vector.</param>
+inline void append_vector_array(const aiVector3D* vector_array,
+	const int length, std::vector<float>& destination);
+
 /// <summary>
 /// Import a model, process it, and return results that we will output to a 
 /// file.
@@ -104,8 +114,6 @@ void calc_animation_max_frames();
 std::vector<std::shared_ptr<Animation>> process_animations(
 	const aiScene* scene, std::vector<Bone>& bones,
 	Node* root_node, glm::mat4 global_inverse_transform);
-void process_bitangents(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data);
 void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data);
 void process_indices(const aiMesh* mesh,
@@ -128,13 +136,15 @@ std::shared_ptr<RawMaterial> process_material(const aiMaterial* raw_material);
 /// <returns>The resulting mesh data information.</returns>
 std::shared_ptr<RawMeshData> process_mesh(const aiMesh* mesh, 
 	std::vector<Bone>& bones);
-void process_normals(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data);
-void process_tangents(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data);
+
+/// <summary>
+/// Process texture coordinates for the first texture for a mesh, converting it
+/// to a buffer of x and then (1-y) values for each coordinate, and storing
+/// it in the mesh data's texture coordinate storage.
+/// </summary>
+/// <param name="mesh">The mesh to process.</param>
+/// <param name="mesh_data">The place to store the coordinate data.</param>
 void process_texture_coordinates(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data);
-void process_vertices(const aiMesh* mesh,
 	std::shared_ptr<RawMeshData> mesh_data);
 
 /// <summary>
@@ -150,7 +160,24 @@ constexpr glm::mat4 to_matrix(const aiMatrix4x4& matrix);
 /// <param name="color">The color.</param>
 /// <returns>A 4d vector with the same rgba values.</returns>
 constexpr glm::vec4 to_vector(const aiColor4D& color);
+
 #pragma endregion
+
+inline void append_vector_array(const aiVector3D* vector_array,
+	const int length, std::vector<float>& destination)
+{
+	if (vector_array == nullptr || length <= 0)
+	{
+		return;
+	}
+	for (int i = 0; i < length; ++i)
+	{
+		const aiVector3D vector = vector_array[i];
+		destination.push_back(vector.x);
+		destination.push_back(vector.y);
+		destination.push_back(vector.z);
+	}
+}
 
 void MeshConverter::convert_model(const fs::directory_entry& source)
 {
@@ -270,12 +297,6 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 	return animations;
 }
 
-void process_bitangents(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data)
-{
-	//TODO(ches) complete this
-}
-
 void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data)
 {
@@ -350,10 +371,15 @@ std::shared_ptr<RawMeshData> process_mesh(const aiMesh* mesh,
 {
 	std::shared_ptr<RawMeshData> result = std::make_shared<RawMeshData>();
 
-	process_vertices(mesh, result);
-	process_normals(mesh, result);
-	process_tangents(mesh, result);
-	process_bitangents(mesh, result);
+	append_vector_array(mesh->mVertices, mesh->mNumVertices,
+		result->positions);
+	append_vector_array(mesh->mNormals, mesh->mNumVertices,
+		result->normals);
+	append_vector_array(mesh->mTangents, mesh->mNumVertices,
+		result->tangents);
+	append_vector_array(mesh->mBitangents, mesh->mNumVertices,
+		result->bitangents);
+
 	process_texture_coordinates(mesh, result);
 	process_indices(mesh, result);
 	process_bones(mesh, bones, result);
@@ -363,29 +389,22 @@ std::shared_ptr<RawMeshData> process_mesh(const aiMesh* mesh,
 	return result;
 }
 
-
-void process_normals(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data)
-{
-	//TODO(ches) complete this
-}
-
-void process_tangents(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data)
-{
-	//TODO(ches) complete this
-}
-
 void process_texture_coordinates(const aiMesh* mesh,
 	std::shared_ptr<RawMeshData> mesh_data)
 {
-	//TODO(ches) complete this
-}
+	const aiVector3D* const *coordinates_array = mesh->mTextureCoords;
+	const unsigned int length = mesh->mNumVertices;
 
-void process_vertices(const aiMesh* mesh,
-	std::shared_ptr<RawMeshData> mesh_data)
-{
-	//TODO(ches) complete this
+	if (coordinates_array == nullptr || length <= 0)
+	{
+		return;
+	}
+	for (int i = 0; i < length; ++i)
+	{
+		const aiVector3D vector = *coordinates_array[i];
+		mesh_data->texture_coordinates.push_back(vector.x);
+		mesh_data->texture_coordinates.push_back(1 - vector.y);
+	}
 }
 
 constexpr glm::mat4 to_matrix(const aiMatrix4x4& matrix)
