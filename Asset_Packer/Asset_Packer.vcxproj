@@ -148,7 +148,6 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Models\MeshConverter.cpp" />
     <ClCompile Include="src\Models\Node.cpp" />
-    <ClCompile Include="src\Models\RawMaterial.cpp" />
     <ClCompile Include="src\Models\RawMeshData.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +177,6 @@
     <ClInclude Include="src\FileUtils.h" />
     <ClInclude Include="src\Models\MeshConverter.h" />
     <ClInclude Include="src\Models\Node.h" />
-    <ClInclude Include="src\Models\RawMaterial.h" />
     <ClInclude Include="src\Models\RawMeshData.h" />
   </ItemGroup>
   <ItemGroup>

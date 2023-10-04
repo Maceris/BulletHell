@@ -1,10 +1,10 @@
 #include "MeshConverter.h"
 
 #include "FileUtils.h"
-#include "RawMaterial.h"
 #include "RawMeshData.h"
 
 #include "Animation.h"
+#include "Material.h"
 #include "MeshData.h"
 #include "Node.h"
 
@@ -76,7 +76,7 @@ struct ModelResults
 {
 	std::vector<std::shared_ptr<Animation>> animations;
 	std::vector<std::shared_ptr<RawMeshData>> mesh_data;
-	std::vector<std::shared_ptr<RawMaterial>> materials;
+	std::vector<std::shared_ptr<Material>> materials;
 
 };
 
@@ -125,7 +125,7 @@ void process_indices(const aiMesh* mesh,
 /// </summary>
 /// <param name="raw_material">The assimp material.</param>
 /// <returns>A material reference.</returns>
-std::shared_ptr<RawMaterial> process_material(const aiMaterial* raw_material);
+std::shared_ptr<Material> process_material(const aiMaterial* raw_material);
 
 /// <summary>
 /// Process an assimp mesh into raw mesh data and return it.
@@ -236,7 +236,7 @@ ModelResults* import_model(const fs::directory_entry& source)
 	for (int i = 0; i < material_count; ++i)
 	{
 		const aiMaterial* raw_material = scene->mMaterials[i];
-		std::shared_ptr<RawMaterial> material = process_material(raw_material);
+		std::shared_ptr<Material> material = process_material(raw_material);
 		results->materials.push_back(std::move(material));
 	}
 
@@ -308,9 +308,9 @@ void process_indices(const aiMesh* mesh, std::shared_ptr<RawMeshData> mesh_data)
 	//TODO(ches) complete this
 }
 
-std::shared_ptr<RawMaterial> process_material(const aiMaterial* assimp_material)
+std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 {
-	std::shared_ptr<RawMaterial> material = std::make_shared<RawMaterial>();
+	std::shared_ptr<Material> material = std::make_shared<Material>();
 
 	aiColor4D color;
 
@@ -350,7 +350,7 @@ std::shared_ptr<RawMaterial> process_material(const aiMaterial* assimp_material)
 
 	if (!diffusePath.empty())
 	{
-		material->texture = diffusePath;
+		material->texture_name = diffusePath;
 	}
 
 	aiString aiNormalPath;
@@ -360,7 +360,7 @@ std::shared_ptr<RawMaterial> process_material(const aiMaterial* assimp_material)
 
 	if (!normalPath.empty())
 	{
-		material->normal_map = normalPath;
+		material->normal_map_name = normalPath;
 	}
 
 	return material;

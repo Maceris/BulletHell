@@ -46,12 +46,12 @@ struct Material
 	/// <summary>
 	/// The texture for this material.
 	/// </summary>
-	std::shared_ptr<Texture> texture;
+	std::string texture_name;
 	
 	/// <summary>
 	/// The normal map texture for this material.
 	/// </summary>
-	std::shared_ptr<Texture> normal_map;
+	std::string normal_map_name;
 
 	/// <summary>
 	/// Where this material is referenced in the materials uniform.
@@ -61,7 +61,15 @@ struct Material
 	/// <summary>
 	/// Create a material with all default values.
 	/// </summary>
-	Material();
+	Material()
+		: ambient_color(MATERIAL_DEFAULT_COLOR)
+		, diffuse_color(MATERIAL_DEFAULT_COLOR)
+		, specular_color(MATERIAL_DEFAULT_COLOR)
+		, reflectance(0.0f)
+		, texture_name("")
+		, normal_map_name("")
+		, material_id(0)
+	{}
 
 	/// <summary>
 	/// Copy a material.
