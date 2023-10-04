@@ -16,7 +16,7 @@ using material_id = int;
 /// <summary>
 /// The default color for materials.
 /// </summary>
-extern const glm::vec4 MATERIAL_DEFAULT_COLOR;
+constexpr glm::vec4 MATERIAL_DEFAULT_COLOR = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 /// <summary>
 /// A material that describes details about a mesh, like color.
