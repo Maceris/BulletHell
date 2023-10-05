@@ -116,6 +116,12 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 	Node* root_node, glm::mat4 global_inverse_transform);
 void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data);
+
+/// <summary>
+/// Process all of the indices for a mesh and store them in the mesh data.
+/// </summary>
+/// <param name="mesh">The mesh to process.</param>
+/// <param name="mesh_data">The storage for mesh data.</param>
 void process_indices(const aiMesh* mesh,
 	std::shared_ptr<RawMeshData> mesh_data);
 
@@ -303,9 +309,21 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	//TODO(ches) complete this
 }
 
-void process_indices(const aiMesh* mesh, std::shared_ptr<RawMeshData> mesh_data)
+void process_indices(const aiMesh* mesh, 
+	std::shared_ptr<RawMeshData> mesh_data)
 {
-	//TODO(ches) complete this
+	const int face_count = mesh->mNumFaces;
+	const aiFace* faces = mesh->mFaces;
+	
+	for (int face_index = 0; face_index < face_count; ++face_index)
+	{
+		const aiFace face = faces[face_index];
+		const unsigned int indices_count = face.mNumIndices;
+		for (int index = 0; index < indices_count; ++index)
+		{
+			mesh_data->indices.push_back(face.mIndices[index]);
+		}
+	}
 }
 
 std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
