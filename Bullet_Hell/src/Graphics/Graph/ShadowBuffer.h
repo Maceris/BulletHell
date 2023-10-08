@@ -39,19 +39,8 @@ public:
 	/// </summary>
 	ShadowBuffer();
 	
-	/// <summary>
-	/// Don't allow copy.
-	/// </summary>
 	ShadowBuffer(const ShadowBuffer&) = delete;
-	
-	/// <summary>
-	/// Don't allow copy.
-	/// </summary>
 	ShadowBuffer& operator=(const ShadowBuffer&) = delete;
-
-	/// <summary>
-	/// Clean up the buffers.
-	/// </summary>
 	~ShadowBuffer();
 
 	/// <summary>

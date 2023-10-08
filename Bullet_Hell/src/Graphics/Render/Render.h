@@ -30,19 +30,8 @@ public:
 	/// <param name="window"></param>
 	Render(const Window& window);
 
-	/// <summary>
-	/// We don't copy the renderer.
-	/// </summary>
 	Render(const Render&) = delete;
-
-	/// <summary>
-	/// We don't copy the renderer.
-	/// </summary>
 	Render& operator=(const Render&) = delete;
-
-	/// <summary>
-	/// Clean up data.
-	/// </summary>
 	~Render();
 
 	/// <summary>

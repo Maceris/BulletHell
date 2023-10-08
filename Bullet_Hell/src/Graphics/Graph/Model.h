@@ -66,18 +66,8 @@ struct Model
 	Model(const std::string id, std::vector<MeshData> mesh_data_list,
 		std::vector<Animation> animation_list);
 
-	/// <summary>
-	/// We cannot copy models.
-	/// </summary>
+
 	Model(const Model&) = delete;
-
-	/// <summary>
-	/// We cannot copy models.
-	/// </summary>
 	Model& operator=(const Model&) = delete;
-
-	/// <summary>
-	/// Clean up the model.
-	/// </summary>
 	~Model() = default;
 };

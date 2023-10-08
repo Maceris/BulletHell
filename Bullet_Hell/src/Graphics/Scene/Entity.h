@@ -61,19 +61,8 @@ struct Entity
 	/// entity.</param>
 	Entity(const std::string entity_ID, const std::string model_ID);
 
-	/// <summary>
-	/// Entities are unique, so we don't copy them.
-	/// </summary>
 	Entity(const Entity&) = delete;
-
-	/// <summary>
-	/// Entities are unique, so we don't copy them.
-	/// </summary>
 	Entity& operator=(const Entity&) = delete;
-
-	/// <summary>
-	/// Clean up the entity.
-	/// </summary>
 	~Entity() = default;
 
 	/// <summary>

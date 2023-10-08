@@ -38,19 +38,8 @@ struct AnimMeshDrawData
 	AnimMeshDrawData(std::shared_ptr<Entity> entity, int binding_pose_offset,
 		int weights_offset);
 
-	/// <summary>
-	/// Copy the struct.
-	/// </summary>
 	AnimMeshDrawData(const AnimMeshDrawData&) = default;
-
-	/// <summary>
-	/// Copy the struct.
-	/// </summary>
 	AnimMeshDrawData& operator=(const AnimMeshDrawData&) = default;
-
-	/// <summary>
-	/// Clean up data.
-	/// </summary>
 	~AnimMeshDrawData() = default;
 };
 
@@ -112,19 +101,8 @@ struct MeshDrawData
 		const int offset, const int vertices, 
 		const AnimMeshDrawData& animated_mesh_draw_data);
 
-	/// <summary>
-	/// Copy the struct.
-	/// </summary>
 	MeshDrawData(const MeshDrawData&) = default;
-
-	/// <summary>
-	/// Copy the struct.
-	/// </summary>
 	MeshDrawData& operator=(const MeshDrawData&) = default;
-
-	/// <summary>
-	/// Clean up data.
-	/// </summary>
 	~MeshDrawData() = default;
 };
 

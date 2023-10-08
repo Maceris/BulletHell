@@ -57,19 +57,8 @@ class Node
 	/// node, relative to the parent.</param>
 	Node(std::string name, Node* parent, glm::mat4 node_transformation);
 
-	/// <summary>
-	/// Disallow copy.
-	/// </summary>
 	Node(const Node&) = delete;
-
-	/// <summary>
-	/// Disallow copy.
-	/// </summary>
 	Node& operator=(const Node&) = delete;
-
-	/// <summary>
-	/// Clean up the node.
-	/// </summary>
 	~Node();
 
 	/// <summary>

@@ -30,18 +30,7 @@ public:
 	/// </summary>
 	QuadMesh();
 
-	/// <summary>
-	/// We don't copy meshes.
-	/// </summary>
 	QuadMesh(const QuadMesh&) = delete;
-
-	/// <summary>
-	/// We don't copy meshes.
-	/// </summary>
 	QuadMesh& operator=(const QuadMesh&) = delete;
-
-	/// <summary>
-	/// Cleanup data.
-	/// </summary>
 	~QuadMesh();
 };

@@ -67,19 +67,7 @@ struct RawMeshData
 	/// Create mesh data.
 	/// </summary>
 	RawMeshData();
-
-	/// <summary>
-	/// We don't copy the mesh data.
-	/// </summary>
 	RawMeshData(const RawMeshData&) = default;
-
-	/// <summary>
-	/// We don't copy the mesh data.
-	/// </summary>
 	RawMeshData& operator=(const RawMeshData&) = default;
-
-	/// <summary>
-	/// Clean up the data.
-	/// </summary>
 	~RawMeshData() = default;
 };

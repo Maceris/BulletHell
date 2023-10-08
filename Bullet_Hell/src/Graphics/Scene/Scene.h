@@ -65,19 +65,8 @@ public:
 	/// <param name="height">The window height, in pixels.</param>
 	Scene(const unsigned int width, const unsigned int height);
 
-	/// <summary>
-	/// Copying scenes is not allowed.
-	/// </summary>
 	Scene(const Scene&) = delete;
-
-	/// <summary>
-	/// Copying scenes is not allowed.
-	/// </summary>
 	Scene& operator=(const Scene&) = delete;
-
-	/// <summary>
-	/// Clean up scene contents
-	/// </summary>
 	~Scene() = default;
 
 	/// <summary>

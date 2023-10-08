@@ -19,19 +19,8 @@ public:
 	/// </summary>
 	MaterialCache();
 
-	/// <summary>
-	/// There is only one cache.
-	/// </summary>
 	MaterialCache(const MaterialCache&) = delete;
-
-	/// <summary>
-	/// There is only one cache.
-	/// </summary>
 	MaterialCache& operator=(const MaterialCache&) = delete;
-
-	/// <summary>
-	/// Clean up data.
-	/// </summary>
 	~MaterialCache() = default;
 
 	/// <summary>

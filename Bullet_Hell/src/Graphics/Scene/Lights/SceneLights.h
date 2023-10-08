@@ -40,18 +40,7 @@ struct SceneLights
 	/// </summary>
 	SceneLights();
 
-	/// <summary>
-	/// Do not allow copy.
-	/// </summary>
 	SceneLights(const SceneLights&) = delete;
-
-	/// <summary>
-	/// Do not allow copy.
-	/// </summary>
 	SceneLights& operator=(const SceneLights&) = delete;
-
-	/// <summary>
-	/// Clean up lights.
-	/// </summary>
 	~SceneLights() = default;
 };

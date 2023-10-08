@@ -33,19 +33,8 @@ public:
 	Texture(const unsigned int width, const unsigned int height, 
 		const char* buffer);
 
-	/// <summary>
-	/// Disallow copy.
-	/// </summary>
 	Texture(const Texture&) = delete;
-
-	/// <summary>
-	/// Disallow copy.
-	/// </summary>
 	Texture& operator=(const Texture&) = delete;
-
-	/// <summary>
-	/// Clean up the texture data.
-	/// </summary>
 	~Texture();
 
 	/// <summary>

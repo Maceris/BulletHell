@@ -31,19 +31,8 @@ public:
 	/// <param name="animation">The animation.</param>
 	AnimationData(std::shared_ptr<Animation> animation);
 
-	/// <summary>
-	/// Don't allow copy.
-	/// </summary>
 	AnimationData(const AnimationData&) = delete;
-
-	/// <summary>
-	/// Don't allow copy.
-	/// </summary>
 	AnimationData& operator=(const AnimationData&) = delete;
-	
-	/// <summary>
-	/// Clean up.
-	/// </summary>
 	~AnimationData() = default;
 
 	/// <summary>

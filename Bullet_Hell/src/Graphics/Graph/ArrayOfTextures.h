@@ -50,13 +50,7 @@ struct ArrayOfTextures
 		}
 	}
 
-	/// <summary>
-	/// Texture arrays cannot be copied.
-	/// </summary>
 	ArrayOfTextures(const ArrayOfTextures&) = delete;
-	/// <summary>
-	/// Texture arrays cannot be copied.
-	/// </summary>
 	ArrayOfTextures& operator=(const ArrayOfTextures&) = delete;
 
 	/// <summary>

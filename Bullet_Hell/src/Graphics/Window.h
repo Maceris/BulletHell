@@ -36,17 +36,8 @@ public:
 	/// Set up the object used to handle the OpenGL window.
 	/// </summary>
 	Window() = default;
-
-	/// <summary>
-	/// Windows cannot be copied, we only ever use one.
-	/// </summary>
 	Window(const Window&) = delete;
-
-	/// <summary>
-	/// Windows cannot be assigned, we only ever use one.
-	/// </summary>
 	Window& operator=(const Window&) = delete;
-
 	~Window() = default;
 
 	/// <summary>

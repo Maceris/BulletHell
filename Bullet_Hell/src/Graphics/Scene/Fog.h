@@ -39,19 +39,8 @@ struct Fog
 	/// 1/(e^(distance*density)).</param>
 	Fog(const bool active, const glm::vec3& color, const float density);
 
-	/// <summary>
-	/// Copy fog.
-	/// </summary>
 	Fog(const Fog&) = default;
-
-	/// <summary>
-	/// Copy fog.
-	/// </summary>
 	Fog& operator=(const Fog&) = default;
-
-	/// <summary>
-	/// Clean up.
-	/// </summary>
 	~Fog() = default;
 
 	/// <summary>

@@ -71,19 +71,8 @@ struct Material
 		, material_id(0)
 	{}
 
-	/// <summary>
-	/// Copy a material.
-	/// </summary>
 	Material(const Material&) = default;
-
-	/// <summary>
-	/// Copy a material.
-	/// </summary>
 	Material& operator=(const Material&) = default;
-
-	/// <summary>
-	/// Clean up a material.
-	/// </summary>
 	~Material() = default;
 };
 

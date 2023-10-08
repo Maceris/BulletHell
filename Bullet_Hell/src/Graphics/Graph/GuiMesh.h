@@ -30,18 +30,7 @@ struct GuiMesh
 	/// </summary>
 	GuiMesh();
 
-	/// <summary>
-	/// We don't copy the meshes.
-	/// </summary>
 	GuiMesh(const GuiMesh&) = delete;
-
-	/// <summary>
-	/// We don't copy the meshes.
-	/// </summary>
 	GuiMesh& operator=(const GuiMesh&) = delete;
-
-	/// <summary>
-	/// Clean up the data.
-	/// </summary>
 	~GuiMesh();
 };

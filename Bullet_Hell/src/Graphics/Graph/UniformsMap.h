@@ -40,19 +40,8 @@ public:
 	/// <param name="program_id">The shader program identifier.</param>
 	UniformsMap(GLuint program_id);
 
-	/// <summary>
-	/// No copying.
-	/// </summary>
 	UniformsMap(const UniformsMap&) = delete;
-
-	/// <summary>
-	/// No copying.
-	/// </summary>
 	UniformsMap& operator=(const UniformsMap&) = delete;
-
-	/// <summary>
-	/// Clean up data.
-	/// </summary>
 	~UniformsMap() = default;
 
 	/// <summary>

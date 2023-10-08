@@ -52,9 +52,6 @@ struct PointLight
 			, linear(linear)
 			, exponent(exponent) {}
 
-		/// <summary>
-		/// Copy from another struct.
-		/// </summary>
 		Attenuation(const Attenuation&) = default;
 	};
 

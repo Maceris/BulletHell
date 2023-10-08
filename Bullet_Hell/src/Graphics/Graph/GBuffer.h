@@ -45,18 +45,7 @@ struct GBuffer
 	/// <param name="height">The height of each texture.</param>
 	GBuffer(const unsigned int width, const unsigned int height);
 	
-	/// <summary>
-	/// We cannot copy buffers.
-	/// </summary>
 	GBuffer(const GBuffer&) = delete;
-
-	/// <summary>
-	/// We cannot copy buffers.
-	/// </summary>
 	GBuffer& operator=(const GBuffer&) = delete;
-
-	/// <summary>
-	/// Clean up resources.
-	/// </summary>
 	~GBuffer();
 };

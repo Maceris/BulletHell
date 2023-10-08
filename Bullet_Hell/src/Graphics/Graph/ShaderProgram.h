@@ -38,19 +38,8 @@ struct ShaderModuleData
 	ShaderModuleData(const char* source, int length, 
 		const GLuint type);
 
-	/// <summary>
-	/// Copy data.
-	/// </summary>
 	ShaderModuleData(const ShaderModuleData&) = default;
-
-	/// <summary>
-	/// Copy data.
-	/// </summary>
 	ShaderModuleData& operator=(const ShaderModuleData&) = default;
-
-	/// <summary>
-	/// Clean up.
-	/// </summary>
 	~ShaderModuleData() = default;
 };
 
@@ -87,18 +76,11 @@ public:
 	/// </param>
 	ShaderProgram(std::vector<ShaderModuleData> modules);
 
-	/// <summary>
-	/// We do not copy shader programs.
-	/// </summary>
 	ShaderProgram(const ShaderProgram&) = delete;
-
-	/// <summary>
-	/// We do not copy shader programs.
-	/// </summary>
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
 
 	/// <summary>
-	/// Unbind and delete the program.
+	/// Unbind and then delete the program.
 	/// </summary>
 	~ShaderProgram();
 

@@ -17,14 +17,7 @@ public:
 		InitializeCriticalSection(&critical_section);
 	}
 
-	/// <summary>
-	/// Not copyable.
-	/// </summary>
 	CriticalSection(const CriticalSection&) = delete;
-
-	/// <summary>
-	/// Not copyable.
-	/// </summary>
 	CriticalSection& operator=(const CriticalSection&) = delete;
 
 	/// <summary>
