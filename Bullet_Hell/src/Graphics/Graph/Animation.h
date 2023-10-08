@@ -26,7 +26,7 @@ struct AnimatedFrame
 	/// <summary>
 	/// The bone transformations.
 	/// </summary>
-	std::vector<BoneMatrix> bones_matrices;
+	std::vector<BoneMatrix> bone_matrices;
 
 	/// <summary>
 	/// The position in the list of bone transformation matrices.
@@ -36,9 +36,10 @@ struct AnimatedFrame
 	/// <summary>
 	/// Create a new animated frame, given the transformation matrices.
 	/// </summary>
-	/// <param name="bones_matrices">The bone transformation matrices
+	/// <param name="bone_matrices_count">The number of bone matrices that
+	/// this frame involves.
 	/// </param>
-	AnimatedFrame(const std::vector<BoneMatrix>& bones_matrices);
+	AnimatedFrame(const unsigned int bone_matrices_count);
 
 	AnimatedFrame(const AnimatedFrame&) = default;
 	AnimatedFrame& operator=(const AnimatedFrame&) = default;

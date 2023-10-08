@@ -2,10 +2,14 @@
 
 #include "Animation.h"
 
-AnimatedFrame::AnimatedFrame(const std::vector<BoneMatrix>& bones_matrices)
-	: bones_matrices(bones_matrices)
-	, offset(0)
-{}
+AnimatedFrame::AnimatedFrame(const unsigned int bone_matrices_count)
+	: offset(0)
+{
+	for (int i = 0; i < bone_matrices_count; ++i)
+	{
+		bone_matrices.emplace_back(1);
+	}
+}
 
 Animation::Animation(const std::string name, const double duration,
 	const std::vector<AnimatedFrame>& frames)
@@ -16,7 +20,8 @@ Animation::Animation(const std::string name, const double duration,
 
 void Animation::append_weights_to_buffer(std::vector<float>& buffer)
 {
-	const int data_size = (int) (weights.size() * sizeof(BoneWeights));
+	const int data_size = (int) (
+		weights.size() * sizeof(BoneWeights) / sizeof(float));
 	const float* data_start = (float*)weights.data();
 	const float* data_end = data_start + data_size;
 

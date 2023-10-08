@@ -107,10 +107,22 @@ ModelResults* import_model(const fs::directory_entry& source);
 /// <param name="expected_path">The path to the output model file.</param>
 void output_results(ModelResults* results,
 	fs::path expected_path);
-void build_frame_matrices();
+void build_frame_matrices(const aiAnimation* animation, 
+	std::vector<Bone>& bone_list, const AnimatedFrame& frame,
+	const int frame_number, Node* node, const glm::mat4& parent_transform,
+	const glm::mat4& global_inverse_transform);
 Node* build_node_tree(aiNode* raw_node, Node* parent_node);
 void build_node_transform_matrix();
-void calc_animation_max_frames();
+
+/// <summary>
+/// Calculate the maximum number of frames in an animation. Since each node
+/// might have a different number of keys, and there are different keys for
+/// position, scaling, and rotation, we look for the max overall.
+/// </summary>
+/// <param name="animation">The animation.</param>
+/// <returns>The maximum number of frames for the animation.</returns>
+unsigned int calc_animation_max_frames(const aiAnimation* animation);
+
 std::vector<std::shared_ptr<Animation>> process_animations(
 	const aiScene* scene, std::vector<Bone>& bones,
 	Node* root_node, glm::mat4 global_inverse_transform);
@@ -274,7 +286,10 @@ void output_results(ModelResults* results, fs::path expected_path)
 	//TODO(ches) complete this
 }
 
-void build_frame_matrices()
+void build_frame_matrices(const aiAnimation* animation,
+	AnimatedFrame& frame, const int frame_number, Node* node,
+	const glm::mat4& parent_transform,
+	const glm::mat4& global_inverse_transform)
 {
 	//TODO(ches) complete this
 }
@@ -289,17 +304,52 @@ void build_node_transform_matrix()
 	//TODO(ches) complete this
 }
 
-void calc_animation_max_frames()
+unsigned int calc_animation_max_frames(const aiAnimation* animation)
 {
-	//TODO(ches) complete this
+	unsigned int max_frames = 0;
+	const int channel_counts = animation->mNumChannels;
+	const aiNodeAnim** channels = animation->mChannels;
+	for (int i = 0; i < channel_counts; ++i)
+	{
+		const aiNodeAnim* node_animation = channels[i];
+		const unsigned int num_frames = std::max(
+			node_animation->mNumPositionKeys, 
+			node_animation->mNumScalingKeys, 
+			node_animation->mNumRotationKeys);
+		max_frames = std::max(max_frames, num_frames);
+	}
+	return max_frames;
 }
 
 std::vector<std::shared_ptr<Animation>> process_animations(
 	const aiScene* scene, std::vector<Bone>& bones,
 	Node* root_node, glm::mat4 global_inverse_transform)
 {
-	//TODO(ches) complete this
 	std::vector<std::shared_ptr<Animation>> animations;
+
+	const unsigned int animation_count = scene->mNumAnimations;
+	const aiAnimation** aiAnimations = scene->mAnimations;
+	for (int i = 0; i < animation_count; ++i)
+	{
+		const aiAnimation* aiAnimation = aiAnimations[i];
+		const unsigned int max_frames = calc_animation_max_frames(aiAnimation);
+		std::vector<AnimatedFrame> frames;
+		std::string name = std::string(aiAnimation->mName.C_Str());
+
+		for (int j = 0; j < max_frames; ++j)
+		{
+			AnimatedFrame animatedFrame(MAX_BONES);
+
+			build_frame_matrices(aiAnimation, animatedFrame, j, root_node, 
+				root_node->node_transformation, global_inverse_transform);
+			frames.push_back(animatedFrame);
+		}
+
+		std::shared_ptr<Animation> animation = 
+			std::make_shared<Animation>(name, aiAnimation->mDuration, frames);
+		animations.push_back(animation);
+	}
+
 	return animations;
 }
 

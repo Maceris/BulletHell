@@ -8,7 +8,7 @@
 /// <summary>
 /// A node in the hiearchy, used for generating animations.
 /// </summary>
-class Node
+struct Node
 {
 	/// <summary>
 	/// The list of children, which may be empty but should not be null.
