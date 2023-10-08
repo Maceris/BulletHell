@@ -7,9 +7,9 @@ AnimatedFrame::AnimatedFrame(const std::vector<BoneMatrix>& bones_matrices)
 	, offset(0)
 {}
 
-Animation::Animation(const int index, const double duration,
+Animation::Animation(const std::string name, const double duration,
 	const std::vector<AnimatedFrame>& frames)
-	: index(index)
+	: name(name)
 	, duration(duration)
 	, frames(frames)
 {}

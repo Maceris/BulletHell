@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 
+#include <string>
 #include <vector>
 
 #include "glm.hpp"
@@ -39,19 +40,8 @@ struct AnimatedFrame
 	/// </param>
 	AnimatedFrame(const std::vector<BoneMatrix>& bones_matrices);
 
-	/// <summary>
-	/// Copy an animated frame.
-	/// </summary>
 	AnimatedFrame(const AnimatedFrame&) = default;
-
-	/// <summary>
-	/// Copy assignment.
-	/// </summary>
 	AnimatedFrame& operator=(const AnimatedFrame&) = default;
-
-	/// <summary>
-	/// Clean up the frame.
-	/// </summary>
 	~AnimatedFrame() = default;
 };
 
@@ -78,9 +68,9 @@ struct BoneWeights
 struct Animation
 {
 	/// <summary>
-	/// The index of the animation.
+	/// The name of the animation.
 	/// </summary>
-	const int index;
+	const std::string name;
 
 	/// <summary>
 	/// The length of the animation, in ticks.
@@ -101,26 +91,15 @@ struct Animation
 	/// <summary>
 	/// Create an animation.
 	/// </summary>
-	/// <param name="index">The index of the animation.</param>
+	/// <param name="index">The name of the animation.</param>
 	/// <param name="duration">The length of the animation, in ticks.
 	/// </param>
 	/// <param name="frames">The frames that make up the animation.</param>
-	Animation(const int index, const double duration,
+	Animation(const std::string name, const double duration,
 		const std::vector<AnimatedFrame>& frames);
 
-	/// <summary>
-	/// Copy an animation.
-	/// </summary>
 	Animation(const Animation&) = default;
-
-	/// <summary>
-	/// Copy an animation.
-	/// </summary>
 	Animation& operator=(const Animation&) = default;
-
-	/// <summary>
-	/// Clean up the animation.
-	/// </summary>
 	~Animation() = default;
 
 	/// <summary>
