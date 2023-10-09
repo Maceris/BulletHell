@@ -14,7 +14,9 @@
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+#include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
+#include "gtx/quaternion.hpp"
 
 #pragma region Constants
 const unsigned int DEFAULT_POST_PROCESS_FLAGS = 
@@ -107,12 +109,13 @@ ModelResults* import_model(const fs::directory_entry& source);
 /// <param name="expected_path">The path to the output model file.</param>
 void output_results(ModelResults* results,
 	fs::path expected_path);
-void build_frame_matrices(const aiAnimation* animation, 
-	std::vector<Bone>& bone_list, const AnimatedFrame& frame,
+void build_frame_matrices(const aiAnimation* animation,
+	const std::vector<Bone>& bones, AnimatedFrame& frame, 
 	const int frame_number, Node* node, const glm::mat4& parent_transform,
 	const glm::mat4& global_inverse_transform);
 Node* build_node_tree(aiNode* raw_node, Node* parent_node);
-void build_node_transform_matrix();
+glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation, 
+	const unsigned int frame);
 
 /// <summary>
 /// Calculate the maximum number of frames in an animation. Since each node
@@ -286,12 +289,58 @@ void output_results(ModelResults* results, fs::path expected_path)
 	//TODO(ches) complete this
 }
 
-void build_frame_matrices(const aiAnimation* animation,
-	AnimatedFrame& frame, const int frame_number, Node* node,
-	const glm::mat4& parent_transform,
+void build_frame_matrices(const aiAnimation* animation, 
+	const std::vector<Bone>& bones, AnimatedFrame& frame,
+	const int frame_number, Node* node, const glm::mat4& parent_transform,
 	const glm::mat4& global_inverse_transform)
 {
-	//TODO(ches) complete this
+	aiNodeAnim* node_animation = nullptr;
+	const std::string node_name = node->name;
+	const unsigned int channel_count = animation->mNumChannels;
+	for (int i = 0; i < channel_count; ++i)
+	{
+		aiNodeAnim* test_node = animation->mChannels[i];
+
+		if (strcmp(test_node->mNodeName.C_Str(), node_name.c_str()) == 0)
+		{
+			node_animation = test_node;
+		}
+	}
+
+	glm::mat4 node_transform;
+	if (node_animation != nullptr)
+	{
+		node_transform = build_node_transform_matrix(node_animation, 
+			frame_number);
+	}
+	else {
+		node_transform = node->node_transformation;
+	}
+
+	glm::mat4 node_global_transform = glm::mat4(parent_transform)
+		* node_transform;
+
+	std::vector<Bone> affected_bones;
+	for (auto& bone : bones)
+	{
+		if (bone.bone_name == node_name)
+		{
+			affected_bones.push_back(bone);
+		}
+	}
+
+	for (auto& bone : affected_bones)
+	{
+		glm::mat4 bone_tranform = glm::mat4(global_inverse_transform)
+			* node_global_transform * bone.offset_matrix;
+		frame.bone_matrices[bone.bone_ID] = bone_tranform;
+	}
+
+	for (Node* child_node : node->children)
+	{
+		build_frame_matrices(animation, bones, frame, frame_number, child_node,
+			node_global_transform, global_inverse_transform);
+	}
 }
 Node* build_node_tree(aiNode* raw_node, Node* parent_node)
 {
@@ -299,9 +348,53 @@ Node* build_node_tree(aiNode* raw_node, Node* parent_node)
 	return nullptr;
 }
 
-void build_node_transform_matrix()
+glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
+	const unsigned int frame)
 {
-	//TODO(ches) complete this
+	aiVectorKey* position_keys = node_animation->mPositionKeys;
+	aiVectorKey* scaling_keys = node_animation->mScalingKeys;
+	aiQuatKey* rotation_keys = node_animation->mRotationKeys;
+	
+	const unsigned int position_count = node_animation->mNumPositionKeys;
+	const unsigned int scaling_count = node_animation->mNumScalingKeys;
+	const unsigned int rotation_count = node_animation->mNumRotationKeys;
+
+	// Start with identity, then transform, rotate, and scale it in that order
+	glm::mat4 node_transform = glm::mat4(1);
+	if (position_count > 0)
+	{
+		aiVectorKey key = position_keys[std::min(position_count - 1, frame)];
+		aiVector3D vector = key.mValue;
+		glm::mat4 translation = glm::mat4(
+			1, 0, 0, vector.x,
+			0, 1, 0, vector.y,
+			0, 0, 1, vector.z,
+			0, 0, 0, 1
+		);
+		node_transform *= translation;
+	}
+
+	if (rotation_count > 0)
+	{
+		aiQuatKey key = rotation_keys[std::min(rotation_count - 1, frame)];
+		glm::quat quat(key.mValue.w, key.mValue.x, key.mValue.y, key.mValue.z);
+		node_transform *= glm::toMat4(quat);
+	}
+	
+	if (scaling_count)
+	{
+		aiVectorKey key = scaling_keys[std::min(scaling_count - 1, frame)];
+		aiVector3D vector = key.mValue;
+		glm::mat4 scale = glm::mat4(
+			vector.x, 0,        0,        0,
+			0,        vector.y, 0,        0,
+			0,        0,        vector.z, 0,
+			0,        0,        0,        0
+		);
+		node_transform *= scale;
+	}
+
+	return node_transform;
 }
 
 unsigned int calc_animation_max_frames(const aiAnimation* animation)
@@ -327,6 +420,9 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 {
 	std::vector<std::shared_ptr<Animation>> animations;
 
+	// bones.size() should not be ridiculously large, so down-casting is fine
+	const int bone_count = std::min(MAX_BONES, (int) bones.size());
+
 	const unsigned int animation_count = scene->mNumAnimations;
 	const aiAnimation** aiAnimations = scene->mAnimations;
 	for (int i = 0; i < animation_count; ++i)
@@ -334,14 +430,24 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 		const aiAnimation* aiAnimation = aiAnimations[i];
 		const unsigned int max_frames = calc_animation_max_frames(aiAnimation);
 		std::vector<AnimatedFrame> frames;
-		std::string name = std::string(aiAnimation->mName.C_Str());
+		std::string name;
+		
+		if (aiAnimation->mName.length <= 0)
+		{
+			name = "animation" + i;
+		} 
+		else
+		{
+			name = std::string(aiAnimation->mName.C_Str());
+		}
 
 		for (int j = 0; j < max_frames; ++j)
 		{
-			AnimatedFrame animatedFrame(MAX_BONES);
+			AnimatedFrame animatedFrame(bone_count);
 
-			build_frame_matrices(aiAnimation, animatedFrame, j, root_node, 
-				root_node->node_transformation, global_inverse_transform);
+			build_frame_matrices(aiAnimation, bones, animatedFrame, j,
+				root_node, root_node->node_transformation, 
+				global_inverse_transform);
 			frames.push_back(animatedFrame);
 		}
 
@@ -357,6 +463,7 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data)
 {
 	//TODO(ches) complete this
+
 }
 
 void process_indices(const aiMesh* mesh, 
