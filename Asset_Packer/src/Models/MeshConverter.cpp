@@ -758,7 +758,7 @@ std::shared_ptr<RawMeshData> process_mesh(const aiMesh* mesh,
 void process_texture_coordinates(const aiMesh* mesh,
 	std::shared_ptr<RawMeshData> mesh_data)
 {
-	const aiVector3D* const *coordinates_array = mesh->mTextureCoords;
+	const aiVector3D* coordinates_array = mesh->mTextureCoords[0];
 	const unsigned int length = mesh->mNumVertices;
 
 	if (coordinates_array == nullptr || length <= 0)
@@ -767,7 +767,7 @@ void process_texture_coordinates(const aiMesh* mesh,
 	}
 	for (int i = 0; i < length; ++i)
 	{
-		const aiVector3D vector = *coordinates_array[i];
+		const aiVector3D vector = coordinates_array[i];
 		mesh_data->texture_coordinates.push_back(vector.x);
 		mesh_data->texture_coordinates.push_back(1 - vector.y);
 	}
