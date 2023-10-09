@@ -371,7 +371,8 @@ void output_results(ModelResults* results, fs::path model_path,
 	std::string model_name)
 {
 	//TODO(ches) complete this
-	
+	LOG_ASSERT(results != nullptr);
+	assert(results != nullptr);
 
 	// Mesh data
 	LOG_TAGGED("MODEL", "Meshes: "
@@ -430,7 +431,15 @@ void build_frame_matrices(const aiAnimation* animation,
 	{
 		glm::mat4 bone_tranform = glm::mat4(global_inverse_transform)
 			* node_global_transform * bone.offset_matrix;
-		frame.bone_matrices[bone.bone_ID] = bone_tranform;
+		int bone_ID = bone.bone_ID;
+		if (bone_ID < MAX_BONES)
+		{
+			frame.bone_matrices[bone.bone_ID] = bone_tranform;
+		}
+		else {
+			LOG_WARNING("Ignoring a bone ID of " + std::to_string(bone_ID)
+				+ " as it is above the limit of " + std::to_string(MAX_BONES));
+		}
 	}
 
 	for (Node* child_node : node->children)

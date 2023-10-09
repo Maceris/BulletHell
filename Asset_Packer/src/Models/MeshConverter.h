@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 /// <summary>
 /// The maximum number of bones that are allowed in a model.
 /// </summary>
-constexpr auto MAX_BONES = 150;
+constexpr auto MAX_BONES = 256;
 
 /// <summary>
 /// The extension to use for the output files.

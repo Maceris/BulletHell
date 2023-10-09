@@ -143,7 +143,7 @@ int FileUtils::process_file(const fs::directory_entry& file)
     auto dot = extension.find_last_of("\\.");
     extension = extension.substr(dot, extension.size());
 
-    if (".obj" == extension)
+    if (".obj" == extension || ".fbx" == extension)
     {
         MeshConverter::convert_model(file);
     }
