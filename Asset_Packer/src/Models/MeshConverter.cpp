@@ -138,7 +138,7 @@ void build_frame_matrices(const aiAnimation* animation,
 	const std::vector<Bone>& bones, AnimatedFrame& frame, 
 	const int frame_number, Node* node, const glm::mat4& parent_transform,
 	const glm::mat4& global_inverse_transform);
-Node* build_node_tree(aiNode* raw_node, Node* parent_node);
+Node* build_node_tree(const aiNode* raw_node, Node* parent_node);
 glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation, 
 	const unsigned int frame);
 
@@ -303,6 +303,8 @@ ModelResults* import_model(const fs::directory_entry& source)
 			scene->mRootNode->mTransformation));
 		results->animations = process_animations(scene, bones, root_node,
 			global_inverse_transform);
+
+		delete root_node;
 	}
 
 	aiReleaseImport(scene);
@@ -367,10 +369,35 @@ void build_frame_matrices(const aiAnimation* animation,
 			node_global_transform, global_inverse_transform);
 	}
 }
-Node* build_node_tree(aiNode* raw_node, Node* parent_node)
+Node* build_node_tree(const aiNode* raw_node, Node* parent_node)
 {
-	//TODO(ches) complete this
-	return nullptr;
+	// For fallback IDs
+	static int node_ID;
+
+	std::string name;
+	if (raw_node->mName.length == 0)
+	{
+		name = "node" + node_ID;
+		++node_ID;
+	}
+	else
+	{
+		name = std::string(raw_node->mName.C_Str());
+	}
+
+	Node* node = 
+		new Node(name, parent_node, to_matrix(raw_node->mTransformation));
+
+	const unsigned int child_count = raw_node->mNumChildren;
+	aiNode** const children = raw_node->mChildren;
+	for (int i = 0; i < child_count; ++i)
+	{
+		const aiNode* ai_child = children[i];
+		Node* child = build_node_tree(ai_child, node);
+		node->add_child(child);
+	}
+
+	return node;
 }
 
 glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
