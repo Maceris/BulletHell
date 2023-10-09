@@ -1,6 +1,7 @@
 #include "MeshConverter.h"
 
 #include "FileUtils.h"
+#include "Logger.h"
 #include "RawMeshData.h"
 
 #include "Animation.h"
@@ -53,7 +54,9 @@ const unsigned int DEFAULT_POST_PROCESS_FLAGS =
 	*/
 	| aiProcess_RemoveRedundantMaterials;
 
-const std::string OUTPUT_EXTENSION = ".model";
+const std::string ANIMATION_OUTPUT_EXTENSION = ".animation";
+const std::string MATERIAL_OUTPUT_EXTENSION = ".material";
+const std::string MODEL_OUTPUT_EXTENSION = ".model";
 
 #pragma endregion
 
@@ -104,7 +107,6 @@ struct ModelResults
 	std::vector<std::shared_ptr<Animation>> animations;
 	std::vector<std::shared_ptr<RawMeshData>> mesh_data;
 	std::vector<std::shared_ptr<Material>> materials;
-
 };
 
 #pragma endregion
@@ -131,9 +133,11 @@ ModelResults* import_model(const fs::directory_entry& source);
 /// Output the results from loading a model to a file.
 /// </summary>
 /// <param name="results">The results from importing.</param>
-/// <param name="expected_path">The path to the output model file.</param>
-void output_results(ModelResults* results,
-	fs::path expected_path);
+/// <param name="model_path">The folder that results will be placed in.</param>
+/// <param name="model_name">The name of the model, without path or extension.
+/// </param>
+void output_results(ModelResults* results, fs::path model_path, 
+	std::string model_name);
 
 /// <summary>
 /// For a given frame, go through and build transformation matrices from the
@@ -276,22 +280,27 @@ inline void append_vector_array(const aiVector3D* vector_array,
 
 void MeshConverter::convert_model(const fs::directory_entry& source)
 {
+	LOG_TAGGED("MODEL", "Converting model " + source.path().string());
     std::string target_file_name = source.path().string();
-    target_file_name = target_file_name.erase(0, ASSET_FOLDER.size());
+	target_file_name.erase(0, ASSET_FOLDER.size());
   
-    // Swap extensions
-    auto dot = target_file_name.find_last_of("\\.");
-    const int extension_size = target_file_name.size() - dot;
-    target_file_name = target_file_name.erase(dot, extension_size);
-    target_file_name = target_file_name + OUTPUT_EXTENSION;
-    
-    target_file_name = TEMP_FOLDER + target_file_name;
+	std::string model_path_string = TEMP_FOLDER + target_file_name;
+	auto last_slash = model_path_string.find_last_of(
+		fs::path::preferred_separator);
+	model_path_string.erase(last_slash, model_path_string.size() - last_slash);
+
+	fs::path model_path(model_path_string);
+
+	target_file_name = source.path().filename().string();
+	auto dot = target_file_name.find_last_of("\\.");
+	const int extension_size = target_file_name.size() - dot;
+	std::string model_name = target_file_name.erase(dot, extension_size);
 
     fs::path target_path(target_file_name);
 	ModelResults* results = import_model(source);
 	if (results != nullptr)
 	{
-		output_results(results, target_path);
+		output_results(results, model_path, model_name);
 		delete results;
 		results = nullptr;
 	}
@@ -304,7 +313,7 @@ ModelResults* import_model(const fs::directory_entry& source)
 		DEFAULT_POST_PROCESS_FLAGS);
 	if (scene == nullptr)
 	{
-		std::cout << "Error loading " << source_path << std::endl;
+		LOG_FATAL("Error loading " + source_path);
 		return nullptr;
 	}
 	
@@ -320,7 +329,7 @@ ModelResults* import_model(const fs::directory_entry& source)
 
 		if (result == nullptr)
 		{
-			std::cout << "Error transforming " << source_path << std::endl;
+			LOG_FATAL("Error transforming " + source_path);
 			return nullptr;
 		}
 		// scene was modified in place
@@ -334,7 +343,7 @@ ModelResults* import_model(const fs::directory_entry& source)
 		std::shared_ptr<Material> material = process_material(raw_material);
 		results->materials.push_back(std::move(material));
 	}
-
+	
 	std::vector<Bone> bones;
 	const int mesh_count = scene->mNumMeshes;
 	for (int i = 0; i < mesh_count; ++i)
@@ -343,7 +352,6 @@ ModelResults* import_model(const fs::directory_entry& source)
 		std::shared_ptr<RawMeshData> mesh_data = process_mesh(raw_mesh, bones);
 		results->mesh_data.push_back(std::move(mesh_data));
 	}
-
 	
 	if (animated)
 	{
@@ -355,14 +363,27 @@ ModelResults* import_model(const fs::directory_entry& source)
 
 		delete root_node;
 	}
-
 	aiReleaseImport(scene);
 	return results;
 }
 
-void output_results(ModelResults* results, fs::path expected_path)
+void output_results(ModelResults* results, fs::path model_path, 
+	std::string model_name)
 {
 	//TODO(ches) complete this
+	
+
+	// Mesh data
+	LOG_TAGGED("MODEL", "Meshes: "
+		+ std::to_string(results->mesh_data.size()));
+
+	// Materials
+	LOG_TAGGED("MODEL", "Materials: "
+		+ std::to_string(results->materials.size()));
+
+	// Animations
+	LOG_TAGGED("MODEL", "Animations: "
+		+ std::to_string(results->animations.size()));
 }
 
 void build_frame_matrices(const aiAnimation* animation, 

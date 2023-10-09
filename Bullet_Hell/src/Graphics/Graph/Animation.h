@@ -42,7 +42,7 @@ struct AnimatedFrame
 	AnimatedFrame(const unsigned int bone_matrices_count)
 		: offset(0)
 	{
-		for (int i = 0; i < bone_matrices_count; ++i)
+		for (unsigned int i = 0; i < bone_matrices_count; ++i)
 		{
 			bone_matrices.emplace_back(1);
 		}

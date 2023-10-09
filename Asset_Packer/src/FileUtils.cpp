@@ -1,10 +1,10 @@
 #include "FileUtils.h"
 
 #include <string>
-#include <iostream>
 
 #include "ZipFile.h"
 
+#include "Logger.h"
 #include "MeshConverter.h"
 
 const std::string ASSET_FOLDER = "Assets";
@@ -14,8 +14,8 @@ const std::string OUTPUT_FILE = "dist/assets.zip";
 int FileUtils::process_all_files()
 {
     if (!fs::exists(ASSET_FOLDER)) {
-        std::cout << "Asset directory " << fs::absolute(ASSET_FOLDER);
-        std::cout << " does not exist!" << std::endl;
+        LOG_FATAL("Asset directory " 
+            + fs::absolute(ASSET_FOLDER).string() + " does not exist!");
         return 1;
     }
     int total_files = 0;
@@ -26,8 +26,8 @@ int FileUtils::process_all_files()
 
     if (fs::exists(OUTPUT_FILE))
     {
-        std::cout << "The file " << OUTPUT_FILE << " already exists, ";
-        std::cout << "removing it and recreating." << std::endl;
+        LOG_WARNING("The file " + OUTPUT_FILE 
+            + " already exists, removing it and recreating.");
         fs::remove(OUTPUT_FILE);
     }
 
@@ -43,7 +43,7 @@ int FileUtils::process_all_files()
             target_folder_name = TEMP_FOLDER + target_folder_name;
 
             std::filesystem::path target_path(target_folder_name);
-            std::cout << "Creating temp directory " << target_path << std::endl;
+            LOG_INFO("Creating temp directory " + target_path.string());
 
             if (!fs::exists(target_path))
             {
@@ -57,19 +57,20 @@ int FileUtils::process_all_files()
         ++total_files;
         if (process_file(entry) != 0)
         {
-            std::cout << "Error processing the file ";
-            std::cout << fs::absolute(entry.path()) << std::endl;
+            LOG_ERROR("Error processing the file "
+                + fs::absolute(entry.path()).string());
             ++errors;
         }
     }
-    std::cout << "Zipping contents..." << std::endl;
+    LOG_INFO("Zipping contents...");
     zip_contents();
-    std::cout << "Done zipping!" << std::endl;
+    LOG_INFO("Done zipping!");
 
     delete_temp_folder();
 
-    std::cout << "Processed " << total_files << " files." << std::endl;
-    std::cout << "There were " << errors << " errors." << std::endl;
+    LOG_INFO("Processed " + std::to_string(total_files) + " files.");
+    LOG_INFO("There were " + std::to_string(errors) + " errors.");
+
     if (errors > 0)
     {
         return 1;
@@ -81,14 +82,14 @@ int FileUtils::create_temp_folder()
 {
     if (fs::exists(TEMP_FOLDER))
     {
-        std::cout << "WARNING: Temporary folder " << fs::absolute(TEMP_FOLDER);
-        std::cout << " already exists" << std::endl;
+        LOG_WARNING("Temporary folder " + fs::absolute(TEMP_FOLDER).string()
+        + " already exists");
         return 0;
     }
     if (!fs::create_directory(TEMP_FOLDER))
     {
-        std::cout << "Failed to create temporary folder ";
-        std::cout << fs::absolute(TEMP_FOLDER) << std::endl;
+        LOG_FATAL("Failed to create temporary folder " 
+            + fs::absolute(TEMP_FOLDER).string());
         return 1;
     }
     return 0;
@@ -104,7 +105,8 @@ int FileUtils::zip_contents()
         }
 
         std::string file_to_zip = entry.path().string();
-        std::cout << "Zipping " << entry.path() << "..." << std::endl;
+
+        LOG_INFO("Zipping " + file_to_zip + "...");
 
         std::string in_archive_name = file_to_zip;
         in_archive_name.erase(0, TEMP_FOLDER.size() + 1);
@@ -119,14 +121,14 @@ void FileUtils::delete_temp_folder()
 {
     if (!fs::exists(TEMP_FOLDER))
     {
-        std::cout << "Trying to delete temp folder " << TEMP_FOLDER;
-        std::cout << " but it does not exist." << std::endl;
+        LOG_INFO("Trying to delete temp folder " + TEMP_FOLDER
+            + " but it does not exist.");
         return;
     }
     uintmax_t files_removed = fs::remove_all(TEMP_FOLDER);
-    std::cout << "Deleted temporary folder " << TEMP_FOLDER;
-    std::cout << ", removing a total of " << files_removed;
-    std::cout << " files/directories" << std::endl;
+    LOG_INFO("Deleted temporary folder " + TEMP_FOLDER
+        + ", removing a total of " + std::to_string(files_removed)
+        + " files/directories");
 }
 
 int FileUtils::process_file(const fs::directory_entry& file)

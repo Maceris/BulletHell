@@ -112,14 +112,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,18 +132,19 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
+    <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Models\MeshConverter.cpp" />
@@ -174,6 +175,8 @@
     <ClInclude Include="src\3rdParty\glm\glm\vec3.hpp" />
     <ClInclude Include="src\3rdParty\glm\glm\vec4.hpp" />
     <ClInclude Include="src\3rdParty\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="src\Debugging\CriticalSection.h" />
+    <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\FileUtils.h" />
     <ClInclude Include="src\Models\MeshConverter.h" />
     <ClInclude Include="src\Models\Node.h" />

@@ -8,4 +8,6 @@ set configuration=Debug
 IF %ERRORLEVEL% NEQ 0 (
   ECHO ----
   ECHO Could not find asset packer for the %platform% %configuration% build, please check the script
+  pause
 )
+pause

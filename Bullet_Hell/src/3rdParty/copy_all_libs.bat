@@ -5,14 +5,17 @@ md ..\Lib\x64Debug
 md ..\Lib\x64Release
 md ..\Lib\x64Profile
 
-echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.lib ..\Lib\x64Debug\glfw3.lib
-echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.pdb ..\Lib\x64Debug\glfw3.pdb
+set platform=x64
+set configuration=Debug
 
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\bzip2.lib ..\Lib\x64Debug\bzip2.lib
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\bzip2.pdb ..\Lib\x64Debug\bzip2.pdb
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\lzma.lib ..\Lib\x64Debug\lzma.lib
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\lzma.pdb ..\Lib\x64Debug\lzma.pdb
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\ZipLib.lib ..\Lib\x64Debug\ZipLib.lib
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\ZipLib.pdb ..\Lib\x64Debug\ZipLib.pdb
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\zlib.lib ..\Lib\x64Debug\zlib.lib
-echo f | xcopy /D /y ziplib\Bin\x64\Debug\zlib.pdb ..\Lib\x64Debug\zlib.pdb
+echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.lib ..\Lib\%platform%%configuration%\glfw3.lib
+echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.pdb ..\Lib\%platform%%configuration%\glfw3.pdb
+
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\bzip2.lib ..\Lib\%platform%%configuration%\bzip2.lib
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\bzip2.pdb ..\Lib\%platform%%configuration%\bzip2.pdb
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\lzma.lib ..\Lib\%platform%%configuration%\lzma.lib
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\lzma.pdb ..\Lib\%platform%%configuration%\lzma.pdb
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\ZipLib.lib ..\Lib\%platform%%configuration%\ZipLib.lib
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\ZipLib.pdb ..\Lib\%platform%%configuration%\ZipLib.pdb
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.lib ..\Lib\%platform%%configuration%\zlib.lib
+echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.pdb ..\Lib\%platform%%configuration%\zlib.pdb

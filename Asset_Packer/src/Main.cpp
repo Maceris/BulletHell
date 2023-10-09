@@ -1,7 +1,5 @@
-#include <iostream>
-#include <windows.h>
-
 #include "FileUtils.h"
+#include "Logger.h"
 
 const std::string version = "0.0.1";
 
@@ -11,8 +9,12 @@ const std::string version = "0.0.1";
 /// <returns>The exit code for the program.</returns>
 int main(int argc, char* argv[])
 {
-    std::cout << "Asset packer v" << version << std::endl;
+    Logger::init();
+    Logger::set_display_flags("MODEL", FLAG_WRITE_TO_DEBUGGER);
+    LOG_INFO("Asset packer v" + version);
 
     int result = FileUtils::process_all_files();
+
+    Logger::destroy();
     return result;
 }
