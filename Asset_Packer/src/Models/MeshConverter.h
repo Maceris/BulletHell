@@ -3,11 +3,6 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
-/// <summary>
-/// The maximum number of bone weights that can affect a vertex, the
-/// default value used by Assimp when limiting bone weights.
-/// </summary>
-constexpr auto MAX_WEIGHTS = 4;
 
 /// <summary>
 /// The maximum number of bones that are allowed in a model.

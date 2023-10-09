@@ -39,7 +39,14 @@ struct AnimatedFrame
 	/// <param name="bone_matrices_count">The number of bone matrices that
 	/// this frame involves.
 	/// </param>
-	AnimatedFrame(const unsigned int bone_matrices_count);
+	AnimatedFrame(const unsigned int bone_matrices_count)
+		: offset(0)
+	{
+		for (int i = 0; i < bone_matrices_count; ++i)
+		{
+			bone_matrices.emplace_back(1);
+		}
+	}
 
 	AnimatedFrame(const AnimatedFrame&) = default;
 	AnimatedFrame& operator=(const AnimatedFrame&) = default;
@@ -97,7 +104,11 @@ struct Animation
 	/// </param>
 	/// <param name="frames">The frames that make up the animation.</param>
 	Animation(const std::string name, const double duration,
-		const std::vector<AnimatedFrame>& frames);
+		const std::vector<AnimatedFrame>& frames)
+		: name(name)
+		, duration(duration)
+		, frames(frames)
+	{}
 
 	Animation(const Animation&) = default;
 	Animation& operator=(const Animation&) = default;
@@ -107,7 +118,13 @@ struct Animation
 	/// Append the bone index/weight data to a buffer.
 	/// </summary>
 	/// <param name="buffer">The buffer to append to.</param>
-	void append_weights_to_buffer(std::vector<float>& buffer);
+	void constexpr append_weights_to_buffer(std::vector<float>& buffer)
+	{
+		const int data_size = (int)(
+			weights.size() * sizeof(BoneWeights) / sizeof(float));
+		const float* data_start = (float*)weights.data();
+		const float* data_end = data_start + data_size;
+
+		buffer.insert(buffer.end(), data_start, data_end);
+	}
 }; 
-
-

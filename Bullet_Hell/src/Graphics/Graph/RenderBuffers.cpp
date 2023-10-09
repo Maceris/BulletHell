@@ -214,7 +214,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 		{
 			for (auto& frame : animation.frames)
 			{
-				for (auto& bone_matrix : frame.bones_matrices)
+				for (auto& bone_matrix : frame.bone_matrices)
 				{
 					data_buffer.insert(data_buffer.end(), matrix_size, 
 						*glm::value_ptr(bone_matrix));

@@ -9,6 +9,7 @@
 #include "Node.h"
 
 #include <iostream>
+#include <map>
 #include <vector>
 
 #include "assimp/cimport.h"
@@ -62,6 +63,21 @@ struct Bone
 	int bone_ID;
 	std::string bone_name;
 	glm::mat4 offset_matrix;
+	Bone() = default;
+	Bone(const int id, const std::string bone_name, 
+		const glm::mat4& offset_matrix)
+		: bone_ID(id)
+		, bone_name(bone_name)
+		, offset_matrix(offset_matrix)
+	{}
+	Bone(const int id, const std::string bone_name, glm::mat4&& offset_matrix)
+		: bone_ID(id)
+		, bone_name(bone_name)
+		, offset_matrix(std::move(offset_matrix))
+	{}
+	Bone(const Bone&) = default;
+	Bone& operator=(const Bone&) = default;
+	~Bone() = default;
 };
 
 struct VertexWeight
@@ -69,6 +85,15 @@ struct VertexWeight
 	int bone_ID;
 	int vertex_ID;
 	float weight;
+	VertexWeight() = default;
+	VertexWeight(const int bone_ID, const int vertex_ID, const float weight)
+		: bone_ID(bone_ID)
+		, vertex_ID(vertex_ID)
+		, weight(weight)
+	{}
+	VertexWeight(const VertexWeight&) = default;
+	VertexWeight& operator=(const VertexWeight&) = default;
+	~VertexWeight() = default;
 };
 
 /// <summary>
@@ -401,13 +426,13 @@ unsigned int calc_animation_max_frames(const aiAnimation* animation)
 {
 	unsigned int max_frames = 0;
 	const int channel_counts = animation->mNumChannels;
-	const aiNodeAnim** channels = animation->mChannels;
+	aiNodeAnim** const channels = animation->mChannels;
 	for (int i = 0; i < channel_counts; ++i)
 	{
 		const aiNodeAnim* node_animation = channels[i];
 		const unsigned int num_frames = std::max(
-			node_animation->mNumPositionKeys, 
-			node_animation->mNumScalingKeys, 
+			std::max(node_animation->mNumPositionKeys, 
+			node_animation->mNumScalingKeys),
 			node_animation->mNumRotationKeys);
 		max_frames = std::max(max_frames, num_frames);
 	}
@@ -424,7 +449,7 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 	const int bone_count = std::min(MAX_BONES, (int) bones.size());
 
 	const unsigned int animation_count = scene->mNumAnimations;
-	const aiAnimation** aiAnimations = scene->mAnimations;
+	aiAnimation** const aiAnimations = scene->mAnimations;
 	for (int i = 0; i < animation_count; ++i)
 	{
 		const aiAnimation* aiAnimation = aiAnimations[i];
@@ -462,8 +487,77 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data)
 {
-	//TODO(ches) complete this
+	const unsigned int bone_count = mesh->mNumBones;
+	aiBone** const ai_bones = mesh->mBones;
 
+	std::map<int, std::vector<VertexWeight>> weight_map;
+
+	for (int i = 0; i < bone_count; ++i)
+	{
+		const aiBone* ai_bone = ai_bones[i];
+		const int id = bones.size();
+		std::string bone_name;
+		if (ai_bone->mName.length == 0)
+		{
+			bone_name = "bone" + id;
+		}
+		else
+		{
+			bone_name = std::string(ai_bone->mName.C_Str());
+		}
+
+		Bone bone(id, bone_name, to_matrix(ai_bone->mOffsetMatrix));
+		bones.push_back(bone);
+
+		const unsigned int weight_count = ai_bone->mNumWeights;
+		const aiVertexWeight* weights = ai_bone->mWeights;
+		for (int j = 0; j < weight_count; ++j)
+		{
+			aiVertexWeight ai_weight = weights[j];
+			VertexWeight weight(bone.bone_ID, ai_weight.mVertexId,
+				ai_weight.mWeight);
+
+			if (weight_map.find(weight.vertex_ID) == weight_map.end())
+			{
+				weight_map.insert(std::make_pair(weight.vertex_ID,
+					std::vector<VertexWeight>()));
+			}
+			std::vector<VertexWeight>& weights = 
+				weight_map.find(weight.vertex_ID)->second;
+			weights.push_back(weight);
+		}
+	}
+
+	const unsigned int vertex_count = mesh->mNumVertices;
+	for (int i = 0; i < vertex_count; ++i)
+	{
+		
+		unsigned int size = 0;
+		auto iter = weight_map.find(i);
+		std::vector<VertexWeight>* weights = nullptr;
+		if (iter != weight_map.end())
+		{
+			weights = &iter->second;
+			size = weights->size();
+		}
+		BoneWeights bone_weights = BoneWeights();
+		for (int j = 0; j < MAX_WEIGHTS_PER_BONE; ++j)
+		{
+			if (j < size)
+			{
+				// Only reachable if weights was not null
+				VertexWeight& vw = weights->at(j);
+				bone_weights.weights[j] = vw.weight;
+				bone_weights.indices[j] = vw.bone_ID;
+			}
+			else
+			{
+				bone_weights.weights[j] = 0.0f;
+				bone_weights.indices[j] = 0;
+			}
+		}
+		mesh_data->bone_indices.push_back(bone_weights);
+	}
 }
 
 void process_indices(const aiMesh* mesh, 
