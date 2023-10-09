@@ -134,11 +134,42 @@ ModelResults* import_model(const fs::directory_entry& source);
 /// <param name="expected_path">The path to the output model file.</param>
 void output_results(ModelResults* results,
 	fs::path expected_path);
+
+/// <summary>
+/// For a given frame, go through and build transformation matrices from the
+/// root node down recursively.
+/// </summary>
+/// <param name="animation">The animation data.</param>
+/// <param name="bones">The list of bone information.</param>
+/// <param name="frame">The frame data.</param>
+/// <param name="frame_number">The frame number we are processing.</param>
+/// <param name="node">The current node we are processing.</param>
+/// <param name="parent_transform">The transformation matrix of the parent
+/// node.</param>
+/// <param name="global_inverse_transform">The inverse of the root node
+/// transformation matrix.</param>
 void build_frame_matrices(const aiAnimation* animation,
 	const std::vector<Bone>& bones, AnimatedFrame& frame, 
 	const int frame_number, Node* node, const glm::mat4& parent_transform,
 	const glm::mat4& global_inverse_transform);
+
+/// <summary>
+/// Builds a tree of named nodes for later processing.
+/// </summary>
+/// <param name="raw_node">The node from assimp to process.</param>
+/// <param name="parent_node">The parent node, which may be null for the root
+/// node.</param>
+/// <returns>The converted node.</returns>
 Node* build_node_tree(const aiNode* raw_node, Node* parent_node);
+
+/// <summary>
+/// Build a ndoe transformation matrix for the specified frame of an 
+/// animation.
+/// </summary>
+/// <param name="node_animation">The animation we are working on.</param>
+/// <param name="frame">The frame we want.</param>
+/// <returns>The node transformation matrix corresponding to 
+/// the specifed frame of the animation.</returns>
 glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation, 
 	const unsigned int frame);
 
@@ -151,9 +182,27 @@ glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
 /// <returns>The maximum number of frames for the animation.</returns>
 unsigned int calc_animation_max_frames(const aiAnimation* animation);
 
+/// <summary>
+/// Process a scene and extract a list of animations.
+/// </summary>
+/// <param name="scene">The scene we are processing.</param>
+/// <param name="bones">The bone data.</param>
+/// <param name="root_node">The scene's root node.</param>
+/// <param name="global_inverse_transform">The inverse of the root node's
+/// transformation relative to the parent.</param>
+/// <returns>A list of animations.</returns>
 std::vector<std::shared_ptr<Animation>> process_animations(
 	const aiScene* scene, std::vector<Bone>& bones,
 	Node* root_node, glm::mat4 global_inverse_transform);
+
+/// <summary>
+/// Process the mesh and populate the bone list with bone data for use in
+/// processing animations, as well as updating the mesh data structure for
+/// with bone and weight data for the vertices.
+/// </summary>
+/// <param name="mesh">The mesh we are processing.</param>
+/// <param name="bones">The bone list to populate.</param>
+/// <param name="mesh_data">Mesh data to store bone weights in.</param>
 void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	std::shared_ptr<RawMeshData> mesh_data);
 
