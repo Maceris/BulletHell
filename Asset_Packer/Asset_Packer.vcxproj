@@ -119,7 +119,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +139,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -149,7 +149,6 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Models\MeshConverter.cpp" />
     <ClCompile Include="src\Models\Node.cpp" />
-    <ClCompile Include="src\Models\RawMeshData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\3rdParty\glm\glm\common.hpp" />

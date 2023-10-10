@@ -25,7 +25,7 @@ struct RawMeshData
 	/// <summary>
 	/// The indices of all the faces.
 	/// </summary>
-	std::vector<int> indices;
+	std::vector<uint32_t> indices;
 
 	/// <summary>
 	/// Lists of bone IDs that affect the vertices, and their weights, 
@@ -37,8 +37,7 @@ struct RawMeshData
 
 	/// <summary>
 	/// A mesh uses only a single material, so if an imported model uses
-	/// multiple materials, the import splits up the mesh. This value is used
-	/// reference the appropriate material in the material cache.
+	/// multiple materials, the import splits up the mesh.
 	/// </summary>
 	int material_id;
 
@@ -63,10 +62,9 @@ struct RawMeshData
 	/// </summary>
 	std::vector<float> texture_coordinates;
 
-	/// <summary>
-	/// Create mesh data.
-	/// </summary>
-	RawMeshData();
+	RawMeshData()
+		: material_id(0)
+	{}
 	RawMeshData(const RawMeshData&) = default;
 	RawMeshData& operator=(const RawMeshData&) = default;
 	~RawMeshData() = default;

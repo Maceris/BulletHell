@@ -24,9 +24,6 @@
     <ClCompile Include="src\Models\MeshConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Models\RawMeshData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Models\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

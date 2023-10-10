@@ -1,5 +1,6 @@
 #include "MeshConverter.h"
 
+
 #include "FileUtils.h"
 #include "Logger.h"
 #include "RawMeshData.h"
@@ -9,9 +10,14 @@
 #include "MeshData.h"
 #include "Node.h"
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <vector>
+
+#define NOMINMAX
+#include <winsock2.h>
 
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
@@ -136,8 +142,17 @@ ModelResults* import_model(const fs::directory_entry& source);
 /// <param name="model_path">The folder that results will be placed in.</param>
 /// <param name="model_name">The name of the model, without path or extension.
 /// </param>
-void output_results(ModelResults* results, fs::path model_path, 
-	std::string model_name);
+void output_results(ModelResults* results, const fs::path& model_path, 
+	const std::string& model_name);
+
+void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data, 
+	const fs::path& model_path, const std::string& model_name);
+
+void output_animation(std::shared_ptr<Animation> animation,
+	const fs::path& model_path, const std::string& model_name);
+
+void output_material(std::shared_ptr<Material> material,
+	const fs::path& model_path, const std::string& model_name);
 
 /// <summary>
 /// For a given frame, go through and build transformation matrices from the
@@ -367,24 +382,98 @@ ModelResults* import_model(const fs::directory_entry& source)
 	return results;
 }
 
-void output_results(ModelResults* results, fs::path model_path, 
-	std::string model_name)
+void output_results(ModelResults* results, const fs::path& model_path,
+	const std::string& model_name)
 {
-	//TODO(ches) complete this
 	LOG_ASSERT(results != nullptr);
 	assert(results != nullptr);
 
-	// Mesh data
 	LOG_TAGGED("MODEL", "Meshes: "
 		+ std::to_string(results->mesh_data.size()));
+	output_mesh(results->mesh_data, model_path, model_name);
 
-	// Materials
 	LOG_TAGGED("MODEL", "Materials: "
 		+ std::to_string(results->materials.size()));
+	for (auto& material : results->materials)
+	{
+		output_material(material, model_path, model_name);
+	}
 
-	// Animations
 	LOG_TAGGED("MODEL", "Animations: "
 		+ std::to_string(results->animations.size()));
+	for (auto& animation : results->animations)
+	{
+		output_animation(animation, model_path, model_name);
+	}
+}
+
+void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data,
+	const fs::path& model_path, const std::string& model_name)
+{
+	uint16_t _tmp16;
+	uint32_t _tmp32;
+
+	//TODO(ches) complete this
+	const std::string file_name = model_path.string() + '/' + model_name
+		+ MODEL_OUTPUT_EXTENSION;
+	std::ofstream out(file_name, std::ios::out | std::ios::binary 
+		| std::ios::app);
+	out.imbue(std::locale::classic());
+	// NOTE(ches) This is cursed and I hate it
+#define write_uint16(x) _tmp16 = htons(std::bit_cast<uint16_t>(x)); out.write((char*)&_tmp16, sizeof(_tmp16))
+#define write_uint32(x) _tmp32 = htonl(std::bit_cast<uint32_t>(x)); out.write((char*)&_tmp32, sizeof(_tmp32))
+	
+	const uint16_t endian_check = 0xCAFE;
+	write_uint16(endian_check);
+
+	const uint32_t mesh_count = data.size();
+	write_uint32(mesh_count);
+	
+	for (auto& mesh : data)
+	{
+		const uint32_t vertex_count = mesh->positions.size() / 3;
+		write_uint32(vertex_count);
+		for (int row = 0; row < vertex_count; ++row)
+		{
+			const int start_pos = row * 3;
+			const int start_text_coord = row * 2;
+			write_uint32(mesh->positions[start_pos]);
+			write_uint32(mesh->positions[start_pos + 1]);
+			write_uint32(mesh->positions[start_pos + 2]);
+			write_uint32(mesh->normals[start_pos]);
+			write_uint32(mesh->normals[start_pos + 1]);
+			write_uint32(mesh->normals[start_pos + 2]);
+			write_uint32(mesh->tangents[start_pos]);
+			write_uint32(mesh->tangents[start_pos + 1]);
+			write_uint32(mesh->tangents[start_pos + 2]);
+			write_uint32(mesh->bitangents[start_pos]);
+			write_uint32(mesh->bitangents[start_pos + 1]);
+			write_uint32(mesh->bitangents[start_pos + 2]);
+			write_uint32(mesh->texture_coordinates[start_text_coord]);
+			write_uint32(mesh->texture_coordinates[start_text_coord + 1]);
+		}
+		const uint32_t index_count = mesh->indices.size();
+		write_uint32(index_count);
+		out.write((char*)mesh->indices.data(),
+			index_count * sizeof(mesh->indices[0]));
+	}
+
+	out.close();
+
+#undef write_uint16(x)
+#undef write_uint32(x)
+}
+
+void output_animation(std::shared_ptr<Animation> animation,
+	const fs::path& model_path, const std::string& model_name)
+{
+	//TODO(ches) complete this
+}
+
+void output_material(std::shared_ptr<Material> material,
+	const fs::path& model_path, const std::string& model_name)
+{
+	//TODO(ches) complete this
 }
 
 void build_frame_matrices(const aiAnimation* animation, 
