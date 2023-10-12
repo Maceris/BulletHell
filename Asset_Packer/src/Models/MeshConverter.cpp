@@ -277,6 +277,34 @@ constexpr glm::vec4 to_vector(const aiColor4D& color);
 
 #pragma endregion
 
+/// <summary>
+/// Write a value to an output stream as a 16 bit integer, in network byte 
+/// order (big endian).
+/// </summary>
+/// <typeparam name="FROM">The type we are converting from.</typeparam>
+/// <param name="value">The value to write.</param>
+/// <param name="target">The stream to write to.</param>
+template <typename FROM>
+void constexpr write_uint16(const FROM& value, std::ofstream& target)
+{
+	uint16_t local = htons(std::bit_cast<uint16_t>(value));
+	target.write((char*)&local, sizeof(local));
+}
+
+/// <summary>
+/// Write a value to an output stream as a 32 bit integer, in network byte 
+/// order (big endian).
+/// </summary>
+/// <typeparam name="FROM">The type we are converting from.</typeparam>
+/// <param name="value">The value to write.</param>
+/// <param name="target">The stream to write to.</param>
+template <typename FROM>
+void constexpr write_uint32(const FROM& value, std::ofstream& target)
+{
+	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
+	target.write((char*)&local, sizeof(local));
+}
+
 inline void append_vector_array(const aiVector3D* vector_array,
 	const int length, std::vector<float>& destination)
 {
@@ -419,49 +447,55 @@ void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data,
 	std::ofstream out(file_name, std::ios::out | std::ios::binary 
 		| std::ios::app);
 	out.imbue(std::locale::classic());
-	// NOTE(ches) This is cursed and I hate it
-#define write_uint16(x) _tmp16 = htons(std::bit_cast<uint16_t>(x)); out.write((char*)&_tmp16, sizeof(_tmp16))
-#define write_uint32(x) _tmp32 = htonl(std::bit_cast<uint32_t>(x)); out.write((char*)&_tmp32, sizeof(_tmp32))
-	
-	const uint16_t endian_check = 0xCAFE;
-	write_uint16(endian_check);
+
+	const uint32_t file_id = 0xC0DE0001;
+	write_uint32(file_id, out);
+
+	const uint16_t version = 1;
+	write_uint16(version, out);
 
 	const uint32_t mesh_count = data.size();
-	write_uint32(mesh_count);
+	write_uint32(mesh_count, out);
 	
 	for (auto& mesh : data)
 	{
 		const uint32_t vertex_count = mesh->positions.size() / 3;
-		write_uint32(vertex_count);
+		write_uint32(vertex_count, out);
+
+		LOG_ASSERT(mesh->positions.size() == mesh->normals.size());
+		LOG_ASSERT(mesh->positions.size() == mesh->tangents.size());
+		LOG_ASSERT(mesh->positions.size() == mesh->bitangents.size());
+		LOG_ASSERT(mesh->positions.size() / 3 
+			== mesh->texture_coordinates.size() / 2);
+
 		for (int row = 0; row < vertex_count; ++row)
 		{
 			const int start_pos = row * 3;
 			const int start_text_coord = row * 2;
-			write_uint32(mesh->positions[start_pos]);
-			write_uint32(mesh->positions[start_pos + 1]);
-			write_uint32(mesh->positions[start_pos + 2]);
-			write_uint32(mesh->normals[start_pos]);
-			write_uint32(mesh->normals[start_pos + 1]);
-			write_uint32(mesh->normals[start_pos + 2]);
-			write_uint32(mesh->tangents[start_pos]);
-			write_uint32(mesh->tangents[start_pos + 1]);
-			write_uint32(mesh->tangents[start_pos + 2]);
-			write_uint32(mesh->bitangents[start_pos]);
-			write_uint32(mesh->bitangents[start_pos + 1]);
-			write_uint32(mesh->bitangents[start_pos + 2]);
-			write_uint32(mesh->texture_coordinates[start_text_coord]);
-			write_uint32(mesh->texture_coordinates[start_text_coord + 1]);
+			write_uint32(mesh->positions[start_pos], out);
+			write_uint32(mesh->positions[start_pos + 1], out);
+			write_uint32(mesh->positions[start_pos + 2], out);
+			write_uint32(mesh->normals[start_pos], out);
+			write_uint32(mesh->normals[start_pos + 1], out);
+			write_uint32(mesh->normals[start_pos + 2], out);
+			write_uint32(mesh->tangents[start_pos], out);
+			write_uint32(mesh->tangents[start_pos + 1], out);
+			write_uint32(mesh->tangents[start_pos + 2], out);
+			write_uint32(mesh->bitangents[start_pos], out);
+			write_uint32(mesh->bitangents[start_pos + 1], out);
+			write_uint32(mesh->bitangents[start_pos + 2], out);
+			write_uint32(mesh->texture_coordinates[start_text_coord], out);
+			write_uint32(mesh->texture_coordinates[start_text_coord + 1], out);
 		}
 		const uint32_t index_count = mesh->indices.size();
-		write_uint32(index_count);
-		out.write((char*)mesh->indices.data(),
-			index_count * sizeof(mesh->indices[0]));
+		write_uint32(index_count, out);
+		for (int i = 0; i < index_count; ++i)
+		{
+			write_uint32(mesh->indices[i], out);
+		}
 	}
 
 	out.close();
-
-#undef write_uint16(x)
-#undef write_uint32(x)
 }
 
 void output_animation(std::shared_ptr<Animation> animation,
