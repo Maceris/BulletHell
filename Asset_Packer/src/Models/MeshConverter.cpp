@@ -281,13 +281,14 @@ constexpr glm::vec4 to_vector(const aiColor4D& color);
 /// Write a value to an output stream as a 16 bit integer, in network byte 
 /// order (big endian).
 /// </summary>
-/// <typeparam name="FROM">The type we are converting from.</typeparam>
+/// <typeparam name="T">The type we are converting from.</typeparam>
 /// <param name="value">The value to write.</param>
 /// <param name="target">The stream to write to.</param>
-template <typename FROM,
-	typename = typename std::enable_if_t<sizeof(FROM) <= sizeof(uint16_t)>>
-void constexpr write_uint16(const FROM& value, std::ofstream& target)
+template <typename T>
+void constexpr write_uint16(const T& value, std::ofstream& target)
 {
+	static_assert(sizeof(T) <= sizeof(uint16_t), 
+		"Provided value does not fit in 16 bits.");
 	uint16_t local = htons(std::bit_cast<uint16_t>(value));
 	target.write((char*)&local, sizeof(local));
 }
@@ -296,13 +297,14 @@ void constexpr write_uint16(const FROM& value, std::ofstream& target)
 /// Write a value to an output stream as a 32 bit integer, in network byte 
 /// order (big endian).
 /// </summary>
-/// <typeparam name="FROM">The type we are converting from.</typeparam>
+/// <typeparam name="T">The type we are converting from.</typeparam>
 /// <param name="value">The value to write.</param>
 /// <param name="target">The stream to write to.</param>
-template <typename FROM, 
-	typename = typename std::enable_if_t<sizeof(FROM) <= sizeof(uint32_t)>>
-void constexpr write_uint32(const FROM& value, std::ofstream& target)
+template <typename T>
+void constexpr write_uint32(const T& value, std::ofstream& target)
 {
+	static_assert(sizeof(T) <= sizeof(uint32_t), 
+		"Provided value does not fit in 32 bits.");
 	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
 	target.write((char*)&local, sizeof(local));
 }
