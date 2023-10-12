@@ -145,6 +145,23 @@ ModelResults* import_model(const fs::directory_entry& source);
 void output_results(ModelResults* results, const fs::path& model_path, 
 	const std::string& model_name);
 
+//TODO(ches) document this
+void output_animation(std::shared_ptr<Animation> animation,
+	const fs::path& model_path, const std::string& model_name);
+
+/// <summary>
+/// Output a material to file.
+/// </summary>
+/// <param name="material">The material to output.</param>
+/// <param name="index">The material index, which matches the index 
+/// each mesh refers to.</param>
+/// <param name="model_path">The folder that results will be placed in.</param>
+/// <param name="model_name">The name of the model, without path or extension.
+/// </param>
+void output_material(std::shared_ptr<Material> material,
+	const unsigned int index, const fs::path& model_path,
+	const std::string& model_name);
+
 /// <summary>
 /// Output a model to file.
 /// </summary>
@@ -152,13 +169,6 @@ void output_results(ModelResults* results, const fs::path& model_path,
 /// <param name="model_path">The path where the model should be stored.</param>
 /// <param name="model_name">The name of the model.</param>
 void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
-	const fs::path& model_path, const std::string& model_name);
-
-//TODO(ches) document this
-void output_animation(std::shared_ptr<Animation> animation,
-	const fs::path& model_path, const std::string& model_name);
-
-void output_material(std::shared_ptr<Material> material,
 	const fs::path& model_path, const std::string& model_name);
 
 /// <summary>
@@ -284,6 +294,7 @@ constexpr glm::vec4 to_vector(const aiColor4D& color);
 
 #pragma endregion
 
+#pragma region Utility functions
 /// <summary>
 /// Write a value to an output stream as a 16 bit integer, in network byte 
 /// order (big endian).
@@ -315,6 +326,46 @@ void constexpr write_uint32(const T& value, std::ofstream& target)
 	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
 	target.write((char*)&local, sizeof(local));
 }
+
+/// <summary>
+/// Write a string, including prefixing the size, to the target file in network
+/// byte order (big endian).
+/// </summary>
+/// <param name="value">The string to write.</param>
+/// <param name="target">The stream to write to.</param>
+void constexpr write_string(const std::string& value, std::ofstream& target)
+{
+	const uint32_t size = value.size();
+	write_uint32(size, target);
+	
+	if (size > 0)
+	{
+		/*
+		   NOTE(ches) We can't dump the whole array directly unless it's a big
+		   endian system.
+		*/
+		const char* data = value.data();
+		for (unsigned int i = 0; i < size; ++i)
+		{
+			target.write(&data[i], 1);
+		}
+	}
+}
+
+/// <summary>
+/// Write a vector to the target file in network byte order (big endian).
+/// </summary>
+/// <param name="value">The vector to write.</param>
+/// <param name="target">The stream to write to.</param>
+void constexpr write_vec4(const glm::vec4& value, std::ofstream& target)
+{
+	write_uint32(value.r, target);
+	write_uint32(value.g, target);
+	write_uint32(value.b, target);
+	write_uint32(value.a, target);
+}
+
+#pragma endregion
 
 inline void append_vector_array(const aiVector3D* vector_array,
 	const int length, std::vector<float>& destination)
@@ -433,9 +484,11 @@ void output_results(ModelResults* results, const fs::path& model_path,
 
 	LOG_TAGGED("MODEL", "Materials: "
 		+ std::to_string(results->materials.size()));
-	for (auto& material : results->materials)
+
+	for (unsigned int i = 0; i < results->materials.size(); ++i)
 	{
-		output_material(material, model_path, model_name);
+		std::shared_ptr<Material> material = results->materials[i];
+		output_material(material, i, model_path, model_name);
 	}
 
 	LOG_TAGGED("MODEL", "Animations: "
@@ -444,6 +497,40 @@ void output_results(ModelResults* results, const fs::path& model_path,
 	{
 		output_animation(animation, model_path, model_name);
 	}
+}
+
+void output_animation(std::shared_ptr<Animation> animation,
+	const fs::path& model_path, const std::string& model_name)
+{
+	//TODO(ches) complete this
+}
+
+void output_material(std::shared_ptr<Material> material,
+	const unsigned int index, const fs::path& model_path,
+	const std::string& model_name)
+{
+	const std::string file_name = model_path.string() + '/' + model_name 
+		+ '.' + std::to_string(index) + MATERIAL_OUTPUT_EXTENSION;
+	std::ofstream out(file_name, std::ios::out | std::ios::binary
+		| std::ios::app);
+	out.imbue(std::locale::classic());
+
+	const uint32_t file_id = 0xC0DE0002;
+	write_uint32(file_id, out);
+
+	const uint16_t version = 1;
+	write_uint16(version, out);
+
+	write_vec4(material->ambient_color, out);
+	write_vec4(material->diffuse_color, out);
+	write_vec4(material->specular_color, out);
+
+	write_uint32(material->reflectance, out);
+
+	write_string(material->texture_name, out);
+	write_string(material->normal_map_name, out);
+
+	out.close();
 }
 
 void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
@@ -506,18 +593,6 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	}
 
 	out.close();
-}
-
-void output_animation(std::shared_ptr<Animation> animation,
-	const fs::path& model_path, const std::string& model_name)
-{
-	//TODO(ches) complete this
-}
-
-void output_material(std::shared_ptr<Material> material,
-	const fs::path& model_path, const std::string& model_name)
-{
-	//TODO(ches) complete this
 }
 
 void build_frame_matrices(const aiAnimation* animation, 
