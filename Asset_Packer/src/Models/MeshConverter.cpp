@@ -145,9 +145,16 @@ ModelResults* import_model(const fs::directory_entry& source);
 void output_results(ModelResults* results, const fs::path& model_path, 
 	const std::string& model_name);
 
-void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data, 
+/// <summary>
+/// Output a model to file.
+/// </summary>
+/// <param name="data">The mesh data for the model.</param>
+/// <param name="model_path">The path where the model should be stored.</param>
+/// <param name="model_name">The name of the model.</param>
+void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	const fs::path& model_path, const std::string& model_name);
 
+//TODO(ches) document this
 void output_animation(std::shared_ptr<Animation> animation,
 	const fs::path& model_path, const std::string& model_name);
 
@@ -422,7 +429,7 @@ void output_results(ModelResults* results, const fs::path& model_path,
 
 	LOG_TAGGED("MODEL", "Meshes: "
 		+ std::to_string(results->mesh_data.size()));
-	output_mesh(results->mesh_data, model_path, model_name);
+	output_model(results->mesh_data, model_path, model_name);
 
 	LOG_TAGGED("MODEL", "Materials: "
 		+ std::to_string(results->materials.size()));
@@ -439,13 +446,9 @@ void output_results(ModelResults* results, const fs::path& model_path,
 	}
 }
 
-void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data,
+void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	const fs::path& model_path, const std::string& model_name)
 {
-	uint16_t _tmp16;
-	uint32_t _tmp32;
-
-	//TODO(ches) complete this
 	const std::string file_name = model_path.string() + '/' + model_name
 		+ MODEL_OUTPUT_EXTENSION;
 	std::ofstream out(file_name, std::ios::out | std::ios::binary 
@@ -463,6 +466,9 @@ void output_mesh(std::vector<std::shared_ptr<RawMeshData>>& data,
 	
 	for (auto& mesh : data)
 	{
+		const uint16_t material_index = mesh->material_id;
+		write_uint16(material_index, out);
+
 		const uint32_t vertex_count = mesh->positions.size() / 3;
 		write_uint32(vertex_count, out);
 
