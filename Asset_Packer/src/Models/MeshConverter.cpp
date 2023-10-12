@@ -284,7 +284,8 @@ constexpr glm::vec4 to_vector(const aiColor4D& color);
 /// <typeparam name="FROM">The type we are converting from.</typeparam>
 /// <param name="value">The value to write.</param>
 /// <param name="target">The stream to write to.</param>
-template <typename FROM>
+template <typename FROM,
+	typename = typename std::enable_if_t<sizeof(FROM) <= sizeof(uint16_t)>>
 void constexpr write_uint16(const FROM& value, std::ofstream& target)
 {
 	uint16_t local = htons(std::bit_cast<uint16_t>(value));
@@ -298,7 +299,8 @@ void constexpr write_uint16(const FROM& value, std::ofstream& target)
 /// <typeparam name="FROM">The type we are converting from.</typeparam>
 /// <param name="value">The value to write.</param>
 /// <param name="target">The stream to write to.</param>
-template <typename FROM>
+template <typename FROM, 
+	typename = typename std::enable_if_t<sizeof(FROM) <= sizeof(uint32_t)>>
 void constexpr write_uint32(const FROM& value, std::ofstream& target)
 {
 	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
