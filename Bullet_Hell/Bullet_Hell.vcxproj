@@ -195,7 +195,12 @@
     <ClCompile Include="src\Main\GameLogic.cpp" />
     <ClCompile Include="src\Main\GameOptions.cpp" />
     <ClCompile Include="src\Main\Main.cpp" />
+    <ClCompile Include="src\ResourceCache\DefaultResourceLoader.cpp" />
+    <ClCompile Include="src\ResourceCache\Resource.cpp" />
     <ClCompile Include="src\ResourceCache\ResourceCache.cpp" />
+    <ClCompile Include="src\ResourceCache\ResourceHandle.cpp" />
+    <ClCompile Include="src\ResourceCache\ResourceLoader.cpp" />
+    <ClCompile Include="src\ResourceCache\ResourceZipFile.cpp" />
     <ClCompile Include="src\Utilities\MathUtil.cpp" />
     <ClCompile Include="src\Utilities\OpenGLUtil.cpp" />
     <ClCompile Include="src\Utilities\StringUtil.cpp" />
@@ -255,7 +260,13 @@
     <ClInclude Include="src\Main\GameLogic.h" />
     <ClInclude Include="src\Main\GameOptions.h" />
     <ClInclude Include="src\Memory\CriticalSection.h" />
+    <ClInclude Include="src\ResourceCache\DefaultResourceLoader.h" />
+    <ClInclude Include="src\ResourceCache\Resource.h" />
     <ClInclude Include="src\ResourceCache\ResourceCache.h" />
+    <ClInclude Include="src\ResourceCache\ResourceFile.h" />
+    <ClInclude Include="src\ResourceCache\ResourceHandle.h" />
+    <ClInclude Include="src\ResourceCache\ResourceLoader.h" />
+    <ClInclude Include="src\ResourceCache\ResourceZipFile.h" />
     <ClInclude Include="src\Utilities\Globals.h" />
     <ClInclude Include="src\Utilities\MathUtil.h" />
     <ClInclude Include="src\Utilities\OpenGLUtil.h" />
