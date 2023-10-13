@@ -1,11 +1,10 @@
 #include "ResourceCache.h"
 
+#include "Logger.h"
 #include "StringUtil.h"
 #include "ZipFile.h"
 
-//=============================================================================
-// Resource
-//=============================================================================
+#pragma region Resource
 
 Resource::Resource(const std::string& resource_name)
 {
@@ -13,9 +12,9 @@ Resource::Resource(const std::string& resource_name)
 	std::transform(name.begin(), name.end(), name.begin(), std::tolower);
 }
 
-//=============================================================================
-// ResourceZipFile
-//=============================================================================
+#pragma endregion
+
+#pragma region ResourceZipFile
 
 ResourceZipFile::ResourceZipFile(const std::string resource_file_name)
 	: zip_file(nullptr)
@@ -94,9 +93,9 @@ std::string ResourceZipFile::get_resource_name(int index)
 	return result;
 }
 
-//=============================================================================
-// ResourceHandle
-//=============================================================================
+#pragma endregion
+
+#pragma region ResourceHandle
 
 const std::string ResourceHandle::get_name()
 {
@@ -143,19 +142,18 @@ ResourceHandle::~ResourceHandle()
 	resource_cache->memory_has_been_freed(size);
 }
 
+#pragma endregion
 
-//=============================================================================
-// ResourceLoader
-//=============================================================================
+#pragma region ResourceLoader
 
 bool ResourceLoader::append_null()
 {
 	return false;
 }
 
-//=============================================================================
-// DefaultResourceLoader
-//=============================================================================
+#pragma endregion
+
+#pragma region DefaultResourceLoader
 
 bool DefaultResourceLoader::use_raw_file()
 {
@@ -184,10 +182,9 @@ std::string DefaultResourceLoader::get_pattern()
 	return "*";
 }
 
-//=============================================================================
-// ResourceCache
-//=============================================================================
+#pragma endregion
 
+#pragma region ResourceCache
 
 bool ResourceCache::make_room(unsigned int size)
 {
@@ -248,7 +245,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 	if (!loader)
 	{
-		//TODO(ches) log this, we should have at least the default loader
+		LOG_ERROR("Default resource loader was not found!");
 		return handle;
 	}
 
@@ -256,7 +253,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 	if (raw_size < 0)
 	{
-		//TODO(ches) log this
+		LOG_WARNING("Resource not found");
 		return std::shared_ptr<ResourceHandle>();
 	}
 
@@ -314,7 +311,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 		resources[resource->name] = handle;
 	}
 
-	//TODO(ches) log this, we are out of memory or don't have a default loader
+	LOG_ERROR("Default resource loader was not found!");
 	return handle;
 }
 
@@ -387,7 +384,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::get_handle(Resource* resource)
 	if (!handle)
 	{
 		handle = load(resource);
-		//TODO(ches) double check we actually loaded anything
+		LOG_ASSERT(handle);
 	}
 	else
 	{
@@ -453,3 +450,6 @@ void ResourceCache::flush()
 		lru_list.pop_front();
 	}
 }
+
+#pragma endregion
+
