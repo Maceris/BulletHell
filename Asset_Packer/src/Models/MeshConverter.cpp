@@ -14,6 +14,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <regex>
 #include <vector>
 
 #define NOMINMAX
@@ -145,7 +146,13 @@ ModelResults* import_model(const fs::directory_entry& source);
 void output_results(ModelResults* results, const fs::path& model_path, 
 	const std::string& model_name);
 
-//TODO(ches) document this
+/// <summary>
+/// Output an animation to file.
+/// </summary>
+/// <param name="animation">The animation to output.</param>
+/// <param name="model_path">The folder that results will be placed in.</param>
+/// <param name="model_name">The name of the model, without path or extension.
+/// </param>
 void output_animation(std::shared_ptr<Animation> animation,
 	const fs::path& model_path, const std::string& model_name);
 
@@ -328,6 +335,22 @@ void constexpr write_uint32(const T& value, std::ofstream& target)
 }
 
 /// <summary>
+/// Write a value to an output stream as a 64 bit integer, in network byte 
+/// order (big endian).
+/// </summary>
+/// <typeparam name="T">The type we are converting from.</typeparam>
+/// <param name="value">The value to write.</param>
+/// <param name="target">The stream to write to.</param>
+template <typename T>
+void constexpr write_uint64(const T& value, std::ofstream& target)
+{
+	static_assert(sizeof(T) <= sizeof(uint64_t),
+		"Provided value does not fit in 64 bits.");
+	uint64_t local = htonll(std::bit_cast<uint64_t>(value));
+	target.write((char*)&local, sizeof(local));
+}
+
+/// <summary>
 /// Write a string, including prefixing the size, to the target file in network
 /// byte order (big endian).
 /// </summary>
@@ -353,7 +376,8 @@ void constexpr write_string(const std::string& value, std::ofstream& target)
 }
 
 /// <summary>
-/// Write a vector to the target file in network byte order (big endian).
+/// Write a vec3 to the target file in network byte order (big endian).
+/// Stores the output in rgba order.
 /// </summary>
 /// <param name="value">The vector to write.</param>
 /// <param name="target">The stream to write to.</param>
@@ -363,6 +387,24 @@ void constexpr write_vec4(const glm::vec4& value, std::ofstream& target)
 	write_uint32(value.g, target);
 	write_uint32(value.b, target);
 	write_uint32(value.a, target);
+}
+
+/// <summary>
+/// Write a mat4 to the target file in network byte order (big endian).
+/// Stores the output in column-major order.
+/// </summary>
+/// <param name="value">The vector to write.</param>
+/// <param name="target">The stream to write to.</param>
+void constexpr write_mat4(const glm::mat4& value, std::ofstream& target)
+{
+	for (unsigned int column = 0; column < 4; ++column)
+	{
+		auto& column_reference = value[column];
+		for (unsigned int row = 0; row < 4; ++row)
+		{
+			write_uint32(column_reference[row], target);
+		}
+	}
 }
 
 #pragma endregion
@@ -502,7 +544,54 @@ void output_results(ModelResults* results, const fs::path& model_path,
 void output_animation(std::shared_ptr<Animation> animation,
 	const fs::path& model_path, const std::string& model_name)
 {
-	//TODO(ches) complete this
+	static int fallback_id;
+
+	static const std::regex invalid_characters("[^a-zA-Z0-9_\.\-]+");
+	std::string formatted_name = 
+		std::regex_replace(animation->name, invalid_characters, "");
+	
+	if (formatted_name.empty())
+	{
+		formatted_name = std::to_string(fallback_id);
+		++fallback_id;
+	}
+
+	const std::string file_name = model_path.string() + '/' + model_name
+		+ '.' + formatted_name + ANIMATION_OUTPUT_EXTENSION;
+	std::ofstream out(file_name, std::ios::out | std::ios::binary
+		| std::ios::app);
+	out.imbue(std::locale::classic());
+
+	const uint32_t file_id = 0xC0DE0003;
+	write_uint32(file_id, out);
+
+	const uint16_t version = 1;
+	write_uint16(version, out);
+
+	write_string(animation->name, out);
+
+	write_uint64(animation->duration, out);
+
+	const uint32_t frame_count = animation->frames.size();
+	write_uint32(frame_count, out);
+
+	uint32_t bones_size = 0;
+	if (frame_count > 0)
+	{
+		bones_size = animation->frames[0].bone_matrices.size();
+	}
+
+	write_uint32(bones_size, out);
+
+	for (const auto& frame : animation->frames)
+	{
+		for (const auto& bone_matrix : frame.bone_matrices)
+		{
+			write_mat4(bone_matrix, out);
+		}
+	}
+
+	out.close();
 }
 
 void output_material(std::shared_ptr<Material> material,
@@ -548,6 +637,9 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	const uint16_t version = 1;
 	write_uint16(version, out);
 
+	const uint32_t max_weights = MAX_WEIGHTS_PER_BONE;
+	write_uint32(max_weights, out);
+
 	const uint32_t mesh_count = data.size();
 	write_uint32(mesh_count, out);
 	
@@ -589,6 +681,21 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 		for (int i = 0; i < index_count; ++i)
 		{
 			write_uint32(mesh->indices[i], out);
+		}
+
+		const uint32_t weight_count = mesh->bone_indices.size();
+		write_uint32(weight_count, out);
+
+		for (const auto& weight : mesh->bone_indices)
+		{
+			for (unsigned int i = 0; i < MAX_WEIGHTS_PER_BONE; ++i)
+			{
+				write_uint32(weight.weights[i], out);
+			}
+			for (unsigned int i = 0; i < MAX_WEIGHTS_PER_BONE; ++i)
+			{
+				write_uint32(weight.indices[i], out);
+			}
 		}
 	}
 
