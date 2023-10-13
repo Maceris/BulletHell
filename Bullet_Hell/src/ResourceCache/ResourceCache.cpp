@@ -1,5 +1,8 @@
 #include "ResourceCache.h"
 
+#include <algorithm>
+
+#include "DefaultResourceLoader.h"
 #include "Logger.h"
 #include "StringUtil.h"
 

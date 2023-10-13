@@ -5,13 +5,11 @@
 #include <list>
 #include <map>
 #include <string>
+#include <vector>
 
-#include "Resource.h"
 #include "ResourceFile.h"
-#include "ResourceZipFile.h"
 #include "ResourceHandle.h"
 #include "ResourceLoader.h"
-#include "DefaultResourceLoader.h"
 
 using ResourceHandleList = std::list<std::shared_ptr<ResourceHandle>>;
 using ResourceHandleMap = std::map<std::string, std::shared_ptr<ResourceHandle>>;

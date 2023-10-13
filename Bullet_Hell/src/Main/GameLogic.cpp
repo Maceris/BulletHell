@@ -1,6 +1,7 @@
 #include "GameLogic.h"
 
 #include "Logger.h"
+#include "ResourceZipFile.h"
 
 GameLogic* g_game_logic = nullptr;
 
