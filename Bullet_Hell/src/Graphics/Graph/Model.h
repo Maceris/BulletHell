@@ -50,6 +50,13 @@ struct Model
 	std::vector<MeshDrawData> mesh_draw_data_list;
 
 	/// <summary>
+	/// The weights and index of each bone that affects each vertex. There 
+	/// is one set of bone weights for each vertex. Only animated models have
+	/// this data filled out.
+	/// </summary>
+	const std::vector<BoneWeights> bone_weights;
+
+	/// <summary>
 	/// Whether this model is animated.
 	/// </summary>
 	/// <returns></returns>
@@ -70,4 +77,18 @@ struct Model
 	Model(const Model&) = delete;
 	Model& operator=(const Model&) = delete;
 	~Model() = default;
+
+	/// <summary>
+	/// Append the bone index/weight data to a buffer.
+	/// </summary>
+	/// <param name="buffer">The buffer to append to.</param>
+	void constexpr append_weights_to_buffer(std::vector<float>& buffer)
+	{
+		const int data_size = (int)(
+			bone_weights.size() * sizeof(BoneWeights) / sizeof(float));
+		const float* data_start = (float*)bone_weights.data();
+		const float* data_end = data_start + data_size;
+
+		buffer.insert(buffer.end(), data_start, data_end);
+	}
 };
