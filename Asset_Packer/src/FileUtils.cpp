@@ -147,6 +147,10 @@ int FileUtils::process_file(const fs::directory_entry& file)
     {
         MeshConverter::convert_model(file);
     }
+    else if (".mtl" == extension)
+    {
+        // Ignore
+    }
     else
     {
         // Copy as a fallback
