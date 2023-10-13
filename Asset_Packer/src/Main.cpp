@@ -11,6 +11,8 @@ int main(int argc, char* argv[])
 {
     Logger::init();
     Logger::set_display_flags("MODEL", FLAG_WRITE_TO_DEBUGGER);
+    Logger::set_display_flags("IMAGE", FLAG_WRITE_TO_DEBUGGER);
+
     LOG_INFO("Asset packer v" + version);
 
     int result = FileUtils::process_all_files();

@@ -1,8 +1,8 @@
 #include "MeshConverter.h"
 
-
 #include "FileUtils.h"
 #include "Logger.h"
+#include "Portability.h"
 #include "RawMeshData.h"
 
 #include "Animation.h"
@@ -16,9 +16,6 @@
 #include <map>
 #include <regex>
 #include <vector>
-
-#define NOMINMAX
-#include <winsock2.h>
 
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
@@ -301,114 +298,6 @@ constexpr glm::vec4 to_vector(const aiColor4D& color);
 
 #pragma endregion
 
-#pragma region Utility functions
-/// <summary>
-/// Write a value to an output stream as a 16 bit integer, in network byte 
-/// order (big endian).
-/// </summary>
-/// <typeparam name="T">The type we are converting from.</typeparam>
-/// <param name="value">The value to write.</param>
-/// <param name="target">The stream to write to.</param>
-template <typename T>
-void constexpr write_uint16(const T& value, std::ofstream& target)
-{
-	static_assert(sizeof(T) <= sizeof(uint16_t), 
-		"Provided value does not fit in 16 bits.");
-	uint16_t local = htons(std::bit_cast<uint16_t>(value));
-	target.write((char*)&local, sizeof(local));
-}
-
-/// <summary>
-/// Write a value to an output stream as a 32 bit integer, in network byte 
-/// order (big endian).
-/// </summary>
-/// <typeparam name="T">The type we are converting from.</typeparam>
-/// <param name="value">The value to write.</param>
-/// <param name="target">The stream to write to.</param>
-template <typename T>
-void constexpr write_uint32(const T& value, std::ofstream& target)
-{
-	static_assert(sizeof(T) <= sizeof(uint32_t), 
-		"Provided value does not fit in 32 bits.");
-	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
-	target.write((char*)&local, sizeof(local));
-}
-
-/// <summary>
-/// Write a value to an output stream as a 64 bit integer, in network byte 
-/// order (big endian).
-/// </summary>
-/// <typeparam name="T">The type we are converting from.</typeparam>
-/// <param name="value">The value to write.</param>
-/// <param name="target">The stream to write to.</param>
-template <typename T>
-void constexpr write_uint64(const T& value, std::ofstream& target)
-{
-	static_assert(sizeof(T) <= sizeof(uint64_t),
-		"Provided value does not fit in 64 bits.");
-	uint64_t local = htonll(std::bit_cast<uint64_t>(value));
-	target.write((char*)&local, sizeof(local));
-}
-
-/// <summary>
-/// Write a string, including prefixing the size, to the target file in network
-/// byte order (big endian).
-/// </summary>
-/// <param name="value">The string to write.</param>
-/// <param name="target">The stream to write to.</param>
-void constexpr write_string(const std::string& value, std::ofstream& target)
-{
-	const uint32_t size = value.size();
-	write_uint32(size, target);
-	
-	if (size > 0)
-	{
-		/*
-		   NOTE(ches) We can't dump the whole array directly unless it's a big
-		   endian system.
-		*/
-		const char* data = value.data();
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			target.write(&data[i], 1);
-		}
-	}
-}
-
-/// <summary>
-/// Write a vec3 to the target file in network byte order (big endian).
-/// Stores the output in rgba order.
-/// </summary>
-/// <param name="value">The vector to write.</param>
-/// <param name="target">The stream to write to.</param>
-void constexpr write_vec4(const glm::vec4& value, std::ofstream& target)
-{
-	write_uint32(value.r, target);
-	write_uint32(value.g, target);
-	write_uint32(value.b, target);
-	write_uint32(value.a, target);
-}
-
-/// <summary>
-/// Write a mat4 to the target file in network byte order (big endian).
-/// Stores the output in column-major order.
-/// </summary>
-/// <param name="value">The vector to write.</param>
-/// <param name="target">The stream to write to.</param>
-void constexpr write_mat4(const glm::mat4& value, std::ofstream& target)
-{
-	for (unsigned int column = 0; column < 4; ++column)
-	{
-		auto& column_reference = value[column];
-		for (unsigned int row = 0; row < 4; ++row)
-		{
-			write_uint32(column_reference[row], target);
-		}
-	}
-}
-
-#pragma endregion
-
 inline void append_vector_array(const aiVector3D* vector_array,
 	const int length, std::vector<float>& destination)
 {
@@ -427,8 +316,8 @@ inline void append_vector_array(const aiVector3D* vector_array,
 
 void MeshConverter::convert_model(const fs::directory_entry& source)
 {
-	LOG_TAGGED("MODEL", "Converting model " + source.path().string());
-    std::string target_file_name = source.path().string();
+	std::string target_file_name = source.path().string();
+	LOG_TAGGED("MODEL", "Converting model " + target_file_name);
 	target_file_name.erase(0, ASSET_FOLDER.size());
   
 	std::string model_path_string = TEMP_FOLDER + target_file_name;

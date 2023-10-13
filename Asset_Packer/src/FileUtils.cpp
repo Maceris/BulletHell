@@ -5,6 +5,7 @@
 #include "ZipFile.h"
 
 #include "Logger.h"
+#include "ImageConverter.h"
 #include "MeshConverter.h"
 
 const std::string ASSET_FOLDER = "Assets";
@@ -143,9 +144,24 @@ int FileUtils::process_file(const fs::directory_entry& file)
     auto dot = extension.find_last_of("\\.");
     extension = extension.substr(dot, extension.size());
 
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+        [](unsigned char c) { return std::tolower(c); });
+
     if (".obj" == extension || ".fbx" == extension)
     {
         MeshConverter::convert_model(file);
+    }
+    else if (".jpg" == extension 
+        || ".png" == extension
+        || ".tga" == extension
+        || ".bmp" == extension
+        || ".psd" == extension
+        || ".gif" == extension
+        || ".hdr" == extension
+        || ".pic" == extension
+        )
+    {
+        ImageConverter::convert_image(file);
     }
     else if (".mtl" == extension)
     {

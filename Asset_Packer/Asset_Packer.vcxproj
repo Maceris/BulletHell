@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Images;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)/src/3rdParty/stb;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -132,7 +132,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Images;$(ProjectDir)/src/Models;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/assimp/include;$(ProjectDir)/src/3rdParty/stb;$(ProjectDir)../Bullet_Hell/src/Graphics/Graph;$(ProjectDir)../Bullet_Hell/src/Utilities;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +146,7 @@
     <ClCompile Include="src\3rdParty\glad\src\glad.c" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\FileUtils.cpp" />
+    <ClCompile Include="src\Images\ImageConverter.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Models\MeshConverter.cpp" />
     <ClCompile Include="src\Models\Node.cpp" />
@@ -177,9 +178,11 @@
     <ClInclude Include="src\Debugging\CriticalSection.h" />
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\FileUtils.h" />
+    <ClInclude Include="src\Images\ImageConverter.h" />
     <ClInclude Include="src\Models\MeshConverter.h" />
     <ClInclude Include="src\Models\Node.h" />
     <ClInclude Include="src\Models\RawMeshData.h" />
+    <ClInclude Include="src\Portability.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\3rdParty\glm\glm\CMakeLists.txt" />

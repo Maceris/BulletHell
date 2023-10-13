@@ -9,11 +9,6 @@ namespace fs = std::filesystem;
 /// </summary>
 constexpr auto MAX_BONES = 256;
 
-/// <summary>
-/// The extension to use for the output files.
-/// </summary>
-extern const std::string OUTPUT_EXTENSION;
-
 namespace MeshConverter
 {
 	/// <summary>
@@ -23,5 +18,4 @@ namespace MeshConverter
 	/// <param name="source"></param>
 	/// <param name="destination"></param>
 	void convert_model(const fs::directory_entry& source);
-	
 }
