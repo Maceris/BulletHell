@@ -234,7 +234,7 @@
     <ClInclude Include="src\Graphics\Graph\Texture.h" />
     <ClInclude Include="src\Graphics\Graph\UniformsMap.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
-    <ClInclude Include="src\Graphics\Render\CommandBuffer.h" />
+    <ClInclude Include="src\Graphics\Render\CommandBuffers.h" />
     <ClInclude Include="src\Graphics\Render\FilterRender.h" />
     <ClInclude Include="src\Graphics\Render\GuiRender.h" />
     <ClInclude Include="src\Graphics\Render\LightRender.h" />

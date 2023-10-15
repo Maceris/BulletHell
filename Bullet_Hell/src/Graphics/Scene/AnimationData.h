@@ -5,7 +5,6 @@
 #include "glm.hpp"
 
 #include "Animation.h"
-#include "ModelLoader.h"
 
 #include <memory>
 

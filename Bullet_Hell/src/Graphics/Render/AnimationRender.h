@@ -4,9 +4,10 @@
 
 #include "glad.h"
 
+#include "QuadMesh.h"
+#include "RenderBuffers.h"
 #include "Scene.h"
 #include "ShaderProgram.h"
-#include "RenderBuffers.h"
 #include "UniformsMap.h"
 
 #include <memory>
@@ -19,6 +20,7 @@ class AnimationRender
 private:
 	std::unique_ptr<ShaderProgram> shader_program;
 	std::unique_ptr<UniformsMap> uniforms_map;
+	std::unique_ptr<QuadMesh> quad_mesh;
 
 public:
 	AnimationRender();

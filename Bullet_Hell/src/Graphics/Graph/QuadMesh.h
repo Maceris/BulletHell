@@ -7,11 +7,8 @@
 /// <summary>
 /// Defines a quad that is used to render in the lighting pass.
 /// </summary>
-class QuadMesh
+struct QuadMesh
 {
-private:
-	
-public:
 	/// <summary>
 	/// The Vertex Array Object ID for the mesh.
 	/// </summary>

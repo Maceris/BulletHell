@@ -1,7 +1,7 @@
 #include "Model.h"
 
 Model::Model(const std::string id, std::vector<MeshData> mesh_data_list,
-	std::vector<Animation> animation_list)
+	std::vector<std::string> animation_list)
 	: id(id)
 	, mesh_data_list(std::move(mesh_data_list))
 	, animation_list(std::move(animation_list))

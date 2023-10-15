@@ -305,7 +305,7 @@
     <ClInclude Include="src\Utilities\MathUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Render\CommandBuffer.h">
+    <ClInclude Include="src\Graphics\Render\CommandBuffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\3rdParty\imgui-1.89.9\imconfig.h">

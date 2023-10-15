@@ -1,6 +1,7 @@
 #include "RenderBuffers.h"
 
 #include <cmath>
+#include <memory>
 
 #include "gtc/type_ptr.hpp"
 
@@ -210,13 +211,14 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 
 	for (auto& model : models)
 	{
-		for (auto& animation : model->animation_list)
+		auto& animation = model->current_animation;
+		if (animation)
 		{
-			for (auto& frame : animation.frames)
+			for (auto& frame : animation->frames)
 			{
 				for (auto& bone_matrix : frame.bone_matrices)
 				{
-					data_buffer.insert(data_buffer.end(), matrix_size, 
+					data_buffer.insert(data_buffer.end(), matrix_size,
 						*glm::value_ptr(bone_matrix));
 				}
 			}

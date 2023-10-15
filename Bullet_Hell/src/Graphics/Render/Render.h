@@ -6,7 +6,7 @@
 #include "glfw3.h"
 
 #include "AnimationRender.h"
-#include "CommandBuffer.h"
+#include "CommandBuffers.h"
 #include "FilterRender.h"
 #include "GuiRender.h"
 #include "LightRender.h"
@@ -70,7 +70,7 @@ private:
 	/// <summary>
 	/// The command buffers for batch rendering of models.
 	/// </summary>
-	CommandBuffer command_buffer;
+	CommandBuffers command_buffers;
 
 	/// <summary>
 	/// The buffers for indirect drawing of models.

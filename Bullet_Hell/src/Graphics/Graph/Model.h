@@ -29,9 +29,14 @@ struct Model
 	const std::string id;
 	
 	/// <summary>
-	/// A list of animations that can be applied to the model.
+	/// A list of animation names that can be applied to the model.
 	/// </summary>
-	std::vector<Animation> animation_list;
+	std::vector<std::string> animation_list;
+
+	/// <summary>
+	/// The current animation, if this is animated and there is one playing.
+	/// </summary>
+	std::shared_ptr<Animation> current_animation;
 
 	/// <summary>
 	/// A list of entities that use this model.
@@ -71,7 +76,7 @@ struct Model
 	/// <param name="animation_list">A list of animations that can be
 	/// applied to the model.</param>
 	Model(const std::string id, std::vector<MeshData> mesh_data_list,
-		std::vector<Animation> animation_list);
+		std::vector<std::string> animation_list);
 
 
 	Model(const Model&) = delete;
