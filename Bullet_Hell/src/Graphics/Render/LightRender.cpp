@@ -1,5 +1,8 @@
-#include "../../Utilities/Globals.h"
 #include "LightRender.h"
+
+#include "CascadeShadowSlice.h"
+
+#pragma region Shader code
 
 const char vertex_shader_source[] = R"glsl(
 #version 460
@@ -228,3 +231,225 @@ void main()
     }
 }
 )glsl";
+
+#pragma endregion
+
+constexpr auto MAX_POINT_LIGHTS = 50;
+constexpr auto MAX_SPOT_LIGHTS = 50;
+
+LightRender::LightRender()
+{
+    std::vector<ShaderModuleData> shader_modules;
+    shader_modules.emplace_back(vertex_shader_source,
+        sizeof(vertex_shader_source), GL_VERTEX_SHADER);
+    shader_modules.emplace_back(fragment_shader_source,
+        sizeof(fragment_shader_source), GL_FRAGMENT_SHADER);
+    shader_program = std::make_unique<ShaderProgram>(shader_modules);
+    
+    quad_mesh = std::make_unique<QuadMesh>();
+
+    uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
+    create_uniforms();
+}
+
+void LightRender::render(const Scene& scene, const ShadowRender& shadow_render,
+    const GBuffer& gBuffer)
+{
+    update_lights(scene);
+
+    int next_texture = 0;
+    if (gBuffer.texture_IDs != nullptr)
+    {
+        for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES; ++i)
+        {
+            glActiveTexture(GL_TEXTURE0 + next_texture);
+            glBindTexture(GL_TEXTURE_2D, gBuffer.texture_IDs[next_texture]);
+            ++next_texture;
+        }
+    }
+
+    uniforms_map->set_uniform("albedo_sampler", 0);
+    uniforms_map->set_uniform("normal_sampler", 1);
+    uniforms_map->set_uniform("specular_sampler", 2);
+    uniforms_map->set_uniform("depth_sampler", 3);
+
+    const Fog& fog = scene.fog;
+    uniforms_map->set_uniform("fog.enabled", fog.active);
+    uniforms_map->set_uniform("fog.color", fog.color);
+    uniforms_map->set_uniform("fog.density", fog.density);
+
+    auto& cascade_shadows = shadow_render.cascade_shadows;
+    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+    {
+        uniforms_map->set_uniform("shadow_map_" + std::to_string(i), 
+            next_texture + i);
+        uniforms_map->set_uniform("cascade_shadows[" + std::to_string(i) 
+            + "].projection_view_matrix", 
+            cascade_shadows[i].projection_view_matrix);
+        uniforms_map->set_uniform("cascade_shadows[" + std::to_string(i)
+            + "].split_distance", cascade_shadows[i].split_distance);
+    }
+    glActiveTexture(GL_TEXTURE0 + next_texture);
+    shadow_render.shadow_buffer->bind_textures(GL_TEXTURE0 + next_texture);
+
+    uniforms_map->set_uniform("inverse_projection_matrix",
+        scene.projection.inverse_projection_matrix);
+    uniforms_map->set_uniform("inverse_view_matrix",
+        scene.camera.inverse_view_matrix);
+
+    glBindVertexArray(quad_mesh->vao);
+    glDrawElements(GL_TRIANGLES, QUAD_MESH_VERTEX_COUNT, GL_UNSIGNED_INT, 
+        nullptr);
+
+    shader_program->unbind();
+}
+
+void LightRender::create_uniforms()
+{
+    uniforms_map->create_uniform("albedo_sampler");
+    uniforms_map->create_uniform("normal_sampler");
+    uniforms_map->create_uniform("specular_sampler");
+    uniforms_map->create_uniform("depth_sampler");
+    uniforms_map->create_uniform("inverse_projection_matrix");
+    uniforms_map->create_uniform("inverse_view_matrix");
+
+    uniforms_map->create_uniform("ambient_light.intensity");
+    uniforms_map->create_uniform("ambient_light.color");
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
+    {
+        const std::string prefix = "point_lights[" + std::to_string(i) + "].";
+        uniforms_map->create_uniform(prefix + "position");
+        uniforms_map->create_uniform(prefix + "color");
+        uniforms_map->create_uniform(prefix + "intensity");
+        uniforms_map->create_uniform(prefix + "attenuation.constant");
+        uniforms_map->create_uniform(prefix + "attenuation.linear");
+        uniforms_map->create_uniform(prefix + "attenuation.exponent");
+    }
+
+    for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+    {
+        const std::string prefix = "spot_lights[" + std::to_string(i) + "].";
+        uniforms_map->create_uniform(prefix + "point_light.position");
+        uniforms_map->create_uniform(prefix + "point_light.color");
+        uniforms_map->create_uniform(prefix + "point_light.intensity");
+        uniforms_map->create_uniform(prefix + "point_light.attenuation.constant");
+        uniforms_map->create_uniform(prefix + "point_light.attenuation.linear");
+        uniforms_map->create_uniform(prefix + "point_light.attenuation.exponent");
+        uniforms_map->create_uniform(prefix + "cone_direction");
+        uniforms_map->create_uniform(prefix + "cutoff");
+    }
+
+    uniforms_map->create_uniform("directional_light.color");
+    uniforms_map->create_uniform("directional_light.direction");
+    uniforms_map->create_uniform("directional_light.intensity");
+
+    uniforms_map->create_uniform("fog.enabled");
+    uniforms_map->create_uniform("fog.color");
+    uniforms_map->create_uniform("fog.density");
+
+    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+    {
+        uniforms_map->create_uniform("shadow_map_" + std::to_string(i));
+        uniforms_map->create_uniform("cascade_shadows[" + std::to_string(i) 
+            + "].projection_view_matrix");
+        uniforms_map->create_uniform("cascade_shadows[" + std::to_string(i)
+            + "].split_distance");
+    }
+}
+
+void LightRender::update_lights(const Scene& scene)
+{
+    const glm::mat4& view_matrix = scene.camera.view_matrix;
+
+    const SceneLights& scene_lights = scene.scene_lights;
+
+    const AmbientLight& ambient_light = scene_lights.ambient_light;
+    uniforms_map->set_uniform("ambient_light.intensity", 
+        ambient_light.intensity);
+    uniforms_map->set_uniform("ambient_light.color", ambient_light.color);
+
+    const DirectionalLight& directional_light = scene_lights.directional_light;
+    glm::vec4 adjusted(directional_light.direction, 0);
+    adjusted = adjusted * view_matrix;
+    glm::vec3 direction(adjusted.x, adjusted.y, adjusted.z);
+    uniforms_map->set_uniform("directional_light.color",
+        directional_light.color);
+    uniforms_map->set_uniform("directional_light.direction",
+        direction);
+    uniforms_map->set_uniform("directional_light.intensity",
+        directional_light.intensity);
+
+    const auto& point_lights = scene_lights.point_lights;
+    for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
+    {
+        const PointLight* point_light = i < point_lights.size() 
+            ? &point_lights[i] : nullptr;
+
+        const std::string prefix = "point_lights[" + std::to_string(i) + "].";
+        update_point_light(point_light, prefix, view_matrix);
+    }
+
+    const auto& spot_lights = scene_lights.spot_lights;
+    for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+    {
+        const SpotLight* spot_light = i < spot_lights.size()
+            ? &spot_lights[i] : nullptr;
+
+        const std::string prefix = "spot_lights[" + std::to_string(i) + "].";
+        update_spot_light(spot_light, prefix, view_matrix);
+    }
+}
+
+void LightRender::update_point_light(const PointLight* point_light,
+    const std::string& prefix, const glm::mat4& view_matrix)
+{
+    glm::vec3 position(0);
+    glm::vec3 color(0);
+    float intensity = 0.0f;
+    float constant = 0.0f;
+    float linear = 0.0f;
+    float exponent = 0.0f;
+
+    if (point_light != nullptr)
+    {
+        glm::vec4 temp(point_light->position, 1);
+        temp = temp * view_matrix;
+        position.x = temp.x;
+        position.y = temp.y;
+        position.z = temp.z;
+        color = point_light->color;
+        intensity = point_light->intensity;
+        const auto& attenuation = point_light->attenuation;
+        constant = attenuation.constant;
+        linear = attenuation.linear;
+        exponent = attenuation.exponent;
+    }
+
+    uniforms_map->set_uniform(prefix + "position", position);
+    uniforms_map->set_uniform(prefix + "color", color);
+    uniforms_map->set_uniform(prefix + "intensity", intensity);
+    uniforms_map->set_uniform(prefix + "attenuation.constant", constant);
+    uniforms_map->set_uniform(prefix + "attenuation.linear", linear);
+    uniforms_map->set_uniform(prefix + "attenuation.exponent", exponent);
+}
+
+void LightRender::update_spot_light(const SpotLight* spot_light,
+    const std::string& prefix, const glm::mat4& view_matrix)
+{
+    const PointLight* point_light = spot_light != nullptr 
+        ? &spot_light->point_light : nullptr;
+    glm::vec3 cone_direction(0);
+    float cutoff = 0.0f;
+
+    if (spot_light != nullptr)
+    {
+        cone_direction = spot_light->cone_direction;
+        cutoff = spot_light->cut_off;
+    }
+
+    uniforms_map->set_uniform(prefix + "cone_direction", cone_direction);
+    uniforms_map->set_uniform(prefix + "cutoff", cutoff);
+    
+    update_point_light(point_light, prefix + "point_light.", view_matrix);
+}

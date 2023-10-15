@@ -1,4 +1,4 @@
-#include "../../Utilities/Globals.h"
+#include "Globals.h"
 #include "GuiRender.h"
 
 #include "imgui.h"
@@ -94,12 +94,14 @@ void GuiRender::render(const Scene& scene)
 
 void GuiRender::resize(const unsigned int width, const unsigned int height)
 {
-	//TODO(ches) resize
+	ImGuiIO& imGuiIO = ImGui::GetIO();
+	imGuiIO.DisplaySize.x = width;
+	imGuiIO.DisplaySize.y = height;
 }
 
 void GuiRender::setup_imgui_keys()
 {
-	//TODO(ches) setup keys
+	//TODO(ches) check if this is really still required after ImGui issue #4921
 }
 
 GuiRender::~GuiRender()

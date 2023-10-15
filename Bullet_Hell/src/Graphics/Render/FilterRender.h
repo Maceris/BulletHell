@@ -19,8 +19,19 @@
 class FilterRender
 {
 private:
+	/// <summary>
+	/// The current shader, we should always have at least the default.
+	/// </summary>
 	std::shared_ptr<ShaderProgram> shader;
+
+	/// <summary>
+	/// Uniforms for the current shader.
+	/// </summary>
 	std::unique_ptr<UniformsMap> uniforms_map;
+
+	/// <summary>
+	/// The mesh we render to.
+	/// </summary>
 	std::unique_ptr<QuadMesh> quad_mesh;
 
 public:

@@ -4,6 +4,8 @@
 
 #include "glad.h"
 
+constexpr auto QUAD_MESH_VERTEX_COUNT = 6;
+
 /// <summary>
 /// Defines a quad that is used to render in the lighting pass.
 /// </summary>

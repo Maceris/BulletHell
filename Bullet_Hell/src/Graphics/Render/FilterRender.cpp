@@ -24,7 +24,8 @@ void FilterRender::render(const Scene& scene, const GLuint screen_texture)
 	uniforms_map->set_uniform("screen_texture", 0);
 
 	glBindVertexArray(quad_mesh->vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, QUAD_MESH_VERTEX_COUNT, GL_UNSIGNED_INT, 
+		nullptr);
 
 	shader->unbind();
 

@@ -9,12 +9,12 @@
 /// <summary>
 /// The width of the shadow map in pixels.
 /// </summary>
-extern const unsigned int SHADOW_MAP_WIDTH;
+constexpr auto SHADOW_MAP_WIDTH = 4096;
 
 /// <summary>
 /// The height of the shadow map in pixels.
 /// </summary>
-extern const unsigned int SHADOW_MAP_HEIGHT;
+constexpr auto SHADOW_MAP_HEIGHT = 4096;
 
 /// <summary>
 /// Depth buffers for a cascaded shadow map.
@@ -22,8 +22,6 @@ extern const unsigned int SHADOW_MAP_HEIGHT;
 class ShadowBuffer
 {
 public:
-	
-
 	/// <summary>
 	/// The actual depth map textures used for the FBO.
 	/// </summary>

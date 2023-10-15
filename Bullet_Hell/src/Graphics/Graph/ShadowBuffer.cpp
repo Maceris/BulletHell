@@ -2,9 +2,6 @@
 
 #include "CascadeShadowSlice.h"
 
-const unsigned int SHADOW_MAP_WIDTH = 4096;
-const unsigned int SHADOW_MAP_HEIGHT = 4096;
-
 ShadowBuffer::ShadowBuffer()
 	: depth_map(SHADOW_MAP_CASCADE_COUNT, SHADOW_MAP_WIDTH,
 		SHADOW_MAP_HEIGHT, GL_DEPTH_COMPONENT)

@@ -8,15 +8,13 @@
 /// The maximum number of textures, which are used for albedo, normals,
 /// specular, and depth, in that order.
 /// </summary>
-#define G_BUFFER_TOTAL_TEXTURES 3
+constexpr auto G_BUFFER_TOTAL_TEXTURES = 3;
 
 /// <summary>
 /// A buffer for the deferred shading geometry pass.
 /// </summary>
 struct GBuffer
 {
-	
-
 	/// <summary>
 	/// The frame buffer to use for geometry.
 	/// </summary>

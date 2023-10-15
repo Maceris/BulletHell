@@ -11,7 +11,7 @@
 /// <summary>
 /// The number of sections to split the frustum into.
 /// </summary>
-extern const unsigned int SHADOW_MAP_CASCADE_COUNT;
+constexpr auto SHADOW_MAP_CASCADE_COUNT = 3;
 
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 
@@ -37,4 +37,10 @@ struct CascadeShadowSlice
 	/// <param name="scene">The scene we are updating shadows for.</param>
 	static void updateCascadeShadows(std::vector<CascadeShadowSlice>& shadows,
 		Scene& scene);
+
+private:
+	/// <summary>
+	/// We calculate the splits once, and just reuse them.
+	/// </summary>
+	static float* cached_splits;
 };
