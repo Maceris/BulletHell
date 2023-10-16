@@ -73,7 +73,7 @@ void GuiRender::create_ui_resources(const Window& window)
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplGlfw_InitForOpenGL(window.handle, true);
-	ImGui_ImplOpenGL3_Init("#version 130");
+	ImGui_ImplOpenGL3_Init("#version 460");
 }
 
 void GuiRender::create_uniforms()

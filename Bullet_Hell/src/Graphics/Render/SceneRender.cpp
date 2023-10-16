@@ -1,5 +1,6 @@
-#include "../../Utilities/Globals.h"
 #include "SceneRender.h"
+
+#pragma region Shader code
 
 const char fragment_shader_source[] = R"glsl(
 #version 460
@@ -59,7 +60,6 @@ void main() {
 }
 )glsl";
 
-
 const char vertex_shader_source[] = R"glsl(
 #version 460
 
@@ -115,3 +115,69 @@ void main()
     texture_coordinate_out = texture_coordinate;
 }
 )glsl";
+
+#pragma endregion
+
+
+constexpr auto MAX_DRAW_ELEMENTS = 300;
+constexpr auto MAX_ENTITIES = 100;
+constexpr auto MAX_MATERIALS = 30;
+constexpr auto MAX_TEXTURES = 16;
+
+SceneRender::SceneRender()
+{
+    std::vector<ShaderModuleData> shader_modules;
+    shader_modules.emplace_back(vertex_shader_source,
+        sizeof(vertex_shader_source), GL_VERTEX_SHADER);
+    shader_modules.emplace_back(fragment_shader_source,
+        sizeof(fragment_shader_source), GL_FRAGMENT_SHADER);
+    shader_program = std::make_unique<ShaderProgram>(shader_modules);
+
+    uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
+    create_uniforms();
+}
+
+void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers,
+    const GBuffer& gBuffer, const CommandBuffers& command_buffers)
+{
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer.gBuffer_ID);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, gBuffer.width, gBuffer.height);
+    glDisable(GL_BLEND);
+    shader_program->bind();
+
+    uniforms_map->set_uniform("projection_matrix", 
+        scene.projection.projection_matrix);
+    uniforms_map->set_uniform("view_matrix",
+        scene.camera.view_matrix);
+
+    glActiveTexture(GL_TEXTURE0);
+    //TODO(ches) complete this, bind default texture
+}
+
+void SceneRender::create_uniforms()
+{
+    uniforms_map->create_uniform("projection_matrix");
+    uniforms_map->create_uniform("view_matrix");
+
+    for (int i = 0; i < MAX_TEXTURES; ++i)
+    {
+        uniforms_map->create_uniform("texture_sampler[" + std::to_string(i) 
+            + "]");
+    }
+
+    for (int i = 0; i < MAX_MATERIALS; ++i)
+    {
+        const std::string prefix = "materials[" + std::to_string(i) + "].";
+        uniforms_map->create_uniform(prefix + "diffuse");
+        uniforms_map->create_uniform(prefix + "specular");
+        uniforms_map->create_uniform(prefix + "reflectance");
+        uniforms_map->create_uniform(prefix + "normal_map_index");
+        uniforms_map->create_uniform(prefix + "texture_index");
+    }
+}
+
+void SceneRender::setup_materials_uniform(const MaterialCache& material_cache)
+{
+
+}

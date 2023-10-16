@@ -5,6 +5,9 @@
 #include "glad.h"
 
 #include <string>
+#include <memory>
+
+#include "Resource.h"
 
 class Texture
 {
@@ -42,4 +45,5 @@ public:
 	/// </summary>
 	void bind();
 
+	static std::shared_ptr<Texture> default_texture;
 };

@@ -37,11 +37,6 @@ private:
 	std::unique_ptr<ShaderProgram> shader_program;
 
 	/// <summary>
-	/// A font texture to supply ImGui with.
-	/// </summary>
-	std::shared_ptr<Texture> font;
-
-	/// <summary>
 	/// Uniforms for the shader.
 	/// </summary>
 	std::unique_ptr<UniformsMap> uniforms_map;
