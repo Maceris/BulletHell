@@ -147,9 +147,6 @@
     <ClCompile Include="src\3rdParty\imgui-1.89.9\backends\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Graph\MeshDrawData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -342,9 +339,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\3rdParty\glfw-3.3.8\include\GLFW\glfw3native.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Graph\MaterialCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ResourceCache\ResourceCache.h">

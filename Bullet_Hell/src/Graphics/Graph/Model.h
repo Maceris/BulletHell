@@ -78,7 +78,6 @@ struct Model
 	Model(const std::string id, std::vector<MeshData> mesh_data_list,
 		std::vector<std::string> animation_list);
 
-
 	Model(const Model&) = delete;
 	Model& operator=(const Model&) = delete;
 	~Model() = default;

@@ -1,7 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity(const std::string entity_ID, const std::string model_ID)
-	: entity_ID(entity_ID)
+std::atomic<uint64_t> Entity::next_ID{ 0 };
+
+Entity::Entity(const std::string model_ID)
+	: entity_ID(next_ID++)
 	, model_ID(model_ID)
 	, model_matrix(glm::mat4(1))
 	, position(glm::vec3(0))

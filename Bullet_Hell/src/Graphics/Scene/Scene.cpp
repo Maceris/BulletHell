@@ -5,9 +5,8 @@
 Scene::Scene(const unsigned int width, const unsigned int height)
 	: camera(Camera())
 	, fog(Fog())
-	, material_cache(MaterialCache())
 	, projection(Projection(width, height))
-	, model_map(std::map<const std::string, std::shared_ptr<Model>>())
+	, model_map{}
 	, scene_lights(SceneLights())
 	, sky_box(SkyBox())
 {}
@@ -22,7 +21,7 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 
 	if (result != model_map.end())
 	{
-		auto vec = result->second->entity_list;
+		auto& vec = result->second->entity_list;
 		vec.push_back(entity);
 	}
 	else

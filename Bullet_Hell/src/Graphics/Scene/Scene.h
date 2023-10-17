@@ -5,7 +5,6 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "Fog.h"
-#include "MaterialCache.h"
 #include "Model.h"
 #include "Projection.h"
 #include "SceneLights.h"
@@ -32,11 +31,6 @@ public:
 	/// The details used to render fog.
 	/// </summary>
 	Fog fog;
-
-	/// <summary>
-	/// A cache of materials.
-	/// </summary>
-	MaterialCache material_cache;
 
 	/// <summary>
 	/// The projection matrix, taking into account screen size.

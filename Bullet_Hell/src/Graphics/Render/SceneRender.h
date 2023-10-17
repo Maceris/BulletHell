@@ -39,5 +39,5 @@ private:
 	std::unique_ptr<UniformsMap> uniforms_map;
 
 	void create_uniforms();
-	void setup_materials_uniform(const MaterialCache& material_cache);
+	void setup_materials_uniform();
 };

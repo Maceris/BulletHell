@@ -16,9 +16,16 @@
 struct Entity
 {
 	/// <summary>
-	/// A globally unique ID for this entity.
+	/// A globally unique ID for this entity. If there are multiple 
+	/// quintillion different entities, we have larger problems than 
+	/// ID collisions.
 	/// </summary>
-	const std::string entity_ID;
+	const uint64_t entity_ID;
+
+	/// <summary>
+	/// The next valid ID to use for an entity.
+	/// </summary>
+	static std::atomic<uint64_t> next_ID;
 
 	/// <summary>
 	/// The ID of the model associated to this entity.
@@ -53,10 +60,9 @@ struct Entity
 	/// <summary>
 	/// Construct an entity.
 	/// </summary>
-	/// <param name="entity_ID">The unique ID of this entity.</param>
 	/// <param name="model_ID">The ID of the modal associated with this
 	/// entity.</param>
-	Entity(const std::string entity_ID, const std::string model_ID);
+	Entity(const std::string model_ID);
 
 	Entity(const Entity&) = delete;
 	Entity& operator=(const Entity&) = delete;

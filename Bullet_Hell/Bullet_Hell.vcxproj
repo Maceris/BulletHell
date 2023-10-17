@@ -160,7 +160,6 @@
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
-    <ClCompile Include="src\Graphics\Graph\MaterialCache.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshDrawData.cpp" />
     <ClCompile Include="src\Graphics\Graph\Model.cpp" />
@@ -224,7 +223,6 @@
     <ClInclude Include="src\Graphics\Graph\GBuffer.h" />
     <ClInclude Include="src\Graphics\Graph\GuiMesh.h" />
     <ClInclude Include="src\Graphics\Graph\Material.h" />
-    <ClInclude Include="src\Graphics\Graph\MaterialCache.h" />
     <ClInclude Include="src\Graphics\Graph\MeshData.h" />
     <ClInclude Include="src\Graphics\Graph\MeshDrawData.h" />
     <ClInclude Include="src\Graphics\Graph\Model.h" />

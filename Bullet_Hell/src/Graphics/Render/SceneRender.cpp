@@ -153,6 +153,10 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
 
     glActiveTexture(GL_TEXTURE0);
     //TODO(ches) complete this, bind default texture
+    Texture::default_texture->bind();
+
+    int next_texture = 1;
+
 }
 
 void SceneRender::create_uniforms()
@@ -177,7 +181,7 @@ void SceneRender::create_uniforms()
     }
 }
 
-void SceneRender::setup_materials_uniform(const MaterialCache& material_cache)
+void SceneRender::setup_materials_uniform()
 {
 
 }
