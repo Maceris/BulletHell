@@ -5,6 +5,7 @@
 unsigned int TextureLoader::get_loaded_resource_size(char* raw_buffer,
 	unsigned int raw_size)
 {
+	//NOTE(ches) once we upload the data to the GPU, we don't keep it around
 	return sizeof(Texture);
 }
 
