@@ -8,7 +8,9 @@
 ResourceZipFile::ResourceZipFile(const std::string resource_file_name)
 	: zip_file(nullptr)
 	, resource_file_name(resource_file_name)
-{}
+{
+	LOG_INFO("Opening the resource zip file " + resource_file_name);
+}
 
 ResourceZipFile::~ResourceZipFile()
 {
@@ -20,82 +22,80 @@ bool ResourceZipFile::open()
 	zip_file = ZipFile::Open(resource_file_name);
 	if (!zip_file)
 	{
+		LOG_ERROR("Failed to open resource file " + resource_file_name);
 		return false;
 	}
 	return true;
 }
 
-int ResourceZipFile::get_raw_resource_size(const Resource& resource)
+size_t ResourceZipFile::get_raw_resource_size(const Resource& resource)
 {
-	if (zip_file == nullptr)
+	if (zip_file == nullptr || !zip_file)
 	{
+		LOG_ERROR("Resource file not valid!");
 		return 0;
 	}
 	std::shared_ptr<ZipArchiveEntry> entry = zip_file->GetEntry(resource.name);
 	if (!entry)
 	{
+		LOG_WARNING("Can not find the entry " + resource.name
+			+ " in the resource file in order to determine size");
 		return -1;
 	}
 
-	size_t size = entry->GetSize();
-	if (size > INT_MAX)
-	{
-		LOG_WARNING("The resource size is larger than we can represent with an int");
-		return INT_MAX;
-	}
-	return (int)size;
+	return entry->GetSize();
 }
 
-int ResourceZipFile::load_resource(const Resource& resource, char* buffer)
+size_t ResourceZipFile::load_resource(const Resource& resource, char* buffer)
 {
 	
-	if (zip_file == nullptr || buffer == nullptr)
+	if (zip_file == nullptr || !zip_file || buffer == nullptr)
 	{
+		LOG_WARNING("Resource file or destination buffer are null");
 		return 0;
 	}
 
 	std::shared_ptr<ZipArchiveEntry> entry = zip_file->GetEntry(resource.name);
 	if (!entry || !entry->CanExtract())
 	{
+		LOG_WARNING("Failed to find or extract entry " + resource.name);
 		return 0;
 	}
 	size_t size = entry->GetSize();
 
-	if (size > INT_MAX)
-	{
-		LOG_ERROR("We are trying to load a single file over 2 gigabytes");
-		return 0;
-	}
-
 	std::istream* data_stream = entry->GetDecompressionStream();
 	data_stream->read(buffer, size);
 
-	return (int) size;
+	return size;
 }
 
-const int ResourceZipFile::get_resource_count()
+const size_t ResourceZipFile::get_resource_count()
 {
-	if (zip_file == nullptr)
+	if (zip_file == nullptr || !zip_file)
 	{
+		LOG_ERROR("Resource file not valid!");
 		return 0;
 	}
-	size_t entry_count = zip_file->GetEntriesCount();
-	if (entry_count > INT_MAX)
-	{
-		LOG_WARNING("There are more resources than we can represent with an int");
-		return INT_MAX;
-	}
-	return (int) entry_count;
+	
+	return zip_file->GetEntriesCount();
 }
 
 std::string ResourceZipFile::get_resource_name(int index)
 {
-	std::string result = "";
-
-	if (zip_file != nullptr
-		&& index >= 0 && index < zip_file->GetEntriesCount())
+	
+	if (zip_file == nullptr || !zip_file)
 	{
-		result = zip_file->GetEntry(index)->GetFullName();
+		LOG_ERROR("Resource file not valid!");
+		return "";
 	}
-	return result;
+
+	if (index < 0 || index >= zip_file->GetEntriesCount())
+	{
+		LOG_ERROR("Index " + std::to_string(index) 
+			+ " not valid for entries 0 through " 
+			+ std::to_string(zip_file->GetEntriesCount()));
+		return "";
+	}
+	
+	return zip_file->GetEntry(index)->GetFullName();
 }

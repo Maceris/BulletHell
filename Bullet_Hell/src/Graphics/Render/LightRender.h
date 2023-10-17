@@ -2,9 +2,6 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glm.hpp"
-
 #include <memory>
 
 #include "GBuffer.h"
@@ -13,6 +10,9 @@
 #include "ShaderProgram.h"
 #include "ShadowRender.h"
 #include "UniformsMap.h"
+
+#include "glad.h"
+#include "glm.hpp"
 
 /// <summary>
 /// Handles light rendering.

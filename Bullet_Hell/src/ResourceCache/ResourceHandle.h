@@ -25,7 +25,7 @@ protected:
 	Resource resource;
 
 	/// <summary>
-	/// The actual data.
+	/// The actual data, assuming we keep the raw buffer.
 	/// </summary>
 	char* buffer;
 
@@ -74,13 +74,15 @@ public:
 	unsigned int get_size();
 
 	/// <summary>
-	/// Return a const reference to the data.
+	/// Return a const reference to the data. If this type of resource does
+	/// not use the raw data, this will be a nullptr.
 	/// </summary>
 	/// <returns>The raw data for this resource.</returns>
 	const char* get_buffer();
 
 	/// <summary>
-	/// Return a writeable reference to the data.
+	/// Return a writeable reference to the data. If this type of resource does
+	/// not use the raw data, this will be a nullptr.
 	/// </summary>
 	/// <returns>The raw data for this resource.</returns>
 	char* get_writeable_buffer();

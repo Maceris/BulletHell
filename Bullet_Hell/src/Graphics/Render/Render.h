@@ -2,9 +2,6 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glfw3.h"
-
 #include "AnimationRender.h"
 #include "CommandBuffers.h"
 #include "FilterRender.h"
@@ -17,6 +14,9 @@
 #include "Window.h"
 
 #include "GBuffer.h"
+
+#include "glad.h"
+#include "glfw3.h"
 
 /// <summary>
 /// Handles all the rendering stages for drawing to the screen

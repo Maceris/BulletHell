@@ -73,7 +73,8 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 	if (raw_size < 0)
 	{
-		LOG_WARNING("Resource not found");
+		LOG_WARNING("Resource " + resource->name + " not found");
+
 		return std::shared_ptr<ResourceHandle>();
 	}
 
@@ -131,7 +132,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 		resources[resource->name] = handle;
 	}
 
-	LOG_ERROR("Default resource loader was not found!");
+	LOG_ASSERT(loader && "Default resource loader was not found!");
 	return handle;
 }
 
@@ -168,9 +169,9 @@ void ResourceCache::memory_has_been_freed(unsigned int size)
 }
 
 ResourceCache::ResourceCache(const unsigned int size_in_MB, ResourceFile* file)
-	: cache_size(size_in_MB * 1024 * 1024)
-	, allocated(0)
-	, file(file)
+	: cache_size{ size_in_MB * 1024 * 1024 }
+	, allocated{ 0 }
+	, file{ file }
 {}
 
 ResourceCache::~ResourceCache()

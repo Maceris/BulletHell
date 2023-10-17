@@ -2,13 +2,13 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glfw3.h"
-
 #include <vector>
 
 #include "MeshDrawData.h"
 #include "Scene.h"
+
+#include "glad.h"
+#include "glfw3.h"
 
 /// <summary>
 /// A list of pointers to models.

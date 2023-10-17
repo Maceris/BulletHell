@@ -2,12 +2,12 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-
 #include "CascadeShadowSlice.h"
 #include "ShadowBuffer.h"
 
 #include <memory>
+
+#include "glad.h"
 
 /// <summary>
 /// Handles rendering for shadows.

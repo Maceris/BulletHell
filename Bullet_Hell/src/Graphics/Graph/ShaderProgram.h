@@ -2,10 +2,11 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-
 #include <string>
 #include <vector>
+
+#include "glad.h"
+
 
 /// <summary>
 /// Details about a shader.

@@ -2,12 +2,10 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-
 #include <string>
 #include <memory>
 
-#include "Resource.h"
+#include "glad.h"
 
 class Texture
 {
@@ -45,5 +43,8 @@ public:
 	/// </summary>
 	void bind();
 
+	/// <summary>
+	/// The default texture to use, which is loaded during initialization.
+	/// </summary>
 	static std::shared_ptr<Texture> default_texture;
 };

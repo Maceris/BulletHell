@@ -2,6 +2,9 @@
 
 #include "Logger.h"
 #include "ResourceZipFile.h"
+#include "TextureResource.h"
+
+#include <filesystem>
 
 GameLogic* g_game_logic = nullptr;
 
@@ -14,7 +17,11 @@ GameLogic::GameLogic()
 
 bool GameLogic::initialize()
 {
-	ResourceFile* zip_file = ALLOC ResourceZipFile("assets.zip");
+	std::filesystem::path resource_path{ "assets.zip" };
+	std::filesystem::path full_resource_path = 
+		std::filesystem::canonical(resource_path);
+
+	ResourceFile* zip_file = ALLOC ResourceZipFile(full_resource_path.string());
 	resource_cache = ALLOC ResourceCache(50, zip_file);
 
 	if (!resource_cache->init())
@@ -23,8 +30,16 @@ bool GameLogic::initialize()
 		return false;
 	}
 
+	resource_cache->register_loader(std::make_shared<TextureLoader>());
+
 	window = std::unique_ptr<Window>(ALLOC Window());
 	window->initialize();
+
+	Resource default_texture("textures/default_texture.image");
+	auto handle = resource_cache->get_handle(&default_texture);
+	std::shared_ptr<TextureExtraData> texture_extra =
+		static_pointer_cast<TextureExtraData>(handle->get_extra());
+	Texture::default_texture = texture_extra->texture;
 
 	return true;
 }

@@ -2,9 +2,6 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glfw3.h"
-
 #include <string>
 #include <memory>
 
@@ -12,6 +9,9 @@
 #include "ShaderProgram.h"
 #include "Scene.h"
 #include "UniformsMap.h"
+
+#include "glad.h"
+#include "glfw3.h"
 
 /// <summary>
 /// Handles post-processing filters

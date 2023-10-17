@@ -1,5 +1,7 @@
 #include "Texture.h"
 
+std::shared_ptr<Texture> Texture::default_texture = nullptr;
+
 Texture::Texture(const unsigned int width, const unsigned int height,
 	const char* buffer)
 	: width(width)

@@ -2,8 +2,6 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-
 #include <memory>
 
 #include "CommandBuffers.h"
@@ -12,6 +10,8 @@
 #include "Scene.h"
 #include "ShaderProgram.h"
 #include "UniformsMap.h"
+
+#include "glad.h"
 
 /// <summary>
 /// Handles rendering for the scene geometry.

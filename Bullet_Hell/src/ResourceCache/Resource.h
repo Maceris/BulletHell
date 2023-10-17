@@ -1,23 +1,18 @@
 #pragma once
 
-/*
-	NOTE(ches) This file is not intended to be included directly. Please see
-	ResourceCache.h instead.
-*/
-
 #include <string>
 
 /// <summary>
 /// Extra data associated with a resource. For example, length and format of
-/// a sound file.
+/// a sound file, or a parsed version of a resource requiring extra processing.
 /// </summary>
 class ResourceExtraData
 {
 public:
 	/// <summary>
-	/// Return a string version of the extra data.
+	/// Return a string indicating the type of data.
 	/// </summary>
-	/// <returns>The extra data.</returns>
+	/// <returns>The type of data.</returns>
 	virtual std::string to_string() = 0;
 };
 

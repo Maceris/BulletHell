@@ -2,8 +2,6 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-
 #include "QuadMesh.h"
 #include "RenderBuffers.h"
 #include "Scene.h"
@@ -11,6 +9,8 @@
 #include "UniformsMap.h"
 
 #include <memory>
+
+#include "glad.h"
 
 /// <summary>
 /// Handles compute shaders for animated models.

@@ -2,16 +2,13 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#define GLFW_INCLUDE_NONE
-#include "glm.hpp"
-#include "mat4x4.hpp"
-#include "gtx/quaternion.hpp"
-#include "vec3.hpp"
-
 #include "AnimationData.h"
 
 #include <string>
+
+#include "glad.h"
+#include "glm.hpp"
+#include "gtx/quaternion.hpp"
 
 /// <summary>
 /// Something that is part of the 3D scene.

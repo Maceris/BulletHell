@@ -44,7 +44,7 @@ struct AnimatedFrame
 	{
 		for (unsigned int i = 0; i < bone_matrices_count; ++i)
 		{
-			bone_matrices.emplace_back(1);
+			bone_matrices.push_back(glm::mat4{ 1 });
 		}
 	}
 

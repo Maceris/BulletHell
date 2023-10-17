@@ -2,11 +2,11 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glm.hpp"
-
 #include <map>
 #include <string>
+
+#include "glad.h"
+#include "glm.hpp"
 
 /// <summary>
 /// Allows for creation and usage of uniforms for a shader program.

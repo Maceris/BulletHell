@@ -16,8 +16,8 @@ unsigned int DefaultResourceLoader::get_loaded_resource_size(char* raw_buffer,
 	return raw_size;
 }
 
-bool DefaultResourceLoader::load_resource(char* raw_buffer, unsigned int raw_size,
-	std::shared_ptr<ResourceHandle> handle)
+bool DefaultResourceLoader::load_resource(char* raw_buffer, 
+	unsigned int raw_size, std::shared_ptr<ResourceHandle> handle)
 {
 	return true;
 }
