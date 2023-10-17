@@ -329,7 +329,7 @@ void MeshConverter::convert_model(const fs::directory_entry& source)
 
 	target_file_name = source.path().filename().string();
 	auto dot = target_file_name.find_last_of("\\.");
-	const int extension_size = target_file_name.size() - dot;
+	const size_t extension_size = target_file_name.size() - dot;
 	std::string model_name = target_file_name.erase(dot, extension_size);
 
     fs::path target_path(target_file_name);
@@ -435,7 +435,7 @@ void output_animation(std::shared_ptr<Animation> animation,
 {
 	static int fallback_id;
 
-	static const std::regex invalid_characters("[^a-zA-Z0-9_\.\-]+");
+	static const std::regex invalid_characters("[^a-zA-Z0-9_.-]+");
 	std::string formatted_name = 
 		std::regex_replace(animation->name, invalid_characters, "");
 	
@@ -461,16 +461,16 @@ void output_animation(std::shared_ptr<Animation> animation,
 
 	write_uint64(animation->duration, out);
 
-	const uint32_t frame_count = animation->frames.size();
-	write_uint32(frame_count, out);
+	const uint64_t frame_count = animation->frames.size();
+	write_uint64(frame_count, out);
 
-	uint32_t bones_size = 0;
+	uint64_t bones_size = 0;
 	if (frame_count > 0)
 	{
 		bones_size = animation->frames[0].bone_matrices.size();
 	}
 
-	write_uint32(bones_size, out);
+	write_uint64(bones_size, out);
 
 	for (const auto& frame : animation->frames)
 	{
@@ -529,16 +529,16 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	const uint32_t max_weights = MAX_WEIGHTS_PER_BONE;
 	write_uint32(max_weights, out);
 
-	const uint32_t mesh_count = data.size();
-	write_uint32(mesh_count, out);
+	const uint64_t mesh_count = data.size();
+	write_uint64(mesh_count, out);
 	
 	for (auto& mesh : data)
 	{
 		const uint16_t material_index = mesh->material_id;
 		write_uint16(material_index, out);
 
-		const uint32_t vertex_count = mesh->positions.size() / 3;
-		write_uint32(vertex_count, out);
+		const uint64_t vertex_count = mesh->positions.size() / 3;
+		write_uint64(vertex_count, out);
 
 		LOG_ASSERT(mesh->positions.size() == mesh->normals.size());
 		LOG_ASSERT(mesh->positions.size() == mesh->tangents.size());
@@ -565,15 +565,15 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 			write_uint32(mesh->texture_coordinates[start_text_coord], out);
 			write_uint32(mesh->texture_coordinates[start_text_coord + 1], out);
 		}
-		const uint32_t index_count = mesh->indices.size();
-		write_uint32(index_count, out);
+		const uint64_t index_count = mesh->indices.size();
+		write_uint64(index_count, out);
 		for (int i = 0; i < index_count; ++i)
 		{
 			write_uint32(mesh->indices[i], out);
 		}
 
-		const uint32_t weight_count = mesh->bone_indices.size();
-		write_uint32(weight_count, out);
+		const uint64_t weight_count = mesh->bone_indices.size();
+		write_uint64(weight_count, out);
 
 		for (const auto& weight : mesh->bone_indices)
 		{
@@ -599,7 +599,7 @@ void build_frame_matrices(const aiAnimation* animation,
 	aiNodeAnim* node_animation = nullptr;
 	const std::string node_name = node->name;
 	const unsigned int channel_count = animation->mNumChannels;
-	for (int i = 0; i < channel_count; ++i)
+	for (unsigned int i = 0; i < channel_count; ++i)
 	{
 		aiNodeAnim* test_node = animation->mChannels[i];
 
@@ -673,7 +673,7 @@ Node* build_node_tree(const aiNode* raw_node, Node* parent_node)
 
 	const unsigned int child_count = raw_node->mNumChildren;
 	aiNode** const children = raw_node->mChildren;
-	for (int i = 0; i < child_count; ++i)
+	for (unsigned int i = 0; i < child_count; ++i)
 	{
 		const aiNode* ai_child = children[i];
 		Node* child = build_node_tree(ai_child, node);
@@ -760,7 +760,7 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 
 	const unsigned int animation_count = scene->mNumAnimations;
 	aiAnimation** const aiAnimations = scene->mAnimations;
-	for (int i = 0; i < animation_count; ++i)
+	for (unsigned int i = 0; i < animation_count; ++i)
 	{
 		const aiAnimation* aiAnimation = aiAnimations[i];
 		const unsigned int max_frames = calc_animation_max_frames(aiAnimation);
@@ -776,7 +776,7 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 			name = std::string(aiAnimation->mName.C_Str());
 		}
 
-		for (int j = 0; j < max_frames; ++j)
+		for (unsigned int j = 0; j < max_frames; ++j)
 		{
 			AnimatedFrame animatedFrame(bone_count);
 
@@ -802,14 +802,15 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 
 	std::map<int, std::vector<VertexWeight>> weight_map;
 
-	for (int i = 0; i < bone_count; ++i)
+	for (unsigned int i = 0; i < bone_count; ++i)
 	{
 		const aiBone* ai_bone = ai_bones[i];
-		const int id = bones.size();
+		assert(bones.size() < INT_MAX);
+		const int id = (int) bones.size();
 		std::string bone_name;
 		if (ai_bone->mName.length == 0)
 		{
-			bone_name = "bone" + id;
+			bone_name = "bone" + std::to_string(id);
 		}
 		else
 		{
@@ -821,7 +822,7 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 
 		const unsigned int weight_count = ai_bone->mNumWeights;
 		const aiVertexWeight* weights = ai_bone->mWeights;
-		for (int j = 0; j < weight_count; ++j)
+		for (unsigned int j = 0; j < weight_count; ++j)
 		{
 			aiVertexWeight ai_weight = weights[j];
 			VertexWeight weight(bone.bone_ID, ai_weight.mVertexId,
@@ -839,10 +840,10 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 	}
 
 	const unsigned int vertex_count = mesh->mNumVertices;
-	for (int i = 0; i < vertex_count; ++i)
+	for (unsigned int i = 0; i < vertex_count; ++i)
 	{
 		
-		unsigned int size = 0;
+		size_t size = 0;
 		auto iter = weight_map.find(i);
 		std::vector<VertexWeight>* weights = nullptr;
 		if (iter != weight_map.end())
@@ -851,19 +852,19 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 			size = weights->size();
 		}
 		BoneWeights bone_weights = BoneWeights();
-		for (int j = 0; j < MAX_WEIGHTS_PER_BONE; ++j)
+		for (unsigned int j = 0; j < MAX_WEIGHTS_PER_BONE; ++j)
 		{
 			if (j < size)
 			{
 				// Only reachable if weights was not null
 				VertexWeight& vw = weights->at(j);
 				bone_weights.weights[j] = vw.weight;
-				bone_weights.indices[j] = vw.bone_ID;
+				bone_weights.indices[j] = static_cast<float>(vw.bone_ID);
 			}
 			else
 			{
 				bone_weights.weights[j] = 0.0f;
-				bone_weights.indices[j] = 0;
+				bone_weights.indices[j] = 0.0f;
 			}
 		}
 		mesh_data->bone_indices.push_back(bone_weights);
@@ -880,7 +881,7 @@ void process_indices(const aiMesh* mesh,
 	{
 		const aiFace face = faces[face_index];
 		const unsigned int indices_count = face.mNumIndices;
-		for (int index = 0; index < indices_count; ++index)
+		for (unsigned int index = 0; index < indices_count; ++index)
 		{
 			mesh_data->indices.push_back(face.mIndices[index]);
 		}
@@ -978,7 +979,7 @@ void process_texture_coordinates(const aiMesh* mesh,
 	{
 		return;
 	}
-	for (int i = 0; i < length; ++i)
+	for (unsigned int i = 0; i < length; ++i)
 	{
 		const aiVector3D vector = coordinates_array[i];
 		mesh_data->texture_coordinates.push_back(vector.x);

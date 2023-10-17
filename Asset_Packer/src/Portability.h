@@ -1,10 +1,10 @@
 #pragma once
 
-#include "glm.hpp"
-
 #include <fstream>
 #define NOMINMAX
 #include <winsock2.h>
+
+#include "glm.hpp"
 
 /// <summary>
 /// Write a value to an output stream as a 16 bit integer, in network byte 
@@ -19,7 +19,7 @@ void constexpr write_uint16(const T& value, std::ofstream& target)
 	static_assert(sizeof(T) <= sizeof(uint16_t),
 		"Provided value does not fit in 16 bits.");
 	uint16_t local = htons(std::bit_cast<uint16_t>(value));
-	target.write((char*)&local, sizeof(local));
+	target.write(reinterpret_cast<const char*>(&local), sizeof(local));
 }
 
 /// <summary>
@@ -35,7 +35,7 @@ void constexpr write_uint32(const T& value, std::ofstream& target)
 	static_assert(sizeof(T) <= sizeof(uint32_t),
 		"Provided value does not fit in 32 bits.");
 	uint32_t local = htonl(std::bit_cast<uint32_t>(value));
-	target.write((char*)&local, sizeof(local));
+	target.write(reinterpret_cast<const char*>(&local), sizeof(local));
 }
 
 /// <summary>
@@ -51,11 +51,11 @@ void constexpr write_uint64(const T& value, std::ofstream& target)
 	static_assert(sizeof(T) <= sizeof(uint64_t),
 		"Provided value does not fit in 64 bits.");
 	uint64_t local = htonll(std::bit_cast<uint64_t>(value));
-	target.write((char*)&local, sizeof(local));
+	target.write(reinterpret_cast<const char*>(&local), sizeof(local));
 }
 
 /// <summary>
-/// Write an array of raw bytes to file, in network byte order (big endian).
+/// Write an array of raw bytes to file.
 /// The bytes are prefixed with an integer describing the length of the byte
 /// array.
 /// </summary>
@@ -63,22 +63,13 @@ void constexpr write_uint64(const T& value, std::ofstream& target)
 /// <param name="length">The size of the array.</param>
 /// <param name="target">The stream to write to.</param>
 void constexpr write_data_array(const unsigned char* value, 
-	const unsigned int length, std::ofstream& target)
+	const uint64_t length, std::ofstream& target)
 {
-	const uint32_t size = length;
-	write_uint32(size, target);
+	write_uint64(length, target);
 
-	if (size > 0)
+	if (length > 0)
 	{
-		/*
-		   NOTE(ches) We can't dump the whole array directly unless it's a big
-		   endian system.
-		*/
-		
-		for (unsigned int i = 0; i < length; ++i)
-		{
-			target.write((char*) &value[i], 1);
-		}
+		target.write(reinterpret_cast<const char*>(value), length);
 	}
 }
 
@@ -90,8 +81,8 @@ void constexpr write_data_array(const unsigned char* value,
 /// <param name="target">The stream to write to.</param>
 void constexpr write_string(const std::string& value, std::ofstream& target)
 {
-	write_data_array((const unsigned char*) value.data(), value.length(), 
-		target);
+	write_data_array(reinterpret_cast<const unsigned char*>(value.data()), 
+		value.length(), target);
 }
 
 /// <summary>

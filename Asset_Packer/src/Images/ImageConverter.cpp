@@ -35,7 +35,7 @@ void ImageConverter::convert_image(const fs::directory_entry& source)
 	
 	//NOTE(ches) swap extensions
 	auto dot = target_file_name.find_last_of("\\.");
-	const int extension_size = target_file_name.size() - dot;
+	const size_t extension_size = target_file_name.size() - dot;
 	target_file_name.erase(dot, extension_size);
 	target_file_name += IMAGE_OUTPUT_EXTENSION;
 
