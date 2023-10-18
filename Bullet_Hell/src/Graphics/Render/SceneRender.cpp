@@ -124,6 +124,7 @@ void main()
 #pragma endregion
 
 SceneRender::SceneRender()
+    : texture_bindings{}
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
