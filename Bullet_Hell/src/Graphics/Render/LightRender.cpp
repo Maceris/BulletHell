@@ -1,6 +1,7 @@
 #include "LightRender.h"
 
 #include "CascadeShadowSlice.h"
+#include "RenderConstants.h"
 
 #pragma region Shader code
 
@@ -233,9 +234,6 @@ void main()
 )glsl";
 
 #pragma endregion
-
-constexpr auto MAX_POINT_LIGHTS = 50;
-constexpr auto MAX_SPOT_LIGHTS = 50;
 
 LightRender::LightRender()
 {

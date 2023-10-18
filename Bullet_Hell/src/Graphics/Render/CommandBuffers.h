@@ -47,7 +47,7 @@ struct CommandBuffers
 	/// <summary>
 	/// Storage for model matrices for static models.
 	/// </summary>
-	GLuint static_model_matrics_buffer;
+	GLuint static_model_matrices_buffer;
 
 	CommandBuffers()
 		: animated_command_buffer(0)
@@ -57,7 +57,7 @@ struct CommandBuffers
 		, static_command_buffer(0)
 		, static_draw_count(0)
 		, static_draw_element_buffer(0)
-		, static_model_matrics_buffer(0)
+		, static_model_matrices_buffer(0)
 	{}
 	CommandBuffers(const CommandBuffers&) = delete;
 	CommandBuffers& operator=(const CommandBuffers&) = delete;
@@ -84,9 +84,9 @@ struct CommandBuffers
 		{
 			glDeleteBuffers(1, &static_draw_element_buffer);
 		}
-		if (static_model_matrics_buffer != 0)
+		if (static_model_matrices_buffer != 0)
 		{
-			glDeleteBuffers(1, &static_model_matrics_buffer);
+			glDeleteBuffers(1, &static_model_matrices_buffer);
 		}
 	}
 };

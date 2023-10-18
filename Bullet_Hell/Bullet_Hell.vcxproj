@@ -239,6 +239,7 @@
     <ClInclude Include="src\Graphics\Render\GuiRender.h" />
     <ClInclude Include="src\Graphics\Render\LightRender.h" />
     <ClInclude Include="src\Graphics\Render\Render.h" />
+    <ClInclude Include="src\Graphics\Render\RenderConstants.h" />
     <ClInclude Include="src\Graphics\Render\SceneRender.h" />
     <ClInclude Include="src\Graphics\Render\ShadowRender.h" />
     <ClInclude Include="src\Graphics\Render\SkyBoxRender.h" />
