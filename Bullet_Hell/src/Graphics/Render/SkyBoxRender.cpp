@@ -1,7 +1,10 @@
-#include "../../Utilities/Globals.h"
 #include "SkyBoxRender.h"
 
+#include "GameLogic.h"
+#include "ResourceCache.h"
+#include "TextureResource.h"
 
+#pragma region Shader code
 const char fragment_shader_source[] = R"glsl(
 #version 460
 
@@ -41,3 +44,69 @@ void main()
     texture_coordinates_out = texture_coordinates;
 }
 )glsl";
+#pragma endregion
+
+SkyBoxRender::SkyBoxRender()
+{
+    std::vector<ShaderModuleData> shader_modules;
+    shader_modules.emplace_back(vertex_shader_source,
+        sizeof(vertex_shader_source), GL_VERTEX_SHADER);
+    shader_modules.emplace_back(fragment_shader_source,
+        sizeof(fragment_shader_source), GL_FRAGMENT_SHADER);
+    shader_program = std::make_unique<ShaderProgram>(shader_modules);
+
+    uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
+    create_uniforms();
+}
+
+void SkyBoxRender::render(const Scene& scene)
+{
+    const SkyBox& sky_box = scene.sky_box;
+
+    shader_program->bind();
+
+    uniforms_map->set_uniform("projection_matrix",
+        scene.projection.projection_matrix);
+    view_matrix = scene.camera.view_matrix;
+    view_matrix[3][0] = 0;
+    view_matrix[3][1] = 0;
+    view_matrix[3][2] = 0;
+    uniforms_map->set_uniform("view_matrix", view_matrix);
+    uniforms_map->set_uniform("texture_sampler", 0);
+
+    const auto& material = sky_box.model->mesh_data_list[0].material;
+    uniforms_map->set_uniform("diffuse", material->diffuse_color);
+
+    bool has_texture = false;
+    if (material->texture_name == "")
+    {
+        glActiveTexture(GL_TEXTURE0);
+        Resource tex(material->normal_map_name);
+        auto handle = g_game_logic->resource_cache->get_handle(&tex);
+        std::shared_ptr<TextureExtraData> texture_extra =
+            static_pointer_cast<TextureExtraData>(handle->get_extra());
+        texture_extra->texture->bind();
+        has_texture = true;
+    }
+
+    uniforms_map->set_uniform("has_texture", has_texture ? 1 : 0);
+
+    glBindVertexArray(sky_box.vao);
+
+    uniforms_map->set_uniform("model_matrix", sky_box.entity->model_matrix);
+    glDrawElements(GL_TRIANGLES, sky_box.vertex_count, GL_UNSIGNED_INT,
+        nullptr);
+
+    glBindVertexArray(0);
+    shader_program->unbind();
+}
+
+void SkyBoxRender::create_uniforms()
+{
+    uniforms_map->create_uniform("projection_matrix");
+    uniforms_map->create_uniform("view_matrix");
+    uniforms_map->create_uniform("model_matrix");
+    uniforms_map->create_uniform("diffuse");
+    uniforms_map->create_uniform("texture_sampler");
+    uniforms_map->create_uniform("has_texture");
+}
