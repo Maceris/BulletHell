@@ -4,14 +4,8 @@
 
 #include "glm.hpp"
 
+#include "RenderConstants.h"
 #include "Scene.h"
-
-#include <vector>
-
-/// <summary>
-/// The number of sections to split the frustum into.
-/// </summary>
-constexpr auto SHADOW_MAP_CASCADE_COUNT = 3;
 
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 
@@ -35,8 +29,14 @@ struct CascadeShadowSlice
 	/// </summary>
 	/// <param name="shadows">The cascade shadows to update.</param>
 	/// <param name="scene">The scene we are updating shadows for.</param>
-	static void updateCascadeShadows(std::vector<CascadeShadowSlice>& shadows,
-		Scene& scene);
+	static void updateCascadeShadows(
+		CascadeShadowSlice shadows[SHADOW_MAP_CASCADE_COUNT], 
+		const Scene& scene);
+
+	CascadeShadowSlice();
+	CascadeShadowSlice(const CascadeShadowSlice&) = delete;
+	CascadeShadowSlice& operator=(const CascadeShadowSlice&) = delete;
+	~CascadeShadowSlice() = default;
 
 private:
 	/// <summary>

@@ -24,6 +24,14 @@ public:
 	SceneRender& operator=(const SceneRender&) = delete;
 	~SceneRender() = default;
 
+	/// <summary>
+	/// Render the scene.
+	/// </summary>
+	/// <param name="scene">The scene to render.</param>
+	/// <param name="render_buffers">Buffers for indirect drawing of models.
+	/// </param>
+	/// <param name="gBuffer">The buffer for geometry data.</param>
+	/// <param name="command_buffers">The render command buffers.</param>
 	void render(const Scene& scene, const RenderBuffers& render_buffers,
 		const GBuffer& gBuffer, const CommandBuffers& command_buffers);
 
@@ -34,14 +42,7 @@ public:
 	/// <param name="scene">The scene to pull materials from.</param>
 	void setup_materials_uniform(const Scene& scene);
 private:
-	/// <summary>
-	/// The GUI Shader program.
-	/// </summary>
 	std::unique_ptr<ShaderProgram> shader_program;
-
-	/// <summary>
-	/// Uniforms for the shader.
-	/// </summary>
 	std::unique_ptr<UniformsMap> uniforms_map;
 
 	/// <summary>
