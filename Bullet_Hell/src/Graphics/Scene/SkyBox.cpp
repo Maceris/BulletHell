@@ -1,19 +1,25 @@
 #include "SkyBox.h"
 
 #include "GameLogic.h"
+#include "Logger.h"
+#include "ModelResource.h"
 #include "ResourceCache.h"
-#include "TextureResource.h"
 
 SkyBox::SkyBox()
 {
 	Resource model_resource("models/skybox/skybox.model");
 	auto model_handle = g_game_logic->resource_cache->
 		get_handle(&model_resource);
-	//TODO(ches) load model, create entity
 	
-	std::shared_ptr<TextureExtraData> texture_extra =
-		static_pointer_cast<TextureExtraData>(model_handle->get_extra());
+	std::shared_ptr<ModelExtraData> model_extra =
+		static_pointer_cast<ModelExtraData>(model_handle->get_extra());
+	model = model_extra->model;
 
+	entity = std::make_shared<Entity>(model_resource.name);
+
+	LOG_ASSERT(model->mesh_data_list.size() == 1
+		&& "We are assuming that skybox models only have one mesh");
+	populate_buffers(model->mesh_data_list[0]);
 }
 
 void SkyBox::populate_buffers(const MeshData& mesh_data)
