@@ -39,10 +39,9 @@ public:
 	/// </summary>
 	GLuint vbo_list[SKYBOX_VBO_COUNT];
 
-	material_id material;
-
 	std::shared_ptr<Entity> entity;
 	std::shared_ptr<Model> model;
+
 	SkyBox();
 	SkyBox(const SkyBox&) = delete;
 	SkyBox& operator=(const SkyBox&) = delete;
