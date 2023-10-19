@@ -190,7 +190,7 @@ void RenderBuffers::load_bones_indices_weights(const ModelList& models)
 	{
 		for (auto& mesh_data : model->mesh_data_list)
 		{
-			mesh_data.append_vertices_to_buffer(data_buffer);
+			mesh_data.append_weights_to_buffer(data_buffer);
 		}
 	}
 

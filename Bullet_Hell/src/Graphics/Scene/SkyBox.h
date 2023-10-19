@@ -43,7 +43,7 @@ public:
 
 	std::shared_ptr<Entity> entity;
 	std::shared_ptr<Model> model;
-	SkyBox();//TODO(ches) model loading setup (model path?)
+	SkyBox();
 	SkyBox(const SkyBox&) = delete;
 	SkyBox& operator=(const SkyBox&) = delete;
 	~SkyBox();

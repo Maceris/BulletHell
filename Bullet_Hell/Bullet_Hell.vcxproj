@@ -160,9 +160,11 @@
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
+    <ClCompile Include="src\Graphics\Graph\MaterialResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshDrawData.cpp" />
     <ClCompile Include="src\Graphics\Graph\Model.cpp" />
+    <ClCompile Include="src\Graphics\Graph\ModelResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\QuadMesh.cpp" />
     <ClCompile Include="src\Graphics\Graph\RenderBuffers.cpp" />
     <ClCompile Include="src\Graphics\Graph\ShaderProgram.cpp" />
@@ -202,6 +204,7 @@
     <ClCompile Include="src\ResourceCache\ResourceZipFile.cpp" />
     <ClCompile Include="src\Utilities\MathUtil.cpp" />
     <ClCompile Include="src\Utilities\OpenGLUtil.cpp" />
+    <ClCompile Include="src\Utilities\Portability.cpp" />
     <ClCompile Include="src\Utilities\StringUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,9 +226,11 @@
     <ClInclude Include="src\Graphics\Graph\GBuffer.h" />
     <ClInclude Include="src\Graphics\Graph\GuiMesh.h" />
     <ClInclude Include="src\Graphics\Graph\Material.h" />
+    <ClInclude Include="src\Graphics\Graph\MaterialResource.h" />
     <ClInclude Include="src\Graphics\Graph\MeshData.h" />
     <ClInclude Include="src\Graphics\Graph\MeshDrawData.h" />
     <ClInclude Include="src\Graphics\Graph\Model.h" />
+    <ClInclude Include="src\Graphics\Graph\ModelResource.h" />
     <ClInclude Include="src\Graphics\Graph\QuadMesh.h" />
     <ClInclude Include="src\Graphics\Graph\RenderBuffers.h" />
     <ClInclude Include="src\Graphics\Graph\ShaderProgram.h" />

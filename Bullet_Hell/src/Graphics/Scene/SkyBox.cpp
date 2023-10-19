@@ -1,7 +1,18 @@
 #include "SkyBox.h"
 
+#include "GameLogic.h"
+#include "ResourceCache.h"
+#include "TextureResource.h"
+
 SkyBox::SkyBox()
 {
+	Resource model_resource("models/skybox/skybox.model");
+	auto model_handle = g_game_logic->resource_cache->
+		get_handle(&model_resource);
+	//TODO(ches) load model, create entity
+	
+	std::shared_ptr<TextureExtraData> texture_extra =
+		static_pointer_cast<TextureExtraData>(model_handle->get_extra());
 
 }
 

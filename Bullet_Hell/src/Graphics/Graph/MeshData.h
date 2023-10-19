@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "Animation.h"
 #include "Material.h"
 
 #pragma pack(push,1)
@@ -55,10 +56,23 @@ struct MeshData
 	std::shared_ptr<Material> material;
 
 	/// <summary>
+	/// The weights and index of each bone that affects each vertex. There 
+	/// is one set of bone weights for each vertex. Only animated models have
+	/// this data filled out.
+	/// </summary>
+	std::vector<BoneWeights> bone_weights;
+
+	/// <summary>
 	/// Append the raw vertex data to a buffer.
 	/// </summary>
 	/// <param name="buffer">The buffer to append to.</param>
 	void append_vertices_to_buffer(std::vector<float>& buffer);
+
+	/// <summary>
+	/// Append the bone index/weight data to a buffer.
+	/// </summary>
+	/// <param name="buffer">The buffer to append to.</param>
+	void append_weights_to_buffer(std::vector<float>& buffer);
 };
 
 
