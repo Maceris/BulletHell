@@ -82,36 +82,13 @@ private:
 	/// If we have, but need to set data up for the scene again, we will
 	/// need to clear them out and start over.
 	/// </summary>
-	bool buffers_populated;
+	std::atomic_bool buffers_populated;
 
-	/// <summary>
-	/// The animation render stage.
-	/// </summary>
 	AnimationRender animation_render;
-
-	/// <summary>
-	/// The GUI render stage.
-	/// </summary>
 	GuiRender gui_render;
-
-	/// <summary>
-	/// The light render stage.
-	/// </summary>
 	LightRender light_render;
-
-	/// <summary>
-	/// The scene geometry render stage.
-	/// </summary>
 	SceneRender scene_render;
-
-	/// <summary>
-	/// The shadow render stage.
-	/// </summary>
 	ShadowRender shadow_render;
-
-	/// <summary>
-	/// The skybox render stage.
-	/// </summary>
 	SkyBoxRender sky_box_render;
 
 	/// <summary>
@@ -149,15 +126,11 @@ private:
 		const unsigned int height);
 
 	/// <summary>
-	/// Set up the command buffer for animated models.
+	/// Set up the command buffers to render animated models, which should be
+	/// deleted before calling this if they are currently filled.
 	/// </summary>
 	/// <param name="scene">The scene we are rendering.</param>
 	void setup_animated_command_buffer(const Scene& scene);
-
-	/// <summary>
-	/// Set up the command buffer for static models.
-	/// </summary>
-	/// <param name="scene">The scene we are rendering./</param>
 	void setup_static_command_buffer(const Scene& scene);
 
 	/// <summary>
@@ -169,9 +142,5 @@ private:
 	void update_model_buffer(const std::vector<std::shared_ptr<Model>> models,
 		GLuint buffer_id);
 
-	/// <summary>
-	/// Update the model matrices buffers for all the scene objects.
-	/// </summary>
-	/// <param name="scene">The scene we are rendering.</param>
 	void update_model_matrices(const Scene& scene);
 };

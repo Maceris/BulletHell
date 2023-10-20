@@ -49,6 +49,38 @@ struct CommandBuffers
 	/// </summary>
 	GLuint static_model_matrices_buffer;
 
+	/// <summary>
+	/// Delete any buffers that are set up.
+	/// </summary>
+	void cleanup()
+	{
+		if (animated_command_buffer != 0)
+		{
+			glDeleteBuffers(1, &animated_command_buffer);
+		}
+		if (animated_draw_element_buffer != 0)
+		{
+			glDeleteBuffers(1, &animated_draw_element_buffer);
+		}
+		if (animated_model_matrices_buffer != 0)
+		{
+			glDeleteBuffers(1, &animated_model_matrices_buffer);
+		}
+
+		if (static_command_buffer != 0)
+		{
+			glDeleteBuffers(1, &static_command_buffer);
+		}
+		if (static_draw_element_buffer != 0)
+		{
+			glDeleteBuffers(1, &static_draw_element_buffer);
+		}
+		if (static_model_matrices_buffer != 0)
+		{
+			glDeleteBuffers(1, &static_model_matrices_buffer);
+		}
+	}
+
 	CommandBuffers()
 		: animated_command_buffer(0)
 		, animated_draw_count(0)
@@ -63,30 +95,6 @@ struct CommandBuffers
 	CommandBuffers& operator=(const CommandBuffers&) = delete;
 	~CommandBuffers()
 	{
-		if (animated_command_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_command_buffer);
-		}
-		if (animated_draw_element_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_draw_element_buffer);
-		}
-		if (animated_model_matrices_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_model_matrices_buffer);
-		}
-		
-		if (static_command_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_command_buffer);
-		}
-		if (static_draw_element_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_draw_element_buffer);
-		}
-		if (static_model_matrices_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_model_matrices_buffer);
-		}
+		cleanup();
 	}
 };
