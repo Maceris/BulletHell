@@ -249,7 +249,118 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 
 void Render::setup_static_command_buffer(const Scene& scene)
 {
-	//TODO(ches) complete this
+	std::vector<std::shared_ptr<Model>> model_list;
+
+	for (const auto& pair : scene.model_map)
+	{
+		if (!pair.second->is_animated())
+		{
+			model_list.push_back(pair.second);
+		}
+	}
+
+	int mesh_count = 0;
+	int draw_element_count = 0;
+	int entity_count = 0;
+	for (const auto& model : model_list)
+	{
+		mesh_count += model->mesh_draw_data_list.size();
+		draw_element_count += model->entity_list.size()
+			* model->mesh_draw_data_list.size();
+		entity_count += model->entity_list.size();
+	}
+
+	std::map<uint64_t, int> entity_index_map;
+
+	float* model_matrices = ALLOC float[entity_count * 16];
+
+	int entity_index = 0;
+	for (const auto& model : model_list)
+	{
+		EntityList& entities = model->entity_list;
+		for (const auto& entity : entities)
+		{
+			auto matrix = glm::value_ptr(entity->model_matrix);
+			std::copy(matrix, matrix + 16,
+				model_matrices + (entity_index * 16));
+			entity_index_map.emplace(
+				std::pair(entity->entity_ID, entity_index));
+			++entity_index;
+		}
+	}
+	size_t data_size_in_bytes =
+		static_cast<size_t>(entity_count) * 16 * sizeof(float);
+
+	glGenBuffers(1, &command_buffers.static_model_matrices_buffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers.static_model_matrices_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
+		GL_STATIC_DRAW);
+	SAFE_DELETE_ARRAY(model_matrices);
+
+	int first_index = 0;
+	int base_instance = 0;
+
+	int draw_element_index = 0;
+	const int COMMAND_SIZE = 5;
+	const int DRAW_ELEMENT_SIZE = 2;
+
+	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
+	int* draw_elements = ALLOC int[draw_element_count * DRAW_ELEMENT_SIZE];
+	for (const auto& model : model_list)
+	{
+		const EntityList& entities = model->entity_list;
+		const int entity_count = (int) entities.size();
+		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
+		{
+			// count
+			command_buffer[base_instance * COMMAND_SIZE] =
+				mesh_draw_data.vertices;
+			command_buffer[base_instance * COMMAND_SIZE + 1] = entity_count;
+			command_buffer[base_instance * COMMAND_SIZE + 2] = first_index;
+			// base vertex
+			command_buffer[base_instance * COMMAND_SIZE + 3] =
+				mesh_draw_data.offset;
+			command_buffer[base_instance * COMMAND_SIZE + 4] = base_instance;
+
+			first_index += mesh_draw_data.vertices;
+			base_instance += entity_count;
+
+			const material_id material_index = mesh_draw_data.material;
+			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
+			for (const auto& entity : entities)
+			{
+				//NOTE(ches) it should (tm) be in the map
+				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE] =
+					entity_index_map.find(entity->entity_ID)->second;
+				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
+					material_index;
+				++draw_element_index;
+			}
+		}
+	}
+
+	data_size_in_bytes = static_cast<size_t>(mesh_count)
+		* COMMAND_SIZE * sizeof(int);
+
+	command_buffers.animated_draw_count = mesh_count;
+
+	glGenBuffers(1, &command_buffers.static_command_buffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers.static_command_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, command_buffer,
+		GL_STATIC_DRAW);
+	SAFE_DELETE_ARRAY(command_buffer);
+
+	data_size_in_bytes = static_cast<size_t>(draw_element_count)
+		* DRAW_ELEMENT_SIZE * sizeof(int);
+
+	glGenBuffers(1, &command_buffers.static_draw_element_buffer);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers.static_draw_element_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
+		GL_STATIC_DRAW);
+	SAFE_DELETE_ARRAY(draw_elements);
 }
 
 void Render::update_model_buffer(const std::vector<std::shared_ptr<Model>> models,

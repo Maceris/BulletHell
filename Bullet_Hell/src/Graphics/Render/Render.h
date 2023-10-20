@@ -131,6 +131,12 @@ private:
 	/// </summary>
 	/// <param name="scene">The scene we are rendering.</param>
 	void setup_animated_command_buffer(const Scene& scene);
+
+	/// <summary>
+	/// Set up the command buffers to render static models, which should be
+	/// deleted before calling this if they are currently filled.
+	/// </summary>
+	/// <param name="scene">The scene we are rendering.</param>
 	void setup_static_command_buffer(const Scene& scene);
 
 	/// <summary>
