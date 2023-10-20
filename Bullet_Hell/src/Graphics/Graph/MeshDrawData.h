@@ -53,7 +53,7 @@ struct MeshDrawData
 	/// <summary>
 	/// The material ID that the mesh is associated with.
 	/// </summary>
-	const material_id material;
+	const MaterialID material;
 
 	/// <summary>
 	/// The offset, in rows.
@@ -84,7 +84,7 @@ struct MeshDrawData
 	/// with.</param>
 	/// <param name="offset">The offset to the base vertex.</param>
 	/// <param name="vertices">The number of indices.</param>
-	MeshDrawData(const int size_in_bytes, const material_id material, 
+	MeshDrawData(const int size_in_bytes, const MaterialID material,
 		const int offset, const int vertices);
 
 	/// <summary>
@@ -97,7 +97,7 @@ struct MeshDrawData
 	/// <param name="vertices">The number of indices.</param>
 	/// <param name="animated_mesh_draw_data">The animation mesh draw data.
 	/// </param>
-	MeshDrawData(const int size_in_bytes, const material_id material, 
+	MeshDrawData(const int size_in_bytes, const MaterialID material,
 		const int offset, const int vertices, 
 		const AnimMeshDrawData& animated_mesh_draw_data);
 

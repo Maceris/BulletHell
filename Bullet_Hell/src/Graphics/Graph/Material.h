@@ -11,7 +11,7 @@
 /// <summary>
 /// Used to identify materials in the material cache.
 /// </summary>
-using material_id = int;
+using MaterialID = int;
 
 /// <summary>
 /// The default color for materials.
@@ -56,7 +56,7 @@ struct Material
 	/// <summary>
 	/// Where this material is referenced in the materials uniform.
 	/// </summary>
-	material_id material_id;
+	MaterialID material_id;
 
 	/// <summary>
 	/// Create a material with all default values.

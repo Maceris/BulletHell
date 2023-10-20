@@ -241,7 +241,7 @@ void SceneRender::create_uniforms()
 void SceneRender::setup_materials_uniform(const Scene& scene)
 {
     shader_program->bind();
-    material_id next_ID = 0;
+    MaterialID next_ID = 0;
 
     int next_texture = 1;
 

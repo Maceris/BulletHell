@@ -326,7 +326,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 			first_index += mesh_draw_data.vertices;
 			base_instance += entity_count;
 
-			const material_id material_index = mesh_draw_data.material;
+			const MaterialID material_index = mesh_draw_data.material;
 			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
 			for (const auto& entity : entities)
 			{
