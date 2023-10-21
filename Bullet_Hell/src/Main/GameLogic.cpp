@@ -11,8 +11,10 @@
 GameLogic* g_game_logic = nullptr;
 
 GameLogic::GameLogic()
-	: current_state(starting_up)
-	, resource_cache(nullptr)
+	: current_state{ starting_up }
+	, resource_cache{ nullptr }
+	, render{ nullptr }
+	, current_scene{ nullptr }
 {
 	g_game_logic = this;
 }

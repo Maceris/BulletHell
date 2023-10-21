@@ -1,5 +1,6 @@
-#include "Globals.h"
 #include "GuiRender.h"
+
+#include "UI.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -88,8 +89,9 @@ void GuiRender::render(const Scene& scene)
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	ImGui::ShowDemoWindow();
-	ImGui::Render();
+	UI::draw();
 	ImGui::EndFrame();
+	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

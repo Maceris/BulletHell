@@ -116,7 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/GUI;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/GUI;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -172,6 +172,8 @@
     <ClCompile Include="src\Graphics\Graph\Texture.cpp" />
     <ClCompile Include="src\Graphics\Graph\TextureResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\UniformsMap.cpp" />
+    <ClCompile Include="src\Graphics\GUI\DebugUI.cpp" />
+    <ClCompile Include="src\Graphics\GUI\UI.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
@@ -238,6 +240,8 @@
     <ClInclude Include="src\Graphics\Graph\Texture.h" />
     <ClInclude Include="src\Graphics\Graph\TextureResource.h" />
     <ClInclude Include="src\Graphics\Graph\UniformsMap.h" />
+    <ClInclude Include="src\Graphics\GUI\DebugUI.h" />
+    <ClInclude Include="src\Graphics\GUI\UI.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
     <ClInclude Include="src\Graphics\Render\CommandBuffers.h" />
     <ClInclude Include="src\Graphics\Render\FilterRender.h" />

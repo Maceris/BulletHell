@@ -2,6 +2,8 @@
 
 #include "gtc/type_ptr.hpp"
 
+Configuration Render::configuration;
+
 Render::Render(const Window& window)
 	: gBuffer{ window.width, window.height }
 	, animation_render{}
@@ -96,9 +98,23 @@ void Render::render(const Window& window, const Scene& scene)
 	animation_render.render(scene, render_buffers);
 	shadow_render.render(scene, render_buffers, command_buffers);
 
-	//TODO(ches) support wireframe?
+#if DEBUG
+	if (Render::configuration.wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDisable(GL_TEXTURE_2D);
+	}
+#endif
 
 	scene_render.render(scene, render_buffers, gBuffer, command_buffers);
+
+#if DEBUG
+	if (Render::configuration.wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_TEXTURE_2D);
+	}
+#endif
 
 	light_render_start(window.width, window.height);
 	light_render.render(scene, shadow_render, gBuffer);

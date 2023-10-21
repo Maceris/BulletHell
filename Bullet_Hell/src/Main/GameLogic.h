@@ -48,16 +48,6 @@ private:
 	/// </summary>
 	std::unique_ptr<Window> window;
 
-	/// <summary>
-	/// Handles all the rendering, other than literally swapping buffers.
-	/// </summary>
-	std::unique_ptr<Render> render;
-
-	/// <summary>
-	/// The scene we are currently in.
-	/// </summary>
-	std::shared_ptr<Scene> current_scene;
-
 public:
 	GameLogic();
 	GameLogic(const GameLogic&) = delete;
@@ -102,6 +92,16 @@ public:
 	/// is essentially finished shutting down.
 	/// </summary>
 	void run_game();
+
+	/// <summary>
+	/// Handles all the rendering, other than literally swapping buffers.
+	/// </summary>
+	std::unique_ptr<Render> render;
+
+	/// <summary>
+	/// The scene we are currently in.
+	/// </summary>
+	std::shared_ptr<Scene> current_scene;
 };
 
 /// <summary>

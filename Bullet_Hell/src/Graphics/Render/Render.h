@@ -19,6 +19,14 @@
 #include "glfw3.h"
 
 /// <summary>
+/// Configuration for tweaking the rendering pipeline.
+/// </summary>
+struct Configuration
+{
+	bool wireframe;
+};
+
+/// <summary>
 /// Handles all the rendering stages for drawing to the screen
 /// </summary>
 class Render
@@ -60,6 +68,10 @@ public:
 	/// <param name="scene">The scene to read models from.</param>
 	void setup_data(const Scene& scene);
 
+	/// <summary>
+	/// Configuration for tweaking the rendering pipeline.
+	/// </summary>
+	static Configuration configuration;
 private:
 
 	/// <summary>
