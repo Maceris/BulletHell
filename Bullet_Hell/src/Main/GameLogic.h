@@ -80,10 +80,11 @@ public:
 	bool initialize();
 	
 	/// <summary>
-	/// Start running the main game logic. This will not return until the game
-	/// is essentially finished shutting down.
+	/// Called after the window has been resized.
 	/// </summary>
-	void run_game();
+	/// <param name="width">The new width of the window, in pixels.</param>
+	/// <param name="height">The new height of the window, in pixels.</param>
+	void notify_about_resize(const int width, const int height);
 
 	/// <summary>
 	/// Called while the game is supposed to close, releases all the game 
@@ -95,6 +96,12 @@ public:
 	/// Called when we need to shut down.
 	/// </summary>
 	void request_close();
+
+	/// <summary>
+	/// Start running the main game logic. This will not return until the game
+	/// is essentially finished shutting down.
+	/// </summary>
+	void run_game();
 };
 
 /// <summary>

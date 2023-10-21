@@ -53,6 +53,17 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
+/// <summary>
+/// A callback to register for when the window gets resized.
+/// </summary>
+/// <param name="window">The window that was resized.</param>
+/// <param name="width">The new width, in pixels, of the framebuffer.</param>
+/// <param name="height">The new height, in pixels, of the framebuffer.</param>
+static void resize_callback(GLFWwindow* window, int width, int height)
+{
+    g_game_logic->notify_about_resize(width, height);
+}
+
 void Window::initialize()
 {
     glfwSetErrorCallback(error_callback);
@@ -114,6 +125,7 @@ void Window::initialize()
     }
 
     glfwSetKeyCallback(handle, key_callback);
+    glfwSetFramebufferSizeCallback(handle, resize_callback);
 
     glfwMakeContextCurrent(handle);
     gladLoadGL();

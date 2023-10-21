@@ -67,16 +67,20 @@ bool GameLogic::initialize()
 	return true;
 }
 
-void GameLogic::run_game()
+void GameLogic::notify_about_resize(const int width, const int height)
 {
-	current_state = running;
-
-	while (current_state == running)
+	if (current_scene)
 	{
-		render->render(*window, *current_scene);
-		window->render();
+		current_scene->resize(width, height);
 	}
-	
+	render->resize(width, height);
+}
+
+void GameLogic::on_close()
+{
+	current_state = quitting;
+
+	window->terminate();
 }
 
 void GameLogic::request_close()
@@ -87,9 +91,14 @@ void GameLogic::request_close()
 	}
 }
 
-void GameLogic::on_close()
+void GameLogic::run_game()
 {
-	current_state = quitting;
+	current_state = running;
 
-	window->terminate();
+	while (current_state == running)
+	{
+		render->render(*window, *current_scene);
+		window->render();
+	}
+	
 }
