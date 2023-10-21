@@ -88,7 +88,6 @@ void Window::initialize()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    const char* glsl_version = "#version 460";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
@@ -117,7 +116,7 @@ void Window::initialize()
     }
 
     handle = glfwCreateWindow(width, height, 
-        g_game_logic->options.window_title.c_str(), NULL, NULL);
+        g_game_logic->options.window_title.c_str(), nullptr, nullptr);
     if (!handle)
     {
         glfwTerminate();
@@ -130,6 +129,9 @@ void Window::initialize()
     glfwMakeContextCurrent(handle);
     gladLoadGL();
     glfwSwapInterval(1);
+
+    LOG_INFO("Initialized window with opengl v" 
+        + std::string((char*)glGetString(GL_VERSION)));
 }
 
 bool Window::should_close()

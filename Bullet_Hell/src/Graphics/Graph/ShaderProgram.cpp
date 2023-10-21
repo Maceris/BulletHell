@@ -1,6 +1,7 @@
 #include "ShaderProgram.h"
 
 #include "Logger.h"
+#include "OpenGLUtil.h"
 
 ShaderModuleData::ShaderModuleData(const char* source, int length, 
 	const GLuint type)
@@ -12,10 +13,7 @@ ShaderModuleData::ShaderModuleData(const char* source, int length,
 ShaderProgram::ShaderProgram(std::vector<ShaderModuleData> modules)
 	: program_id(glCreateProgram())
 {
-	if (program_id == 0)
-	{
-		LOG_WARNING("Failed to create a shader program");
-	}
+	LOG_ASSERT(program_id != 0 && "Failed to create a shader program");
 
 	std::vector<GLuint> shader_modules;
 
@@ -25,6 +23,7 @@ ShaderProgram::ShaderProgram(std::vector<ShaderModuleData> modules)
 	}
 
 	link();
+	validate();
 
 	for (auto it = shader_modules.begin(); it != shader_modules.end(); ++it)
 	{
@@ -46,26 +45,31 @@ GLuint ShaderProgram::create_shader(const ShaderModuleData& shader_data)
 {
 	GLuint shader_id = glCreateShader(shader_data.shader_type);
 
-	if (shader_id == 0)
-	{
-		LOG_WARNING("Failed to create shader module");
-	}
+	LOG_ASSERT(shader_id != 0 && "Failed to create shader module");
 
-	glShaderSource(program_id, 1, &shader_data.source_code, 
+	glShaderSource(program_id, 1, &shader_data.source_code,
 		&shader_data.source_length);
 	glCompileShader(shader_id);
 
-	GLint compile_status = GL_TRUE;
-	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &compile_status);
+	OpenGLUtil::check_shader_compiled(shader_id);
 
-	if (compile_status == GL_FALSE)
+#ifdef DEBUG
+	GLint max_length = 0;
+	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &max_length);
+
+	if (max_length > 0)
 	{
-		GLint log_length = 0;
-		char log[1024];
-		glGetShaderInfoLog(shader_id, sizeof(log), &log_length, log);
+		std::string log;
+		log.reserve(max_length);
 
-		LOG_WARNING(log);
+		glGetShaderInfoLog(shader_id, max_length, &max_length, &log[0]);
+
+		LOG_INFO("Shader log for shader " + std::to_string(shader_id) 
+			+ ": " + log);
 	}
+	
+#endif //DEBUG
+	OpenGLUtil::check_gl_errors();
 
 	glAttachShader(program_id, shader_id);
 
@@ -79,14 +83,8 @@ void ShaderProgram::link()
 	GLint link_status = GL_TRUE;
 	glGetProgramiv(program_id, GL_LINK_STATUS, &link_status);
 
-	if (link_status == GL_FALSE)
-	{
-		GLint log_length = 0;
-		char log[1024];
-		glGetProgramInfoLog(program_id, sizeof(log), &log_length, log);
-
-		LOG_WARNING(log);
-	}
+	OpenGLUtil::check_shader_program_linked(program_id);
+	OpenGLUtil::check_gl_errors();
 }
 
 void ShaderProgram::validate()
@@ -102,7 +100,7 @@ void ShaderProgram::validate()
 		char log[1024];
 		glGetProgramInfoLog(program_id, sizeof(log), &log_length, log);
 
-		LOG_WARNING(log);
+		LOG_ERROR(log);
 	}
 }
 

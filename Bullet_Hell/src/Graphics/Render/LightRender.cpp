@@ -253,6 +253,7 @@ LightRender::LightRender()
 void LightRender::render(const Scene& scene, const ShadowRender& shadow_render,
     const GBuffer& gBuffer)
 {
+    shader_program->bind();
     update_lights(scene);
 
     int next_texture = 0;

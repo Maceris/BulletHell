@@ -89,6 +89,7 @@ void GuiRender::render(const Scene& scene)
 	ImGui::NewFrame();
 	ImGui::ShowDemoWindow();
 	ImGui::Render();
+	ImGui::EndFrame();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

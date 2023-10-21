@@ -13,6 +13,7 @@ SkyBox::SkyBox()
 
 	LOG_ASSERT(model->mesh_data_list.size() == 1
 		&& "We are assuming that skybox models only have one mesh");
+	vertex_count = model->mesh_data_list[0].vertices.size();
 	populate_buffers(model->mesh_data_list[0]);
 }
 

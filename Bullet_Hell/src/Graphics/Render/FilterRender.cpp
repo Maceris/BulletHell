@@ -40,7 +40,7 @@ bool FilterRender::set_filter(const std::string name)
 
 	if (!frag_handle)
 	{
-		LOG_WARNING("Cannot find filter " + name + ".frag");
+		LOG_ERROR("Cannot find filter " + name + ".frag");
 		return false;
 	}
 
@@ -50,7 +50,7 @@ bool FilterRender::set_filter(const std::string name)
 
 	if (!vert_handle)
 	{
-		LOG_WARNING("Cannot find filter " + name + ".vert");
+		LOG_ERROR("Cannot find filter " + name + ".vert");
 		return false;
 	}
 
