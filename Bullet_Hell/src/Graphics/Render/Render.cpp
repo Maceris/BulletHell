@@ -363,13 +363,58 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	SAFE_DELETE_ARRAY(draw_elements);
 }
 
-void Render::update_model_buffer(const std::vector<std::shared_ptr<Model>> models,
-	GLuint buffer_id)
+void Render::update_model_buffer(
+	const std::vector<std::shared_ptr<Model>> models, GLuint buffer_id)
 {
-	//TODO(ches) complete this
+	int entity_count = 0;
+	for (const auto& model : models)
+	{
+		entity_count += model->entity_list.size();
+	}
+
+	float* model_matrices = ALLOC float[entity_count * 16];
+
+	int entity_index = 0;
+	for (const auto& model : models)
+	{
+		for (const auto& entity : model->entity_list)
+		{
+			auto matrix = glm::value_ptr(entity->model_matrix);
+			std::copy(matrix, matrix + 16,
+				model_matrices + (entity_index * 16));
+			++entity_index;
+		}
+	}
+	size_t data_size_in_bytes =
+		static_cast<size_t>(entity_count) * 16 * sizeof(float);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer_id);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes,
+		model_matrices, GL_STATIC_DRAW);
+
+	SAFE_DELETE_ARRAY(model_matrices);
 }
 
 void Render::update_model_matrices(const Scene& scene)
 {
-	//TODO(ches) complete this
+	std::vector<std::shared_ptr<Model>> animated_models;
+	std::vector<std::shared_ptr<Model>> static_models;
+
+	for (const auto& pair : scene.model_map)
+	{
+		if (pair.second->is_animated())
+		{
+			animated_models.push_back(pair.second);
+		}
+		else
+		{
+			static_models.push_back(pair.second);
+		}
+	}
+
+	GLuint animated_buffer = command_buffers.animated_model_matrices_buffer;
+	GLuint static_buffer = command_buffers.static_model_matrices_buffer;
+
+	update_model_buffer(animated_models, animated_buffer);
+	update_model_buffer(static_models, static_buffer);
 }
