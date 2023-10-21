@@ -38,3 +38,10 @@ private:
 	bool parse_material(std::shared_ptr<MaterialExtraData> extra_data,
 		char* raw_buffer, unsigned int raw_size);
 };
+
+/// <summary>
+/// Load a material from the resource cache.
+/// </summary>
+/// <param name="name">The name of the material to load.</param>
+/// <returns>A pointer to the loaded material.</returns>
+std::shared_ptr<Material> load_material(const std::string& name);

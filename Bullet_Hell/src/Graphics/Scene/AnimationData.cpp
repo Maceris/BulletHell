@@ -4,9 +4,7 @@
 AnimationData::AnimationData(std::shared_ptr<Animation> animation)
 	: current_animation(std::move(animation))
 	, current_frame_index(0)
-{
-	LOG_ASSERT(current_animation != nullptr);
-}
+{}
 
 AnimatedFrame AnimationData::get_current_frame()
 {

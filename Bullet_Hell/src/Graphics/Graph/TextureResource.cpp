@@ -1,5 +1,6 @@
 #include "TextureResource.h"
 
+#include "GameLogic.h"
 #include "Portability.h"
 
 unsigned int TextureLoader::get_loaded_resource_size(char* raw_buffer,
@@ -48,4 +49,13 @@ bool TextureLoader::parse_texture(std::shared_ptr<TextureExtraData> extra_data,
 
 	SAFE_DELETE_ARRAY(image_data);
 	return true;
+}
+
+std::shared_ptr<Texture> load_texture(const std::string& name)
+{
+	Resource resource(name);
+	auto handle = g_game_logic->resource_cache->get_handle(&resource);
+	std::shared_ptr<TextureExtraData> model_extra =
+		static_pointer_cast<TextureExtraData>(handle->get_extra());
+	return model_extra->texture;
 }

@@ -162,3 +162,12 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 	
 	return true;
 }
+
+std::shared_ptr<Model> load_model(const std::string& name)
+{
+	Resource resource(name);
+	auto handle = g_game_logic->resource_cache->get_handle(&resource);
+	std::shared_ptr<ModelExtraData> model_extra =
+		static_pointer_cast<ModelExtraData>(handle->get_extra());
+	return model_extra->model;
+}

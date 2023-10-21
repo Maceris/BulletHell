@@ -67,5 +67,7 @@ bool FilterRender::set_filter(const std::string name)
 	shader = std::make_shared<ShaderProgram>(module_data);
 	uniforms_map = std::make_unique<UniformsMap>(shader->program_id);
 
+	uniforms_map->create_uniform("screen_texture");
+
 	return true;
 }

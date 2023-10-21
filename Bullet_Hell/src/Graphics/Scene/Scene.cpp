@@ -3,12 +3,12 @@
 #include "Entity.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
-	: camera(Camera())
-	, fog(Fog())
-	, projection(Projection(width, height))
+	: camera{}
+	, fog{}
+	, projection{width, height}
 	, model_map{}
-	, scene_lights(SceneLights())
-	, sky_box(SkyBox())
+	, scene_lights{}
+	, sky_box{}
 {}
 
 void Scene::add_entity(std::shared_ptr<Entity> entity)

@@ -38,3 +38,10 @@ private:
 	bool parse_texture(std::shared_ptr<TextureExtraData> extra_data,
 		char* raw_buffer, unsigned int raw_size);
 };
+
+/// <summary>
+/// Load a texture from the resource cache.
+/// </summary>
+/// <param name="name">The name of the texture to load.</param>
+/// <returns>A pointer to the loaded texture.</returns>
+std::shared_ptr<Texture> load_texture(const std::string& name);

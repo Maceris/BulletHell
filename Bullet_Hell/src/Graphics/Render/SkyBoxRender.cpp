@@ -78,14 +78,11 @@ void SkyBoxRender::render(const Scene& scene)
     uniforms_map->set_uniform("diffuse", material->diffuse_color);
 
     bool has_texture = false;
-    if (material->texture_name == "")
+    if (material->texture_name != "")
     {
         glActiveTexture(GL_TEXTURE0);
-        Resource tex(material->normal_map_name);
-        auto handle = g_game_logic->resource_cache->get_handle(&tex);
-        std::shared_ptr<TextureExtraData> texture_extra =
-            static_pointer_cast<TextureExtraData>(handle->get_extra());
-        texture_extra->texture->bind();
+        auto texture = load_texture(material->normal_map_name);
+        texture->bind();
         has_texture = true;
     }
 

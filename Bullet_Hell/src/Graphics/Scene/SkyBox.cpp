@@ -7,15 +7,9 @@
 
 SkyBox::SkyBox()
 {
-	Resource model_resource("models/skybox/skybox.model");
-	auto model_handle = g_game_logic->resource_cache->
-		get_handle(&model_resource);
-	
-	std::shared_ptr<ModelExtraData> model_extra =
-		static_pointer_cast<ModelExtraData>(model_handle->get_extra());
-	model = model_extra->model;
-
-	entity = std::make_shared<Entity>(model_resource.name);
+	const std::string model_name = "models/skybox/skybox.model";
+	model = load_model(model_name);
+	entity = std::make_shared<Entity>(model_name);
 
 	LOG_ASSERT(model->mesh_data_list.size() == 1
 		&& "We are assuming that skybox models only have one mesh");

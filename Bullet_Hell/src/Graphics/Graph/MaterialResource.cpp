@@ -1,5 +1,6 @@
 #include "MaterialResource.h"
 
+#include "GameLogic.h"
 #include "Portability.h"
 
 /// <summary>
@@ -37,7 +38,7 @@ bool MaterialLoader::parse_material(
 	stream.data_size = raw_size;
 
 	const uint32_t magic_bytes = read_uint32(stream);
-	if (magic_bytes != 0xC0DE0001)
+	if (magic_bytes != 0xC0DE0002)
 	{
 		LOG_ERROR("This material does not start with the expected file ID bytes");
 		return false;
@@ -65,4 +66,13 @@ bool MaterialLoader::parse_material(
 	extra_data->material->normal_map_name = read_string(stream);
 	
 	return true;
+}
+
+std::shared_ptr<Material> load_material(const std::string& name)
+{
+	Resource resource(name);
+	auto handle = g_game_logic->resource_cache->get_handle(&resource);
+	std::shared_ptr<MaterialExtraData> model_extra =
+		static_pointer_cast<MaterialExtraData>(handle->get_extra());
+	return model_extra->material;
 }

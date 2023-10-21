@@ -166,11 +166,8 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
                 && "We found an unknown texture");
             if (normal->second == next_texture)
             {
-                Resource tex(material->normal_map_name);
-                auto handle = g_game_logic->resource_cache->get_handle(&tex);
-                std::shared_ptr<TextureExtraData> texture_extra =
-                    static_pointer_cast<TextureExtraData>(handle->get_extra());
-                texture_extra->texture->bind();
+                auto texture = load_texture(material->normal_map_name);
+                texture->bind();
                 uniforms_map->set_uniform("texture_sampler["
                     + std::to_string(next_texture) + "]", next_texture);
             }
@@ -180,11 +177,8 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
                 && "We found an unknown texture");
             if (texture->second == next_texture)
             {
-                Resource tex(material->texture_name);
-                auto handle = g_game_logic->resource_cache->get_handle(&tex);
-                std::shared_ptr<TextureExtraData> texture_extra =
-                    static_pointer_cast<TextureExtraData>(handle->get_extra());
-                texture_extra->texture->bind();
+                auto texture = load_texture(material->texture_name);
+                texture->bind();
                 uniforms_map->set_uniform("texture_sampler["
                     + std::to_string(next_texture) + "]", next_texture);
             }
@@ -246,6 +240,8 @@ void SceneRender::setup_materials_uniform(const Scene& scene)
     int next_texture = 1;
 
     texture_bindings.clear();
+
+    texture_bindings.emplace("", 0);
 
     for (const auto& pair : scene.model_map)
     {

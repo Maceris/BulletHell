@@ -38,3 +38,10 @@ private:
 	bool parse_model(std::shared_ptr<ModelExtraData> extra_data,
 		char* raw_buffer, unsigned int raw_size, const std::string& file_name);
 };
+
+/// <summary>
+/// Load a model from the resource cache.
+/// </summary>
+/// <param name="name">The name of the model to load.</param>
+/// <returns>A pointer to the loaded model.</returns>
+std::shared_ptr<Model> load_model(const std::string& name);

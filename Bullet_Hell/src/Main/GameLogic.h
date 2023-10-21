@@ -4,6 +4,7 @@
 
 #include "GameOptions.h"
 #include "ResourceCache.h"
+#include "Render.h"
 #include "Window.h"
 
 #include <memory>
@@ -46,6 +47,16 @@ private:
 	/// The window we are showing.
 	/// </summary>
 	std::unique_ptr<Window> window;
+
+	/// <summary>
+	/// Handles all the rendering, other than literally swapping buffers.
+	/// </summary>
+	std::unique_ptr<Render> render;
+
+	/// <summary>
+	/// The scene we are currently in.
+	/// </summary>
+	std::shared_ptr<Scene> current_scene;
 
 public:
 	GameLogic();

@@ -1,6 +1,8 @@
 #include "GameLogic.h"
 
 #include "Logger.h"
+#include "MaterialResource.h"
+#include "ModelResource.h"
 #include "ResourceZipFile.h"
 #include "TextureResource.h"
 
@@ -31,15 +33,36 @@ bool GameLogic::initialize()
 	}
 
 	resource_cache->register_loader(std::make_shared<TextureLoader>());
+	resource_cache->register_loader(std::make_shared<ModelLoader>());
+	resource_cache->register_loader(std::make_shared<MaterialLoader>());
 
 	window = std::unique_ptr<Window>(ALLOC Window());
 	window->initialize();
 
-	Resource default_texture("textures/default_texture.image");
-	auto handle = resource_cache->get_handle(&default_texture);
-	std::shared_ptr<TextureExtraData> texture_extra =
-		static_pointer_cast<TextureExtraData>(handle->get_extra());
-	Texture::default_texture = texture_extra->texture;
+	Texture::default_texture = load_texture("textures/default_texture.image");
+
+	render = std::make_unique<Render>(*window);
+	//TODO(ches) handle all the scene stuff elsewhere, and after a menu
+	current_scene = std::make_shared<Scene>(window->width, window->height);
+	auto player_model = load_model("models/player/human_male.model");
+	current_scene->add_model(player_model);
+	auto player_entity = std::make_shared<Entity>(player_model->id);
+	current_scene->add_entity(player_entity);
+
+	auto ground_model = load_model("models/terrain/terrain.model");
+	current_scene->add_model(ground_model);
+	auto ground_entity = std::make_shared<Entity>(ground_model->id);
+	current_scene->add_entity(ground_entity);
+
+	current_scene->scene_lights.ambient_light.intensity = 0.5f;
+	current_scene->scene_lights.ambient_light.set_color(0.3f, 0.3f, 0.3f);
+
+	current_scene->scene_lights.directional_light.intensity = 1.0f;
+	current_scene->scene_lights.directional_light.set_color(1.0f, 1.0f, 1.0f);
+	current_scene->scene_lights.directional_light.
+		set_direction(-0.91f, 1.0f, -0.43f);
+
+	render->recalculate_materials(*current_scene);
 
 	return true;
 }
@@ -50,6 +73,7 @@ void GameLogic::run_game()
 
 	while (current_state == running)
 	{
+		render->render(*window, *current_scene);
 		window->render();
 	}
 	
@@ -69,5 +93,3 @@ void GameLogic::on_close()
 
 	window->terminate();
 }
-
-
