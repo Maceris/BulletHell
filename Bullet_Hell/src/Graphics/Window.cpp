@@ -132,6 +132,25 @@ void Window::initialize()
 
     LOG_INFO("Initialized window with opengl v" 
         + std::string((char*)glGetString(GL_VERSION)));
+#if 0
+#if DEBUG
+    OpenGLUtil::log_extensions();
+#endif // DEBUG
+#endif
+
+    std::vector<std::string> required_extensions;
+    required_extensions.emplace_back("GL_ARB_compute_shader");
+    required_extensions.emplace_back("GL_ARB_compute_variable_group_size");
+    required_extensions.emplace_back("GL_ARB_fragment_shader");
+    required_extensions.emplace_back("GL_ARB_framebuffer_object");
+    required_extensions.emplace_back("GL_ARB_multi_draw_indirect");
+    required_extensions.emplace_back("GL_ARB_separate_shader_objects");
+    required_extensions.emplace_back("GL_ARB_shader_storage_buffer_object");
+    required_extensions.emplace_back("GL_ARB_vertex_array_object");
+    required_extensions.emplace_back("GL_ARB_vertex_buffer_object");
+    required_extensions.emplace_back("GL_ARB_vertex_shader");
+
+    OpenGLUtil::assert_extensions_exist(required_extensions);
 }
 
 bool Window::should_close()

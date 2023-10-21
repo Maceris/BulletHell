@@ -15,6 +15,8 @@ ShaderProgram::ShaderProgram(std::vector<ShaderModuleData> modules)
 {
 	LOG_ASSERT(program_id != 0 && "Failed to create a shader program");
 
+	OpenGLUtil::check_gl_errors();
+
 	std::vector<GLuint> shader_modules;
 
 	for (auto it = modules.begin(); it != modules.end(); ++it)
@@ -47,8 +49,9 @@ GLuint ShaderProgram::create_shader(const ShaderModuleData& shader_data)
 
 	LOG_ASSERT(shader_id != 0 && "Failed to create shader module");
 
-	glShaderSource(program_id, 1, &shader_data.source_code,
+	glShaderSource(shader_id, 1, &shader_data.source_code,
 		&shader_data.source_length);
+	OpenGLUtil::check_gl_errors();
 	glCompileShader(shader_id);
 
 	OpenGLUtil::check_shader_compiled(shader_id);

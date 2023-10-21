@@ -11,12 +11,12 @@ const char vertex_shader_source[] = R"glsl(
 layout (location=0) in vec3 position_in;
 layout (location=1) in vec2 coordinate_in;
 
-out vec2 texture_coordinate_out;
+out vec2 texture_coordinate;
 
 void main()
 {
-    texture_coordinate_out = position_in;
-    gl_Position = vec4(coordinate_in, 1.0f);
+    texture_coordinate = coordinate_in;
+    gl_Position = vec4(position_in, 1.0f);
 }
 )glsl";
 
@@ -30,7 +30,7 @@ const int NUM_CASCADES = 3;
 const float BIAS = 0.0005;
 const float SHADOW_FACTOR = 0.25;
 
-in vec2 texture_coordinate_out;
+in vec2 texture_coordinate;
 out vec4 fragment_color_out;
 
 struct Attenuation
@@ -182,20 +182,20 @@ float calculate_shadow(vec4 world_position, int index) {
 
 void main()
 {
-    vec4 albedo_sampler_value = texture(albedo_sampler, texture_coordinate_out);
+    vec4 albedo_sampler_value = texture(albedo_sampler, texture_coordinate);
     vec3 albedo = albedo_sampler_value.rgb;
     vec4 diffuse = vec4(albedo, 1);
 
     float reflectance = albedo_sampler_value.a;
-    vec3 normal = normalize(2.0 * texture(normal_sampler, texture_coordinate_out).rgb  - 1.0);
-    vec4 specular = texture(specular_sampler, texture_coordinate_out);
+    vec3 normal = normalize(2.0 * texture(normal_sampler, texture_coordinate).rgb  - 1.0);
+    vec4 specular = texture(specular_sampler, texture_coordinate);
 
     // Retrieve position from depth
-    float depth = texture(depth_sampler, texture_coordinate_out).x * 2.0 - 1.0;
+    float depth = texture(depth_sampler, texture_coordinate).x * 2.0 - 1.0;
     if (depth == 1) {
         discard;
     }
-    vec4 clip = vec4(texture_coordinate_out.x * 2.0 - 1.0, texture_coordinate_out.y * 2.0 - 1.0, depth, 1.0);
+    vec4 clip = vec4(texture_coordinate.x * 2.0 - 1.0, texture_coordinate.y * 2.0 - 1.0, depth, 1.0);
     vec4 view_w = inverse_projection_matrix * clip;
     vec3 view_position = view_w.xyz / view_w.w;
     vec4 world_position = inverse_view_matrix * vec4(view_position, 1);

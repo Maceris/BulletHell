@@ -8,7 +8,7 @@
 const char fragment_shader_source[] = R"glsl(
 #version 460
 
-in vec2 texture_coordinates;
+in vec2 texture_coordinates_out;
 out vec4 fragment_color;
 
 uniform vec4 diffuse;
@@ -18,7 +18,7 @@ uniform int has_texture;
 void main()
 {
     if (has_texture == 1) {
-        fragment_color = texture(texture_sampler, texture_coordinates);
+        fragment_color = texture(texture_sampler, texture_coordinates_out);
     } else {
         fragment_color = diffuse;
     }

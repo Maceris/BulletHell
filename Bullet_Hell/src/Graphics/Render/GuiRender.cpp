@@ -16,7 +16,7 @@ const char fragment_shader_source[] = R"glsl(
 #version 460
 
 in vec2 texture_coordinates;
-in vec4 color_in;
+in vec4 fragment_color;
 
 uniform sampler2D texture_sampler;
 
@@ -24,7 +24,7 @@ out vec4 color_out;
 
 void main()
 {
-    color_out = color_in  * texture(texture_sampler, texture_coordinates);
+    color_out = fragment_color  * texture(texture_sampler, texture_coordinates);
 }
 )glsl";
 
@@ -35,15 +35,15 @@ layout (location=0) in vec2 position_in;
 layout (location=1) in vec2 texture_coordinates_in;
 layout (location=2) in vec4 color_in;
 
-out vec2 texture_coordinates_out;
-out vec4 color_out;
+out vec2 texture_coordinates;
+out vec4 fragment_color;
 
 uniform vec2 scale;
 
 void main()
 {
-    texture_coordinates_out = texture_coordinates_in;
-    color_out = color_in;
+    texture_coordinates = texture_coordinates_in;
+    fragment_color = color_in;
     gl_Position = vec4(position_in * scale + vec2(-1.0, 1.0), 0.0, 1.0);
 }
 )glsl";

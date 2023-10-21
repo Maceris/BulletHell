@@ -1,8 +1,10 @@
-#include "Globals.h"
 #include "AnimationRender.h"
+
+#include "Logger.h"
 
 #include <cmath>
 #include <vector>
+
 
 #pragma region Shader code
 const char compute_shader_source[] = R"glsl(
@@ -75,7 +77,7 @@ void main()
     source_buffer_base_index += 3;
     destination_buffer_base_index += 3;
 
-    vec4 normal = vec4
+    vec4 normal = vec4(
         source_vector.data[source_buffer_base_index],
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
@@ -93,7 +95,7 @@ void main()
     source_buffer_base_index += 3;
     destination_buffer_base_index += 3;
 
-    vec4 tangent = vec4
+    vec4 tangent = vec4(
         source_vector.data[source_buffer_base_index],
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
@@ -129,7 +131,7 @@ void main()
     source_buffer_base_index += 3;
     destination_buffer_base_index += 3;
 
-    vec2 texture_coordinates = vec2
+    vec2 texture_coordinates = vec2(
         source_vector.data[source_buffer_base_index],
         source_vector.data[source_buffer_base_index + 1]);
     destination_vector.data[destination_buffer_base_index] = texture_coordinates.x;
@@ -142,6 +144,7 @@ void main()
 AnimationRender::AnimationRender()
 {
     std::vector<ShaderModuleData> shader_modules;
+    LOG_ASSERT(compute_shader_source && "Shader source missing!");
     shader_modules.emplace_back(compute_shader_source,
         sizeof(compute_shader_source), GL_COMPUTE_SHADER);
 

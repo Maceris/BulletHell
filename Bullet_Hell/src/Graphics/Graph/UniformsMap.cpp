@@ -10,21 +10,16 @@ UniformsMap::UniformsMap(GLuint program_id)
 GLint UniformsMap::get_uniform_location(const std::string& name)
 {
 	auto result = uniforms.find(name);
-	if (result == uniforms.end())
-	{
-		LOG_ERROR("Uniform " + name + " is missing");
-		return 0;
-	}
+	LOG_ASSERT(result != uniforms.end() 
+		&& std::string("Uniform " + name + " is missing").c_str());
 	return result->second;
 }
 
 void UniformsMap::create_uniform(const std::string& name)
 {
 	GLint location = glGetUniformLocation(program_id, name.c_str());
-	if (location >= 0)
-	{
-		LOG_ERROR("Uniform " + name + " is missing");
-	}
+	LOG_ASSERT(location >= 0 
+		&& std::string("Uniform " + name + " is missing").c_str());
 	uniforms.emplace(name, location);
 }
 
