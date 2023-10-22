@@ -52,8 +52,10 @@ private:
 
 	void create_uniforms();
 	void update_lights(const Scene& scene);
-	void update_point_light(const PointLight* point_light, 
-		const std::string& prefix, const glm::mat4& view_matrix);
-	void update_spot_light(const SpotLight* spot_light,
-		const std::string& prefix, const glm::mat4& view_matrix);
+	void setup_point_light_buffer(const Scene& scene);
+	void setup_spot_light_buffer(const Scene& scene);
+	void initialize_SSBOs();
+
+	GLuint point_light_buffer;
+	GLuint spot_light_buffer;
 };

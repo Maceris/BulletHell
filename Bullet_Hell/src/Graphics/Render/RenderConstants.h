@@ -34,14 +34,31 @@ constexpr auto MAX_TEXTURES = 16;
 
 #pragma region Light constants
 /// <summary>
-/// The maximum number of point lights we allow in a scene.
+/// The binding for the spot light SSBO.
 /// </summary>
-constexpr auto MAX_POINT_LIGHTS = 50;
+constexpr auto POINT_LIGHT_BINDING = 0;
 
 /// <summary>
-/// The maximum number of spot lights we allow in a scene.
+/// The binding for the spot light SSBO.
 /// </summary>
-constexpr auto MAX_SPOT_LIGHTS = 50;
+constexpr auto SPOT_LIGHT_BINDING = 1;
+
+/// <summary>
+/// How many lights of each type (spot, point) we currently support.
+/// </summary>
+constexpr auto MAX_LIGHTS_SUPPORTED = 1000;
+
+/// <summary>
+/// Position (vec3 + ignored), color (vec3), intensity (1), Attenuation
+/// (3 + ignored), in that order.
+/// </summary>
+constexpr auto POINT_LIGHT_SIZE = 4 + 3 + 1 + 4;
+
+/// <summary>
+/// Position (vec3 + ignored), color (vec3), intensity (1), Attenuation
+/// (3 + ignored), cone direction (vec3), cutoff (1) in that order.
+/// </summary>
+constexpr auto SPOT_LIGHT_SIZE = 4 + 3 + 1 + 4 + 3 + 1;
 #pragma endregion
 
 #pragma region Shadow constants

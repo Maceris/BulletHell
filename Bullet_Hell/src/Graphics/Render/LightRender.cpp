@@ -23,8 +23,6 @@ void main()
 const char fragment_shader_source[] = R"glsl(
 #version 460
 
-const int MAX_POINT_LIGHTS = 50;
-const int MAX_SPOT_LIGHTS = 50;
 const float SPECULAR_POWER = 10;
 const int NUM_CASCADES = 3;
 const float BIAS = 0.0005;
@@ -38,6 +36,7 @@ struct Attenuation
     float constant;
     float linear;
     float exponent;
+    float padding;
 };
 struct AmbientLight
 {
@@ -46,6 +45,7 @@ struct AmbientLight
 };
 struct PointLight {
     vec3 position;
+    float padding;
     vec3 color;
     float intensity;
     Attenuation attenuation;
@@ -81,9 +81,18 @@ uniform sampler2D depth_sampler;
 uniform mat4 inverse_projection_matrix;
 uniform mat4 inverse_view_matrix;
 
+layout (std430, binding=0) readonly buffer PointLights {
+    PointLight point_lights[];
+
+};
+
+layout (std430, binding=1) readonly buffer SpotLights {
+    SpotLight spot_lights[];
+};
+
 uniform AmbientLight ambient_light;
-uniform PointLight point_lights[MAX_POINT_LIGHTS];
-uniform SpotLight spot_lights[MAX_SPOT_LIGHTS];
+uniform int point_light_count;
+uniform int spot_light_count;
 uniform DirectionalLight directional_light;
 uniform Fog fog;
 uniform CascadeShadow cascade_shadows[NUM_CASCADES];
@@ -211,13 +220,13 @@ void main()
     }
     float shadow_factor = calculate_shadow(world_position, cascade_index);
 
-    for (int i=0; i < MAX_POINT_LIGHTS; i++) {
+    for (int i=0; i < point_light_count; i++) {
         if (point_lights[i].intensity > 0) {
             diffucse_specular_component += calculate_point_light(diffuse, specular, reflectance, point_lights[i], view_position, normal);
         }
     }
 
-    for (int i=0; i < MAX_SPOT_LIGHTS; i++) {
+    for (int i=0; i < spot_light_count; i++) {
         if (spot_lights[i].point_light.intensity > 0) {
             diffucse_specular_component += calculate_spot_light(diffuse, specular, reflectance, spot_lights[i], view_position, normal);
         }
@@ -236,6 +245,8 @@ void main()
 #pragma endregion
 
 LightRender::LightRender()
+    : point_light_buffer{ 0 }
+    , spot_light_buffer{ 0 }
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
@@ -248,6 +259,34 @@ LightRender::LightRender()
 
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     create_uniforms();
+    initialize_SSBOs();
+}
+
+void LightRender::initialize_SSBOs()
+{
+    glGenBuffers(1, &point_light_buffer);
+    glGenBuffers(1, &spot_light_buffer);
+
+    float* point_light_float_buffer =
+        ALLOC float[MAX_LIGHTS_SUPPORTED * POINT_LIGHT_SIZE];
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, POINT_LIGHT_BINDING,
+        point_light_buffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER,
+        MAX_LIGHTS_SUPPORTED * POINT_LIGHT_SIZE * sizeof(float),
+        point_light_float_buffer, GL_STATIC_DRAW);
+
+    SAFE_DELETE_ARRAY(point_light_float_buffer);
+
+    float* spot_light_float_buffer =
+        ALLOC float[MAX_LIGHTS_SUPPORTED * SPOT_LIGHT_SIZE];
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, SPOT_LIGHT_BINDING,
+        spot_light_buffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER,
+        MAX_LIGHTS_SUPPORTED * SPOT_LIGHT_SIZE * sizeof(float),
+        spot_light_float_buffer, GL_STATIC_DRAW);
+
+    SAFE_DELETE_ARRAY(spot_light_float_buffer);
+
 }
 
 void LightRender::render(const Scene& scene, ShadowRender& shadow_render,
@@ -315,29 +354,8 @@ void LightRender::create_uniforms()
     uniforms_map->create_uniform("ambient_light.intensity");
     uniforms_map->create_uniform("ambient_light.color");
 
-    for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
-    {
-        const std::string prefix = "point_lights[" + std::to_string(i) + "].";
-        uniforms_map->create_uniform(prefix + "position");
-        uniforms_map->create_uniform(prefix + "color");
-        uniforms_map->create_uniform(prefix + "intensity");
-        uniforms_map->create_uniform(prefix + "attenuation.constant");
-        uniforms_map->create_uniform(prefix + "attenuation.linear");
-        uniforms_map->create_uniform(prefix + "attenuation.exponent");
-    }
-
-    for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
-    {
-        const std::string prefix = "spot_lights[" + std::to_string(i) + "].";
-        uniforms_map->create_uniform(prefix + "point_light.position");
-        uniforms_map->create_uniform(prefix + "point_light.color");
-        uniforms_map->create_uniform(prefix + "point_light.intensity");
-        uniforms_map->create_uniform(prefix + "point_light.attenuation.constant");
-        uniforms_map->create_uniform(prefix + "point_light.attenuation.linear");
-        uniforms_map->create_uniform(prefix + "point_light.attenuation.exponent");
-        uniforms_map->create_uniform(prefix + "cone_direction");
-        uniforms_map->create_uniform(prefix + "cutoff");
-    }
+    uniforms_map->create_uniform("point_light_count");
+    uniforms_map->create_uniform("spot_light_count");
 
     uniforms_map->create_uniform("directional_light.color");
     uniforms_map->create_uniform("directional_light.direction");
@@ -379,76 +397,100 @@ void LightRender::update_lights(const Scene& scene)
     uniforms_map->set_uniform("directional_light.intensity",
         directional_light.intensity);
 
-    const auto& point_lights = scene_lights.point_lights;
-    for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
-    {
-        const PointLight* point_light = i < point_lights.size() 
-            ? &point_lights[i] : nullptr;
-
-        const std::string prefix = "point_lights[" + std::to_string(i) + "].";
-        update_point_light(point_light, prefix, view_matrix);
-    }
-
-    const auto& spot_lights = scene_lights.spot_lights;
-    for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
-    {
-        const SpotLight* spot_light = i < spot_lights.size()
-            ? &spot_lights[i] : nullptr;
-
-        const std::string prefix = "spot_lights[" + std::to_string(i) + "].";
-        update_spot_light(spot_light, prefix, view_matrix);
-    }
+    setup_point_light_buffer(scene);
+    setup_spot_light_buffer(scene);
 }
 
-void LightRender::update_point_light(const PointLight* point_light,
-    const std::string& prefix, const glm::mat4& view_matrix)
+void LightRender::setup_point_light_buffer(const Scene& scene)
 {
-    glm::vec3 position(0);
-    glm::vec3 color(0);
-    float intensity = 0.0f;
-    float constant = 0.0f;
-    float linear = 0.0f;
-    float exponent = 0.0f;
+    const std::vector<PointLight>& point_lights = 
+        scene.scene_lights.point_lights;
+    const glm::mat4& view_matrix = scene.camera.view_matrix;
 
-    if (point_light != nullptr)
+    LOG_ASSERT(point_lights.size() <= MAX_LIGHTS_SUPPORTED
+        && "More point lights than supported");
+
+    const unsigned int lights_to_render = 
+        std::min(MAX_LIGHTS_SUPPORTED, (int) point_lights.size());
+
+    float* light_buffer = ALLOC float[lights_to_render * POINT_LIGHT_SIZE];
+
+    const float padding = 0.0f;
+    for (size_t i = 0; i < lights_to_render; ++i)
     {
-        glm::vec4 temp(point_light->position, 1);
-        temp = temp * view_matrix;
-        position.x = temp.x;
-        position.y = temp.y;
-        position.z = temp.z;
-        color = point_light->color;
-        intensity = point_light->intensity;
-        const auto& attenuation = point_light->attenuation;
-        constant = attenuation.constant;
-        linear = attenuation.linear;
-        exponent = attenuation.exponent;
+        const PointLight& light = point_lights[i];
+        glm::vec4 light_position{ light.position, 1 };
+        light_position = light_position * view_matrix;
+        light_buffer[i * POINT_LIGHT_SIZE +  0] = light_position.x;
+        light_buffer[i * POINT_LIGHT_SIZE +  1] = light_position.y;
+        light_buffer[i * POINT_LIGHT_SIZE +  2] = light_position.z;
+        light_buffer[i * POINT_LIGHT_SIZE +  3] = padding;
+        light_buffer[i * POINT_LIGHT_SIZE +  4] = light.color.r;
+        light_buffer[i * POINT_LIGHT_SIZE +  5] = light.color.g;
+        light_buffer[i * POINT_LIGHT_SIZE +  6] = light.color.b;
+        light_buffer[i * POINT_LIGHT_SIZE +  7] = light.intensity;
+        light_buffer[i * POINT_LIGHT_SIZE +  8] = light.attenuation.constant;
+        light_buffer[i * POINT_LIGHT_SIZE +  9] = light.attenuation.linear;
+        light_buffer[i * POINT_LIGHT_SIZE + 10] = light.attenuation.exponent;
+        light_buffer[i * POINT_LIGHT_SIZE + 11] = padding;
     }
 
-    uniforms_map->set_uniform(prefix + "position", position);
-    uniforms_map->set_uniform(prefix + "color", color);
-    uniforms_map->set_uniform(prefix + "intensity", intensity);
-    uniforms_map->set_uniform(prefix + "attenuation.constant", constant);
-    uniforms_map->set_uniform(prefix + "attenuation.linear", linear);
-    uniforms_map->set_uniform(prefix + "attenuation.exponent", exponent);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER,POINT_LIGHT_BINDING, 
+        point_light_buffer);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0,
+        (size_t) lights_to_render * POINT_LIGHT_SIZE * sizeof(float),
+        light_buffer);
+
+    SAFE_DELETE_ARRAY(light_buffer);
+
+    uniforms_map->set_uniform("point_light_count", lights_to_render);
 }
 
-void LightRender::update_spot_light(const SpotLight* spot_light,
-    const std::string& prefix, const glm::mat4& view_matrix)
+void LightRender::setup_spot_light_buffer(const Scene& scene)
 {
-    const PointLight* point_light = spot_light != nullptr 
-        ? &spot_light->point_light : nullptr;
-    glm::vec3 cone_direction(0);
-    float cutoff = 0.0f;
+    const std::vector<SpotLight>& spot_lights =
+        scene.scene_lights.spot_lights;
+    const glm::mat4& view_matrix = scene.camera.view_matrix;
 
-    if (spot_light != nullptr)
+    LOG_ASSERT(spot_lights.size() <= MAX_LIGHTS_SUPPORTED
+        && "More spot lights than supported");
+
+    const unsigned int lights_to_render =
+        std::min(MAX_LIGHTS_SUPPORTED, (int)spot_lights.size());
+
+    float* light_buffer = ALLOC float[lights_to_render * SPOT_LIGHT_SIZE];
+
+    const float padding = 0.0f;
+    for (size_t i = 0; i < lights_to_render; ++i)
     {
-        cone_direction = spot_light->cone_direction;
-        cutoff = spot_light->cut_off;
+        const SpotLight& light = spot_lights[i];
+        glm::vec4 light_position{ light.point_light.position, 1 };
+        light_position = light_position * view_matrix;
+        light_buffer[i * SPOT_LIGHT_SIZE + 0] = light_position.x;
+        light_buffer[i * SPOT_LIGHT_SIZE + 1] = light_position.y;
+        light_buffer[i * SPOT_LIGHT_SIZE + 2] = light_position.z;
+        light_buffer[i * SPOT_LIGHT_SIZE + 3] = padding;
+        light_buffer[i * SPOT_LIGHT_SIZE + 4] = light.point_light.color.r;
+        light_buffer[i * SPOT_LIGHT_SIZE + 5] = light.point_light.color.g;
+        light_buffer[i * SPOT_LIGHT_SIZE + 6] = light.point_light.color.b;
+        light_buffer[i * SPOT_LIGHT_SIZE + 7] = light.point_light.intensity;
+        light_buffer[i * SPOT_LIGHT_SIZE + 8] = light.point_light.attenuation.constant;
+        light_buffer[i * SPOT_LIGHT_SIZE + 9] = light.point_light.attenuation.linear;
+        light_buffer[i * SPOT_LIGHT_SIZE + 10] = light.point_light.attenuation.exponent;
+        light_buffer[i * SPOT_LIGHT_SIZE + 11] = padding;
+        light_buffer[i * SPOT_LIGHT_SIZE + 12] = light.cone_direction.x;
+        light_buffer[i * SPOT_LIGHT_SIZE + 13] = light.cone_direction.y;
+        light_buffer[i * SPOT_LIGHT_SIZE + 14] = light.cone_direction.z;
+        light_buffer[i * SPOT_LIGHT_SIZE + 15] = light.cut_off;
     }
 
-    uniforms_map->set_uniform(prefix + "cone_direction", cone_direction);
-    uniforms_map->set_uniform(prefix + "cutoff", cutoff);
-    
-    update_point_light(point_light, prefix + "point_light.", view_matrix);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, SPOT_LIGHT_BINDING,
+        spot_light_buffer);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0,
+        (size_t)lights_to_render * SPOT_LIGHT_SIZE * sizeof(float),
+        light_buffer);
+
+    SAFE_DELETE_ARRAY(light_buffer);
+
+    uniforms_map->set_uniform("point_light_count", lights_to_render);
 }
