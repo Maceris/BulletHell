@@ -91,7 +91,7 @@ void SkyBoxRender::render(const Scene& scene)
     glBindVertexArray(sky_box.vao);
 
     uniforms_map->set_uniform("model_matrix", sky_box.entity->model_matrix);
-    glDrawElements(GL_TRIANGLES, sky_box.vertex_count, GL_UNSIGNED_INT,
+    glDrawElements(GL_TRIANGLES, sky_box.index_count, GL_UNSIGNED_INT,
         nullptr);
 
     glBindVertexArray(0);

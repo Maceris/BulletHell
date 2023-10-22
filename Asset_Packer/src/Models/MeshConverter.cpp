@@ -838,11 +838,13 @@ void process_bones(const aiMesh* mesh, std::vector<Bone>& bones,
 			weights.push_back(weight);
 		}
 	}
-
+	if (bone_count == 0)
+	{
+		return;
+	}
 	const unsigned int vertex_count = mesh->mNumVertices;
 	for (unsigned int i = 0; i < vertex_count; ++i)
 	{
-		
 		size_t size = 0;
 		auto iter = weight_map.find(i);
 		std::vector<VertexWeight>* weights = nullptr;

@@ -32,7 +32,7 @@ struct MeshVertex
 	/// <summary>
 	/// The u and v texture coordinates.
 	/// </summary>
-	float texture_cordinates[2];
+	float texture_coordinates[2];
 };
 #pragma pack(pop)
 
