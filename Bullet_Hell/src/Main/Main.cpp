@@ -2,6 +2,7 @@
 
 #include "GameLogic.h"
 #include "Logger.h"
+#include "Timer.h"
 
 #include <windows.h>
 #include <iostream>
@@ -14,12 +15,16 @@ int main()
 {
     Logger::init();
 
+    TIME_START("Game Init");
+
     GameLogic game_logic;
     if (!game_logic.initialize())
     {
         LOG_FATAL("Failed to initialize the game logic.");
         exit(EXIT_FAILURE);
     }
+    TIME_END("Game Init");
+
     game_logic.run_game();
 
     //TODO(ches) do we need to call this here or in a callback?
