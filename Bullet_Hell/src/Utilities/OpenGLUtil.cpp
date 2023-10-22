@@ -39,7 +39,7 @@ bool OpenGLUtil::assert_extensions_exist(const std::vector<std::string>& names)
         if (!found)
         {
             LOG_FATAL("Can not find the required OpenGL extension " 
-                + required_name + ", this system is not supported.");
+                + required_name + ", this system may not be supported.");
         }
     }
 

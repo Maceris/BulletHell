@@ -3,6 +3,8 @@
 #include <cmath>
 #include <memory>
 
+#include "Logger.h"
+
 #include "gtc/type_ptr.hpp"
 
 RenderBuffers::RenderBuffers()
@@ -132,6 +134,9 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	vbo_list.push_back(index_vbo);
 	std::vector<float> indices_buffer;
 
+	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
+		&& "This system has different sizes for unsigned int and float, which is currently unsupported.");
+
 	for (auto& model : model_list)
 	{
 		EntityList& entities = model->entity_list;
@@ -141,26 +146,29 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 			for (auto& mesh_data : mesh_data_list)
 			{
 				mesh_data.append_vertices_to_buffer(meshes_buffer);
-				indices_buffer.insert(indices_buffer.end(),
-					std::begin(mesh_data.indices),
-					std::end(mesh_data.indices));
+
+				const float* data_start =
+					reinterpret_cast<float*>(mesh_data.indices.data());
+				const float* data_end = data_start + mesh_data.indices.size();
+				indices_buffer.insert(indices_buffer.end(), data_start,
+					data_end);
 			}
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, dest_animation_vbo);
-	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size(), meshes_buffer.data(),
-		GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size() * sizeof(float),
+		meshes_buffer.data(), GL_STATIC_DRAW);
 
 	define_vertex_attributes();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_buffer.size(),
-		indices_buffer.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+		indices_buffer.size() * sizeof(float), indices_buffer.data(),
+		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
-
 
 void RenderBuffers::load_binding_poses(const ModelList& models)
 {
@@ -176,8 +184,9 @@ void RenderBuffers::load_binding_poses(const ModelList& models)
 		}
 	}
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, binding_poses_vbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, meshes_buffer.size(), 
-		meshes_buffer.data(), GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, 
+		meshes_buffer.size() * sizeof(float), meshes_buffer.data(),
+		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
@@ -198,7 +207,7 @@ void RenderBuffers::load_bones_indices_weights(const ModelList& models)
 	vbo_list.push_back(bones_indices_weights_vbo);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_indices_weights_vbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size(),
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
 		data_buffer.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -229,7 +238,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 	vbo_list.push_back(bones_matrices_vbo);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_matrices_vbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size(),
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
 		data_buffer.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -291,6 +300,9 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	vbo_list.push_back(index_vbo);
 	std::vector<float> indices_buffer;
 
+	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
+	&& "This system has different sizes for unsigned int and float, which is currently unsupported.");
+
 	for (auto& model : model_list)
 	{
 		EntityList& entities = model->entity_list;
@@ -300,21 +312,25 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			for (auto& mesh_data : mesh_data_list)
 			{
 				mesh_data.append_vertices_to_buffer(meshes_buffer);
-				indices_buffer.insert(indices_buffer.end(),
-					std::begin(mesh_data.indices),
-					std::end(mesh_data.indices));
+
+				const float* data_start =
+					reinterpret_cast<float*>(mesh_data.indices.data());
+				const float* data_end = data_start + mesh_data.indices.size();
+				indices_buffer.insert(indices_buffer.end(), data_start, 
+					data_end);
 			}
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, meshes_vbo);
-	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size(), meshes_buffer.data(),
-		GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size() * sizeof(float), 
+		meshes_buffer.data(), GL_STATIC_DRAW);
 
 	define_vertex_attributes();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_buffer.size(),
-		indices_buffer.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+		indices_buffer.size() * sizeof(float), indices_buffer.data(),
+		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
