@@ -3,11 +3,13 @@
 #include "imgui.h"
 
 #include "GameLogic.h"
+#include "Timer.h"
 
 #include <format>
 
 #pragma region Variables
 bool DebugUI::show_debug_window = true;
+bool DebugUI::show_timing_window = false;
 bool DebugUI::wireframe = false;
 #pragma endregion
 
@@ -20,6 +22,7 @@ void DebugUI::draw()
 		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::Checkbox("Debug", &DebugUI::show_debug_window);
+			ImGui::Checkbox("Timers", &DebugUI::show_timing_window);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Render Controls"))
@@ -41,6 +44,10 @@ void DebugUI::draw()
 	{
 		draw_window_debug();
 	}
+	if (DebugUI::show_timing_window)
+	{
+		draw_window_timing();
+	}
 }
 
 void DebugUI::draw_window_debug()
@@ -58,6 +65,22 @@ void DebugUI::draw_window_debug()
 	const int models_loaded = (int) scene->model_map.size();
 	ImGui::Text(std::format("Models loaded: {}", 
 		std::to_string(models_loaded)).c_str());
+
+	ImGui::End();
+}
+
+void DebugUI::draw_window_timing()
+{
+	ImGui::SetNextWindowPos(ImVec2(460, 30), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+
+	ImGui::Begin("Timers");
+	
+	for (auto& stage : TIME_STAGES_LIST)
+	{
+		ImGui::Text(std::format("Stage {}: {} microseconds", stage, 
+			std::to_string(LAST_TIME(stage))).c_str());
+	}
 
 	ImGui::End();
 }

@@ -2,6 +2,8 @@
 
 #include "gtc/type_ptr.hpp"
 
+#include "Timer.h"
+
 Configuration Render::configuration;
 
 Render::Render(const Window& window)
@@ -95,9 +97,15 @@ void Render::render(const Window& window, const Scene& scene)
 {
 	update_model_matrices(scene);
 
+	TIME_START("Animation Render");
 	animation_render.render(scene, render_buffers);
-	shadow_render.render(scene, render_buffers, command_buffers);
+	TIME_END("Animation Render");
 
+	TIME_START("Shadow Render");
+	shadow_render.render(scene, render_buffers, command_buffers);
+	TIME_END("Shadow Render");
+
+	TIME_START("Scene Render");
 #if DEBUG
 	if (Render::configuration.wireframe)
 	{
@@ -115,14 +123,25 @@ void Render::render(const Window& window, const Scene& scene)
 		glEnable(GL_TEXTURE_2D);
 	}
 #endif
+	TIME_END("Scene Render");
 
+	TIME_START("Light Render");
 	light_render_start(window.width, window.height);
 	light_render.render(scene, shadow_render, gBuffer);
+	TIME_END("Light Render");
+
+	TIME_START("Skybox Render");
 	sky_box_render.render(scene);
 	light_render_finish();
+	TIME_END("Skybox Render");
 
+	TIME_START("Filter Render");
 	filter_render.render(scene, screen_texture);
+	TIME_END("Filter Render");
+
+	TIME_START("Gui Render");
 	gui_render.render(scene);
+	TIME_END("Gui Render");
 }
 
 void Render::resize(const unsigned int width, const unsigned int height)

@@ -155,6 +155,7 @@
     <ClCompile Include="src\3rdParty\imgui-1.89.9\imgui_widgets.cpp" />
     <ClCompile Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
+    <ClCompile Include="src\Debugging\Timer.cpp" />
     <ClCompile Include="src\Graphics\Graph\Animation.cpp" />
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="src\3rdParty\imgui-1.89.9\imstb_truetype.h" />
     <ClInclude Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="src\Debugging\Logger.h" />
+    <ClInclude Include="src\Debugging\Timer.h" />
     <ClInclude Include="src\Graphics\Graph\Animation.h" />
     <ClInclude Include="src\Graphics\Graph\ArrayOfTextures.h" />
     <ClInclude Include="src\Graphics\Graph\CascadeShadowSlice.h" />
