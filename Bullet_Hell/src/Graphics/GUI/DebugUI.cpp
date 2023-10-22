@@ -58,13 +58,23 @@ void DebugUI::draw_window_debug()
 	ImGui::Begin("Debug");
 	std::shared_ptr<Scene> scene = g_game_logic->current_scene;
 	
-	const glm::vec3 position = scene->camera.position;
-	ImGui::Text(std::format("Camera position: (%f, %f, %f)", position.x,
-		position.y, position.z).c_str());
+	const glm::vec3& position = scene->camera.position;
+	ImGui::Text(std::format("Camera position: ({}, {}, {})", 
+		std::to_string(position.x),
+		std::to_string(position.y),
+		std::to_string(position.z)).c_str());
+
+	const glm::vec2& rotation = scene->camera.rotation;
+	ImGui::Text(std::format("Camera rotation: ({}, {})", 
+		std::to_string(rotation.x),
+		std::to_string(rotation.y)).c_str());
 
 	const int models_loaded = (int) scene->model_map.size();
 	ImGui::Text(std::format("Models loaded: {}", 
 		std::to_string(models_loaded)).c_str());
+
+	const long long fps = 1000000 / LAST_TIME("Last Frame");
+	ImGui::Text(std::format("FPS: {}", std::to_string(fps)).c_str());
 
 	ImGui::End();
 }

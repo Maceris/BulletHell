@@ -95,6 +95,8 @@ void Render::recalculate_materials(const Scene& scene)
 
 void Render::render(const Window& window, const Scene& scene)
 {
+	TIME_END("Last Frame");
+	TIME_START("Last Frame");
 	update_model_matrices(scene);
 
 	TIME_START("Animation Render");

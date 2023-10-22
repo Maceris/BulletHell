@@ -26,7 +26,6 @@ public:
 	/// <param name="scene">The scene we are rendering.</param>
 	void render(const Scene& scene);
 private:
-	glm::mat4 view_matrix;
 	std::unique_ptr<ShaderProgram> shader_program;
 	std::unique_ptr<UniformsMap> uniforms_map;
 

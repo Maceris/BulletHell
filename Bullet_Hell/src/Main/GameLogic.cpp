@@ -5,6 +5,7 @@
 #include "ModelResource.h"
 #include "ResourceZipFile.h"
 #include "TextureResource.h"
+#include "Timer.h"
 
 #include <filesystem>
 
@@ -100,7 +101,7 @@ void GameLogic::request_close()
 void GameLogic::run_game()
 {
 	current_state = running;
-
+	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
 	while (current_state == running)
 	{
 		render->render(*window, *current_scene);
