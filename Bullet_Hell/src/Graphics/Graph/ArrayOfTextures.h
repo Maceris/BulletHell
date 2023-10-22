@@ -12,7 +12,6 @@
 /// </summary>
 struct ArrayOfTextures
 {
-
 	/// <summary>
 	/// The array of textures that has been allocated.
 	/// </summary>
@@ -33,8 +32,10 @@ struct ArrayOfTextures
 	/// glTexImage2Ds.</param>
 	ArrayOfTextures(unsigned int texture_count, unsigned int width,
 		unsigned int height, int pixel_format)
-		: texture_count(texture_count), textures(new GLuint[texture_count])
+		: texture_count{ texture_count }
 	{
+		textures = ALLOC GLuint[texture_count];
+
 		glGenTextures(texture_count, textures);
 		for (unsigned int i = 0; i < texture_count; ++i) {
 			glBindTexture(GL_TEXTURE_2D, textures[i]);
@@ -71,6 +72,6 @@ struct ArrayOfTextures
 	~ArrayOfTextures()
 	{
 		glDeleteTextures(texture_count, textures);
-		delete[] textures;
+		SAFE_DELETE_ARRAY(textures);
 	}
 };

@@ -32,7 +32,7 @@ public:
 	/// <param name="shadow_render">The shadow renderer, which we 
 	/// need for cascade shadow information.</param>
 	/// <param name="gBuffer">The geometry buffer.</param>
-	void render(const Scene& scene, const ShadowRender& shadow_render,
+	void render(const Scene& scene, ShadowRender& shadow_render,
 		const GBuffer& gBuffer);
 private:
 	/// <summary>

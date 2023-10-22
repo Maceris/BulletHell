@@ -251,8 +251,8 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	load_bones_matrices_buffer(model_list);
 	load_bones_indices_weights(model_list);
 
-	glGenVertexArrays(1, &animated_vao);
-	glBindVertexArray(animated_vao);
+	glGenVertexArrays(1, &static_vao);
+	glBindVertexArray(static_vao);
 
 	int vertices_size = 0;
 	int offset = 0;

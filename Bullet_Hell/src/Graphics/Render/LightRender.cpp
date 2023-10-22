@@ -250,7 +250,7 @@ LightRender::LightRender()
     create_uniforms();
 }
 
-void LightRender::render(const Scene& scene, const ShadowRender& shadow_render,
+void LightRender::render(const Scene& scene, ShadowRender& shadow_render,
     const GBuffer& gBuffer)
 {
     shader_program->bind();
@@ -289,7 +289,7 @@ void LightRender::render(const Scene& scene, const ShadowRender& shadow_render,
             + "].split_distance", cascade_shadows[i].split_distance);
     }
     glActiveTexture(GL_TEXTURE0 + next_texture);
-    shadow_render.shadow_buffer->bind_textures(GL_TEXTURE0 + next_texture);
+    shadow_render.shadow_buffer.bind_textures(GL_TEXTURE0 + next_texture);
 
     uniforms_map->set_uniform("inverse_projection_matrix",
         scene.projection.inverse_projection_matrix);

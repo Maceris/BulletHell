@@ -38,13 +38,18 @@ void main()
 #pragma endregion
 
 ShadowRender::ShadowRender()
-    : shadow_buffer{ std::make_unique<ShadowBuffer>() }
+    : shadow_buffer{}
     , cascade_shadows{}
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
         sizeof(vertex_shader_source), GL_VERTEX_SHADER);
     shader_program = std::make_unique<ShaderProgram>(shader_modules);
+
+    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+    {
+        cascade_shadows.emplace_back();
+    }
 
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     uniforms_map->create_uniform("projection_view_matrix");
@@ -56,7 +61,7 @@ void ShadowRender::render(const Scene& scene,
 {
     CascadeShadowSlice::updateCascadeShadows(cascade_shadows, scene);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, shadow_buffer->depth_map_fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadow_buffer.depth_map_fbo);
     glViewport(0, 0, SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
 
     shader_program->bind();
@@ -64,7 +69,7 @@ void ShadowRender::render(const Scene& scene,
     for (unsigned int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
     {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-            GL_TEXTURE_2D, shadow_buffer->depth_map[i], 0);
+            GL_TEXTURE_2D, shadow_buffer.depth_map[i], 0);
         glClear(GL_DEPTH_BUFFER_BIT);
     }
 
@@ -79,7 +84,7 @@ void ShadowRender::render(const Scene& scene,
     for (unsigned int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
     {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-            GL_TEXTURE_2D, shadow_buffer->depth_map[i], 0);
+            GL_TEXTURE_2D, shadow_buffer.depth_map[i], 0);
 
         uniforms_map->set_uniform("projection_view_matrix",
             cascade_shadows[i].projection_view_matrix);
@@ -87,6 +92,7 @@ void ShadowRender::render(const Scene& scene,
             command_buffers.static_draw_count, 0);
     }
 
+    //NOTE(ches) animated meshes
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
         command_buffers.animated_draw_element_buffer);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, MODEL_MATRICES_BINDING,
@@ -97,7 +103,7 @@ void ShadowRender::render(const Scene& scene,
     for (unsigned int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
     {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-            GL_TEXTURE_2D, shadow_buffer->depth_map[i], 0);
+            GL_TEXTURE_2D, shadow_buffer.depth_map[i], 0);
 
         uniforms_map->set_uniform("projection_view_matrix",
             cascade_shadows[i].projection_view_matrix);

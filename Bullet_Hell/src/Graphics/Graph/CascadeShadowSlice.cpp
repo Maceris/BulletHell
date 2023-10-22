@@ -47,7 +47,7 @@ float* CascadeShadowSlice::cached_splits = calculate_slices();
 	https://johanmedestrom.wordpress.com/2016/03/18/opengl-cascaded-shadow-maps/
 */
 void CascadeShadowSlice::updateCascadeShadows(
-	CascadeShadowSlice shadows[SHADOW_MAP_CASCADE_COUNT], const Scene& scene)
+	std::vector<CascadeShadowSlice>& shadows, const Scene& scene)
 {
 	glm::mat4 view = scene.camera.view_matrix;
 	glm::mat4 projection = scene.projection.projection_matrix;

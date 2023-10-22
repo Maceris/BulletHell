@@ -30,12 +30,13 @@ struct CascadeShadowSlice
 	/// <param name="shadows">The cascade shadows to update.</param>
 	/// <param name="scene">The scene we are updating shadows for.</param>
 	static void updateCascadeShadows(
-		CascadeShadowSlice shadows[SHADOW_MAP_CASCADE_COUNT], 
+		std::vector<CascadeShadowSlice>& shadows,
 		const Scene& scene);
 
 	CascadeShadowSlice();
-	CascadeShadowSlice(const CascadeShadowSlice&) = delete;
-	CascadeShadowSlice& operator=(const CascadeShadowSlice&) = delete;
+	CascadeShadowSlice(const CascadeShadowSlice&) = default;
+	CascadeShadowSlice& operator=(const CascadeShadowSlice&) = default;
+
 	~CascadeShadowSlice() = default;
 
 private:

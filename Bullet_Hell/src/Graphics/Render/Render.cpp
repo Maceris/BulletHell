@@ -343,7 +343,6 @@ void Render::setup_static_command_buffer(const Scene& scene)
 			base_instance += entity_count;
 
 			const MaterialID material_index = mesh_draw_data.material;
-			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
 			for (const auto& entity : entities)
 			{
 				//NOTE(ches) it should (tm) be in the map
@@ -359,7 +358,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	data_size_in_bytes = static_cast<size_t>(mesh_count)
 		* COMMAND_SIZE * sizeof(int);
 
-	command_buffers.animated_draw_count = mesh_count;
+	command_buffers.static_draw_count = mesh_count;
 
 	glGenBuffers(1, &command_buffers.static_command_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,

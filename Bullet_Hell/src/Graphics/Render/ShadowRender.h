@@ -10,6 +10,7 @@
 #include "UniformsMap.h"
 
 #include <memory>
+#include <vector>
 
 #include "glad.h"
 
@@ -22,11 +23,11 @@ public:
 	/// <summary>
 	/// The details for each slice like the view matrix and split distances.
 	/// </summary>
-	CascadeShadowSlice cascade_shadows[SHADOW_MAP_CASCADE_COUNT];
+	std::vector<CascadeShadowSlice> cascade_shadows;
 	/// <summary>
 	/// The depth buffers for the shadow mapping.
 	/// </summary>
-	std::unique_ptr<ShadowBuffer> shadow_buffer;
+	ShadowBuffer shadow_buffer;
 
 	ShadowRender();
 	ShadowRender(const ShadowRender&) = delete;

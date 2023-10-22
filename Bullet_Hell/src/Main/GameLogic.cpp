@@ -64,7 +64,11 @@ bool GameLogic::initialize()
 	current_scene->scene_lights.directional_light.
 		set_direction(-0.91f, 1.0f, -0.43f);
 
+	current_scene->camera.set_position(-11.0f, 11.0f, 0.0f);
+	current_scene->camera.add_rotation(0.42f, 1.92f);
+
 	render->recalculate_materials(*current_scene);
+	render->setup_data(*current_scene);
 
 	return true;
 }
