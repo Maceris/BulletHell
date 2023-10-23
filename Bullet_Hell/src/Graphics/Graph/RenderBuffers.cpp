@@ -118,7 +118,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 				const int group_size = 
 					ceil((float) mesh_size_in_bytes / (14 * 4));
 				weights_offset += group_size * 2 * 4;
-				offset = vertices_size / 3;
+				offset = vertices_size;
 			}
 		}
 		mesh_binding_pose_offset += binding_pose_offset;
@@ -256,9 +256,6 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			model_list.push_back(entry.second);
 		}
 	}
-	load_binding_poses(model_list);
-	load_bones_matrices_buffer(model_list);
-	load_bones_indices_weights(model_list);
 
 	glGenVertexArrays(1, &static_vao);
 	glBindVertexArray(static_vao);
@@ -285,7 +282,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 					mesh_data.material->material_id, offset,
 					mesh_data.indices.size());
 				
-				offset = vertices_size / 3;
+				offset = vertices_size;
 			}
 		}
 	}

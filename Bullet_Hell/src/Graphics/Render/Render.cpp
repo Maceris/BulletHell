@@ -187,9 +187,9 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		}
 	}
 
-	int mesh_count = 0;
-	int draw_element_count = 0;
-	int entity_count = 0;
+	size_t mesh_count = 0;
+	size_t draw_element_count = 0;
+	size_t entity_count = 0;
 	for (const auto& model : model_list)
 	{
 		mesh_count += model->mesh_draw_data_list.size();
@@ -208,9 +208,12 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		EntityList& entities = model->entity_list;
 		for (const auto& entity : entities)
 		{
-			auto matrix = glm::value_ptr(entity->model_matrix);
-			std::copy(matrix, matrix + 16, 
-				model_matrices + (entity_index * 16));
+			const float* matrix = static_cast<const float*>(
+				glm::value_ptr(entity->model_matrix));
+			for (size_t i = 0; i < 16; ++i)
+			{
+				model_matrices[entity_index + i] = *(matrix + i);
+			}
 			entity_index_map.emplace(
 				std::pair(entity->entity_ID, entity_index));
 			++entity_index;
@@ -232,6 +235,8 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 	int draw_element_index = 0;
 	const int COMMAND_SIZE = 5;
 	const int DRAW_ELEMENT_SIZE = 2;
+
+	const int padding = 0;
 
 	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
 	int* draw_elements = ALLOC int[draw_element_count * DRAW_ELEMENT_SIZE];
@@ -261,20 +266,18 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		}
 	}
 
-	data_size_in_bytes = static_cast<size_t>(mesh_count) 
-		* COMMAND_SIZE * sizeof(int);
+	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
 
 	command_buffers.animated_draw_count = mesh_count;
 
 	glGenBuffers(1, &command_buffers.animated_command_buffer);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
 		command_buffers.animated_command_buffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, command_buffer,
+	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
 		GL_STATIC_DRAW);
 	SAFE_DELETE_ARRAY(command_buffer);
 
-	data_size_in_bytes = static_cast<size_t>(draw_element_count) 
-		* DRAW_ELEMENT_SIZE * sizeof(int);
+	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
 	glGenBuffers(1, &command_buffers.animated_draw_element_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
@@ -296,9 +299,9 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		}
 	}
 
-	int mesh_count = 0;
-	int draw_element_count = 0;
-	int entity_count = 0;
+	size_t mesh_count = 0;
+	size_t draw_element_count = 0;
+	size_t entity_count = 0;
 	for (const auto& model : model_list)
 	{
 		mesh_count += model->mesh_draw_data_list.size();
@@ -317,9 +320,12 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		EntityList& entities = model->entity_list;
 		for (const auto& entity : entities)
 		{
-			auto matrix = glm::value_ptr(entity->model_matrix);
-			std::copy(matrix, matrix + 16,
-				model_matrices + (entity_index * 16));
+			const float* matrix =  static_cast<const float*>(
+				glm::value_ptr(entity->model_matrix));
+			for (size_t i = 0; i < 16; ++i)
+			{
+				model_matrices[entity_index + i] = *(matrix + i);
+			}
 			entity_index_map.emplace(
 				std::pair(entity->entity_ID, entity_index));
 			++entity_index;
@@ -341,6 +347,8 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	int draw_element_index = 0;
 	const int COMMAND_SIZE = 5;
 	const int DRAW_ELEMENT_SIZE = 2;
+
+	const int padding = 0;
 
 	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
 	int* draw_elements = ALLOC int[draw_element_count * DRAW_ELEMENT_SIZE];
@@ -371,25 +379,24 @@ void Render::setup_static_command_buffer(const Scene& scene)
 					entity_index_map.find(entity->entity_ID)->second;
 				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
 					material_index;
+
 				++draw_element_index;
 			}
 		}
 	}
 
-	data_size_in_bytes = static_cast<size_t>(mesh_count)
-		* COMMAND_SIZE * sizeof(int);
+	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
 
 	command_buffers.static_draw_count = mesh_count;
 
 	glGenBuffers(1, &command_buffers.static_command_buffer);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
 		command_buffers.static_command_buffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, command_buffer,
+	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
 		GL_STATIC_DRAW);
 	SAFE_DELETE_ARRAY(command_buffer);
 
-	data_size_in_bytes = static_cast<size_t>(draw_element_count)
-		* DRAW_ELEMENT_SIZE * sizeof(int);
+	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
 	glGenBuffers(1, &command_buffers.static_draw_element_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,

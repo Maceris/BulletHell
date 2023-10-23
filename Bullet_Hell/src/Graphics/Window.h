@@ -90,6 +90,10 @@ public:
 	GLFWwindow* handle;
 
 private:
-	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-	GLint mvp_location, vpos_location, vcol_location;
+	/// <summary>
+	/// A callback to register for when the window gets resized.
+	/// </summary>
+	/// <param name="width">The new width, in pixels, of the framebuffer.</param>
+	/// <param name="height">The new height, in pixels, of the framebuffer.</param>
+	void resized(int width, int height);
 };

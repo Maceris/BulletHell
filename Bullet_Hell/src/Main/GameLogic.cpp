@@ -51,11 +51,16 @@ bool GameLogic::initialize()
 	current_scene->add_model(player_model);
 	auto player_entity = std::make_shared<Entity>(player_model->id);
 	current_scene->add_entity(player_entity);
+	player_entity->scale = 0.01f;
+	player_entity->update_model_matrix();
 
 	auto ground_model = load_model("models/terrain/terrain.model");
 	current_scene->add_model(ground_model);
 	auto ground_entity = std::make_shared<Entity>(ground_model->id);
 	current_scene->add_entity(ground_entity);
+	ground_entity->scale = 100.0f;
+	ground_entity->set_position(0, -1, 0);
+	ground_entity->update_model_matrix();
 
 	current_scene->scene_lights.ambient_light.intensity = 0.5f;
 	current_scene->scene_lights.ambient_light.set_color(0.3f, 0.3f, 0.3f);
@@ -76,6 +81,8 @@ bool GameLogic::initialize()
 
 void GameLogic::notify_about_resize(const int width, const int height)
 {
+	window->width = width;
+	window->height = height;
 	if (current_scene)
 	{
 		current_scene->resize(width, height);

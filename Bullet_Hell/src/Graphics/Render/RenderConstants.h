@@ -4,12 +4,12 @@
 /// <summary>
 /// The binding for the draw elements buffer SSBO.
 /// </summary>
-constexpr auto DRAW_ELEMENT_BINDING = 1;
+constexpr auto DRAW_ELEMENT_BINDING = 0;
 
 /// <summary>
 /// The binding for the model matrices buffer SSBO.
 /// </summary>
-constexpr auto MODEL_MATRICES_BINDING = 2;
+constexpr auto MODEL_MATRICES_BINDING = 1;
 
 /// <summary>
 /// The maximum number of draw elements we can handle at once.
