@@ -3,12 +3,12 @@
 std::atomic<uint64_t> Entity::next_ID{ 0 };
 
 Entity::Entity(const std::string model_ID)
-	: entity_ID(next_ID++)
-	, model_ID(model_ID)
-	, model_matrix(glm::mat4(1))
-	, position(glm::vec3(0))
-	, rotation(glm::quat())
-	, scale(1)
+	: entity_ID{ next_ID++ }
+	, model_ID{ model_ID }
+	, model_matrix{ 1.0f }
+	, position{ 0.0f }
+	, rotation{}
+	, scale{ 1 }
 	, animation_data(std::shared_ptr<Animation>())
 {}
 
@@ -36,9 +36,11 @@ void Entity::set_rotation(const float x, const float y, const float z,
 
 void Entity::update_model_matrix()
 {
-	model_matrix = glm::mat4(1);
-	model_matrix = glm::scale(model_matrix, glm::vec3(scale, scale, scale));
-	glm::mat4 translation = glm::translate(model_matrix, position);
-	glm::mat4 rot = glm::toMat4(rotation);
-	model_matrix = rot * model_matrix;
+	model_matrix = glm::mat4(1.0f);
+	glm::mat4 temp_rotation = glm::toMat4(rotation);
+	glm::mat4 translation{ 1 };
+	translation = glm::translate(model_matrix, position);
+	glm::mat4 temp_scale{ 1 };
+	temp_scale = glm::scale(temp_scale, glm::vec3(scale, scale, scale));
+	model_matrix = translation * temp_rotation * temp_scale * model_matrix;
 }
