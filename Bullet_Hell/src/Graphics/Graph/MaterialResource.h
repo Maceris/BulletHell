@@ -24,10 +24,10 @@ public:
 		return true;
 	}
 
-	virtual unsigned int get_loaded_resource_size(char* raw_buffer,
-		unsigned int raw_size);
+	virtual size_t get_loaded_resource_size(char* raw_buffer,
+		size_t raw_size);
 	virtual std::string get_pattern();
-	virtual bool load_resource(char* raw_buffer, unsigned int raw_size,
+	virtual bool load_resource(char* raw_buffer, size_t raw_size,
 		std::shared_ptr<ResourceHandle> handle);
 
 	virtual bool use_raw_file()
@@ -36,7 +36,7 @@ public:
 	}
 private:
 	bool parse_material(std::shared_ptr<MaterialExtraData> extra_data,
-		char* raw_buffer, unsigned int raw_size);
+		char* raw_buffer, size_t raw_size);
 };
 
 /// <summary>

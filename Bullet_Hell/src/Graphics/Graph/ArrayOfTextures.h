@@ -6,7 +6,6 @@
 
 #include "glad.h"
 
-
 /// <summary>
 /// An array of textures, all of the same size and pixel format.
 /// </summary>

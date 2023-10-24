@@ -38,8 +38,8 @@ public:
 	/// <param name="raw_buffer">The raw data.</param>
 	/// <param name="raw_size">The size of the raw data.</param>
 	/// <returns>The size of the loaded resource.</returns>
-	virtual unsigned int get_loaded_resource_size(char* raw_buffer,
-		unsigned int raw_size) = 0;
+	virtual size_t get_loaded_resource_size(char* raw_buffer,
+		size_t raw_size) = 0;
 
 	/// <summary>
 	/// Return the wildcard pattern that defines which resources the loader
@@ -57,7 +57,7 @@ public:
 	/// <param name="raw_size">The size of the buffer.</param>
 	/// <param name="handle">The handle that we want to load.</param>
 	/// <returns>Whether we loaded the resource successfully.</returns>
-	virtual bool load_resource(char* raw_buffer, unsigned int raw_size,
+	virtual bool load_resource(char* raw_buffer, size_t raw_size,
 		std::shared_ptr<ResourceHandle> handle) = 0;
 
 	/// <summary>

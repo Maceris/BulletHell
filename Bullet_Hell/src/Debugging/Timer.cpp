@@ -59,7 +59,7 @@ long long Timer::last_time(const std::string& stage_name)
 	return result->second.elapsed;
 }
 
-const std::vector<std::string> const& Timer::time_stages_list()
+const std::vector<std::string>& Timer::time_stages_list()
 {
 	return TimerManager::stages;
 }

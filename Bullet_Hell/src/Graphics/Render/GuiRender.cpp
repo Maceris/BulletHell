@@ -99,8 +99,8 @@ void GuiRender::render(const Scene& scene)
 void GuiRender::resize(const unsigned int width, const unsigned int height)
 {
 	ImGuiIO& imGuiIO = ImGui::GetIO();
-	imGuiIO.DisplaySize.x = width;
-	imGuiIO.DisplaySize.y = height;
+	imGuiIO.DisplaySize.x = static_cast<float>(width);
+	imGuiIO.DisplaySize.y = static_cast<float>(height);
 }
 
 void GuiRender::setup_imgui_keys()

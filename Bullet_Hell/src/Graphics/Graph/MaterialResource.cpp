@@ -1,15 +1,16 @@
 #include "MaterialResource.h"
 
-#include "GameLogic.h"
 #include "Portability.h"
+
+#include "GameLogic.h"
 
 /// <summary>
 /// What is the latest material file verison we support loading.
 /// </summary>
 constexpr auto MAX_SUPPORTED_MATERIAL_VERSION = 1;
 
-unsigned int MaterialLoader::get_loaded_resource_size(char* raw_buffer,
-	unsigned int raw_size)
+size_t MaterialLoader::get_loaded_resource_size(char* raw_buffer,
+	size_t raw_size)
 {
 	return sizeof(Material);
 }
@@ -19,7 +20,7 @@ std::string MaterialLoader::get_pattern()
 	return "*.material";
 }
 
-bool MaterialLoader::load_resource(char* raw_buffer, unsigned int raw_size,
+bool MaterialLoader::load_resource(char* raw_buffer, size_t raw_size,
 	std::shared_ptr<ResourceHandle> handle)
 {
 	std::shared_ptr<MaterialExtraData> extra
@@ -31,7 +32,7 @@ bool MaterialLoader::load_resource(char* raw_buffer, unsigned int raw_size,
 
 bool MaterialLoader::parse_material(
 	std::shared_ptr<MaterialExtraData> extra_data, char* raw_buffer,
-	unsigned int raw_size)
+	size_t raw_size)
 {
 	RawStream stream{};
 	stream.data = reinterpret_cast<unsigned char*>(raw_buffer);

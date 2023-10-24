@@ -10,14 +10,14 @@ bool DefaultResourceLoader::discard_raw_buffer_after_load()
 	return true;
 }
 
-unsigned int DefaultResourceLoader::get_loaded_resource_size(char* raw_buffer,
-	unsigned int raw_size)
+size_t DefaultResourceLoader::get_loaded_resource_size(char* raw_buffer,
+	size_t raw_size)
 {
 	return raw_size;
 }
 
 bool DefaultResourceLoader::load_resource(char* raw_buffer, 
-	unsigned int raw_size, std::shared_ptr<ResourceHandle> handle)
+	size_t raw_size, std::shared_ptr<ResourceHandle> handle)
 {
 	return true;
 }

@@ -3,15 +3,14 @@
 #include "GameLogic.h"
 #include "MaterialResource.h"
 #include "MeshData.h"
-#include "Portability.h"
 
 /// <summary>
 /// What is the latest model file verison we support loading.
 /// </summary>
 constexpr auto MAX_SUPPORTED_MODEL_VERSION = 1;
 
-unsigned int ModelLoader::get_loaded_resource_size(char* raw_buffer,
-	unsigned int raw_size)
+size_t ModelLoader::get_loaded_resource_size(char* raw_buffer,
+	size_t raw_size)
 {
 	RawStream stream{};
 	stream.data = reinterpret_cast<unsigned char*>(raw_buffer);
@@ -30,7 +29,7 @@ unsigned int ModelLoader::get_loaded_resource_size(char* raw_buffer,
 	const uint64_t mesh_count = read_uint64(stream);
 
 	total_size += mesh_count * sizeof(MeshData);
-	for (unsigned int i = 0; i < mesh_count; ++i)
+	for (uint64_t i = 0; i < mesh_count; ++i)
 	{
 		stream.bytes_read += 2; // material index
 
@@ -56,7 +55,7 @@ std::string ModelLoader::get_pattern()
 	return "*.model";
 }
 
-bool ModelLoader::load_resource(char* raw_buffer, unsigned int raw_size,
+bool ModelLoader::load_resource(char* raw_buffer, size_t raw_size,
 	std::shared_ptr<ResourceHandle> handle)
 {
 	std::shared_ptr<ModelExtraData> extra
@@ -84,7 +83,7 @@ material_name(const std::string& model_name, const uint16_t material_id)
 }
 
 bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
-	char* raw_buffer, unsigned int raw_size, const std::string& file_name)
+	char* raw_buffer, size_t raw_size, const std::string& file_name)
 {
 	RawStream stream{};
 	stream.data = reinterpret_cast<unsigned char*>(raw_buffer);
@@ -135,7 +134,7 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 			for (size_t offset = 0; offset < float_count; ++offset)
 			{
 				raw_value = read_uint32(stream);
-				*(first_value + offset) = *reinterpret_cast<float*>(&raw_value);
+				*(first_value + offset) = reinterpret_cast<float&>(raw_value);
 			}
 		}
 
@@ -149,13 +148,16 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 		for (unsigned int j = 0; j < weight_count; ++j)
 		{
 			BoneWeights& weights = mesh_data.bone_weights.emplace_back();
+			uint32_t raw_value = 0;
 			for (unsigned int i = 0; i < MAX_WEIGHTS_PER_BONE; ++i)
 			{
-				weights.weights[i] = read_uint32(stream);
+				raw_value = read_uint32(stream);
+				weights.weights[i] = reinterpret_cast<float&>(raw_value);
 			}
 			for (unsigned int i = 0; i < MAX_WEIGHTS_PER_BONE; ++i)
 			{
-				weights.indices[i] = read_uint32(stream);
+				raw_value = read_uint32(stream);
+				weights.indices[i] = reinterpret_cast<float&>(raw_value);
 			}
 		}
 	}

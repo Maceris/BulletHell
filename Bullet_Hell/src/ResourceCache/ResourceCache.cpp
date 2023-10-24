@@ -6,7 +6,7 @@
 #include "Logger.h"
 #include "StringUtil.h"
 
-bool ResourceCache::make_room(unsigned int size)
+bool ResourceCache::make_room(size_t size)
 {
 	if (size > cache_size)
 	{
@@ -16,7 +16,7 @@ bool ResourceCache::make_room(unsigned int size)
 	{
 		if (lru_list.empty())
 		{
-			// We ran out of things that we could free
+			//NOTE(ches) We ran out of things that we could free
 			return false;
 		}
 		free_one_resource();
@@ -24,7 +24,7 @@ bool ResourceCache::make_room(unsigned int size)
 	return true;
 }
 
-char* ResourceCache::allocate(unsigned int size)
+char* ResourceCache::allocate(size_t size)
 {
 	if (!make_room(size))
 	{
@@ -68,8 +68,8 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 		LOG_ERROR("Default resource loader was not found!");
 		return handle;
 	}
-
-	int raw_size = file->get_raw_resource_size(*resource);
+	
+	size_t raw_size = file->get_raw_resource_size(*resource);
 
 	if (raw_size < 0)
 	{
@@ -78,7 +78,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 		return std::shared_ptr<ResourceHandle>();
 	}
 
-	int allocation_size = raw_size;
+	size_t allocation_size = raw_size;
 	if (loader->append_null())
 	{
 		++allocation_size;
@@ -95,7 +95,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 	}
 
 	char* buffer = nullptr;
-	unsigned int size = 0;
+	size_t size = 0;
 	if (loader->use_raw_file())
 	{
 		buffer = raw_buffer;
@@ -163,12 +163,12 @@ void ResourceCache::free_one_resource()
 	resources.erase(handle->resource.name);
 }
 
-void ResourceCache::memory_has_been_freed(unsigned int size)
+void ResourceCache::memory_has_been_freed(size_t size)
 {
 	allocated -= size;
 }
 
-ResourceCache::ResourceCache(const unsigned int size_in_MB, ResourceFile* file)
+ResourceCache::ResourceCache(const size_t size_in_MB, ResourceFile* file)
 	: cache_size{ size_in_MB * 1024 * 1024 }
 	, allocated{ 0 }
 	, file{ file }
@@ -221,10 +221,10 @@ int ResourceCache::preload(const std::string pattern,
 	{
 		return 0;
 	}
-	int file_count = file->get_resource_count();
+	size_t file_count = file->get_resource_count();
 	int loaded = 0;
 	bool cancel = false;
-	for (int i = 0; i < file_count; ++i)
+	for (size_t i = 0; i < file_count; ++i)
 	{
 		Resource resource(file->get_resource_name(i));
 
@@ -236,7 +236,7 @@ int ResourceCache::preload(const std::string pattern,
 
 		if (callback != nullptr)
 		{
-			callback(i * 100 / file_count, cancel);
+			callback(static_cast<int>(i * 100 / file_count), cancel);
 		}
 	}
 	return loaded;
@@ -250,8 +250,8 @@ std::vector<std::string> ResourceCache::match(const std::string pattern)
 		return matching_names;
 	}
 
-	int file_count = file->get_resource_count();
-	for (int i = 0; i < file_count; ++i)
+	size_t file_count = file->get_resource_count();
+	for (size_t i = 0; i < file_count; ++i)
 	{
 		std::string name = file->get_resource_name(i);
 		std::transform(name.begin(), name.end(), name.begin(), std::tolower);

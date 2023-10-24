@@ -1,10 +1,11 @@
 #include "TextureResource.h"
 
-#include "GameLogic.h"
 #include "Portability.h"
 
-unsigned int TextureLoader::get_loaded_resource_size(char* raw_buffer,
-	unsigned int raw_size)
+#include "GameLogic.h"
+
+size_t TextureLoader::get_loaded_resource_size(char* raw_buffer,
+	size_t raw_size)
 {
 	//NOTE(ches) once we upload the data to the GPU, we don't keep it around
 	return sizeof(Texture);
@@ -15,7 +16,7 @@ std::string TextureLoader::get_pattern()
 	return "*.image";
 }
 
-bool TextureLoader::load_resource(char* raw_buffer, unsigned int raw_size,
+bool TextureLoader::load_resource(char* raw_buffer, size_t raw_size,
 	std::shared_ptr<ResourceHandle> handle)
 {
 	std::shared_ptr<TextureExtraData> extra
@@ -26,7 +27,7 @@ bool TextureLoader::load_resource(char* raw_buffer, unsigned int raw_size,
 }
 
 bool TextureLoader::parse_texture(std::shared_ptr<TextureExtraData> extra_data,
-	char* raw_buffer, unsigned int raw_size)
+	char* raw_buffer, size_t raw_size)
 {
 	uint64_t size = 0;
 	RawStream stream{};

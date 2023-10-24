@@ -4,7 +4,6 @@
 
 #include "glad.h"
 
-
 /// <summary>
 /// Used to represent ImGui meshes.
 /// </summary>

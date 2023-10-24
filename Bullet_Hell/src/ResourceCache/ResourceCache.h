@@ -49,12 +49,12 @@ class ResourceCache
 	/// <summary>
 	/// The amount of cache memory in use.
 	/// </summary>
-	unsigned int cache_size;
+	size_t cache_size;
 
 	/// <summary>
 	/// The total amount of memory allocated for the cache.
 	/// </summary>
-	unsigned int allocated;
+	size_t allocated;
 
 protected:
 	
@@ -65,7 +65,7 @@ protected:
 	/// <param name="size">The number of bytes we want to make room for.
 	/// </param>
 	/// <returns>Whether we have the specified amount of room.</returns>
-	bool make_room(unsigned int size);
+	bool make_room(size_t size);
 
 	/// <summary>
 	/// Allocate raw memory of the specified size. If we did not have room
@@ -73,7 +73,7 @@ protected:
 	/// </summary>
 	/// <param name="size">The number of bytes to allocate.</param>
 	/// <returns>The allocated memory, or null in the worst case.</returns>
-	char* allocate(unsigned int size);
+	char* allocate(size_t size);
 
 	/// <summary>
 	/// Looks up a resource by handle and remove it from the cache.
@@ -121,7 +121,7 @@ protected:
 	/// freed, so that the cache can track allocation appropriately.
 	/// </summary>
 	/// <param name="size"></param>
-	void memory_has_been_freed(unsigned int size);
+	void memory_has_been_freed(size_t size);
 
 public:
 	/// <summary>
@@ -130,7 +130,7 @@ public:
 	/// <param name="size_in_MB">The amount of memory allocated to the 
 	/// cache, in megabytes.</param>
 	/// <param name="file">The file we are loading resources from.</param>
-	ResourceCache(const unsigned int size_in_MB, ResourceFile* file);
+	ResourceCache(const size_t size_in_MB, ResourceFile* file);
 
 	/// <summary>
 	/// Clean up.

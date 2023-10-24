@@ -32,7 +32,7 @@ protected:
 	/// <summary>
 	/// The size of the data, in bytes.
 	/// </summary>
-	unsigned int size;
+	size_t size;
 
 	/// <summary>
 	/// The optional extra data.
@@ -52,7 +52,7 @@ protected:
 	/// <param name="size">The size of the data, in bytes.</param>
 	/// <param name="resource_cache">The resource cache used to load 
 	/// this resource.</param>
-	ResourceHandle(Resource& resource, char* buffer, unsigned int size,
+	ResourceHandle(Resource& resource, char* buffer, size_t size,
 		ResourceCache* resource_cache);
 
 public:
@@ -71,7 +71,7 @@ public:
 	/// Return the size of this resource, in bytes.
 	/// </summary>
 	/// <returns>The size of the data.</returns>
-	unsigned int get_size();
+	size_t get_size();
 
 	/// <summary>
 	/// Return a const reference to the data. If this type of resource does

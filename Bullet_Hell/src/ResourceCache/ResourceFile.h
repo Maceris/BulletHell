@@ -50,7 +50,7 @@ public:
 	/// <returns>The name of the resource at the supplied index.
 	/// Empty if index is not in bounds.
 	/// </returns>
-	virtual std::string get_resource_name(int index) = 0;
+	virtual std::string get_resource_name(size_t index) = 0;
 
 	/// <summary>
 	/// Clean up.

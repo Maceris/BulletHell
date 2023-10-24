@@ -21,5 +21,5 @@ void SpotLight::set_cone_direction(const float x, const float y, const float z)
 
 void SpotLight::set_cut_off_angle(const float cut_off_degrees)
 {
-	cut_off = std::cos(degreesToRadians(cut_off_degrees));
+	cut_off = static_cast<float>(std::cos(degreesToRadians(cut_off_degrees)));
 }

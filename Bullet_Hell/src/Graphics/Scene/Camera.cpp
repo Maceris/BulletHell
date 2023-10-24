@@ -81,7 +81,6 @@ void Camera::recalculate()
 	rotation.y = fmodf(rotation.y, TWO_PI);
 	rotation.y = fmodf(rotation.y + TWO_PI, TWO_PI);
 
-
 	view_matrix = glm::mat4(1.0f);
 	view_matrix = glm::rotate(view_matrix, rotation.x, glm::vec3(1, 0, 0));
 	view_matrix = glm::rotate(view_matrix, rotation.y, glm::vec3(0, 1, 0));

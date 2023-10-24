@@ -2,11 +2,11 @@
 
 #include "Globals.h"
 
-#include "glad.h"
-#include "glfw3.h"
-
 #include <string>
 #include <vector>
+
+#include "glad.h"
+#include "glfw3.h"
 
 /// <summary>
 /// Utilities relating to OpenGL.

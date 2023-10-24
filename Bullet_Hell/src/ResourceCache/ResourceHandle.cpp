@@ -7,7 +7,7 @@ const std::string ResourceHandle::get_name()
 	return resource.name;
 }
 
-unsigned int ResourceHandle::get_size()
+size_t ResourceHandle::get_size()
 {
 	return size;
 }
@@ -33,7 +33,7 @@ void ResourceHandle::set_extra(std::shared_ptr<ResourceExtraData> extra)
 }
 
 ResourceHandle::ResourceHandle(Resource& resource, char* buffer,
-	unsigned int size, ResourceCache* resource_cache)
+	size_t size, ResourceCache* resource_cache)
 	: resource(resource)
 	, buffer(buffer)
 	, size(size)

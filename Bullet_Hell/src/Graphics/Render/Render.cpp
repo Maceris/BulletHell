@@ -268,7 +268,10 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 
 	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
 
-	command_buffers.animated_draw_count = mesh_count;
+	LOG_ASSERT(mesh_count <= UINT_MAX
+		&& "We have more animated models than fit in an unsigned int");
+
+	command_buffers.animated_draw_count = static_cast<unsigned int>(mesh_count);
 
 	glGenBuffers(1, &command_buffers.animated_command_buffer);
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
@@ -384,10 +387,12 @@ void Render::setup_static_command_buffer(const Scene& scene)
 			}
 		}
 	}
+	LOG_ASSERT(mesh_count <= UINT_MAX
+		&& "We have too more static models than fit in an unsigned int");
 
 	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
 
-	command_buffers.static_draw_count = mesh_count;
+	command_buffers.static_draw_count = static_cast<unsigned int>(mesh_count);
 
 	glGenBuffers(1, &command_buffers.static_command_buffer);
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
@@ -409,7 +414,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 void Render::update_model_buffer(
 	const std::vector<std::shared_ptr<Model>> models, GLuint buffer_id)
 {
-	int entity_count = 0;
+	size_t entity_count = 0;
 	for (const auto& model : models)
 	{
 		entity_count += model->entity_list.size();
@@ -428,8 +433,7 @@ void Render::update_model_buffer(
 			++entity_index;
 		}
 	}
-	size_t data_size_in_bytes =
-		static_cast<size_t>(entity_count) * 16 * sizeof(float);
+	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer_id);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes,

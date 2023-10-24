@@ -31,7 +31,7 @@ void RenderBuffers::cleanup()
 	}
 	buffers_populated = false;
 
-	glDeleteBuffers(vbo_list.size(), vbo_list.data());
+	glDeleteBuffers(static_cast<int>(vbo_list.size()), vbo_list.data());
 	vbo_list.clear();
 	glDeleteVertexArrays(1, &static_vao);
 	glDeleteVertexArrays(1, &animated_vao);
@@ -86,12 +86,12 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	glGenVertexArrays(1, &animated_vao);
 	glBindVertexArray(animated_vao);
 
-	int vertices_size = 0;
-	int offset = 0;
-	int mesh_binding_pose_offset = 0;
-	int binding_pose_offset = 0;
-	int mesh_weights_offset = 0;
-	int weights_offset = 0;
+	size_t vertices_size = 0;
+	size_t offset = 0;
+	size_t mesh_binding_pose_offset = 0;
+	size_t binding_pose_offset = 0;
+	size_t mesh_weights_offset = 0;
+	size_t weights_offset = 0;
 	for (auto& model : model_list)
 	{
 		EntityList& entities = model->entity_list;
@@ -106,17 +106,23 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 			for (auto& mesh_data : model->mesh_data_list)
 			{
 				vertices_size += mesh_data.vertices.size();
-				const int mesh_size_in_bytes = sizeof(MeshVertex)
+				const size_t mesh_size_in_bytes = sizeof(MeshVertex)
 					* mesh_data.vertices.size();
 
 				mesh_draw_data_list.emplace_back(mesh_size_in_bytes,
 					mesh_data.material->material_id, offset,
 					mesh_data.indices.size(), AnimMeshDrawData(
-						entity, binding_pose_offset, weights_offset));
+						entity, 
+						static_cast<int>(binding_pose_offset), 
+						static_cast<int>(weights_offset)
+					)
+				);
 
 				binding_pose_offset += mesh_size_in_bytes / 4;
 				const int group_size = 
-					ceil((float) mesh_size_in_bytes / (14 * 4));
+					static_cast<int>(ceil(
+						(float) mesh_size_in_bytes / (14 * 4)
+					));
 				weights_offset += group_size * 2 * 4;
 				offset = vertices_size;
 			}
@@ -260,8 +266,8 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	glGenVertexArrays(1, &static_vao);
 	glBindVertexArray(static_vao);
 
-	int vertices_size = 0;
-	int offset = 0;
+	size_t vertices_size = 0;
+	size_t offset = 0;
 
 	for (auto& model : model_list)
 	{
@@ -275,7 +281,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			for (MeshData mesh_data : model->mesh_data_list)
 			{
 				vertices_size += mesh_data.vertices.size();
-				const int mesh_size_in_bytes = sizeof(MeshVertex)
+				const size_t mesh_size_in_bytes = sizeof(MeshVertex)
 					* mesh_data.vertices.size();
 
 				mesh_draw_data_list.emplace_back(mesh_size_in_bytes,

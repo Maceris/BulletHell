@@ -1,21 +1,22 @@
 #include "MeshConverter.h"
 
-#include "FileUtils.h"
-#include "Logger.h"
-#include "Portability.h"
-#include "RawMeshData.h"
-
-#include "Animation.h"
-#include "Material.h"
-#include "MeshData.h"
-#include "Node.h"
-
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <regex>
 #include <vector>
+
+#include "FileUtils.h"
+#include "Logger.h"
+#include "Portability.h"
+
+#include "RawMeshData.h"
+
+#include "Animation.h"
+#include "Material.h"
+#include "MeshData.h"
+#include "Node.h"
 
 #include "assimp/cimport.h"
 #include "assimp/scene.h"

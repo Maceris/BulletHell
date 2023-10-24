@@ -34,7 +34,7 @@ namespace Timer
 	/// <returns>The number of microseconds between start and end.</returns>
 	long long last_time(const std::string& stage_name);
 
-	const std::vector<std::string> const& time_stages_list();
+	const std::vector<std::string>& time_stages_list();
 }
 
 #if DEBUG

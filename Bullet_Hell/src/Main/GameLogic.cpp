@@ -103,29 +103,31 @@ void GameLogic::process_input()
 {
 	Camera& camera = current_scene->camera;
 	const float move_speed_per_second = 5.0f;
+	const float move_amount = 
+		static_cast<float>(seconds_since_last_frame * move_speed_per_second);
 	if (window->is_key_pressed(GLFW_KEY_W))
 	{
-		camera.move_forward(seconds_since_last_frame * move_speed_per_second);
+		camera.move_forward(move_amount);
 	}
 	if (window->is_key_pressed(GLFW_KEY_S))
 	{
-		camera.move_backward(seconds_since_last_frame * move_speed_per_second);
+		camera.move_backward(move_amount);
 	}
 	if (window->is_key_pressed(GLFW_KEY_A))
 	{
-		camera.move_left(seconds_since_last_frame * move_speed_per_second);
+		camera.move_left(move_amount);
 	}
 	if (window->is_key_pressed(GLFW_KEY_D))
 	{
-		camera.move_right(seconds_since_last_frame * move_speed_per_second);
+		camera.move_right(move_amount);
 	}
 	if (window->is_key_pressed(GLFW_KEY_LEFT_SHIFT))
 	{
-		camera.move_down(seconds_since_last_frame * move_speed_per_second);
+		camera.move_down(move_amount);
 	}
 	if (window->is_key_pressed(GLFW_KEY_SPACE))
 	{
-		camera.move_up(seconds_since_last_frame * move_speed_per_second);
+		camera.move_up(move_amount);
 	}
 
 }

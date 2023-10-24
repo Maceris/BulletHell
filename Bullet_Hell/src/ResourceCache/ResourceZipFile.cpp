@@ -80,9 +80,8 @@ const size_t ResourceZipFile::get_resource_count()
 	return zip_file->GetEntriesCount();
 }
 
-std::string ResourceZipFile::get_resource_name(int index)
+std::string ResourceZipFile::get_resource_name(size_t index)
 {
-	
 	if (zip_file == nullptr || !zip_file)
 	{
 		LOG_ERROR("Resource file not valid!");
@@ -97,5 +96,5 @@ std::string ResourceZipFile::get_resource_name(int index)
 		return "";
 	}
 	
-	return zip_file->GetEntry(index)->GetFullName();
+	return zip_file->GetEntry(static_cast<int>(index))->GetFullName();
 }
