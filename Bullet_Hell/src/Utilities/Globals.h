@@ -1,6 +1,7 @@
 #pragma once
 
 #define WIN32_LEAN_AND_MEAN	
+#define GLM_FORCE_CTOR_INIT
 
 #ifdef _DEBUG
 #define DEBUG 1
