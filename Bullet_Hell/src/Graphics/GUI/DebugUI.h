@@ -19,6 +19,11 @@ public:
 	static void draw_window_debug();
 
 	/// <summary>
+	/// Draw a window for scene controls.
+	/// </summary>
+	static void draw_window_scene();
+
+	/// <summary>
 	/// Draw a window for profiling timer information.
 	/// </summary>
 	static void draw_window_timing();
@@ -32,6 +37,11 @@ private:
 	/// Whether we should show the debug window.
 	/// </summary>
 	static bool show_debug_window;
+
+	/// <summary>
+	/// Whether we should show the scene controls window.
+	/// </summary>
+	static bool show_scene_window;
 
 	/// <summary>
 	/// Whether we should show the window for profiling timers.

@@ -9,6 +9,7 @@
 
 #pragma region Variables
 bool DebugUI::show_debug_window = true;
+bool DebugUI::show_scene_window = false;
 bool DebugUI::show_timing_window = false;
 bool DebugUI::wireframe = false;
 #pragma endregion
@@ -22,6 +23,7 @@ void DebugUI::draw()
 		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::Checkbox("Debug", &DebugUI::show_debug_window);
+			ImGui::Checkbox("Scene controls", &DebugUI::show_scene_window);
 			ImGui::Checkbox("Timers", &DebugUI::show_timing_window);
 			ImGui::EndMenu();
 		}
@@ -44,6 +46,10 @@ void DebugUI::draw()
 	{
 		draw_window_debug();
 	}
+	if (DebugUI::show_scene_window)
+	{
+		draw_window_scene();
+	}
 	if (DebugUI::show_timing_window)
 	{
 		draw_window_timing();
@@ -52,22 +58,22 @@ void DebugUI::draw()
 
 void DebugUI::draw_window_debug()
 {
-	ImGui::SetNextWindowPos(ImVec2(10, 30), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
 
 	ImGui::Begin("Debug");
 	std::shared_ptr<Scene> scene = g_game_logic->current_scene;
 	
-	const glm::vec3& position = scene->camera.position;
+	const glm::vec3& camera_position = scene->camera.position;
 	ImGui::Text(std::format("Camera position: ({}, {}, {})", 
-		std::to_string(position.x),
-		std::to_string(position.y),
-		std::to_string(position.z)).c_str());
+		std::to_string(camera_position.x),
+		std::to_string(camera_position.y),
+		std::to_string(camera_position.z)).c_str());
 
-	const glm::vec2& rotation = scene->camera.rotation;
+	const glm::vec2& camera_rotation = scene->camera.rotation;
 	ImGui::Text(std::format("Camera rotation: ({}, {})", 
-		std::to_string(rotation.x),
-		std::to_string(rotation.y)).c_str());
+		std::to_string(camera_rotation.x),
+		std::to_string(camera_rotation.y)).c_str());
 
 	const int models_loaded = (int) scene->model_map.size();
 	ImGui::Text(std::format("Models loaded: {}", 
@@ -76,6 +82,83 @@ void DebugUI::draw_window_debug()
 	const long long fps = 1000000 / LAST_TIME("Last Frame");
 	ImGui::Text(std::format("FPS: {}", std::to_string(fps)).c_str());
 
+	const glm::vec3& player_position = scene->player->position;
+	ImGui::Text(std::format("Player position: ({}, {}, {})",
+		std::to_string(player_position.x),
+		std::to_string(player_position.y),
+		std::to_string(player_position.z)).c_str());
+
+	const glm::quat& player_rotation = scene->player->rotation;
+	ImGui::Text(std::format("Player rotation: ({}, {})",
+		std::to_string(player_rotation.x),
+		std::to_string(player_rotation.y)).c_str());
+
+	ImGui::End();
+}
+
+void DebugUI::draw_window_scene()
+{
+	ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+
+	ImGui::Begin("Scene Controls");
+
+	ImGui::Text("Controls WIP, just showing current state");
+
+	std::shared_ptr<Scene> scene = g_game_logic->current_scene;
+
+	if (ImGui::TreeNode("Ambient Light"))
+	{
+		const auto& light = scene->scene_lights.ambient_light;
+		ImGui::Text(std::format("Ambient light intensity {}", 
+			std::to_string(light.intensity))
+			.c_str()
+		);
+		ImGui::Text(std::format("Ambient light color r:{} g:{} b:{}",
+			std::to_string(light.color.r),
+			std::to_string(light.color.g),
+			std::to_string(light.color.b)).c_str()
+		);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Directional Light"))
+	{
+		const auto& light = scene->scene_lights.directional_light;
+		ImGui::Text(std::format("Directional light intensity {}",
+			std::to_string(light.intensity))
+			.c_str()
+		);
+		ImGui::Text(std::format("Directional light color r:{} g:{} b:{}",
+			std::to_string(light.color.r),
+			std::to_string(light.color.g),
+			std::to_string(light.color.b)).c_str()
+		);
+		ImGui::Text(std::format("Directional light angle x:{} y:{} z:{}",
+			std::to_string(light.direction.x),
+			std::to_string(light.direction.y),
+			std::to_string(light.direction.z)).c_str()
+		);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Fog"))
+	{
+		const auto& fog = scene->fog;
+		ImGui::Text(std::format("Fog enabled? {}",
+			fog.active ? "yes" : "no").c_str()
+		);
+		ImGui::Text(std::format("Fog color r:{} g:{} b:{}",
+			std::to_string(fog.color.r),
+			std::to_string(fog.color.g),
+			std::to_string(fog.color.b)).c_str()
+		);
+		ImGui::Text(std::format("Fog density {}",
+			std::to_string(fog.density)).c_str()
+		);
+		ImGui::TreePop();
+	}
+	
 	ImGui::End();
 }
 
