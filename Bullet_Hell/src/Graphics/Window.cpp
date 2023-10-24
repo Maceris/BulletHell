@@ -67,7 +67,7 @@ static void resize_callback(GLFWwindow* window, int width, int height)
 void Window::initialize()
 {
     glfwSetErrorCallback(error_callback);
-
+    
     if (!glfwInit())
     {
         exit(EXIT_FAILURE);
@@ -151,6 +151,15 @@ void Window::initialize()
     required_extensions.emplace_back("GL_ARB_vertex_shader");
 
     OpenGLUtil::assert_extensions_exist(required_extensions);
+}
+
+bool Window::is_key_pressed(int key_code)
+{
+    if (ImGui::GetIO().WantCaptureKeyboard)
+    {
+        return false;
+    }
+    return glfwGetKey(handle, key_code) == GLFW_PRESS;
 }
 
 bool Window::should_close()

@@ -17,6 +17,13 @@ public:
 	void initialize();
 
 	/// <summary>
+	/// Check if a key is pressed.
+	/// </summary>
+	/// <param name="key_code">The GLFW key code to look for.</param>
+	/// <returns>Whether the provided key is pressed.</returns>
+	bool is_key_pressed(int key_code);
+
+	/// <summary>
 	/// Render one frame.
 	/// </summary>
 	void render();
@@ -88,12 +95,4 @@ public:
 	/// The window handle.
 	/// </summary>
 	GLFWwindow* handle;
-
-private:
-	/// <summary>
-	/// A callback to register for when the window gets resized.
-	/// </summary>
-	/// <param name="width">The new width, in pixels, of the framebuffer.</param>
-	/// <param name="height">The new height, in pixels, of the framebuffer.</param>
-	void resized(int width, int height);
 };

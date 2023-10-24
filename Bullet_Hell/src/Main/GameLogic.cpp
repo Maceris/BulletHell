@@ -16,6 +16,8 @@ GameLogic::GameLogic()
 	, resource_cache{ nullptr }
 	, render{ nullptr }
 	, current_scene{ nullptr }
+	, last_frame{ std::chrono::steady_clock::now() }
+	, seconds_since_last_frame{ 0 }
 {
 	g_game_logic = this;
 }
@@ -97,6 +99,37 @@ void GameLogic::on_close()
 	window->terminate();
 }
 
+void GameLogic::process_input()
+{
+	Camera& camera = current_scene->camera;
+	const float move_speed_per_second = 5.0f;
+	if (window->is_key_pressed(GLFW_KEY_W))
+	{
+		camera.move_forward(seconds_since_last_frame * move_speed_per_second);
+	}
+	if (window->is_key_pressed(GLFW_KEY_S))
+	{
+		camera.move_backward(seconds_since_last_frame * move_speed_per_second);
+	}
+	if (window->is_key_pressed(GLFW_KEY_A))
+	{
+		camera.move_left(seconds_since_last_frame * move_speed_per_second);
+	}
+	if (window->is_key_pressed(GLFW_KEY_D))
+	{
+		camera.move_right(seconds_since_last_frame * move_speed_per_second);
+	}
+	if (window->is_key_pressed(GLFW_KEY_LEFT_SHIFT))
+	{
+		camera.move_down(seconds_since_last_frame * move_speed_per_second);
+	}
+	if (window->is_key_pressed(GLFW_KEY_SPACE))
+	{
+		camera.move_up(seconds_since_last_frame * move_speed_per_second);
+	}
+
+}
+
 void GameLogic::request_close()
 {
 	if (current_state == running || current_state == starting_up)
@@ -105,12 +138,23 @@ void GameLogic::request_close()
 	}
 }
 
+void GameLogic::calculate_delta_time()
+{
+	Instant current_frame = std::chrono::steady_clock::now();
+	long long elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+		current_frame - last_frame).count();
+	seconds_since_last_frame = elapsed / 1'000'000.0;
+	last_frame = current_frame;
+}
+
 void GameLogic::run_game()
 {
 	current_state = running;
 	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
 	while (current_state == running)
 	{
+		calculate_delta_time();
+		process_input();
 		render->render(*window, *current_scene);
 		window->render();
 	}

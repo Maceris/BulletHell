@@ -7,6 +7,7 @@
 #include "Render.h"
 #include "Window.h"
 
+#include <chrono>
 #include <memory>
 
 /// <summary>
@@ -32,6 +33,8 @@ enum GameState
 	quitting
 };
 
+using Instant = std::chrono::steady_clock::time_point;
+
 /// <summary>
 /// Handles the lifecycle for the game.
 /// </summary>
@@ -47,6 +50,14 @@ private:
 	/// The window we are showing.
 	/// </summary>
 	std::unique_ptr<Window> window;
+
+	void process_input();
+
+	Instant last_frame;
+
+	double seconds_since_last_frame;
+
+	void calculate_delta_time();
 
 public:
 	GameLogic();
