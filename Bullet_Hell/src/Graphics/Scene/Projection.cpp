@@ -15,6 +15,8 @@ void Projection::update_matrices(const unsigned int width,
 {
 	projection_matrix = glm::perspectiveLH_NO(FOV,
 		static_cast<float>(width) / height, Z_NEAR, Z_FAR);
+	projection_matrix[2][2] *= -1.0f;
+	projection_matrix[2][3] *= -1.0f;
 
 	inverse_projection_matrix = glm::inverse(projection_matrix);
 }

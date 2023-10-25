@@ -86,7 +86,7 @@ void Camera::recalculate()
 		glm::vec3(1.0f, 0.0f, 0.0f));
 	view_matrix = glm::rotate(view_matrix, rotation.y, 
 		glm::vec3(0.0f, 1.0f, 0.0f));
-	view_matrix = glm::translate(view_matrix, position);
+	view_matrix = glm::translate(view_matrix, -position);
 
 	inverse_view_matrix = glm::inverse(view_matrix);
 }

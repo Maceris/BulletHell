@@ -66,12 +66,12 @@ void CascadeShadowSlice::updateCascadeShadows(
 		glm::vec3 frustrum_corners[8] =
 		{
 			glm::vec3(-1.0f,  1.0f, -1.0f),
-			glm::vec3(1.0f,  1.0f, -1.0f),
-			glm::vec3(1.0f, -1.0f, -1.0f),
+			glm::vec3( 1.0f,  1.0f, -1.0f),
+			glm::vec3( 1.0f, -1.0f, -1.0f),
 			glm::vec3(-1.0f, -1.0f, -1.0f),
 			glm::vec3(-1.0f,  1.0f,  1.0f),
-			glm::vec3(1.0f,  1.0f,  1.0f),
-			glm::vec3(1.0f, -1.0f,  1.0f),
+			glm::vec3( 1.0f,  1.0f,  1.0f),
+			glm::vec3( 1.0f, -1.0f,  1.0f),
 			glm::vec3(-1.0f, -1.0f,  1.0f),
 		};
 
@@ -110,11 +110,11 @@ void CascadeShadowSlice::updateCascadeShadows(
 
 		glm::vec3 light_dir = glm::normalize(-light_direction);
 
-		glm::mat4 lightViewMatrix = glm::lookAtLH(
-			frustrum_center + light_dir * radius, frustrum_center,
+		glm::mat4 lightViewMatrix = glm::lookAtRH(
+			frustrum_center - (light_dir * radius), frustrum_center,
 			glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 lightOrthoMatrix = glm::orthoRH_NO(-radius, radius, -radius, 
-			radius, -radius, radius);
+		glm::mat4 lightOrthoMatrix = glm::orthoRH_ZO(-radius, radius, -radius, 
+			radius, 0.0f, 2 * radius);
 
 		// Store split distance and matrix in cascade
 		shadows[i].split_distance = (Z_NEAR + splitDist * clip_range) * -1.0f;

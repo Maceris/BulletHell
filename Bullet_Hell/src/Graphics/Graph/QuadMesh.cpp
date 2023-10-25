@@ -1,8 +1,8 @@
 #include "QuadMesh.h"
 
 QuadMesh::QuadMesh()
-	: vao(0)
-	, vbo_list{0}
+	: vao{ 0 }
+	, vbo_list{ 0 }
 {
 	const float positions[] =
 	{
