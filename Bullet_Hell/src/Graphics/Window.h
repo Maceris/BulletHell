@@ -82,13 +82,13 @@ public:
 		/// The desired height in pixels. If width and height are both set to
 		/// 0, we will make the window full screen.
 		/// </summary>
-		unsigned int height = 480;
+		unsigned int height = 0;
 
 		/// <summary>
 		/// The desired width in pixels. If width and height are both set to 0,
 		/// we will make the window full screen.
 		/// </summary>
-		unsigned int width = 640;
+		unsigned int width = 0;
 	} options;
 
 	/// <summary>
