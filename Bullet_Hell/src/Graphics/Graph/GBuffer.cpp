@@ -33,13 +33,13 @@ GBuffer::GBuffer(const unsigned int width, const unsigned int height)
 			texture_IDs[i], 0);
 	}
 
-	GLenum draw_buffers[G_BUFFER_TOTAL_TEXTURES];
-	for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES; ++i)
+	GLenum draw_buffers[G_BUFFER_TOTAL_TEXTURES - 1]{};
+	for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES - 1; ++i)
 	{
 		draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 	}
 
-	glDrawBuffers(G_BUFFER_TOTAL_TEXTURES, draw_buffers);
+	glDrawBuffers(G_BUFFER_TOTAL_TEXTURES - 1, draw_buffers);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

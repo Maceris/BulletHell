@@ -8,7 +8,7 @@
 /// The maximum number of textures, which are used for albedo, normals,
 /// specular, and depth, in that order.
 /// </summary>
-constexpr auto G_BUFFER_TOTAL_TEXTURES = 3;
+constexpr auto G_BUFFER_TOTAL_TEXTURES = 4;
 
 /// <summary>
 /// A buffer for the deferred shading geometry pass.
@@ -21,6 +21,11 @@ struct GBuffer
 	GLuint gBuffer_ID;
 
 	/// <summary>
+	/// The width of each texture.
+	/// </summary>
+	const unsigned int width;
+
+	/// <summary>
 	/// The height of each texture.
 	/// </summary>
 	const unsigned int height;
@@ -30,11 +35,6 @@ struct GBuffer
 	/// specular, and depth, in that order.
 	/// </summary>
 	GLuint texture_IDs[G_BUFFER_TOTAL_TEXTURES];
-
-	/// <summary>
-	/// The width of each texture.
-	/// </summary>
-	const unsigned int width;
 
 	/// <summary>
 	/// Create a gBuffer.
