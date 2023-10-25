@@ -53,7 +53,6 @@ bool GameLogic::initialize()
 	current_scene->add_model(player_model);
 	auto player_entity = std::make_shared<Entity>(player_model->id);
 	current_scene->add_entity(player_entity);
-	player_entity->scale = 0.01f;
 	player_entity->update_model_matrix();
 	current_scene->player = player_entity;
 
