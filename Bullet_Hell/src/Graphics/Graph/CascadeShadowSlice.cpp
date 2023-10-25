@@ -108,15 +108,13 @@ void CascadeShadowSlice::updateCascadeShadows(
 		}
 		radius = std::ceil(radius * 16.0f) / 16.0f;
 
-		glm::vec3 maxExtents = glm::vec3(radius);
-		glm::vec3 minExtents = -maxExtents;
+		glm::vec3 light_dir = glm::normalize(-light_direction);
 
-		glm::mat4 lightViewMatrix = glm::lookAt(
-			frustrum_center - light_direction * -minExtents.z, frustrum_center,
+		glm::mat4 lightViewMatrix = glm::lookAtLH(
+			frustrum_center + light_dir * radius, frustrum_center,
 			glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 lightOrthoMatrix = glm::ortho(
-			minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, 0.0f,
-			maxExtents.z - minExtents.z);
+		glm::mat4 lightOrthoMatrix = glm::orthoRH_NO(-radius, radius, -radius, 
+			radius, -radius, radius);
 
 		// Store split distance and matrix in cascade
 		shadows[i].split_distance = (Z_NEAR + splitDist * clip_range) * -1.0f;

@@ -55,6 +55,7 @@ bool GameLogic::initialize()
 	current_scene->add_entity(player_entity);
 	player_entity->scale = 0.01f;
 	player_entity->update_model_matrix();
+	current_scene->player = player_entity;
 
 	auto ground_model = load_model("models/terrain/terrain.model");
 	current_scene->add_model(ground_model);

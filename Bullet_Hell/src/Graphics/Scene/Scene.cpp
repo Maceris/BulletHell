@@ -9,6 +9,7 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, model_map{}
 	, scene_lights{}
 	, sky_box{}
+	, player{}
 {}
 
 void Scene::add_entity(std::shared_ptr<Entity> entity)

@@ -7,12 +7,12 @@
 /// <summary>
 /// The near clipping plane distance, in world units.
 /// </summary>
-extern const float Z_NEAR;
+constexpr float Z_NEAR = 0.01f;
 
 /// <summary>
 /// The far clipping plane distance, in world units.
 /// </summary>
-extern const float Z_FAR;
+constexpr float Z_FAR = 1000.0f;
 
 /// <summary>
 /// A symmetric perspective projection frustum transformation for a
@@ -51,5 +51,5 @@ private:
 	/// <summary>
 	/// The field of view in radians.
 	/// </summary>
-	float FOV = glm::radians(60.0f);
+	float FOV;
 };

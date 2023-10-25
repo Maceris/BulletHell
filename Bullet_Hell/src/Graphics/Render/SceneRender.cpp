@@ -88,11 +88,11 @@ struct DrawElement
     int material_index;
 };
 
-layout (std430, binding=1) buffer DrawElements {
+layout (std430, binding=0) buffer DrawElements {
     DrawElement draw_elements[];
 };
 
-layout (std430, binding=2) buffer Matrices {
+layout (std430, binding=1) buffer Matrices {
 	mat4 model_matrices[];
 };
 
