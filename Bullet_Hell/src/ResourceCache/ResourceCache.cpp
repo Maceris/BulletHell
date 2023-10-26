@@ -221,7 +221,7 @@ int ResourceCache::preload(const std::string pattern,
 	{
 		return 0;
 	}
-	size_t file_count = file->get_resource_count();
+	const size_t file_count = file->get_resource_count();
 	int loaded = 0;
 	bool cancel = false;
 	for (size_t i = 0; i < file_count; ++i)

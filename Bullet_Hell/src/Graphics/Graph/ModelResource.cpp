@@ -162,7 +162,17 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 		}
 	}
 
-	//TODO(ches) find, count, and note down the animations for the model
+	std::string model_name = file_name;
+	auto dot = model_name.find_last_of("\\.");
+	const size_t extension_size = model_name.size() - dot;
+	std::string prefix = model_name.erase(dot + 1, extension_size - 1);
+	std::string animation_filter =  prefix + "*.animation";
+	extra_data->model->animation_list = 
+		g_game_logic->resource_cache->match(animation_filter);
+
+	LOG_INFO(file_name + " had "
+		+ std::to_string(extra_data->model->animation_list.size())
+		+ " animations");
 	
 	return true;
 }
