@@ -193,6 +193,7 @@ void Window::initialize()
 #endif // DEBUG
 #endif
 
+#if 0
     std::vector<std::string> required_extensions;
     required_extensions.emplace_back("GL_ARB_compute_shader");
     required_extensions.emplace_back("GL_ARB_compute_variable_group_size");
@@ -206,6 +207,7 @@ void Window::initialize()
     required_extensions.emplace_back("GL_ARB_vertex_shader");
 
     OpenGLUtil::assert_extensions_exist(required_extensions);
+#endif
 }
 
 bool Window::is_key_pressed(int key_code)
