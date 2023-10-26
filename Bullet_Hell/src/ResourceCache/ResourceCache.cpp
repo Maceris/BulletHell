@@ -71,7 +71,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 	
 	size_t raw_size = file->get_raw_resource_size(*resource);
 
-	if (raw_size < 0)
+	if (raw_size == 0)
 	{
 		LOG_WARNING("Resource " + resource->name + " not found");
 

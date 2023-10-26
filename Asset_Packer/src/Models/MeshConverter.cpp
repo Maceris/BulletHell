@@ -446,6 +446,9 @@ void output_animation(std::shared_ptr<Animation> animation,
 		++fallback_id;
 	}
 
+	std::transform(formatted_name.begin(), formatted_name.end(),
+		formatted_name.begin(), (int (*)(int)) std::tolower);
+
 	const std::string file_name = model_path.string() + '/' + model_name
 		+ '.' + formatted_name + ANIMATION_OUTPUT_EXTENSION;
 	std::ofstream out(file_name, std::ios::out | std::ios::binary
@@ -765,7 +768,6 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 	{
 		const aiAnimation* aiAnimation = aiAnimations[i];
 		const unsigned int max_frames = calc_animation_max_frames(aiAnimation);
-		std::vector<AnimatedFrame> frames;
 		std::string name;
 		
 		if (aiAnimation->mName.length <= 0)
@@ -777,19 +779,24 @@ std::vector<std::shared_ptr<Animation>> process_animations(
 			name = std::string(aiAnimation->mName.C_Str());
 		}
 
+		std::shared_ptr<Animation> animation =
+			std::make_shared<Animation>(name, aiAnimation->mDuration);
+		animations.push_back(animation);
+
 		for (unsigned int j = 0; j < max_frames; ++j)
 		{
-			AnimatedFrame animatedFrame(bone_count);
+			AnimatedFrame animatedFrame;
+
+			for (int i = 0; i < bone_count; ++i)
+			{
+				animatedFrame.bone_matrices.push_back(glm::mat4(1.0f));
+			}
 
 			build_frame_matrices(aiAnimation, bones, animatedFrame, j,
 				root_node, root_node->node_transformation, 
 				global_inverse_transform);
-			frames.push_back(animatedFrame);
+			animation->frames.push_back(animatedFrame);
 		}
-
-		std::shared_ptr<Animation> animation = 
-			std::make_shared<Animation>(name, aiAnimation->mDuration, frames);
-		animations.push_back(animation);
 	}
 
 	return animations;

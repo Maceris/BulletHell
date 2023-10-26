@@ -161,6 +161,8 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 			}
 		}
 	}
+
+	//TODO(ches) find, count, and note down the animations for the model
 	
 	return true;
 }

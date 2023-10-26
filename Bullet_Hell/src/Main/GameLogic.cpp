@@ -1,6 +1,7 @@
 #include "GameLogic.h"
 
 #include "Logger.h"
+#include "AnimationResource.h"
 #include "MaterialResource.h"
 #include "ModelResource.h"
 #include "ResourceZipFile.h"
@@ -42,6 +43,7 @@ bool GameLogic::initialize()
 	resource_cache->register_loader(std::make_shared<TextureLoader>());
 	resource_cache->register_loader(std::make_shared<ModelLoader>());
 	resource_cache->register_loader(std::make_shared<MaterialLoader>());
+	resource_cache->register_loader(std::make_shared<AnimationLoader>());
 
 	window = std::unique_ptr<Window>(ALLOC Window());
 	window->initialize();
@@ -56,6 +58,8 @@ bool GameLogic::initialize()
 	auto player_entity = std::make_shared<Entity>(player_model->id);
 	current_scene->add_entity(player_entity);
 	player_entity->update_model_matrix();
+	auto idle = load_animation("models/player/human_male.human_maleIK_human_male_idle.animation");
+	player_entity->animation_data.set_current_animation(idle);
 	current_scene->player = player_entity;
 
 	auto ground_model = load_model("models/terrain/terrain.model");
@@ -170,6 +174,7 @@ void GameLogic::run_game()
 	{
 		calculate_delta_time();
 		process_input();
+		current_scene->player->animation_data.next_frame();
 		render->render(*window, *current_scene);
 		window->render();
 	}

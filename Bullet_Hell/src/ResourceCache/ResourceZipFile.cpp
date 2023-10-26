@@ -38,9 +38,9 @@ size_t ResourceZipFile::get_raw_resource_size(const Resource& resource)
 	std::shared_ptr<ZipArchiveEntry> entry = zip_file->GetEntry(resource.name);
 	if (!entry)
 	{
-		LOG_WARNING("Can not find the entry " + resource.name
+		LOG_ERROR("Can not find the entry " + resource.name
 			+ " in the resource file in order to determine size");
-		return -1;
+		return 0;
 	}
 
 	return entry->GetSize();

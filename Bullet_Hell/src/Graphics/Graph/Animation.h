@@ -33,20 +33,9 @@ struct AnimatedFrame
 	/// </summary>
 	unsigned int offset;
 
-	/// <summary>
-	/// Create a new animated frame, given the transformation matrices.
-	/// </summary>
-	/// <param name="bone_matrices_count">The number of bone matrices that
-	/// this frame involves.
-	/// </param>
-	AnimatedFrame(const unsigned int bone_matrices_count)
+	AnimatedFrame()
 		: offset(0)
-	{
-		for (unsigned int i = 0; i < bone_matrices_count; ++i)
-		{
-			bone_matrices.push_back(glm::mat4{ 1 });
-		}
-	}
+	{}
 
 	AnimatedFrame(const AnimatedFrame&) = default;
 	AnimatedFrame& operator=(const AnimatedFrame&) = default;
@@ -88,7 +77,7 @@ struct Animation
 	/// <summary>
 	/// The frames that make up the animation.
 	/// </summary>
-	const std::vector<AnimatedFrame> frames;
+	std::vector<AnimatedFrame> frames;
 
 	/// <summary>
 	/// Create an animation.
@@ -96,12 +85,10 @@ struct Animation
 	/// <param name="index">The name of the animation.</param>
 	/// <param name="duration">The length of the animation, in ticks.
 	/// </param>
-	/// <param name="frames">The frames that make up the animation.</param>
-	Animation(const std::string name, const double duration,
-		const std::vector<AnimatedFrame>& frames)
-		: name(name)
-		, duration(duration)
-		, frames(frames)
+	Animation(const std::string name, const double duration)
+		: name{ name }
+		, duration{ duration }
+		, frames{}
 	{}
 
 	Animation(const Animation&) = default;
