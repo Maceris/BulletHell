@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Globals.h"
+
+#include "MouseInput.h"
+
 #include <memory>
 
 #include "glad.h"
@@ -56,6 +60,11 @@ public:
 	/// The height of the window in pixels.
 	/// </summary>
 	unsigned int height;
+
+	/// <summary>
+	/// Mouse input information for the window.
+	/// </summary>
+	MouseInput mouse_input;
 
 	/// <summary>
 	/// Used to configure the window before setting it up.

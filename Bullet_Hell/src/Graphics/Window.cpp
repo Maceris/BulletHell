@@ -126,6 +126,61 @@ void Window::initialize()
     glfwSetKeyCallback(handle, key_callback);
     glfwSetFramebufferSizeCallback(handle, resize_callback);
 
+    glfwSetCursorPosCallback(handle, 
+        [](GLFWwindow* window, double xpos, double ypos)
+        {
+            auto& pos = g_game_logic->window->mouse_input.current_position;
+            pos.x = xpos;
+            pos.y = ypos;
+        }
+    );
+    glfwSetCursorEnterCallback(handle, 
+        [](GLFWwindow* window, int entered)
+        {
+            g_game_logic->window->mouse_input.in_window = entered;
+        }
+    );
+    glfwSetMouseButtonCallback(handle,
+        [](GLFWwindow* window, int button, int action, int mods)
+        {
+            auto& input = g_game_logic->window->mouse_input;
+            if (button == GLFW_MOUSE_BUTTON_1)
+            {
+                switch (action)
+                {
+                case GLFW_PRESS:
+                    input.left_button_pressed = true;
+                    break;
+                case GLFW_RELEASE:
+                    input.left_button_pressed = false;
+                    break;
+                case GLFW_REPEAT:
+                defaut:
+                    break;
+                }
+            }
+            if (button == GLFW_MOUSE_BUTTON_2)
+            {
+                switch (action)
+                {
+                case GLFW_PRESS:
+                    input.right_button_pressed = true;
+                    glfwSetInputMode(window, GLFW_CURSOR, 
+                        GLFW_CURSOR_DISABLED);
+                    break;
+                case GLFW_RELEASE:
+                    input.right_button_pressed = false;
+                    glfwSetInputMode(window, GLFW_CURSOR,
+                        GLFW_CURSOR_NORMAL);
+                    break;
+                case GLFW_REPEAT:
+                default:
+                    break;
+                }
+            }
+        }
+    );
+
     glfwMakeContextCurrent(handle);
     gladLoadGL();
     glfwSwapInterval(1);

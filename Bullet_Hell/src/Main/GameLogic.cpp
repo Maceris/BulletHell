@@ -9,6 +9,8 @@
 
 #include <filesystem>
 
+#include "imgui.h"
+
 GameLogic* g_game_logic = nullptr;
 
 GameLogic::GameLogic()
@@ -101,8 +103,10 @@ void GameLogic::on_close()
 
 void GameLogic::process_input()
 {
+	window->mouse_input.handle_input();
 	Camera& camera = current_scene->camera;
 	const float move_speed_per_second = 5.0f;
+	const float mouse_sensitivity = 0.02f;
 	const float move_amount = 
 		static_cast<float>(seconds_since_last_frame * move_speed_per_second);
 	if (window->is_key_pressed(GLFW_KEY_W))
@@ -130,6 +134,15 @@ void GameLogic::process_input()
 		camera.move_up(move_amount);
 	}
 
+	if (window->mouse_input.right_button_pressed 
+		&& !ImGui::GetIO().WantCaptureMouse)
+	{
+		const glm::vec2& displace = window->mouse_input.displacement;
+		camera.add_rotation(
+			displace.x * mouse_sensitivity, 
+			displace.y * mouse_sensitivity
+		);
+	}
 }
 
 void GameLogic::request_close()

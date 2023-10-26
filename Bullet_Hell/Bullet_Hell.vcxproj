@@ -175,6 +175,7 @@
     <ClCompile Include="src\Graphics\Graph\UniformsMap.cpp" />
     <ClCompile Include="src\Graphics\GUI\DebugUI.cpp" />
     <ClCompile Include="src\Graphics\GUI\UI.cpp" />
+    <ClCompile Include="src\Graphics\MouseInput.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="src\Graphics\Graph\UniformsMap.h" />
     <ClInclude Include="src\Graphics\GUI\DebugUI.h" />
     <ClInclude Include="src\Graphics\GUI\UI.h" />
+    <ClInclude Include="src\Graphics\MouseInput.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
     <ClInclude Include="src\Graphics\Render\CommandBuffers.h" />
     <ClInclude Include="src\Graphics\Render\FilterRender.h" />

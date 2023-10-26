@@ -46,11 +46,6 @@ private:
 	/// </summary>
 	GameState current_state;
 
-	/// <summary>
-	/// The window we are showing.
-	/// </summary>
-	std::unique_ptr<Window> window;
-
 	void process_input();
 
 	Instant last_frame;
@@ -73,6 +68,11 @@ public:
 	/// Settings for the game.
 	/// </summary>
 	GameOptions options;
+
+	/// <summary>
+	/// The window we are showing.
+	/// </summary>
+	std::unique_ptr<Window> window;
 	
 	/// <summary>
 	/// Set up data before anything loads.
