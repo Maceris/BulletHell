@@ -68,6 +68,7 @@ void SkyBoxRender::render(const Scene& scene)
     uniforms_map->set_uniform("projection_matrix",
         scene.projection.projection_matrix);
     glm::mat4 view_matrix = scene.camera.view_matrix;
+    //NOTE(ches) directly set transform to 0
     view_matrix[3][0] = 0;
     view_matrix[3][1] = 0;
     view_matrix[3][2] = 0;
