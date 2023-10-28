@@ -68,17 +68,11 @@ struct Bone
 	int bone_ID;
 	std::string bone_name;
 	glm::mat4 offset_matrix;
-	Bone() = default;
 	Bone(const int id, const std::string bone_name, 
 		const glm::mat4& offset_matrix)
-		: bone_ID(id)
-		, bone_name(bone_name)
-		, offset_matrix(offset_matrix)
-	{}
-	Bone(const int id, const std::string bone_name, glm::mat4&& offset_matrix)
-		: bone_ID(id)
-		, bone_name(bone_name)
-		, offset_matrix(std::move(offset_matrix))
+		: bone_ID{ id }
+		, bone_name{ bone_name }
+		, offset_matrix{ offset_matrix }
 	{}
 	Bone(const Bone&) = default;
 	Bone& operator=(const Bone&) = default;
@@ -547,10 +541,10 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 		LOG_ASSERT(mesh->positions.size() / 3 
 			== mesh->texture_coordinates.size() / 2);
 
-		for (int row = 0; row < vertex_count; ++row)
+		for (size_t row = 0; row < vertex_count; ++row)
 		{
-			const int start_pos = row * 3;
-			const int start_text_coord = row * 2;
+			const size_t start_pos = row * 3;
+			const size_t start_text_coord = row * 2;
 			write_uint32(mesh->positions[start_pos], out);
 			write_uint32(mesh->positions[start_pos + 1], out);
 			write_uint32(mesh->positions[start_pos + 2], out);
@@ -695,39 +689,33 @@ glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
 	const unsigned int scaling_count = node_animation->mNumScalingKeys;
 	const unsigned int rotation_count = node_animation->mNumRotationKeys;
 
-	// Start with identity, then transform, rotate, and scale it in that order
-	glm::mat4 node_transform = glm::mat4(1);
-	if (position_count > 0)
+	
+	glm::mat4 node_transform = glm::mat4{ 1.0f };
+
+	if (scaling_count)
 	{
-		aiVectorKey key = position_keys[std::min(position_count - 1, frame)];
+		aiVectorKey key = scaling_keys[std::min(scaling_count - 1, frame)];
 		aiVector3D vector = key.mValue;
-		glm::mat4 translation = glm::mat4(
-			1, 0, 0, vector.x,
-			0, 1, 0, vector.y,
-			0, 0, 1, vector.z,
-			0, 0, 0, 1
-		);
-		node_transform *= translation;
+		glm::vec3 offset(vector.x, vector.y, vector.z);
+
+		node_transform = glm::scale(node_transform, offset);
 	}
 
 	if (rotation_count > 0)
 	{
 		aiQuatKey key = rotation_keys[std::min(rotation_count - 1, frame)];
 		glm::quat quat(key.mValue.w, key.mValue.x, key.mValue.y, key.mValue.z);
+
 		node_transform *= glm::toMat4(quat);
 	}
-	
-	if (scaling_count)
+
+	if (position_count > 0)
 	{
-		aiVectorKey key = scaling_keys[std::min(scaling_count - 1, frame)];
+		aiVectorKey key = position_keys[std::min(position_count - 1, frame)];
 		aiVector3D vector = key.mValue;
-		glm::mat4 scale = glm::mat4(
-			vector.x, 0,        0,        0,
-			0,        vector.y, 0,        0,
-			0,        0,        vector.z, 0,
-			0,        0,        0,        1
-		);
-		node_transform *= scale;
+		glm::vec3 offset(vector.x, vector.y, vector.z);
+
+		node_transform = glm::translate(node_transform, offset);
 	}
 
 	return node_transform;
@@ -1005,10 +993,10 @@ void process_texture_coordinates(const aiMesh* mesh,
 constexpr glm::mat4 to_matrix(const aiMatrix4x4& matrix)
 {
 	return glm::mat4(
-		matrix.a1, matrix.a2, matrix.a3, matrix.a4,
-		matrix.b1, matrix.b2, matrix.b3, matrix.b4,
-		matrix.c1, matrix.c2, matrix.c3, matrix.c4,
-		matrix.d1, matrix.d2, matrix.d3, matrix.d4
+		matrix.a1, matrix.b1, matrix.c1, matrix.d1,
+		matrix.a2, matrix.b2, matrix.c2, matrix.d2,
+		matrix.a3, matrix.b3, matrix.c3, matrix.d3,
+		matrix.a4, matrix.b4, matrix.c4, matrix.d4
 	);
 }
 

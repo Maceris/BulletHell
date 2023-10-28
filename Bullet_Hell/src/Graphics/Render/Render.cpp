@@ -219,8 +219,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 			++entity_index;
 		}
 	}
-	size_t data_size_in_bytes =
-		static_cast<size_t>(entity_count) * 16 * sizeof(float);
+	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
 
 	glGenBuffers(1, &command_buffers.animated_model_matrices_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
@@ -246,7 +245,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		{
 			// count
 			command_buffer[base_instance * COMMAND_SIZE] = 
-				mesh_draw_data.vertices;
+				mesh_draw_data.indices;
 			// instance count
 			command_buffer[base_instance * COMMAND_SIZE + 1] = 1;
 			command_buffer[base_instance * COMMAND_SIZE + 2] = first_index;
@@ -254,6 +253,8 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 			command_buffer[base_instance * COMMAND_SIZE + 3] = 
 				mesh_draw_data.offset;
 			command_buffer[base_instance * COMMAND_SIZE + 4] = base_instance;
+
+			first_index += mesh_draw_data.indices;
 			++base_instance;
 
 			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
@@ -363,7 +364,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		{
 			// count
 			command_buffer[base_instance * COMMAND_SIZE] =
-				mesh_draw_data.vertices;
+				mesh_draw_data.indices;
 			command_buffer[base_instance * COMMAND_SIZE + 1] = entity_count;
 			command_buffer[base_instance * COMMAND_SIZE + 2] = first_index;
 			// base vertex
@@ -371,7 +372,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 				mesh_draw_data.offset;
 			command_buffer[base_instance * COMMAND_SIZE + 4] = base_instance;
 
-			first_index += mesh_draw_data.vertices;
+			first_index += mesh_draw_data.indices;
 			base_instance += entity_count;
 
 			const MaterialID material_index = mesh_draw_data.material;

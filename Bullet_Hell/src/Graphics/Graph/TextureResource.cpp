@@ -38,7 +38,7 @@ bool TextureLoader::parse_texture(std::shared_ptr<TextureExtraData> extra_data,
 	uint32_t height = read_uint32(stream);
 
 	unsigned char* image_data = nullptr;
-	read_data_array(stream, image_data, &size);
+	read_data_array(stream, &image_data, &size);
 
 	if (size <= 0)
 	{

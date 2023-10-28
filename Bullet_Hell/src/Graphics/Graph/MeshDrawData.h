@@ -63,7 +63,7 @@ struct MeshDrawData
 	/// <summary>
 	/// The number of indices.
 	/// </summary>
-	const int vertices;
+	const int indices;
 
 	/// <summary>
 	/// Whether this contains animated mesh draw data. If false, the animated
@@ -83,9 +83,9 @@ struct MeshDrawData
 	/// <param name="material">The material ID that the mesh is associated
 	/// with.</param>
 	/// <param name="offset">The offset to the base vertex.</param>
-	/// <param name="vertices">The number of indices.</param>
+	/// <param name="indices">The number of indices.</param>
 	MeshDrawData(const int size_in_bytes, const MaterialID material,
-		const int offset, const int vertices);
+		const int offset, const int indices);
 
 	/// <summary>
 	/// Set up mesh draw data for a mesh that does have animation draw data.
@@ -94,11 +94,11 @@ struct MeshDrawData
 	/// <param name="material">The material ID that the mesh is associated
 	/// with.</param>
 	/// <param name="offset">The offset to the base vertex.</param>
-	/// <param name="vertices">The number of indices.</param>
+	/// <param name="indices">The number of indices.</param>
 	/// <param name="animated_mesh_draw_data">The animation mesh draw data.
 	/// </param>
 	MeshDrawData(const int size_in_bytes, const MaterialID material,
-		const int offset, const int vertices, 
+		const int offset, const int indices, 
 		const AnimMeshDrawData& animated_mesh_draw_data);
 
 	MeshDrawData(const MeshDrawData&) = default;

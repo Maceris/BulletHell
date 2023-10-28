@@ -34,11 +34,6 @@ struct Model
 	std::vector<std::string> animation_list;
 
 	/// <summary>
-	/// The current animation, if this is animated and there is one playing.
-	/// </summary>
-	std::shared_ptr<Animation> current_animation;
-
-	/// <summary>
 	/// A list of entities that use this model.
 	/// </summary>
 	EntityList entity_list;

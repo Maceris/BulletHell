@@ -2,7 +2,9 @@
 
 #include <cmath>
 #include <memory>
+#include <set>
 
+#include "AnimationResource.h"
 #include "Logger.h"
 
 #include "gtc/type_ptr.hpp"
@@ -118,12 +120,9 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 					)
 				);
 
-				binding_pose_offset += mesh_size_in_bytes / 4;
-				const int group_size = 
-					static_cast<int>(ceil(
-						(float) mesh_size_in_bytes / (14 * 4)
-					));
-				weights_offset += group_size * 2 * 4;
+				binding_pose_offset += mesh_size_in_bytes / sizeof(float);
+				const size_t group_size = mesh_data.vertices.size();
+				weights_offset += group_size * 2 * sizeof(float);
 				offset = vertices_size;
 			}
 		}
@@ -138,7 +137,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	GLuint index_vbo = 0;
 	glGenBuffers(1, &index_vbo);
 	vbo_list.push_back(index_vbo);
-	std::vector<float> indices_buffer;
+	std::vector<uint32_t> indices_buffer;
 
 	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
 		&& "This system has different sizes for unsigned int and float, which is currently unsupported.");
@@ -152,12 +151,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 			for (auto& mesh_data : mesh_data_list)
 			{
 				mesh_data.append_vertices_to_buffer(meshes_buffer);
-
-				const float* data_start =
-					reinterpret_cast<float*>(mesh_data.indices.data());
-				const float* data_end = data_start + mesh_data.indices.size();
-				indices_buffer.insert(indices_buffer.end(), data_start,
-					data_end);
+				mesh_data.append_indices_to_buffer(indices_buffer);
 			}
 		}
 	}
@@ -169,7 +163,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-		indices_buffer.size() * sizeof(float), indices_buffer.data(),
+		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -224,17 +218,35 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 	const int matrix_size = 4 * 4;
 	std::vector<float> data_buffer;
 
+	int current_offset = 0;
 	for (auto& model : models)
 	{
-		auto& animation = model->current_animation;
-		if (animation)
+		std::set<std::shared_ptr<Animation>> animation_list;
+
+		for (auto& entity : model->entity_list)
+		{
+			auto& current_animation = entity->animation_data.current_animation;
+			if (current_animation)
+			{
+				animation_list.insert(current_animation);
+			}
+		}
+
+		for (auto& animation: animation_list)
 		{
 			for (auto& frame : animation->frames)
 			{
+				frame.offset = current_offset;
 				for (auto& bone_matrix : frame.bone_matrices)
 				{
-					data_buffer.insert(data_buffer.end(), matrix_size,
-						*glm::value_ptr(bone_matrix));
+					for (int col = 0; col < 4; ++col)
+					{
+						for (int row = 0; row < 4; ++row)
+						{
+							data_buffer.push_back(bone_matrix[col][row]);
+						}
+					}
+					++current_offset;
 				}
 			}
 		}
@@ -301,7 +313,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	GLuint index_vbo = 0;
 	glGenBuffers(1, &index_vbo);
 	vbo_list.push_back(index_vbo);
-	std::vector<float> indices_buffer;
+	std::vector<uint32_t> indices_buffer;
 
 	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
 	&& "This system has different sizes for unsigned int and float, which is currently unsupported.");
@@ -315,12 +327,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			for (auto& mesh_data : mesh_data_list)
 			{
 				mesh_data.append_vertices_to_buffer(meshes_buffer);
-
-				const float* data_start =
-					reinterpret_cast<float*>(mesh_data.indices.data());
-				const float* data_end = data_start + mesh_data.indices.size();
-				indices_buffer.insert(indices_buffer.end(), data_start, 
-					data_end);
+				mesh_data.append_indices_to_buffer(indices_buffer);
 			}
 		}
 	}
@@ -332,7 +339,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
-		indices_buffer.size() * sizeof(float), indices_buffer.data(),
+		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

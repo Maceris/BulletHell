@@ -30,5 +30,5 @@ void AnimationData::set_current_animation(
 	std::shared_ptr<Animation> animation)
 {
 	LOG_ASSERT(animation != nullptr);
-	current_animation = std::move(animation);
+	current_animation = animation;
 }
