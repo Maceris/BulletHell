@@ -4,11 +4,6 @@
 
 namespace fs = std::filesystem;
 
-/// <summary>
-/// The maximum number of bones that are allowed in a model.
-/// </summary>
-constexpr auto MAX_BONES = 256;
-
 namespace MeshConverter
 {
 	/// <summary>

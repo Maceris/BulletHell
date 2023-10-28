@@ -1,23 +1,51 @@
 #pragma once
 
+#include <algorithm>
 #include <filesystem>
 
 namespace fs = std::filesystem;
 
 /// <summary>
-/// The folder name where assets are stored. 
+/// Check if an array contains an element.
 /// </summary>
-extern const std::string ASSET_FOLDER;
+/// <typeparam name="T">The type of the array.</typeparam>
+/// <typeparam name="S">The size of the array.</typeparam>
+/// <param name="list">The list to look through.</param>
+/// <param name="element">The element to search for.</param>
+/// <returns>Whether the container includes the given element.</returns>
+template<typename T, std::size_t S>
+bool constexpr contains(const T (& list)[S], 
+	const T& element)
+{
+	return std::find(std::begin(list), std::end(list), element) 
+		!= std::end(list);
+};
 
 /// <summary>
-/// The folder where assets are gathered during processing.
+/// Change the file extension to the specified one. Returns a new string
+/// instead of modifying the passed one in place.
 /// </summary>
-extern const std::string TEMP_FOLDER;
-
-/// <summary>
-/// The zip file where we will output everything.
-/// </summary>
-extern const std::string OUTPUT_FILE;
+/// <param name="file_name">The file name, including extension.</param>
+/// <param name="new_extension">The new file extension we want to have.</param>
+/// <returns>The new file name.</returns>
+std::string constexpr swap_extension(const std::string& file_name,
+	const std::string& new_extension)
+{
+	std::string result(file_name);
+	if (result.empty())
+	{
+		return result;
+	}
+	const auto dot = result.find_last_of("\\.");
+	if (dot == std::string::npos)
+	{
+		return result;
+	}
+	const size_t extension_size = result.size() - dot;
+	result.erase(dot, extension_size);
+	result += new_extension;
+	return result;
+}
 
 /// <summary>
 /// Utilities for interacting with the file system.

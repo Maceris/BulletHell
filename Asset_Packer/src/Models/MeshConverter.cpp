@@ -9,6 +9,7 @@
 
 #include "FileUtils.h"
 #include "Logger.h"
+#include "PackerConstants.h"
 #include "Portability.h"
 
 #include "RawMeshData.h"
@@ -58,10 +59,6 @@ const unsigned int DEFAULT_POST_PROCESS_FLAGS =
 	   Finds and removes redundant/unreferenced materials.
 	*/
 	| aiProcess_RemoveRedundantMaterials;
-
-const std::string ANIMATION_OUTPUT_EXTENSION = ".animation";
-const std::string MATERIAL_OUTPUT_EXTENSION = ".material";
-const std::string MODEL_OUTPUT_EXTENSION = ".model";
 
 #pragma endregion
 
@@ -938,6 +935,10 @@ std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 		&aiDiffusePath);
 	std::string diffusePath(aiDiffusePath.C_Str());
 
+	std::transform(diffusePath.begin(), diffusePath.end(),
+		diffusePath.begin(), (int (*)(int)) std::tolower);
+	diffusePath = swap_extension(diffusePath, IMAGE_OUTPUT_EXTENSION);
+
 	if (!diffusePath.empty())
 	{
 		material->texture_name = diffusePath;
@@ -947,6 +948,10 @@ std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 	aiGetMaterialTexture(assimp_material, aiTextureType_DIFFUSE, 0,
 		&aiNormalPath);
 	std::string normalPath(aiNormalPath.C_Str());
+
+	std::transform(normalPath.begin(), normalPath.end(),
+		normalPath.begin(), (int (*)(int)) std::tolower);
+	normalPath = swap_extension(normalPath, IMAGE_OUTPUT_EXTENSION);
 
 	if (!normalPath.empty())
 	{

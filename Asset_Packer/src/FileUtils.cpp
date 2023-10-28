@@ -7,10 +7,7 @@
 #include "Logger.h"
 #include "ImageConverter.h"
 #include "MeshConverter.h"
-
-const std::string ASSET_FOLDER = "Assets";
-const std::string TEMP_FOLDER = "Asset_Temp";
-const std::string OUTPUT_FILE = "dist/assets.zip";
+#include "PackerConstants.h"
 
 int FileUtils::process_all_files()
 {
@@ -151,15 +148,7 @@ int FileUtils::process_file(const fs::directory_entry& file)
     {
         MeshConverter::convert_model(file);
     }
-    else if (".jpg" == extension 
-        || ".png" == extension
-        || ".tga" == extension
-        || ".bmp" == extension
-        || ".psd" == extension
-        || ".gif" == extension
-        || ".hdr" == extension
-        || ".pic" == extension
-        )
+    else if (contains(IMAGE_FORMATS, extension))
     {
         ImageConverter::convert_image(file);
     }

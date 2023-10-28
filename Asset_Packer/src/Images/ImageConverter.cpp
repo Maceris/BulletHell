@@ -2,12 +2,11 @@
 
 #include "FileUtils.h"
 #include "Logger.h"
+#include "PackerConstants.h"
 #include "Portability.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
-const std::string IMAGE_OUTPUT_EXTENSION = ".image";
 
 void ImageConverter::convert_image(const fs::directory_entry& source)
 {

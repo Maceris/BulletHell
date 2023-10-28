@@ -150,6 +150,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Models\MeshConverter.cpp" />
     <ClCompile Include="src\Models\Node.cpp" />
+    <ClCompile Include="src\PackerConstants.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\3rdParty\glm\glm\common.hpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="src\Models\MeshConverter.h" />
     <ClInclude Include="src\Models\Node.h" />
     <ClInclude Include="src\Models\RawMeshData.h" />
+    <ClInclude Include="src\PackerConstants.h" />
     <ClInclude Include="src\Portability.h" />
   </ItemGroup>
   <ItemGroup>
