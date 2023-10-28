@@ -147,7 +147,7 @@ int FileUtils::process_file(const fs::directory_entry& file)
     std::transform(extension.begin(), extension.end(), extension.begin(),
         [](unsigned char c) { return std::tolower(c); });
 
-    if (".obj" == extension || ".fbx" == extension)
+    if (".obj" == extension || ".fbx" == extension || ".md5mesh" == extension)
     {
         MeshConverter::convert_model(file);
     }
@@ -163,7 +163,7 @@ int FileUtils::process_file(const fs::directory_entry& file)
     {
         ImageConverter::convert_image(file);
     }
-    else if (".mtl" == extension)
+    else if (".mtl" == extension || ".md5anim" == extension)
     {
         // Ignore
     }
