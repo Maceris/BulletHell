@@ -93,6 +93,13 @@ void DebugUI::draw_window_debug()
 		std::to_string(player_rotation.x),
 		std::to_string(player_rotation.y)).c_str());
 
+	const auto& animation_data = scene->player->animation_data;
+	ImGui::Text(std::format("Player animation: {}",
+		animation_data.current_animation != nullptr 
+		? animation_data.current_animation->name :"(none)").c_str());
+	ImGui::Text(std::format("Player animation frame: {}",
+		std::to_string(animation_data.current_frame_index)).c_str());
+
 	ImGui::End();
 }
 
