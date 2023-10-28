@@ -2,8 +2,8 @@
 #include "Logger.h"
 
 AnimationData::AnimationData(std::shared_ptr<Animation> animation)
-	: current_animation(std::move(animation))
-	, current_frame_index(0)
+	: current_animation{ animation }
+	, current_frame_index{ 0 }
 {}
 
 AnimatedFrame AnimationData::get_current_frame()
