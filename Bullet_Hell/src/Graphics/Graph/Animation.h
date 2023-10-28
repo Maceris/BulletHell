@@ -34,7 +34,7 @@ struct AnimatedFrame
 	unsigned int offset;
 
 	AnimatedFrame()
-		: offset(0)
+		: offset{ 0 }
 	{}
 
 	AnimatedFrame(const AnimatedFrame&) = default;

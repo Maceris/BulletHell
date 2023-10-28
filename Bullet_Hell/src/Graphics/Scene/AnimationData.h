@@ -38,7 +38,7 @@ public:
 	/// Fetch the current frame.
 	/// </summary>
 	/// <returns>The current frame from the animation.</returns>
-	AnimatedFrame get_current_frame();
+	AnimatedFrame& get_current_frame();
 
 	/// <summary>
 	/// Advance to the next frame in the animation, looping back to the start

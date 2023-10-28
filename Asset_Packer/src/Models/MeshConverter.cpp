@@ -692,13 +692,13 @@ glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
 	
 	glm::mat4 node_transform = glm::mat4{ 1.0f };
 
-	if (scaling_count)
+	if (position_count > 0)
 	{
-		aiVectorKey key = scaling_keys[std::min(scaling_count - 1, frame)];
+		aiVectorKey key = position_keys[std::min(position_count - 1, frame)];
 		aiVector3D vector = key.mValue;
 		glm::vec3 offset(vector.x, vector.y, vector.z);
 
-		node_transform = glm::scale(node_transform, offset);
+		node_transform = glm::translate(node_transform, offset);
 	}
 
 	if (rotation_count > 0)
@@ -709,13 +709,13 @@ glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
 		node_transform *= glm::toMat4(quat);
 	}
 
-	if (position_count > 0)
+	if (scaling_count)
 	{
-		aiVectorKey key = position_keys[std::min(position_count - 1, frame)];
+		aiVectorKey key = scaling_keys[std::min(scaling_count - 1, frame)];
 		aiVector3D vector = key.mValue;
 		glm::vec3 offset(vector.x, vector.y, vector.z);
 
-		node_transform = glm::translate(node_transform, offset);
+		node_transform = glm::scale(node_transform, offset);
 	}
 
 	return node_transform;

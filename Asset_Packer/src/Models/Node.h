@@ -57,15 +57,6 @@ struct Node
 	/// node, relative to the parent.</param>
 	Node(std::string name, Node* parent, const glm::mat4& node_transformation);
 
-	/// <summary>
-	/// Create a new node.
-	/// </summary>
-	/// <param name="name">The name of the node.</param>
-	/// <param name="parent">This node's parent, if applicable.</param>
-	/// <param name="node_transformation">The transformation matrix for this
-	/// node, relative to the parent.</param>
-	Node(std::string name, Node* parent, glm::mat4&& node_transformation);
-
 	Node(const Node&) = delete;
 	Node& operator=(const Node&) = delete;
 	~Node();

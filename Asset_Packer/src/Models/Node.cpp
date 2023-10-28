@@ -2,15 +2,9 @@
 
 Node::Node(std::string name, Node* parent, 
 	const glm::mat4& node_transformation)
-	: name(std::move(name))
-	, parent(parent)
-	, node_transformation(node_transformation)
-{}
-
-Node::Node(std::string name, Node* parent, glm::mat4&& node_transformation)
-	: name(std::move(name))
-	, parent(parent)
-	, node_transformation(std::move(node_transformation))
+	: name{ name }
+	, parent{ parent }
+	, node_transformation{ node_transformation }
 {}
 
 Node::~Node()

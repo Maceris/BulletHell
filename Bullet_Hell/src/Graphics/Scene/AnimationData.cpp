@@ -6,7 +6,7 @@ AnimationData::AnimationData(std::shared_ptr<Animation> animation)
 	, current_frame_index{ 0 }
 {}
 
-AnimatedFrame AnimationData::get_current_frame()
+AnimatedFrame& AnimationData::get_current_frame()
 {
 	LOG_ASSERT(current_animation.get() != nullptr);
 	return current_animation->frames[current_frame_index];

@@ -184,7 +184,7 @@ void AnimationRender::render(const Scene& scene,
             AnimMeshDrawData anim_mesh_draw_data = 
                 mesh_draw_data.animated_mesh_draw_data;
             std::shared_ptr<Entity> entity = anim_mesh_draw_data.entity;
-            AnimatedFrame frame = entity->animation_data.get_current_frame();
+            AnimatedFrame& frame = entity->animation_data.get_current_frame();
             const int group_size = static_cast<int>(std::ceilf(
                 static_cast<float>(mesh_draw_data.size_in_bytes) / (14 * 4)));
             
@@ -195,7 +195,7 @@ void AnimationRender::render(const Scene& scene,
             uniforms_map->set_uniform("draw_parameters.weights_offset",
                 anim_mesh_draw_data.weights_offset);
             uniforms_map->set_uniform("draw_parameters.bones_matrices_offset",
-               frame.offset);
+               static_cast<int>(frame.offset));
             uniforms_map->set_uniform("draw_parameters.destination_offset",
                 destination_offset);
 
