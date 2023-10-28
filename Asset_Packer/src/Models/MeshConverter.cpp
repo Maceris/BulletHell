@@ -610,7 +610,7 @@ void build_frame_matrices(const aiAnimation* animation,
 		}
 	}
 
-	glm::mat4 node_transform;
+	glm::mat4 node_transform{ 1.0f };
 	if (node_animation != nullptr)
 	{
 		node_transform = build_node_transform_matrix(node_animation, 
@@ -725,7 +725,7 @@ glm::mat4 build_node_transform_matrix(const aiNodeAnim* node_animation,
 			vector.x, 0,        0,        0,
 			0,        vector.y, 0,        0,
 			0,        0,        vector.z, 0,
-			0,        0,        0,        0
+			0,        0,        0,        1
 		);
 		node_transform *= scale;
 	}
