@@ -86,10 +86,10 @@ uint64_t read_uint64(RawStream& source)
 	return result;
 }
 
-void read_data_array(RawStream& source, unsigned char* out_result,
-	uint64_t* out_length)
+void read_data_array(RawStream& source, unsigned char** out_result,
+	uint64_t* out_length, const bool null_terminate)
 {
-	const uint64_t size = read_uint64(source);
+	uint64_t size = read_uint64(source);
 	*out_length = size;
 
 	if (size == 0)
@@ -106,12 +106,24 @@ void read_data_array(RawStream& source, unsigned char* out_result,
 		return;
 	}
 
-	out_result = ALLOC unsigned char[size];
-
-	if (size > 0)
+	const size_t bytes_to_read = size;
+	if (null_terminate)
 	{
-		memcpy(out_result, source.data, size);
-		source.bytes_read += size;
+		++size;
+	}
+	*out_length = size;
+
+	*out_result = ALLOC unsigned char[size];
+
+	if (bytes_to_read > 0)
+	{
+		memcpy(*out_result, source.data + source.bytes_read, bytes_to_read);
+		source.bytes_read += bytes_to_read;
+	}
+
+	if (null_terminate)
+	{
+		(*out_result)[size - 1] = 0;
 	}
 }
 
@@ -120,7 +132,7 @@ std::string read_string(RawStream& source)
 	uint64_t size = 0;
 	unsigned char* result_chars = nullptr;
 
-	read_data_array(source, result_chars, &size);
+	read_data_array(source, &result_chars, &size, true);
 
 	if (result_chars == nullptr)
 	{

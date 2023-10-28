@@ -71,8 +71,12 @@ uint64_t read_uint64(RawStream& source);
 /// pass in a pointer to nullptr as this will allocate memory for you.</param>
 /// <param name="out_length">Where to store the length of the returned array.
 /// </param>
-void read_data_array(RawStream& source, unsigned char* out_result,
-	uint64_t* out_length);
+/// <param name="null_terminate">Whether we should include a null byte
+/// at the end of the returned array. Useful for strings, but not always
+/// desireable.
+/// </param>
+void read_data_array(RawStream& source, unsigned char** out_result,
+	uint64_t* out_length, const bool null_terminate = false);
 
 /// <summary>
 /// Load a string from the stream.
