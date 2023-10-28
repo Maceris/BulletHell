@@ -236,7 +236,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 		{
 			for (auto& frame : animation->frames)
 			{
-				frame.offset = current_offset;
+				frame.offset = current_offset++;
 				for (auto& bone_matrix : frame.bone_matrices)
 				{
 					for (int col = 0; col < 4; ++col)
@@ -246,7 +246,6 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 							data_buffer.push_back(bone_matrix[col][row]);
 						}
 					}
-					++current_offset;
 				}
 			}
 		}
