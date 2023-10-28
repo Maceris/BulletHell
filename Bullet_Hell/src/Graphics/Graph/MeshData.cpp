@@ -19,3 +19,11 @@ void MeshData::append_weights_to_buffer(std::vector<float>& buffer)
 
 	buffer.insert(buffer.end(), data_start, data_end);
 }
+
+void MeshData::append_indices_to_buffer(std::vector<uint32_t>& buffer)
+{
+	const size_t data_size = indices.size();
+	const uint32_t* data_start = indices.data();
+	const uint32_t* data_end = data_start + data_size;
+	buffer.insert(buffer.end(), data_start, data_end);
+}
