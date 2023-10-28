@@ -167,9 +167,11 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
             if (normal->second == next_texture)
             {
                 auto texture = load_texture(material->normal_map_name);
+                glActiveTexture(GL_TEXTURE0 + next_texture);
                 texture->bind();
                 uniforms_map->set_uniform("texture_sampler["
                     + std::to_string(next_texture) + "]", next_texture);
+                ++next_texture;
             }
 
             auto texture = texture_bindings.find(material->texture_name);
@@ -178,9 +180,11 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
             if (texture->second == next_texture)
             {
                 auto texture = load_texture(material->texture_name);
+                glActiveTexture(GL_TEXTURE0 + next_texture);
                 texture->bind();
                 uniforms_map->set_uniform("texture_sampler["
                     + std::to_string(next_texture) + "]", next_texture);
+                ++next_texture;
             }
         }
     }
