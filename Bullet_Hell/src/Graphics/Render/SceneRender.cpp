@@ -161,7 +161,7 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
         for (const auto& mesh_data : model->mesh_data_list)
         {
             const auto& material = mesh_data.material;
-            auto normal = texture_bindings.find(material->texture_name);
+            auto normal = texture_bindings.find(material->normal_map_name);
             LOG_ASSERT(normal != texture_bindings.end()
                 && "We found an unknown texture");
             if (normal->second == next_texture)
