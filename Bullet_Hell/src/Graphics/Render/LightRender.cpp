@@ -380,7 +380,6 @@ void LightRender::update_lights(const Scene& scene)
     const glm::mat4& view_matrix = scene.camera.view_matrix;
 
     const SceneLights& scene_lights = scene.scene_lights;
-
     const AmbientLight& ambient_light = scene_lights.ambient_light;
     uniforms_map->set_uniform("ambient_light.intensity", 
         ambient_light.intensity);
@@ -388,7 +387,7 @@ void LightRender::update_lights(const Scene& scene)
 
     const DirectionalLight& directional_light = scene_lights.directional_light;
     glm::vec4 adjusted(directional_light.direction, 0);
-    adjusted = adjusted * view_matrix;
+    adjusted = view_matrix * adjusted;
     glm::vec3 direction(adjusted.x, adjusted.y, adjusted.z);
     uniforms_map->set_uniform("directional_light.color",
         directional_light.color);
