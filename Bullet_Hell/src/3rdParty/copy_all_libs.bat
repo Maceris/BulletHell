@@ -8,8 +8,8 @@ md ..\Lib\x64Profile
 set platform=x64
 set configuration=Debug
 
-echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.lib ..\Lib\%platform%%configuration%\glfw3.lib
-echo f | xcopy /D /y glfw-3.3.8\msvc\src\Debug\glfw3.pdb ..\Lib\%platform%%configuration%\glfw3.pdb
+echo f | xcopy /D /y glfw-3.3.8\msvc\src\%configuration%\glfw3.lib ..\Lib\%platform%%configuration%\glfw3.lib
+echo f | xcopy /D /y glfw-3.3.8\msvc\src\%configuration%\glfw3.pdb ..\Lib\%platform%%configuration%\glfw3.pdb
 
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\bzip2.lib ..\Lib\%platform%%configuration%\bzip2.lib
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\bzip2.pdb ..\Lib\%platform%%configuration%\bzip2.pdb
@@ -19,3 +19,6 @@ echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\ZipLib.lib ..\Lib\%pl
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\ZipLib.pdb ..\Lib\%platform%%configuration%\ZipLib.pdb
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.lib ..\Lib\%platform%%configuration%\zlib.lib
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.pdb ..\Lib\%platform%%configuration%\zlib.pdb
+
+echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.lib ..\Lib\%platform%%configuration%\libtmxlite.lib
+echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.pdb ..\Lib\%platform%%configuration%\libtmxlite.pdb
