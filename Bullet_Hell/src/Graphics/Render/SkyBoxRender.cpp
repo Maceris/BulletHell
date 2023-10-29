@@ -67,7 +67,7 @@ void SkyBoxRender::render(const Scene& scene)
 
     uniforms_map->set_uniform("projection_matrix",
         scene.projection.projection_matrix);
-    glm::mat4 view_matrix = scene.camera.view_matrix;
+    glm::mat4 view_matrix(scene.camera.view_matrix);
     //NOTE(ches) directly set transform to 0
     view_matrix[3][0] = 0;
     view_matrix[3][1] = 0;
@@ -82,7 +82,7 @@ void SkyBoxRender::render(const Scene& scene)
     if (material->texture_name != "")
     {
         glActiveTexture(GL_TEXTURE0);
-        auto texture = load_texture(material->normal_map_name);
+        auto texture = load_texture(material->texture_name);
         texture->bind();
         has_texture = true;
     }
