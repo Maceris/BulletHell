@@ -42,26 +42,26 @@ float* CascadeShadowSlice::cached_splits = calculate_slices();
 /*
 	Function is derived from Vulkan examples from Sascha Willems, and
 	licensed under the MIT License :
-	https ://github.com/SaschaWillems/Vulkan/tree/master/examples/shadowmappingcascade
+	https://github.com/SaschaWillems/Vulkan/tree/master/examples/shadowmappingcascade
 	which are based on
 	https://johanmedestrom.wordpress.com/2016/03/18/opengl-cascaded-shadow-maps/
 */
 void CascadeShadowSlice::updateCascadeShadows(
 	std::vector<CascadeShadowSlice>& shadows, const Scene& scene)
 {
-	glm::mat4 view = scene.camera.view_matrix;
-	glm::mat4 projection = scene.projection.projection_matrix;
-	glm::vec3 light_direction = scene.scene_lights.directional_light.direction;
+	const glm::mat4 view = scene.camera.view_matrix;
+	const glm::mat4 projection = scene.projection.projection_matrix;
+	const glm::vec3 light_direction 
+		= scene.scene_lights.directional_light.direction;
 
 	const float near_clip = Z_NEAR;
 	const float far_clip = Z_FAR;
 	const float clip_range = far_clip - near_clip;
 
-	// Calculate orthographic projection matrix for each cascade
 	float lastSplitDist = 0.0;
-	for (uint32_t i = 0; i < SHADOW_MAP_CASCADE_COUNT; i++)
+	for (uint32_t cascade = 0; cascade < SHADOW_MAP_CASCADE_COUNT; cascade++)
 	{
-		float splitDist = cached_splits[i];
+		const float splitDist = cached_splits[cascade];
 
 		glm::vec3 frustrum_corners[8] =
 		{
@@ -75,8 +75,8 @@ void CascadeShadowSlice::updateCascadeShadows(
 			glm::vec3(-1.0f, -1.0f,  1.0f),
 		};
 
-		// Project frustum corners into world space
-		glm::mat4 inverse_camera = glm::inverse(projection * view);
+		//NOTE(ches) Project frustum corners into world space
+		const glm::mat4 inverse_camera = glm::inverse(projection * view);
 		for (int i = 0; i < 8; ++i)
 		{
 			glm::vec4 invCorner = inverse_camera * 
@@ -91,7 +91,6 @@ void CascadeShadowSlice::updateCascadeShadows(
 			frustrum_corners[i] = frustrum_corners[i] + (dist * lastSplitDist);
 		}
 
-		// Get frustum center
 		glm::vec3 frustrum_center = glm::vec3(0.0f);
 		for (int i = 0; i < 8; ++i)
 		{
@@ -109,17 +108,16 @@ void CascadeShadowSlice::updateCascadeShadows(
 		radius = std::ceil(radius * 16.0f) / 16.0f;
 
 		glm::vec3 light_dir = glm::normalize(-light_direction);
+		glm::vec3 eye = frustrum_center + (light_dir * radius);
+		glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-		glm::mat4 lightViewMatrix = glm::lookAtRH(
-			frustrum_center - (light_dir * radius), frustrum_center,
-			glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 lightViewMatrix = glm::lookAtLH(eye, frustrum_center, up);
 		glm::mat4 lightOrthoMatrix = glm::orthoRH_ZO(-radius, radius, -radius, 
 			radius, 0.0f, 2 * radius);
 
-		// Store split distance and matrix in cascade
-		shadows[i].split_distance = (Z_NEAR + splitDist * clip_range) * -1.0f;
-		shadows[i].projection_view_matrix = lightOrthoMatrix * lightViewMatrix;
+		shadows[cascade].split_distance = (Z_NEAR + splitDist * clip_range) * -1.0f;
+		shadows[cascade].projection_view_matrix = lightOrthoMatrix * lightViewMatrix;
 
-		lastSplitDist = cached_splits[i];
+		lastSplitDist = cached_splits[cascade];
 	}
 }
