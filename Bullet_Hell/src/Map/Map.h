@@ -4,4 +4,7 @@
 
 class Map
 {
+	unsigned int width;
+	unsigned int height;
+
 };

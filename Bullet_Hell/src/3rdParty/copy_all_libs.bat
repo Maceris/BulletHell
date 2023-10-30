@@ -20,5 +20,3 @@ echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\ZipLib.pdb ..\Lib\%pl
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.lib ..\Lib\%platform%%configuration%\zlib.lib
 echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.pdb ..\Lib\%platform%%configuration%\zlib.pdb
 
-echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.lib ..\Lib\%platform%%configuration%\libtmxlite.lib
-echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.pdb ..\Lib\%platform%%configuration%\libtmxlite.pdb

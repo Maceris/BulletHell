@@ -28,6 +28,7 @@ bool MapLoader::parse_map(
 	size_t raw_size)
 {
 	//TODO(ches) parse the map
+
 	return false;
 }
 
