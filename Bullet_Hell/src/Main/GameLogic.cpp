@@ -46,7 +46,9 @@ bool GameLogic::initialize()
 	resource_cache->register_loader(std::make_shared<AnimationLoader>());
 
 	window = std::unique_ptr<Window>(ALLOC Window());
+	TIME_START("Window Init");
 	window->initialize();
+	TIME_END("Window Init");
 
 	Texture::default_texture = load_texture("textures/default_texture.image");
 
