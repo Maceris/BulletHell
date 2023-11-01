@@ -419,7 +419,7 @@ void LightRender::setup_point_light_buffer(const Scene& scene)
     {
         const PointLight& light = point_lights[i];
         glm::vec4 light_position{ light.position, 1 };
-        light_position = light_position * view_matrix;
+        light_position = view_matrix * light_position;
         light_buffer[i * POINT_LIGHT_SIZE +  0] = light_position.x;
         light_buffer[i * POINT_LIGHT_SIZE +  1] = light_position.y;
         light_buffer[i * POINT_LIGHT_SIZE +  2] = light_position.z;
@@ -442,7 +442,7 @@ void LightRender::setup_point_light_buffer(const Scene& scene)
 
     SAFE_DELETE_ARRAY(light_buffer);
 
-    uniforms_map->set_uniform("point_light_count", lights_to_render);
+    uniforms_map->set_uniform("point_light_count", static_cast<int>(lights_to_render));
 }
 
 void LightRender::setup_spot_light_buffer(const Scene& scene)
@@ -464,7 +464,7 @@ void LightRender::setup_spot_light_buffer(const Scene& scene)
     {
         const SpotLight& light = spot_lights[i];
         glm::vec4 light_position{ light.point_light.position, 1 };
-        light_position = light_position * view_matrix;
+        light_position = view_matrix * light_position;
         light_buffer[i * SPOT_LIGHT_SIZE + 0] = light_position.x;
         light_buffer[i * SPOT_LIGHT_SIZE + 1] = light_position.y;
         light_buffer[i * SPOT_LIGHT_SIZE + 2] = light_position.z;
@@ -491,5 +491,5 @@ void LightRender::setup_spot_light_buffer(const Scene& scene)
 
     SAFE_DELETE_ARRAY(light_buffer);
 
-    uniforms_map->set_uniform("point_light_count", lights_to_render);
+    uniforms_map->set_uniform("spot_light_count", static_cast<int>(lights_to_render));
 }
