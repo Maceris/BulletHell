@@ -31,7 +31,7 @@ size_t ModelLoader::get_loaded_resource_size(char* raw_buffer,
 	total_size += mesh_count * sizeof(MeshData);
 	for (uint64_t i = 0; i < mesh_count; ++i)
 	{
-		stream.bytes_read += 2; // material index
+		stream.bytes_read += 26; // material index, aabb_min, aabb_max
 
 		const size_t vertex_bytes = read_uint64(stream) * sizeof(MeshVertex);
 		stream.bytes_read += vertex_bytes;
@@ -119,6 +119,9 @@ bool ModelLoader::parse_model(std::shared_ptr<ModelExtraData> extra_data,
 				material_handle->get_extra()
 			);
 		mesh_data.material = material_extra_data->material;
+
+		mesh_data.aabb_min = read_vec3(stream);
+		mesh_data.aabb_max = read_vec3(stream);
 
 		const uint64_t vertex_count = read_uint64(stream);
 

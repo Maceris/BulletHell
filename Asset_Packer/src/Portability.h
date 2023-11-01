@@ -91,6 +91,19 @@ void constexpr write_string(const std::string& value, std::ofstream& target)
 /// </summary>
 /// <param name="value">The vector to write.</param>
 /// <param name="target">The stream to write to.</param>
+void constexpr write_vec3(const glm::vec3& value, std::ofstream& target)
+{
+	write_uint32(value.x, target);
+	write_uint32(value.y, target);
+	write_uint32(value.z, target);
+}
+
+/// <summary>
+/// Write a vec4 to the target file in network byte order (big endian).
+/// Stores the output in rgba order.
+/// </summary>
+/// <param name="value">The vector to write.</param>
+/// <param name="target">The stream to write to.</param>
 void constexpr write_vec4(const glm::vec4& value, std::ofstream& target)
 {
 	write_uint32(value.r, target);

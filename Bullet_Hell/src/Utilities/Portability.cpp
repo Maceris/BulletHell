@@ -146,18 +146,31 @@ std::string read_string(RawStream& source)
 	return result;
 }
 
+glm::vec3 read_vec3(RawStream& source)
+{
+	glm::vec3 result{ 0 };
+	uint32_t temp = 0;
+	temp = read_uint32(source);
+	result.x = reinterpret_cast<float&>(temp);
+	temp = read_uint32(source);
+	result.y = reinterpret_cast<float&>(temp);
+	temp = read_uint32(source);
+	result.z = reinterpret_cast<float&>(temp);
+	return result;
+}
+
 glm::vec4 read_vec4(RawStream& source)
 {
 	glm::vec4 result{ 0 };
 	uint32_t temp = 0;
 	temp = read_uint32(source);
-	result.r = *reinterpret_cast<float*>(&temp);
+	result.r = reinterpret_cast<float&>(temp);
 	temp = read_uint32(source);
-	result.g = *reinterpret_cast<float*>(&temp);
+	result.g = reinterpret_cast<float&>(temp);
 	temp = read_uint32(source);
-	result.b = *reinterpret_cast<float*>(&temp);
+	result.b = reinterpret_cast<float&>(temp);
 	temp = read_uint32(source);
-	result.a = *reinterpret_cast<float*>(&temp);
+	result.a = reinterpret_cast<float&>(temp);
 	return result;
 }
 

@@ -45,6 +45,7 @@ struct MeshData
 	/// A tightly-packed array of vertex data for the mesh.
 	/// </summary>
 	std::vector<MeshVertex> vertices;
+
 	/// <summary>
 	/// The index data for the faces.
 	/// </summary>
@@ -61,6 +62,16 @@ struct MeshData
 	/// this data filled out.
 	/// </summary>
 	std::vector<BoneWeights> bone_weights;
+
+	/// <summary>
+	/// The minimum point of the mesh Axis-Aligned Bounding Box.
+	/// </summary>
+	glm::vec3 aabb_min;
+
+	/// <summary>
+	/// The maximum point of the mesh Axis-Aligned Bounding Box.
+	/// </summary>
+	glm::vec3 aabb_max;
 
 	/// <summary>
 	/// Append the raw vertex data to a buffer.

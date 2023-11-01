@@ -86,6 +86,13 @@ void read_data_array(RawStream& source, unsigned char** out_result,
 std::string read_string(RawStream& source);
 
 /// <summary>
+/// Load a vec3 from the stream.
+/// </summary>
+/// <param name="source">The source to read from.</param>
+/// <returns>The vec3 we have read, in host byte order.</returns>
+glm::vec3 read_vec3(RawStream& source);
+
+/// <summary>
 /// Load a vec4 from the stream.
 /// </summary>
 /// <param name="source">The source to read from.</param>

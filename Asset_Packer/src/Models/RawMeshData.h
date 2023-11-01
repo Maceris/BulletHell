@@ -62,8 +62,20 @@ struct RawMeshData
 	/// </summary>
 	std::vector<float> texture_coordinates;
 
+	/// <summary>
+	/// The minimum point of the mesh AABB.
+	/// </summary>
+	glm::vec3 aabb_min;
+
+	/// <summary>
+	/// The maximum point of the mesh AABB.
+	/// </summary>
+	glm::vec3 aabb_max;
+
 	RawMeshData()
-		: material_id(0)
+		: material_id{ 0 }
+		, aabb_min{ 0 }
+		, aabb_max{ 0 }
 	{}
 	RawMeshData(const RawMeshData&) = default;
 	RawMeshData& operator=(const RawMeshData&) = default;

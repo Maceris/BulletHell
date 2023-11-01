@@ -58,7 +58,11 @@ const unsigned int DEFAULT_POST_PROCESS_FLAGS =
 	/*
 	   Finds and removes redundant/unreferenced materials.
 	*/
-	| aiProcess_RemoveRedundantMaterials;
+	| aiProcess_RemoveRedundantMaterials
+	/*
+	   Generates axis-aligned bounding boxes for the mesh.
+	*/
+	| aiProcess_GenBoundingBoxes;
 
 #pragma endregion
 
@@ -280,6 +284,13 @@ void process_texture_coordinates(const aiMesh* mesh,
 /// <param name="matrix">The matrix from assimp.</param>
 /// <returns>The glm version.</returns>
 constexpr glm::mat4 to_matrix(const aiMatrix4x4& matrix);
+
+/// <summary>
+/// Convert a vector3d to a glm vector.
+/// </summary>
+/// <param name="vector">The Assimp vector.</param>
+/// <returns>A 3d vector with the same values.</returns>
+constexpr glm::vec3 to_vector(const aiVector3D& vector);
 
 /// <summary>
 /// Convert a color4d to a glm vector.
@@ -531,6 +542,9 @@ void output_model(std::vector<std::shared_ptr<RawMeshData>>& data,
 	{
 		const uint16_t material_index = mesh->material_id;
 		write_uint16(material_index, out);
+
+		write_vec3(mesh->aabb_min, out);
+		write_vec3(mesh->aabb_max, out);
 
 		const uint64_t vertex_count = mesh->positions.size() / 3;
 		write_uint64(vertex_count, out);
@@ -968,6 +982,8 @@ std::shared_ptr<RawMeshData> process_mesh(const aiMesh* mesh,
 	process_bones(mesh, bones, result);
 
 	result->material_id = mesh->mMaterialIndex;
+	result->aabb_min = to_vector(mesh->mAABB.mMin);
+	result->aabb_max = to_vector(mesh->mAABB.mMax);
 
 	return result;
 }
@@ -998,6 +1014,11 @@ constexpr glm::mat4 to_matrix(const aiMatrix4x4& matrix)
 		matrix.a3, matrix.b3, matrix.c3, matrix.d3,
 		matrix.a4, matrix.b4, matrix.c4, matrix.d4
 	);
+}
+
+constexpr glm::vec3 to_vector(const aiVector3D& vector)
+{
+	return glm::vec3(vector.x, vector.y, vector.z);
 }
 
 constexpr glm::vec4 to_vector(const aiColor4D& color)
