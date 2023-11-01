@@ -10,9 +10,33 @@
 constexpr int CHUNK_WIDTH = 16;
 
 /// <summary>
-/// Coordinate of a chunk within the world.
+/// The location in the world, which can also be referenced as a combined
+/// value.
 /// </summary>
-using ChunkCoordinate = int16_t;
+union ChunkCoordinates
+{
+	/// <summary>
+	/// The x and z coordinates as separate values.
+	/// </summary>
+	struct
+	{
+		/// <summary>
+		/// The x coordinate of the chunk, measured in chunks.
+		/// </summary>
+		int16_t x;
+
+		/// <summary>
+		/// The z coordinate of the chunk, measured in chunks.
+		/// </summary>
+		int16_t z;
+	};
+
+	/// <summary>
+	/// The x and z coordiantes, combined into one integer, for use as a 
+	/// pseudo-hash.
+	/// </summary>
+	uint32_t combined;
+};
 
 /// <summary>
 /// A cluster of tiles.
@@ -20,14 +44,9 @@ using ChunkCoordinate = int16_t;
 struct Chunk
 {
 	/// <summary>
-	/// The x coordinate of the chunk, measured in chunks.
+	/// The x and z coordinates of the chunk, measured in chunks.
 	/// </summary>
-	ChunkCoordinate x;
-
-	/// <summary>
-	/// The z coordinate of the chunk, measured in chunks.
-	/// </summary>
-	ChunkCoordinate z;
+	ChunkCoordinates location;
 
 	/// <summary>
 	/// The tiles that make up the chunk. They are stored in column-major
@@ -38,4 +57,10 @@ struct Chunk
 	/// the +x and +z axis.
 	/// </summary>
 	Tile tiles[CHUNK_WIDTH][CHUNK_WIDTH];
+
+	Chunk();
+	Chunk(const ChunkCoordinates& coordinates);
+	Chunk(const Chunk&) = default;
+	Chunk& operator=(const Chunk&) = default;
+	~Chunk() = default;
 };

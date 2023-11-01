@@ -19,6 +19,12 @@ struct Tile
 	/// The type of tile this is.
 	/// </summary>
 	TileID id;
+
+	Tile();
+	Tile(const TileID id);
+	Tile(const Tile&) = default;
+	Tile& operator=(const Tile&) = default;
+	~Tile() = default;
 };
 
 #pragma region Tile ID constants

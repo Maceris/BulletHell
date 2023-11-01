@@ -9,7 +9,7 @@
 /// <param name="local_coordinate">The local coordinate of the tile within
 /// the chunk.</param>
 /// <returns>The global coordinates of the tile.</returns>
-int constexpr global_coordinate(ChunkCoordinate chunk_coordinate,
+int constexpr global_coordinate(uint16_t chunk_coordinate,
 	unsigned int local_coordinate)
 {
 	return chunk_coordinate * CHUNK_WIDTH + local_coordinate;
@@ -23,10 +23,10 @@ TileID MapGenerator::get_tile(int x, int y)
 
 void MapGenerator::populate_chunk(Chunk& chunk)
 {
-	const int start_x = chunk.x * CHUNK_WIDTH;
-	const int end_x = (chunk.x + 1) * CHUNK_WIDTH - 1;
-	const int start_z = chunk.z * CHUNK_WIDTH;
-	const int end_z = (chunk.z + 1) * CHUNK_WIDTH - 1;
+	const int start_x = chunk.location.x * CHUNK_WIDTH;
+	const int end_x = (chunk.location.x + 1) * CHUNK_WIDTH - 1;
+	const int start_z = chunk.location.z * CHUNK_WIDTH;
+	const int end_z = (chunk.location.z + 1) * CHUNK_WIDTH - 1;
 
 	for (int x = start_x; x <= end_x; ++x)
 	{
