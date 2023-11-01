@@ -55,6 +55,7 @@ Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
 	//NOTE(ches) We have to reuse a chunk.
 	Chunk* chunk = chunk_cache.back();//NOTE(ches) least recently used
 	chunk_cache.pop_back();
+	//TODO(ches) Notify other systems the chunk was unloaded
 	const ChunkCoordinates old_cooordinates = chunk->location;
 	chunk->location = coordinates;
 	MapGenerator::populate_chunk(*chunk);
