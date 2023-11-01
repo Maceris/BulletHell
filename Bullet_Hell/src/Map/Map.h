@@ -65,5 +65,10 @@ private:
 	/// </summary>
 	std::unordered_map<uint32_t, Chunk*> cache_lookup;
 
+	/// <summary>
+	/// Fetch the chunk for the given coordinates, generating it if required.
+	/// </summary>
+	/// <param name="coordinates">The coordinates to look for.</param>
+	/// <returns>The chunk in that location.</returns>
 	Chunk* get_cached(const ChunkCoordinates& coordinates);
 };

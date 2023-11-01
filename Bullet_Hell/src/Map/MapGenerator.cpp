@@ -35,4 +35,5 @@ void MapGenerator::populate_chunk(Chunk& chunk)
 			chunk.tiles[x][z].id = get_tile(start_x + x, start_z + z);
 		}
 	}
+	//TODO(ches) Notify other systems a new chunk was loaded
 }
