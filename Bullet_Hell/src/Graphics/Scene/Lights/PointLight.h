@@ -36,8 +36,8 @@ struct PointLight
 		/// Set up linear attenuation.
 		/// </summary>
 		Attenuation()
-			: constant(1.0f)
-			, linear(0.0f)
+			: constant(0.0f)
+			, linear(1.0f)
 			, exponent(0.0f) {}
 
 		/// <summary>
