@@ -219,6 +219,15 @@
     <ClCompile Include="src\Map\MapResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Map\Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\MapGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics\Window.h">
@@ -444,6 +453,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Map\MapResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\MapGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
