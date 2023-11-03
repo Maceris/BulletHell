@@ -66,6 +66,8 @@ Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
 
 void Map::move_S()
 {
+	ScopedCriticalSection lock(chunk_critical_section);
+
 	Chunk* temp;
 
 	const uint16_t start_x = center.x - LOADED_CHUNKS_RADIUS;
