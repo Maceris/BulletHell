@@ -36,6 +36,33 @@ union ChunkCoordinates
 	/// pseudo-hash.
 	/// </summary>
 	uint32_t combined;
+
+	ChunkCoordinates()
+		: combined{ 0 }
+	{}
+
+	ChunkCoordinates(const uint32_t combined)
+		: combined{ combined }
+	{}
+
+	ChunkCoordinates(const int16_t x, const int16_t z)
+		: x{ x }
+		, z{ z }
+	{}
+
+	ChunkCoordinates(const int x, const int z)
+		: x{ static_cast<int16_t>(x) }
+		, z{ static_cast<int16_t>(z) }
+	{}
+
+	ChunkCoordinates(const unsigned int x, const unsigned int z)
+		: x{ static_cast<int16_t>(x) }
+		, z{ static_cast<int16_t>(z) }
+	{}
+
+	ChunkCoordinates(const ChunkCoordinates&) = default;
+	ChunkCoordinates& operator=(const ChunkCoordinates&) = default;
+	~ChunkCoordinates() = default;
 };
 
 /// <summary>
@@ -49,9 +76,8 @@ struct Chunk
 	ChunkCoordinates location;
 
 	/// <summary>
-	/// The tiles that make up the chunk. They are stored in column-major
-	/// order, with the first coordinate being the x axis, and the second
-	/// being the z axis.
+	/// The tiles that make up the chunk. They are stored with the first
+	/// coordinate being the x axis, and the second being the z axis.
 	/// 
 	/// These tiles start at the lowest x and y coordinates, and go up towards
 	/// the +x and +z axis.

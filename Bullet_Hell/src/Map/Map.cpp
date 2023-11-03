@@ -3,15 +3,14 @@
 Map::Map()
 	: center{ 0 }
 {
-
 	for (int x = 0; x < LOADED_CHUNK_WIDTH; ++x)
 	{
 		for (int z = 0; z < LOADED_CHUNK_WIDTH; ++z)
 		{
-			loaded_chunks[x][z].location.x = x - LOADED_CHUNKS_RADIUS;
-			loaded_chunks[x][z].location.z = z - LOADED_CHUNKS_RADIUS;
+			loaded_chunks[x][z]->location.x = x - LOADED_CHUNKS_RADIUS;
+			loaded_chunks[x][z]->location.z = z - LOADED_CHUNKS_RADIUS;
 
-			MapGenerator::populate_chunk(loaded_chunks[x][z]);
+			MapGenerator::populate_chunk(*loaded_chunks[x][z]);
 		}
 	}
 }
@@ -63,4 +62,33 @@ Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
 	cache_lookup.erase(old_cooordinates.combined);
 	cache_lookup.emplace(std::make_pair(coordinates.combined, chunk));
 	return chunk;
+}
+
+void Map::move_S()
+{
+	Chunk* temp;
+
+	const uint16_t start_x = center.x - LOADED_CHUNKS_RADIUS;
+	const uint16_t fresh_z = center.z + LOADED_CHUNKS_RADIUS + 1;
+
+	for (int x = 0; x < LOADED_CHUNK_WIDTH; ++x)
+	{
+		temp = loaded_chunks[x][0];
+		for (int z = 1; z < LOADED_CHUNK_WIDTH; ++z)
+		{
+			loaded_chunks[x][z - 1] = loaded_chunks[x][z];
+		}
+
+		ChunkCoordinates edge_position{start_x + x, fresh_z};
+		Chunk* new_edge = get_cached(edge_position);
+		loaded_chunks[x][LOADED_CHUNK_WIDTH - 1] = new_edge;
+		/*
+		 * NOTE(ches) since we just pulled from the cache, it's most recently
+		 * used. We need to replace the entry in the cache (now the front)
+		 * with the chunk that we just moved out of the main loaded chunks.
+		 */
+		chunk_cache.pop_front();
+		chunk_cache.push_front(temp);
+	}
+	center.z++;
 }

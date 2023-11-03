@@ -37,11 +37,10 @@ struct Map
 	ChunkCoordinates center;
 
 	/// <summary>
-	/// The currently loaded chunks. They are stored in column-major
-	/// order, with the first coordinate being the x axis, and the second
-	/// being the z axis.
+	/// The currently loaded chunks. They are stored in with the first
+	/// coordinate being the x axis, and the second being the z axis.
 	/// </summary>
-	Chunk loaded_chunks[LOADED_CHUNK_WIDTH][LOADED_CHUNK_WIDTH];
+	Chunk* loaded_chunks[LOADED_CHUNK_WIDTH][LOADED_CHUNK_WIDTH];
 
 	Map();
 	Map(const Map&) = default;
@@ -71,4 +70,18 @@ private:
 	/// <param name="coordinates">The coordinates to look for.</param>
 	/// <returns>The chunk in that location.</returns>
 	Chunk* get_cached(const ChunkCoordinates& coordinates);
+
+	void move_N();
+	void move_E();
+	/// <summary>
+	/// Shift around chunks such that the center lands one tile further in the
+	/// +z direction. Each chunk is moved towards the -z direction in the
+	/// loaded chunks list.
+	/// </summary>
+	void move_S();
+	void move_W();
+	void move_NE();
+	void move_NW();
+	void move_SE();
+	void move_SW();
 };
