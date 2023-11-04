@@ -94,3 +94,35 @@ void Map::move_S()
 	}
 	center.z++;
 }
+
+void Map::move_W()
+{
+	ScopedCriticalSection lock(chunk_critical_section);
+
+	Chunk* temp;
+
+	const uint16_t start_z = center.z - LOADED_CHUNKS_RADIUS;
+	const uint16_t fresh_x = center.x + LOADED_CHUNKS_RADIUS + 1;
+
+	//TODO(ches) Make this more efficient
+	for (int z = 0; z < LOADED_CHUNK_WIDTH; ++z)
+	{
+		temp = loaded_chunks[0][z];
+		for (int x = 1; x < LOADED_CHUNK_WIDTH; ++x)
+		{
+			loaded_chunks[x - 1][z] = loaded_chunks[x][z];
+		}
+
+		ChunkCoordinates edge_position{ fresh_x, start_z + z};
+		Chunk* new_edge = get_cached(edge_position);
+		loaded_chunks[LOADED_CHUNK_WIDTH - 1][z] = new_edge;
+		/*
+		 * NOTE(ches) since we just pulled from the cache, it's most recently
+		 * used. We need to replace the entry in the cache (now the front)
+		 * with the chunk that we just moved out of the main loaded chunks.
+		 */
+		chunk_cache.pop_front();
+		chunk_cache.push_front(temp);
+	}
+	center.x++;
+}

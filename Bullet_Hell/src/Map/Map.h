@@ -79,6 +79,12 @@ private:
 	/// loaded chunks list.
 	/// </summary>
 	void move_S();
+
+	/// <summary>
+	/// Shift around chunks such that the center lands one tile further in the
+	/// +x direction. Each chunk is moved towards the -x direction in the
+	/// loaded chunks list.
+	/// </summary>
 	void move_W();
 	void move_NE();
 	void move_NW();
