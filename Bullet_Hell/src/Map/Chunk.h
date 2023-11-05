@@ -2,6 +2,8 @@
 
 #include "Globals.h"
 
+#include <compare>
+
 #include "Tile.h"
 
 /// <summary>
@@ -63,6 +65,16 @@ union ChunkCoordinates
 	ChunkCoordinates(const ChunkCoordinates&) = default;
 	ChunkCoordinates& operator=(const ChunkCoordinates&) = default;
 	~ChunkCoordinates() = default;
+
+	bool operator==(const ChunkCoordinates& other) const
+	{
+		return combined == other.combined;
+	}
+
+	auto operator<=>(const ChunkCoordinates& other) const
+	{
+		return combined <=> other.combined;
+	}
 };
 
 /// <summary>

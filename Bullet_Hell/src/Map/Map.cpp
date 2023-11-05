@@ -1,67 +1,70 @@
 #include "Map.h"
 
+#include "Logger.h"
+
 Map::Map()
 	: center{ 0 }
 {
-	for (int x = 0; x < LOADED_CHUNK_WIDTH; ++x)
-	{
-		for (int z = 0; z < LOADED_CHUNK_WIDTH; ++z)
-		{
-			loaded_chunks[x][z]->location.x = x - LOADED_CHUNKS_RADIUS;
-			loaded_chunks[x][z]->location.z = z - LOADED_CHUNKS_RADIUS;
+	ScopedCriticalSection lock(chunk_critical_section);
+	std::vector<ChunkCoordinates> hot_list;
+	hot_region(center, hot_list);
 
-			MapGenerator::populate_chunk(*loaded_chunks[x][z]);
-		}
+	for (ChunkCoordinates& coordinates : hot_list)
+	{
+		hot_load(coordinates);
+	}
+
+	std::vector<ChunkCoordinates> cold_list;
+	cold_region(center, cold_list);
+
+	for (ChunkCoordinates& coordinates : cold_list)
+	{
+		cold_load(coordinates);
 	}
 }
 
 Map::~Map()
 {
-	while (!chunk_cache.empty())
+	ScopedCriticalSection lock(chunk_critical_section);
+	for (auto it = hot_cache.begin(); it != hot_cache.end(); ++it)
 	{
-		Chunk* chunk = chunk_cache.front();
-		chunk_cache.pop_front();
-		SAFE_DELETE(chunk);
+		SAFE_DELETE(it->second);
 	}
-	cache_lookup.clear();
+	hot_cache.clear();
+
+	for (auto it = cold_cache.begin(); it != cold_cache.end(); ++it)
+	{
+		SAFE_DELETE(it->second);
+	}
+	cold_cache.clear();
 }
 
 Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
 {
 	ScopedCriticalSection lock(chunk_critical_section);
 
-	const auto result = cache_lookup.find(coordinates.combined);
+	const auto hot_result = hot_cache.find(coordinates.combined);
 	
-	if (result != cache_lookup.end())
+	if (hot_result != hot_cache.end())
 	{
-		Chunk* chunk = result->second;
-		//NOTE(ches) move to the front of the cache.
-		chunk_cache.remove(chunk);
-		chunk_cache.push_front(chunk);
-		return chunk;
+		return hot_result->second;
 	}
 
-	//NOTE(ches) Not in the cache, but we have room to add it
-	if (chunk_cache.size() < CACHE_SIZE)
+	const auto cold_result = cold_cache.find(coordinates.combined);
+
+	if (cold_result != cold_cache.end())
 	{
-		Chunk* chunk = ALLOC Chunk(coordinates);
-		MapGenerator::populate_chunk(*chunk);
-		chunk_cache.push_front(chunk);
-		cache_lookup.emplace(std::make_pair(coordinates.combined, chunk));
-		return chunk;
+		return cold_result->second;
 	}
 
-	//NOTE(ches) We have to reuse a chunk.
-	Chunk* chunk = chunk_cache.back();//NOTE(ches) least recently used
-	chunk_cache.pop_back();
-	//TODO(ches) Notify other systems the chunk was unloaded
-	const ChunkCoordinates old_cooordinates = chunk->location;
-	chunk->location = coordinates;
-	MapGenerator::populate_chunk(*chunk);
-	chunk_cache.push_front(chunk);
-	cache_lookup.erase(old_cooordinates.combined);
-	cache_lookup.emplace(std::make_pair(coordinates.combined, chunk));
-	return chunk;
+	hot_load(coordinates);
+
+	const auto fresh_result = hot_cache.find(coordinates.combined);
+
+	LOG_ASSERT(fresh_result != hot_cache.end()
+		&& "We failed to load a chunk after finding it missing");
+
+	return fresh_result->second;
 }
 
 bool Map::is_cold(const ChunkCoordinates& coordinates)
@@ -74,46 +77,198 @@ bool Map::is_hot(const ChunkCoordinates& coordinates)
 	return hot_cache.find(coordinates.combined) != cold_cache.end();
 }
 
+void constexpr Map::hot_region(const ChunkCoordinates& region_center,
+	std::vector<ChunkCoordinates>& destination)
+{
+	const int16_t start_x = region_center.x - HOT_CACHE_RADIUS;
+	const int16_t end_x = region_center.x + HOT_CACHE_RADIUS;
+	const int16_t start_z = region_center.z - HOT_CACHE_RADIUS;
+	const int16_t end_z = region_center.z + HOT_CACHE_RADIUS;
+
+	for (int16_t x = start_x; x <= end_x; ++x)
+	{
+		for (int16_t z = start_z; z <= end_z; ++z)
+		{
+			destination.emplace_back(x, z);
+		}
+	}
+}
+
+void constexpr Map::cold_region(const ChunkCoordinates& region_center,
+	std::vector<ChunkCoordinates>& destination)
+{
+	const int16_t start_x = region_center.x - COLD_CACHE_RADIUS;
+	const int16_t end_x = region_center.x + COLD_CACHE_RADIUS;
+	const int16_t start_z = region_center.z - COLD_CACHE_RADIUS;
+	const int16_t end_z = region_center.z + COLD_CACHE_RADIUS;
+
+	const int16_t start_x_ignore = region_center.x - HOT_CACHE_RADIUS;
+	const int16_t end_x_ignore = region_center.x + HOT_CACHE_RADIUS;
+	const int16_t start_z_ignore = region_center.z - HOT_CACHE_RADIUS;
+	const int16_t end_z_ignore = region_center.z + HOT_CACHE_RADIUS;
+
+	for (int16_t x = start_x; x <= end_x; ++x)
+	{
+		for (int16_t z = start_z; z <= end_z; ++z)
+		{
+			destination.emplace_back(x, z);
+		}
+	}
+}
+
 void constexpr Map::recenter(const ChunkCoordinates& old_center,
 	const ChunkCoordinates& new_center)
 {
-
+	ScopedCriticalSection lock(chunk_critical_section);
 	std::vector<ChunkCoordinates> old_hot;
+	std::vector<ChunkCoordinates> old_cold;
 	std::vector<ChunkCoordinates> new_hot;
 	std::vector<ChunkCoordinates> new_cold;
 
-	// make sure everything we need hot is hot
-	// check for things that were hot but now need to be cold
-	// check for things that were cold but now need unloaded
-}
+	hot_region(old_center, old_hot);
+	hot_region(new_center, new_hot);
+	cold_region(old_center, old_cold);
+	cold_region(new_center, new_cold);
 
-void Map::move_S()
-{
-	ScopedCriticalSection lock(chunk_critical_section);
+	std::vector<ChunkCoordinates> need_full_loading;
+	std::vector<ChunkCoordinates> need_partial_loading;
 
-	Chunk* temp;
-
-	const uint16_t start_x = center.x - LOADED_CHUNKS_RADIUS;
-	const uint16_t fresh_z = center.z + LOADED_CHUNKS_RADIUS + 1;
-
-	for (int x = 0; x < LOADED_CHUNK_WIDTH; ++x)
+	std::vector<ChunkCoordinates> need_partial_unloading;
+	std::vector<ChunkCoordinates> need_full_unloading;
+	
+	for (const auto& desired : new_hot)
 	{
-		temp = loaded_chunks[x][0];
-		for (int z = 1; z < LOADED_CHUNK_WIDTH; ++z)
+		bool was_already_hot = false;
+		for (const auto& old : old_hot)
 		{
-			loaded_chunks[x][z - 1] = loaded_chunks[x][z];
+			if (old == desired)
+			{
+				was_already_hot = true;
+				break;
+			}
+		}
+		if (was_already_hot)
+		{
+			continue;
+		}
+		need_full_loading.push_back(desired);
+	}
+
+	for (const auto& desired : new_cold)
+	{
+		bool was_already_cold = false;
+		for (const auto& old : old_cold)
+		{
+			if (old == desired)
+			{
+				was_already_cold = true;
+				break;
+			}
+		}
+		if (was_already_cold)
+		{
+			continue;
 		}
 
-		ChunkCoordinates edge_position{start_x + x, fresh_z};
-		Chunk* new_edge = get_cached(edge_position);
-		loaded_chunks[x][LOADED_CHUNK_WIDTH - 1] = new_edge;
-		/*
-		 * NOTE(ches) since we just pulled from the cache, it's most recently
-		 * used. We need to replace the entry in the cache (now the front)
-		 * with the chunk that we just moved out of the main loaded chunks.
-		 */
-		chunk_cache.pop_front();
-		chunk_cache.push_front(temp);
+		bool was_hot = false;
+		for (const auto& old : old_hot)
+		{
+			if (old == desired)
+			{
+				was_hot = true;
+				break;
+			}
+		}
+		if (was_hot)
+		{
+			need_partial_unloading.push_back(desired);
+		}
+		else
+		{
+			need_partial_loading.push_back(desired);
+		}
 	}
-	center.z++;
+
+	for (const auto& to_load : need_full_loading)
+	{
+		hot_load(to_load);
+	}
+
+	for (const auto& to_load : need_partial_loading)
+	{
+		cold_load(to_load);
+	}
+
+	for (const auto& to_load : need_partial_unloading)
+	{
+		cold_unload(to_load);
+	}
+
+	for (const auto& to_load : need_full_unloading)
+	{
+		full_unload(to_load);
+	}
+}
+
+void Map::cold_load(const ChunkCoordinates& coordinates)
+{
+	Chunk* fresh = ALLOC Chunk(coordinates);
+	MapGenerator::populate_chunk(*fresh);
+	cold_cache.insert(std::make_pair(coordinates.combined, fresh));
+}
+
+void Map::hot_load(const ChunkCoordinates& coordinates)
+{
+	if (!is_cold(coordinates))
+	{
+		cold_load(coordinates);
+	}
+
+	auto cold_chunk = cold_cache.find(coordinates.combined);
+	LOG_ASSERT(cold_chunk != cold_cache.end()
+		&& "We failed to cold load a chunk");
+
+	Chunk* loaded = cold_chunk->second;
+	cold_cache.erase(coordinates.combined);
+	hot_cache.insert(std::make_pair(coordinates.combined, loaded));
+	//TODO(ches) Inform other systems about the load so they can do their part
+}
+
+void Map::cold_unload(const ChunkCoordinates& coordinates)
+{
+	if (!is_hot(coordinates))
+	{
+		return;
+	}
+	
+	auto hot_chunk = hot_cache.find(coordinates.combined);
+	LOG_ASSERT(hot_chunk != hot_cache.end()
+		&& "Chunk not found despite reportedly being loaded");
+
+	Chunk* loaded = hot_chunk->second;
+	hot_cache.erase(coordinates.combined);
+	cold_cache.insert(std::make_pair(coordinates.combined, loaded));
+
+	//TODO(ches) Inform other systems about the unload
+}
+
+void Map::full_unload(const ChunkCoordinates& coordinates)
+{
+	if (is_hot(coordinates))
+	{
+		cold_unload(coordinates);
+	}
+
+	if (!is_cold(coordinates))
+	{
+		return;
+	}
+
+	auto cold_chunk = cold_cache.find(coordinates.combined);
+	LOG_ASSERT(cold_chunk != cold_cache.end()
+		&& "Chunk not found despite reportedly being loaded");
+
+	Chunk* loaded = cold_chunk->second;
+	cold_cache.erase(coordinates.combined);
+	SAFE_DELETE(loaded);
 }
