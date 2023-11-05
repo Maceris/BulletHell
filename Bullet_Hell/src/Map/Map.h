@@ -54,15 +54,22 @@ private:
 	/// </summary>
 	CriticalSection chunk_critical_section;
 
-	/// <summary>
-	/// Where cached chunks are actually stored.
-	/// </summary>
+	//TODO(ches) remove this
 	std::list<Chunk*> chunk_cache;
 
-	/// <summary>
-	/// Used to look up
-	/// </summary>
+	//TODO(ches) remove this
 	std::unordered_map<uint32_t, Chunk*> cache_lookup;
+
+	/// <summary>
+	/// Chunks that are loaded, but not completely. We know about the tiles
+	/// but there are no meshes or lights loaded for the chunks.
+	/// </summary>
+	std::unordered_map<uint32_t, Chunk*> cold_cache;
+
+	/// <summary>
+	/// Chunks that are fully loaded, and able to be rendered.
+	/// </summary>
+	std::unordered_map<uint32_t, Chunk*> hot_cache;
 
 	/// <summary>
 	/// Fetch the chunk for the given coordinates, generating it if required.
@@ -71,23 +78,52 @@ private:
 	/// <returns>The chunk in that location.</returns>
 	Chunk* get_cached(const ChunkCoordinates& coordinates);
 
-	void move_N();
-	void move_E();
-	/// <summary>
-	/// Shift around chunks such that the center lands one tile further in the
-	/// +z direction. Each chunk is moved towards the -z direction in the
-	/// loaded chunks list.
-	/// </summary>
-	void move_S();
+	void constexpr recenter(const ChunkCoordinates& old_center,
+		const ChunkCoordinates& new_center);
 
 	/// <summary>
-	/// Shift around chunks such that the center lands one tile further in the
-	/// +x direction. Each chunk is moved towards the -x direction in the
-	/// loaded chunks list.
+	/// Check if the supplied coordinates are in the cold cache.
 	/// </summary>
-	void move_W();
-	void move_NE();
-	void move_NW();
-	void move_SE();
-	void move_SW();
+	/// <param name="coordinates">The coordinates to look for.</param>
+	/// <returns>Whether the given coordinates are currently in the cold cache.
+	/// </returns>
+	bool is_cold(const ChunkCoordinates& coordinates);
+
+	/// <summary>
+	/// Check if the supplied coordinates are in the hot cache.
+	/// </summary>
+	/// <param name="coordinates">The coordinates to look for.</param>
+	/// <returns>Whether the given coordinates are currently in the hot cache.
+	/// </returns>
+	bool is_hot(const ChunkCoordinates& coordinates);
+
+	/// <summary>
+	/// Load a chunk into the cold cache.
+	/// </summary>
+	/// <param name="coordinates">The coordiante of the chunk.</param>
+	void constexpr cold_load(const ChunkCoordinates& coordinates);
+
+	/// <summary>
+	/// Load a chunk into the hot cache. If, for some reason, it's not in
+	/// the cold cache yet, it will pass through the cold cache first.
+	/// </summary>
+	/// <param name="coordinates">The coordiante of the chunk.</param>
+	void constexpr hot_load(const ChunkCoordinates& coordinates);
+
+	/// <summary>
+	/// Unload a chunk from the hot cache into the cold cache, in case we may
+	/// need it in the hot cache again soon.
+	/// </summary>
+	/// <param name="coordinates">The coordiante of the chunk.</param>
+	void constexpr cold_unload(const ChunkCoordinates& coordinates);
+
+	/// <summary>
+	/// Completely unload a chunk from either hot or cold caches.
+	/// </summary>
+	/// <param name="coordinates">The coordiante of the chunk.</param>
+	void constexpr full_unload(const ChunkCoordinates& coordinates);
+	
+	//TODO(ches) remove this
+	void move_S();
+
 };
