@@ -2,13 +2,13 @@
 
 #include "Globals.h"
 
+#include <memory>
+
 #include "QuadMesh.h"
 #include "RenderBuffers.h"
 #include "Scene.h"
 #include "ShaderProgram.h"
 #include "UniformsMap.h"
-
-#include <memory>
 
 #include "glad.h"
 

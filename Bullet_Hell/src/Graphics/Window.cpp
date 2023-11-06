@@ -2,9 +2,22 @@
 
 #include "Globals.h"
 
+#include <iostream>
+#include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "GameLogic.h"
 #include "Logger.h"
 #include "OpenGLUtil.h"
+
+#include "glm.hpp"
+#include "ext/matrix_clip_space.hpp"
+#include "ext/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
+
+#include "glad.h"
+#include "glfw3.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -14,16 +27,6 @@
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
-
-#include "glm.hpp"
-#include "ext/matrix_clip_space.hpp"
-#include "ext/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
-
-#include <iostream>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
 
 /// <summary>
 /// The callback to register for handling errors.
@@ -130,8 +133,8 @@ void Window::initialize()
         [](GLFWwindow* window, double xpos, double ypos)
         {
             auto& pos = g_game_logic->window->mouse_input.current_position;
-            pos.x = xpos;
-            pos.y = ypos;
+            pos.x = static_cast<float>(xpos);
+            pos.y = static_cast<float>(ypos);
         }
     );
     glfwSetCursorEnterCallback(handle, 
@@ -155,7 +158,7 @@ void Window::initialize()
                     input.left_button_pressed = false;
                     break;
                 case GLFW_REPEAT:
-                defaut:
+                default:
                     break;
                 }
             }

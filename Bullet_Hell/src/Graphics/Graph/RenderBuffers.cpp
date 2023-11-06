@@ -1,9 +1,8 @@
-#include "RenderBuffers.h"
-
 #include <cmath>
 #include <memory>
 #include <set>
 
+#include "RenderBuffers.h"
 #include "AnimationResource.h"
 #include "Logger.h"
 

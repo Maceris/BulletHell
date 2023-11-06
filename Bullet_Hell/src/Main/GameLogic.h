@@ -2,13 +2,14 @@
 
 #include "Globals.h"
 
+#include <chrono>
+#include <memory>
+
 #include "GameOptions.h"
+#include "EventManager.h"
 #include "ResourceCache.h"
 #include "Render.h"
 #include "Window.h"
-
-#include <chrono>
-#include <memory>
 
 /// <summary>
 /// Where we are in the program lifecycle.
@@ -119,3 +120,8 @@ public:
 /// A global reference to the game logic object.
 /// </summary>
 extern GameLogic* g_game_logic;
+
+/// <summary>
+/// A global reference to the event manager object.
+/// </summary>
+extern EventManager* g_event_manager;

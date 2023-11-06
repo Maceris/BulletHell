@@ -1,18 +1,22 @@
 #include "GameLogic.h"
 
+#include <filesystem>
+
+#include "GameMap.h"
+
 #include "Logger.h"
 #include "AnimationResource.h"
+#include "EventHandlers.h"
 #include "MaterialResource.h"
 #include "ModelResource.h"
 #include "ResourceZipFile.h"
 #include "TextureResource.h"
 #include "Timer.h"
 
-#include <filesystem>
-
 #include "imgui.h"
 
 GameLogic* g_game_logic = nullptr;
+EventManager* g_event_manager = nullptr;
 
 GameLogic::GameLogic()
 	: current_state{ starting_up }
@@ -44,6 +48,9 @@ bool GameLogic::initialize()
 	resource_cache->register_loader(std::make_shared<ModelLoader>());
 	resource_cache->register_loader(std::make_shared<MaterialLoader>());
 	resource_cache->register_loader(std::make_shared<AnimationLoader>());
+
+	g_event_manager = ALLOC EventManager();
+	EventHandlers::register_handlers();
 
 	window = std::unique_ptr<Window>(ALLOC Window());
 	TIME_START("Window Init");
@@ -98,6 +105,8 @@ bool GameLogic::initialize()
 	render->recalculate_materials(*current_scene);
 	render->setup_data(*current_scene);
 
+	GameMap map;
+
 	return true;
 }
 
@@ -117,6 +126,8 @@ void GameLogic::on_close()
 	current_state = quitting;
 
 	window->terminate();
+
+	SAFE_DELETE(g_event_manager);
 }
 
 void GameLogic::process_input()

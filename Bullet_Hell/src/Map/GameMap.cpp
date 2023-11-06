@@ -1,8 +1,17 @@
-#include "Map.h"
+#include "GameMap.h"
 
+#include "ChunkLoaded.h"
+#include "GameLogic.h"
 #include "Logger.h"
 
-Map::Map()
+#include "CriticalSection.h"
+
+/// <summary>
+/// Ensure thread safety when modifying the chunks.
+/// </summary>
+CriticalSection chunk_critical_section;
+
+GameMap::GameMap()
 	: center{ 0 }
 {
 	ScopedCriticalSection lock(chunk_critical_section);
@@ -23,7 +32,7 @@ Map::Map()
 	}
 }
 
-Map::~Map()
+GameMap::~GameMap()
 {
 	ScopedCriticalSection lock(chunk_critical_section);
 	for (auto it = hot_cache.begin(); it != hot_cache.end(); ++it)
@@ -39,7 +48,7 @@ Map::~Map()
 	cold_cache.clear();
 }
 
-Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
+Chunk* GameMap::get_cached(const ChunkCoordinates& coordinates)
 {
 	ScopedCriticalSection lock(chunk_critical_section);
 
@@ -67,17 +76,17 @@ Chunk* Map::get_cached(const ChunkCoordinates& coordinates)
 	return fresh_result->second;
 }
 
-bool Map::is_cold(const ChunkCoordinates& coordinates)
+bool GameMap::is_cold(const ChunkCoordinates& coordinates)
 {
 	return cold_cache.find(coordinates.combined) != cold_cache.end();
 }
 
-bool Map::is_hot(const ChunkCoordinates& coordinates)
+bool GameMap::is_hot(const ChunkCoordinates& coordinates)
 {
 	return hot_cache.find(coordinates.combined) != cold_cache.end();
 }
 
-void constexpr Map::hot_region(const ChunkCoordinates& region_center,
+void constexpr GameMap::hot_region(const ChunkCoordinates& region_center,
 	std::vector<ChunkCoordinates>& destination)
 {
 	const int16_t start_x = region_center.x - HOT_CACHE_RADIUS;
@@ -94,7 +103,7 @@ void constexpr Map::hot_region(const ChunkCoordinates& region_center,
 	}
 }
 
-void constexpr Map::cold_region(const ChunkCoordinates& region_center,
+void constexpr GameMap::cold_region(const ChunkCoordinates& region_center,
 	std::vector<ChunkCoordinates>& destination)
 {
 	const int16_t start_x = region_center.x - COLD_CACHE_RADIUS;
@@ -116,7 +125,7 @@ void constexpr Map::cold_region(const ChunkCoordinates& region_center,
 	}
 }
 
-void constexpr Map::recenter(const ChunkCoordinates& old_center,
+void constexpr GameMap::recenter(const ChunkCoordinates& old_center,
 	const ChunkCoordinates& new_center)
 {
 	ScopedCriticalSection lock(chunk_critical_section);
@@ -210,14 +219,14 @@ void constexpr Map::recenter(const ChunkCoordinates& old_center,
 	}
 }
 
-void Map::cold_load(const ChunkCoordinates& coordinates)
+void GameMap::cold_load(const ChunkCoordinates& coordinates)
 {
 	Chunk* fresh = ALLOC Chunk(coordinates);
 	MapGenerator::populate_chunk(*fresh);
 	cold_cache.insert(std::make_pair(coordinates.combined, fresh));
 }
 
-void Map::hot_load(const ChunkCoordinates& coordinates)
+void GameMap::hot_load(const ChunkCoordinates& coordinates)
 {
 	if (!is_cold(coordinates))
 	{
@@ -232,9 +241,12 @@ void Map::hot_load(const ChunkCoordinates& coordinates)
 	cold_cache.erase(coordinates.combined);
 	hot_cache.insert(std::make_pair(coordinates.combined, loaded));
 	//TODO(ches) Inform other systems about the load so they can do their part
+
+	ChunkLoaded event(coordinates);
+	g_event_manager->fire(event);
 }
 
-void Map::cold_unload(const ChunkCoordinates& coordinates)
+void GameMap::cold_unload(const ChunkCoordinates& coordinates)
 {
 	if (!is_hot(coordinates))
 	{
@@ -252,7 +264,7 @@ void Map::cold_unload(const ChunkCoordinates& coordinates)
 	//TODO(ches) Inform other systems about the unload
 }
 
-void Map::full_unload(const ChunkCoordinates& coordinates)
+void GameMap::full_unload(const ChunkCoordinates& coordinates)
 {
 	if (is_hot(coordinates))
 	{

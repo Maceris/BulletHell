@@ -6,8 +6,11 @@
 
 #include <memory>
 
-#include "glad.h"
-#include "glfw3.h"
+/*
+ * NOTE(ches) so we don't have to include glfw here, since it will interfere
+ * with the windows definitions for things like APIENTRY.
+ */
+struct GLFWwindow;
 
 /// <summary>
 /// Used to create, track, and interact with an OpenGL window.

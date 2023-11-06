@@ -7,7 +7,6 @@
 #include <unordered_map>
 
 #include "Chunk.h"
-#include "CriticalSection.h"
 #include "MapGenerator.h"
 
 /// <summary>
@@ -39,17 +38,17 @@ constexpr auto HOT_CACHE_CHUNK_WIDTH = 2 * HOT_CACHE_RADIUS + 1;
 /// </summary>
 constexpr auto COLD_CACHE_CHUNK_WIDTH = 2 * COLD_CACHE_RADIUS + 1;
 
-struct Map
+struct GameMap
 {
 	/// <summary>
 	/// The coordinates of the central chunk, updated as we move around.
 	/// </summary>
 	ChunkCoordinates center;
 
-	Map();
-	Map(const Map&) = default;
-	Map& operator=(const Map&) = default;
-	~Map();
+	GameMap();
+	GameMap(const GameMap&) = default;
+	GameMap& operator=(const GameMap&) = default;
+	~GameMap();
 
 	/// <summary>
 	/// Fetch the chunk for the given coordinates, generating it if required.
@@ -70,11 +69,6 @@ struct Map
 		const ChunkCoordinates& new_center);
 
 private:
-
-	/// <summary>
-	/// Ensure thread safety when modifying the chunks.
-	/// </summary>
-	CriticalSection chunk_critical_section;
 
 	/// <summary>
 	/// Chunks that are loaded, but not completely. We know about the tiles

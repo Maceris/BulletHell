@@ -2,15 +2,15 @@
 
 #include "Globals.h"
 
+#include <memory>
+#include <vector>
+
 #include "CascadeShadowSlice.h"
 #include "CommandBuffers.h"
 #include "RenderBuffers.h"
 #include "ShaderProgram.h"
 #include "ShadowBuffer.h"
 #include "UniformsMap.h"
-
-#include <memory>
-#include <vector>
 
 #include "glad.h"
 
