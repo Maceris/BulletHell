@@ -8,9 +8,6 @@
 #include "ShaderProgram.h"
 #include "UniformsMap.h"
 
-#include "glad.h"
-#include "glm.hpp"
-
 // Handles rendering for the skybox
 class SkyBoxRender
 {

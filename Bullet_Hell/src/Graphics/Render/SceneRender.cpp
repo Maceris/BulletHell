@@ -5,6 +5,8 @@
 #include "RenderConstants.h"
 #include "TextureResource.h"
 
+#include "glad.h"
+
 #pragma region Shader code
 
 const char fragment_shader_source[] = R"glsl(

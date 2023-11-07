@@ -240,10 +240,8 @@ void GameMap::hot_load(const ChunkCoordinates& coordinates)
 	Chunk* loaded = cold_chunk->second;
 	cold_cache.erase(coordinates.combined);
 	hot_cache.insert(std::make_pair(coordinates.combined, loaded));
-	//TODO(ches) Inform other systems about the load so they can do their part
 
-	ChunkLoaded event(coordinates);
-	g_event_manager->fire(event);
+	g_event_manager->queue(std::make_shared<ChunkLoaded>(coordinates));
 }
 
 void GameMap::cold_unload(const ChunkCoordinates& coordinates)

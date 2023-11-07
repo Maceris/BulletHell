@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glad.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// References to buffers for rendering entities, so buffers can be cached.
@@ -52,49 +52,10 @@ struct CommandBuffers
 	/// <summary>
 	/// Delete any buffers that are set up.
 	/// </summary>
-	void cleanup()
-	{
-		if (animated_command_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_command_buffer);
-		}
-		if (animated_draw_element_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_draw_element_buffer);
-		}
-		if (animated_model_matrices_buffer != 0)
-		{
-			glDeleteBuffers(1, &animated_model_matrices_buffer);
-		}
+	void cleanup();
 
-		if (static_command_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_command_buffer);
-		}
-		if (static_draw_element_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_draw_element_buffer);
-		}
-		if (static_model_matrices_buffer != 0)
-		{
-			glDeleteBuffers(1, &static_model_matrices_buffer);
-		}
-	}
-
-	CommandBuffers()
-		: animated_command_buffer(0)
-		, animated_draw_count(0)
-		, animated_draw_element_buffer(0)
-		, animated_model_matrices_buffer(0)
-		, static_command_buffer(0)
-		, static_draw_count(0)
-		, static_draw_element_buffer(0)
-		, static_model_matrices_buffer(0)
-	{}
+	CommandBuffers();
 	CommandBuffers(const CommandBuffers&) = delete;
 	CommandBuffers& operator=(const CommandBuffers&) = delete;
-	~CommandBuffers()
-	{
-		cleanup();
-	}
+	~CommandBuffers();
 };

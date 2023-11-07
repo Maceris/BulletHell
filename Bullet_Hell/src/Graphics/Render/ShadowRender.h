@@ -12,8 +12,6 @@
 #include "ShadowBuffer.h"
 #include "UniformsMap.h"
 
-#include "glad.h"
-
 /// <summary>
 /// Handles rendering for shadows.
 /// </summary>

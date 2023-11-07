@@ -5,6 +5,7 @@
 #include <cmath>
 #include <vector>
 
+#include "glad.h"
 
 #pragma region Shader code
 const char compute_shader_source[] = R"glsl(

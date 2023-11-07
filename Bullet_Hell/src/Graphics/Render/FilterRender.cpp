@@ -5,6 +5,8 @@
 #include "ResourceCache.h"
 #include "FilterRender.h"
 
+#include "glad.h"
+
 FilterRender::FilterRender()
 {
 	quad_mesh = std::make_unique<QuadMesh>();

@@ -5,31 +5,24 @@
 #include "Event.h"
 #include "Chunk.h"
 
-class ChunkLoadedInformation : public EventInformation
+class ChunkLoaded : public BaseEvent
 {
 public:
-	ChunkCoordinates coordinates;
+	const ChunkCoordinates coordinates;
+	static const EventType event_type;
 
-	ChunkLoadedInformation(const ChunkCoordinates& coordinates);
-	ChunkLoadedInformation(const ChunkLoadedInformation&) = delete;
-	ChunkLoadedInformation& operator=(const ChunkLoadedInformation&) = delete;
-	~ChunkLoadedInformation() = default;
-};
-
-class ChunkLoaded : public Event
-{
-public:
-	std::shared_ptr<ChunkLoadedInformation> information;
-
-	ChunkLoaded(const ChunkCoordinates& coordinates);
+	explicit ChunkLoaded(const ChunkCoordinates& coordinates);
 	ChunkLoaded(const ChunkLoaded&) = delete;
 	ChunkLoaded& operator=(const ChunkLoaded&) = delete;
 	~ChunkLoaded() = default;
 
-	virtual std::string event_type()
+	virtual const EventType& get_event_type() const
+	{
+		return event_type;
+	}
+
+	virtual const char* get_name() const
 	{
 		return "ChunkLoaded";
 	}
-
-	virtual std::shared_ptr<EventInformation> get_information();
 };

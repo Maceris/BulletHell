@@ -15,8 +15,7 @@
 
 #include "GBuffer.h"
 
-#include "glad.h"
-#include "glfw3.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// Configuration for tweaking the rendering pipeline.

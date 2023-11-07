@@ -1,5 +1,7 @@
 #include "QuadMesh.h"
 
+#include "glad.h"
+
 QuadMesh::QuadMesh()
 	: vao{ 0 }
 	, vbo_list{ 0 }

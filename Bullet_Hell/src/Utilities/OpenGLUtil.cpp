@@ -2,6 +2,8 @@
 
 #include "Logger.h"
 
+#include "glad.h"
+
 std::vector<std::string> OpenGLUtil::cached_extensions;
 
 bool OpenGLUtil::assert_extensions_exist(const std::vector<std::string>& names)

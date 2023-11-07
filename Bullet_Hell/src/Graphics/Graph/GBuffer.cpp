@@ -1,5 +1,7 @@
 #include "GBuffer.h"
 
+#include "glad.h"
+
 GBuffer::GBuffer(const unsigned int width, const unsigned int height)
 	: width(width)
 	, height(height)

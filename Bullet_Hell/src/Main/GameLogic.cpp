@@ -6,13 +6,14 @@
 
 #include "Logger.h"
 #include "AnimationResource.h"
-#include "EventHandlers.h"
 #include "MaterialResource.h"
 #include "ModelResource.h"
 #include "ResourceZipFile.h"
 #include "TextureResource.h"
 #include "Timer.h"
 
+#include "glad.h"
+#include "glfw3.h"
 #include "imgui.h"
 
 GameLogic* g_game_logic = nullptr;
@@ -50,7 +51,6 @@ bool GameLogic::initialize()
 	resource_cache->register_loader(std::make_shared<AnimationLoader>());
 
 	g_event_manager = ALLOC EventManager();
-	EventHandlers::register_handlers();
 
 	window = std::unique_ptr<Window>(ALLOC Window());
 	TIME_START("Window Init");

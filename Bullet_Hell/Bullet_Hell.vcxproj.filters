@@ -234,10 +234,13 @@
     <ClCompile Include="src\Event\ChunkLoaded.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event\EventHandlers.cpp">
+    <ClCompile Include="src\3rdParty\CppDelegates\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\3rdParty\CppDelegates\stdafx.cpp">
+    <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Render\CommandBuffers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -482,7 +485,10 @@
     <ClInclude Include="src\Event\ChunkLoaded.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Event\EventHandlers.h">
+    <ClInclude Include="src\Memory\ConcurrentQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\GladTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

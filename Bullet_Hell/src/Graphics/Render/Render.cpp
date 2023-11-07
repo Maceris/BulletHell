@@ -2,7 +2,10 @@
 
 #include "gtc/type_ptr.hpp"
 
+#include "Logger.h"
 #include "Timer.h"
+
+#include "glad.h"
 
 Configuration Render::configuration;
 

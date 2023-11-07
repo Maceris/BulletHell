@@ -11,8 +11,6 @@
 #include "ShaderProgram.h"
 #include "UniformsMap.h"
 
-#include "glad.h"
-
 /// <summary>
 /// Handles rendering for the scene geometry.
 /// </summary>

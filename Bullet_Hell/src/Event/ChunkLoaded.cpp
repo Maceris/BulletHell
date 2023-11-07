@@ -1,15 +1,7 @@
 #include "ChunkLoaded.h"
 
-ChunkLoadedInformation::ChunkLoadedInformation(
-	const ChunkCoordinates& coordinates)
-	: coordinates{ coordinates }
-{}
+const EventType ChunkLoaded::event_type = 0xf8b52643;
 
 ChunkLoaded::ChunkLoaded(const ChunkCoordinates& coordinates)
-	: information{ std::make_shared<ChunkLoadedInformation>(coordinates) }
+	: coordinates{ coordinates }
 {}
-
-std::shared_ptr<EventInformation> ChunkLoaded::get_information()
-{
-	return information;
-}

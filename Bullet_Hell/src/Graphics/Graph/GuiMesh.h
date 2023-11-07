@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glad.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// Used to represent ImGui meshes.

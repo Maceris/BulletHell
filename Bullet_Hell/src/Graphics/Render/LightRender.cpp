@@ -1,7 +1,10 @@
 #include "LightRender.h"
 
 #include "CascadeShadowSlice.h"
+#include "Logger.h"
 #include "RenderConstants.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 

@@ -159,10 +159,10 @@
     <ClCompile Include="src\Debugging\Timer.cpp" />
     <ClCompile Include="src\Event\ChunkLoaded.cpp" />
     <ClCompile Include="src\Event\Event.cpp" />
-    <ClCompile Include="src\Event\EventHandlers.cpp" />
     <ClCompile Include="src\Event\EventManager.cpp" />
     <ClCompile Include="src\Graphics\Graph\Animation.cpp" />
     <ClCompile Include="src\Graphics\Graph\AnimationResource.cpp" />
+    <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp" />
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
@@ -183,6 +183,7 @@
     <ClCompile Include="src\Graphics\GUI\UI.cpp" />
     <ClCompile Include="src\Graphics\MouseInput.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
+    <ClCompile Include="src\Graphics\Render\CommandBuffers.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
     <ClCompile Include="src\Graphics\Render\LightRender.cpp" />
@@ -237,8 +238,8 @@
     <ClInclude Include="src\Debugging\Timer.h" />
     <ClInclude Include="src\Event\ChunkLoaded.h" />
     <ClInclude Include="src\Event\Event.h" />
-    <ClInclude Include="src\Event\EventHandlers.h" />
     <ClInclude Include="src\Event\EventManager.h" />
+    <ClInclude Include="src\Graphics\GladTypes.h" />
     <ClInclude Include="src\Graphics\Graph\Animation.h" />
     <ClInclude Include="src\Graphics\Graph\AnimationResource.h" />
     <ClInclude Include="src\Graphics\Graph\ArrayOfTextures.h" />
@@ -290,6 +291,7 @@
     <ClInclude Include="src\Map\GameMap.h" />
     <ClInclude Include="src\Map\MapGenerator.h" />
     <ClInclude Include="src\Map\Tile.h" />
+    <ClInclude Include="src\Memory\ConcurrentQueue.h" />
     <ClInclude Include="src\Memory\CriticalSection.h" />
     <ClInclude Include="src\ResourceCache\DefaultResourceLoader.h" />
     <ClInclude Include="src\ResourceCache\Resource.h" />

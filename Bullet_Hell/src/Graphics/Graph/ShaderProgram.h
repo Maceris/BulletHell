@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "glad.h"
+#include "GladTypes.h"
 
 
 /// <summary>

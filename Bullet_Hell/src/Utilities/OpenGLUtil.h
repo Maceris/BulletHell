@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "glad.h"
-#include "glfw3.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// Utilities relating to OpenGL.

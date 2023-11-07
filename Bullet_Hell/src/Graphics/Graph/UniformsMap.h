@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#include "glad.h"
+#include "GladTypes.h"
 #include "glm.hpp"
 
 /// <summary>

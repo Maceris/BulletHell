@@ -7,8 +7,7 @@
 #include "MeshDrawData.h"
 #include "Scene.h"
 
-#include "glad.h"
-#include "glfw3.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// A list of pointers to models.

@@ -10,6 +10,8 @@
 #include "SceneLights.h"
 #include "SkyBox.h"
 
+#include "ChunkLoaded.h"
+
 #include <map>
 #include <memory>
 #include <mutex>
@@ -105,4 +107,6 @@ private:
 	/// models.
 	/// </summary>
 	std::mutex pending_models_mutex;
+
+	void handle_chunk_loading(EventPointer event);
 };

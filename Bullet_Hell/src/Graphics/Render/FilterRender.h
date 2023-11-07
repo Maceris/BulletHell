@@ -10,8 +10,7 @@
 #include "Scene.h"
 #include "UniformsMap.h"
 
-#include "glad.h"
-#include "glfw3.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// Handles post-processing filters

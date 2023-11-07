@@ -3,8 +3,7 @@
 #include "Globals.h"
 
 #include "ArrayOfTextures.h"
-
-#include "glad.h"
+#include "GladTypes.h"
 
 /// <summary>
 /// The width of the shadow map in pixels.

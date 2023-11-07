@@ -1,7 +1,8 @@
 #pragma once
 
+#include "Globals.h"
+
 #include <fstream>
-#define NOMINMAX
 #include <winsock2.h>
 
 #include "glm.hpp"

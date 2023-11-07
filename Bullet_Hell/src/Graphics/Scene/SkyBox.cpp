@@ -5,6 +5,8 @@
 #include "ModelResource.h"
 #include "ResourceCache.h"
 
+#include "glad.h"
+
 SkyBox::SkyBox()
 {
 	const std::string model_name = "models/skybox/skybox.model";

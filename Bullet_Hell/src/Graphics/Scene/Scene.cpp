@@ -1,6 +1,10 @@
 #include "Scene.h"
 
+#include "Delegate.h"
+
 #include "Entity.h"
+#include "GameLogic.h"
+#include "Logger.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
 	: camera{}
@@ -10,7 +14,12 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, scene_lights{}
 	, sky_box{}
 	, player{}
-{}
+{
+	g_event_manager->register_handler(
+		EventHandler::create<Scene, &Scene::handle_chunk_loading>(this),
+		ChunkLoaded::event_type
+	);
+}
 
 void Scene::add_entity(std::shared_ptr<Entity> entity)
 {
@@ -53,4 +62,10 @@ void Scene::add_model(std::shared_ptr<Model> model)
 void Scene::resize(const unsigned int width, const unsigned int height)
 {
 	projection.update_matrices(width, height);
+}
+
+void Scene::handle_chunk_loading(EventPointer event)
+{
+	//TODO(ches) handle loading models for all the tiles in the chunk
+	LOG_INFO("We are doing something with a loaded chunk");
 }

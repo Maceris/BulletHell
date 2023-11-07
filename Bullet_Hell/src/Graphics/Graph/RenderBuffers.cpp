@@ -6,6 +6,7 @@
 #include "AnimationResource.h"
 #include "Logger.h"
 
+#include "glad.h"
 #include "gtc/type_ptr.hpp"
 
 RenderBuffers::RenderBuffers()
@@ -37,7 +38,6 @@ void RenderBuffers::cleanup()
 	glDeleteVertexArrays(1, &static_vao);
 	glDeleteVertexArrays(1, &animated_vao);
 }
-
 
 void RenderBuffers::define_vertex_attributes()
 {

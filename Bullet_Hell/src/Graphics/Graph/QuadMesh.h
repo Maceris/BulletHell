@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glad.h"
+#include "GladTypes.h"
 
 constexpr auto QUAD_MESH_VERTEX_COUNT = 6;
 

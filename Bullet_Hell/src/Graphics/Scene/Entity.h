@@ -6,7 +6,6 @@
 
 #include <string>
 
-#include "glad.h"
 #include "glm.hpp"
 #include "gtx/quaternion.hpp"
 

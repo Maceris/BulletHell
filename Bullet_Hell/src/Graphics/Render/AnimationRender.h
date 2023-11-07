@@ -10,8 +10,6 @@
 #include "ShaderProgram.h"
 #include "UniformsMap.h"
 
-#include "glad.h"
-
 /// <summary>
 /// Handles compute shaders for animated models.
 /// </summary>

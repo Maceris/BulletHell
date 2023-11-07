@@ -3,6 +3,8 @@
 #include "Logger.h"
 #include "OpenGLUtil.h"
 
+#include "glad.h"
+
 ShaderModuleData::ShaderModuleData(const char* source, int length, 
 	const GLuint type)
 	: source_code(source)
