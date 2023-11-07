@@ -2,6 +2,10 @@
 
 #include "Logger.h"
 
+EventManager::EventManager()
+	: active_queue{ 0 }
+{}
+
 bool EventManager::register_handler(const EventHandler& handler,
 	const EventType& type)
 {
@@ -49,7 +53,7 @@ bool EventManager::unregister_handler(const EventHandler& handler,
 
 bool EventManager::queue(EventPointer event)
 {
-	LOG_ASSERT(active_queue > 0);
+	LOG_ASSERT(active_queue >= 0);
 	LOG_ASSERT(active_queue < EVENT_QUEUE_COUNT);
 
 	if (!event)
@@ -66,7 +70,7 @@ bool EventManager::queue(EventPointer event)
 		);
 		return false;
 	}
-	queues[active_queue].push(event);
+	queues[active_queue].push_back(event);
 	
 	LOG_TAGGED("Event", "Queued an event of type "
 		+ std::string(event->get_name())
@@ -108,9 +112,72 @@ void EventManager::fire_immediately(EventPointer event)
 	}
 }
 
-void update(unsigned long max_milliseconds)
+void EventManager::update(unsigned long max_milliseconds)
 {
 	Timestamp current = std::chrono::steady_clock::now();
 	Timestamp end_time = current + std::chrono::milliseconds(max_milliseconds);
 
+	EventPointer realtime_event;
+	while (threadsafe_queue.try_pop(realtime_event))
+	{
+		queue(realtime_event);
+		current = std::chrono::steady_clock::now();
+
+		if (max_milliseconds != -1 && current > end_time)
+		{
+			LOG_ERROR("We have too many real time events to process");
+		}
+	}
+
+	int queue_to_process = active_queue;
+	EventQueue& queue = queues[queue_to_process];
+
+	LOG_TAGGED("Event Loop", "Processing event queue "
+		+ std::to_string(queue_to_process) + ", containing "
+		+ std::to_string(queue.size()) + " events");
+
+	while (!queue.empty())
+	{
+		EventPointer event = queue.front();
+		queue.pop_front();
+
+		LOG_TAGGED("Event Loop", "Processing event "
+			+ std::string(event->get_name()));
+
+		const EventType& type = event->get_event_type();
+
+		auto result = handlers.find(type);
+		if (result != handlers.end())
+		{
+			LOG_TAGGED("Event Loop", "No handlers found, skipping");
+			continue;
+		}
+		else 
+		{
+			const HandlerList& listeners = result->second;
+			LOG_TAGGED("Event Loop", "Found "
+				+ std::to_string(listeners.size())
+			+ " handlers");
+
+			for (auto& listener : listeners)
+			{
+				listener(event);
+			}
+		}
+
+		current = std::chrono::steady_clock::now();
+
+		if (max_milliseconds != -1 && current > end_time)
+		{
+			LOG_TAGGED("Event Loop", "Ran out of time for event processing, aborting.");
+			break;
+		}
+	}
+	//NOTE(ches) we don't want to switch queues until we empty this one
+	if (queue.empty())
+	{
+		active_queue = (active_queue + 1) % EVENT_QUEUE_COUNT;
+		queues[active_queue].clear();
+	}
+	
 }

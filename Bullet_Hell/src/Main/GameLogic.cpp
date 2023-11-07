@@ -199,6 +199,7 @@ void GameLogic::run_game()
 	{
 		calculate_delta_time();
 		process_input();
+		g_event_manager->update(10);
 		current_scene->player->animation_data.next_frame();
 		render->render(*window, *current_scene);
 		window->render();

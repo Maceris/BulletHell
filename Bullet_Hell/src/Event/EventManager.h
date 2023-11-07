@@ -2,6 +2,7 @@
 
 #include "Event.h"
 
+#include <list>
 #include <map>
 #include <vector>
 
@@ -21,7 +22,7 @@ using HandlerList = std::vector<EventHandler>;
 /// <summary>
 /// A queue of events that need to be fired.
 /// </summary>
-using EventQueue = std::queue<EventPointer>;
+using EventQueue = std::list<EventPointer>;
 
 /// <summary>
 /// A threadsafe queue used to register events from another thread.
@@ -33,9 +34,19 @@ using ThreadSafeEventQueue = ConcurrentQueue<EventPointer>;
 /// </summary>
 constexpr unsigned int EVENT_QUEUE_COUNT = 2;
 
+/// <summary>
+/// As long as is physically possible to wait for updates to finish.
+/// </summary>
+constexpr unsigned long FOREVER = -1;
+
 class EventManager
 {
 public:
+	EventManager();
+	EventManager(const EventManager&) = delete;
+	EventManager& operator=(const EventManager&) = delete;
+	~EventManager() = default;
+
 	/// <summary>
 	/// Register an event handler.
 	/// </summary>
@@ -76,7 +87,7 @@ public:
 	/// <summary>
 	/// Go through and fire events in the active queue.
 	/// </summary>
-	void update(unsigned long max_milliseconds);
+	void update(unsigned long max_milliseconds = FOREVER);
 private:
 
 	/// <summary>
