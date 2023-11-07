@@ -14,6 +14,8 @@
 int main()
 {
     Logger::init();
+    Logger::set_display_flags("Event", FLAG_WRITE_TO_DEBUGGER);
+    Logger::set_display_flags("Event Loop", 0);
 
     TIME_START("Game Init");
 
