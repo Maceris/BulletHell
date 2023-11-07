@@ -4,6 +4,9 @@
 
 EventManager::EventManager()
 	: active_queue{ 0 }
+	, handlers{}
+	, queues{}
+	, threadsafe_queue{}
 {}
 
 bool EventManager::register_handler(const EventHandler& handler,
@@ -21,7 +24,8 @@ bool EventManager::register_handler(const EventHandler& handler,
 		}
 	}
 	handler_list.push_back(handler);
-	LOG_TAGGED("Event", "Registered event handler " + std::to_string(type));
+	LOG_TAGGED("Event", "Registered event handler for event type " 
+		+ std::to_string(type));
 	return true;
 }
 
@@ -70,10 +74,12 @@ bool EventManager::queue(EventPointer event)
 		);
 		return false;
 	}
-	queues[active_queue].push_back(event);
+	EventQueue& queue = queues[active_queue];
+	queue.push_back(event);
 	
-	LOG_TAGGED("Event", "Queued an event of type "
+	LOG_TAGGED("Event", "Queued a(n) "
 		+ std::string(event->get_name())
+		+ " event with type " + std::to_string(event->get_event_type())
 	);
 	return true;
 }
@@ -147,10 +153,9 @@ void EventManager::update(unsigned long max_milliseconds)
 		const EventType& type = event->get_event_type();
 
 		auto result = handlers.find(type);
-		if (result != handlers.end())
+		if (result == handlers.end())
 		{
 			LOG_TAGGED("Event Loop", "No handlers found, skipping");
-			continue;
 		}
 		else 
 		{
