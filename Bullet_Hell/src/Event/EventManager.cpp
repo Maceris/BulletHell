@@ -3,9 +3,8 @@
 #include "Logger.h"
 
 EventManager::EventManager()
-	: active_queue{ 0 }
-	, handlers{}
-	, queues{}
+	: handlers{}
+	, main_queue{}
 	, threadsafe_queue{}
 {}
 
@@ -57,9 +56,6 @@ bool EventManager::unregister_handler(const EventHandler& handler,
 
 bool EventManager::queue(EventPointer event)
 {
-	LOG_ASSERT(active_queue >= 0);
-	LOG_ASSERT(active_queue < EVENT_QUEUE_COUNT);
-
 	if (!event)
 	{
 		LOG_ERROR("Firing an invalid event");
@@ -74,8 +70,7 @@ bool EventManager::queue(EventPointer event)
 		);
 		return false;
 	}
-	EventQueue& queue = queues[active_queue];
-	queue.push_back(event);
+	main_queue.push_back(event);
 	
 	LOG_TAGGED("Event", "Queued a(n) "
 		+ std::string(event->get_name())
@@ -135,17 +130,13 @@ void EventManager::update(unsigned long max_milliseconds)
 		}
 	}
 
-	int queue_to_process = active_queue;
-	EventQueue& queue = queues[queue_to_process];
+	LOG_TAGGED("Event Loop", "Processing event queue containing "
+		+ std::to_string(main_queue.size()) + " events");
 
-	LOG_TAGGED("Event Loop", "Processing event queue "
-		+ std::to_string(queue_to_process) + ", containing "
-		+ std::to_string(queue.size()) + " events");
-
-	while (!queue.empty())
+	while (!main_queue.empty())
 	{
-		EventPointer event = queue.front();
-		queue.pop_front();
+		EventPointer event = main_queue.front();
+		main_queue.pop_front();
 
 		LOG_TAGGED("Event Loop", "Processing event "
 			+ std::string(event->get_name()));
@@ -178,11 +169,4 @@ void EventManager::update(unsigned long max_milliseconds)
 			break;
 		}
 	}
-	//NOTE(ches) we don't want to switch queues until we empty this one
-	if (queue.empty())
-	{
-		active_queue = (active_queue + 1) % EVENT_QUEUE_COUNT;
-		queues[active_queue].clear();
-	}
-	
 }

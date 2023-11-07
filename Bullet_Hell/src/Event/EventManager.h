@@ -30,11 +30,6 @@ using EventQueue = std::list<EventPointer>;
 using ThreadSafeEventQueue = ConcurrentQueue<EventPointer>;
 
 /// <summary>
-/// How many event queues we have.
-/// </summary>
-constexpr unsigned int EVENT_QUEUE_COUNT = 2;
-
-/// <summary>
 /// As long as is physically possible to wait for updates to finish.
 /// </summary>
 constexpr unsigned long FOREVER = -1;
@@ -96,18 +91,12 @@ private:
 	std::map<EventType, HandlerList> handlers;
 
 	/// <summary>
-	/// The event queues.
+	/// The event queue.
 	/// </summary>
-	EventQueue queues[EVENT_QUEUE_COUNT];
+	EventQueue main_queue;
 
 	/// <summary>
 	/// The queue for events from another thread.
 	/// </summary>
 	ThreadSafeEventQueue threadsafe_queue;
-
-	/// <summary>
-	/// Which queue is currently active. Events are always queued on an
-	/// inactive queue.
-	/// </summary>
-	unsigned int active_queue;
 };
