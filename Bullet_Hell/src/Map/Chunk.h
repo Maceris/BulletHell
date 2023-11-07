@@ -43,27 +43,38 @@ union ChunkCoordinates
 		: combined{ 0 }
 	{}
 
-	ChunkCoordinates(const uint32_t combined)
+	explicit ChunkCoordinates(const uint32_t combined)
 		: combined{ combined }
 	{}
 
-	ChunkCoordinates(const int16_t x, const int16_t z)
+	explicit ChunkCoordinates(const int16_t x, const int16_t z)
 		: x{ x }
 		, z{ z }
 	{}
 
-	ChunkCoordinates(const int x, const int z)
+	explicit ChunkCoordinates(const int x, const int z)
 		: x{ static_cast<int16_t>(x) }
 		, z{ static_cast<int16_t>(z) }
 	{}
 
-	ChunkCoordinates(const unsigned int x, const unsigned int z)
+	explicit ChunkCoordinates(const unsigned int x, const unsigned int z)
 		: x{ static_cast<int16_t>(x) }
 		, z{ static_cast<int16_t>(z) }
 	{}
 
-	ChunkCoordinates(const ChunkCoordinates&) = default;
-	ChunkCoordinates& operator=(const ChunkCoordinates&) = default;
+	ChunkCoordinates(const ChunkCoordinates& other)
+		: combined{ other.combined }
+	{}
+
+	ChunkCoordinates& operator=(const ChunkCoordinates& other)
+	{
+		if (this != &other)
+		{
+			combined = other.combined;
+		}
+		return *this;
+	}
+
 	~ChunkCoordinates() = default;
 
 	bool operator==(const ChunkCoordinates& other) const

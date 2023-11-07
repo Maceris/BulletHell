@@ -28,12 +28,11 @@ void MapGenerator::populate_chunk(Chunk& chunk)
 	const int start_z = chunk.location.z * CHUNK_WIDTH;
 	const int end_z = (chunk.location.z + 1) * CHUNK_WIDTH - 1;
 
-	for (int x = start_x; x <= end_x; ++x)
+	for (int x = 0; x < CHUNK_WIDTH; ++x)
 	{
-		for (int z = start_z; z <= end_z; ++z)
+		for (int z = 0; z < CHUNK_WIDTH; ++z)
 		{
 			chunk.tiles[x][z].id = get_tile(start_x + x, start_z + z);
 		}
 	}
-	//TODO(ches) Notify other systems a new chunk was loaded
 }
