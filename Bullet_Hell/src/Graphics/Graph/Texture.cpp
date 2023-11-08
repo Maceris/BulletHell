@@ -6,9 +6,9 @@ std::shared_ptr<Texture> Texture::default_texture = nullptr;
 
 Texture::Texture(const unsigned int width, const unsigned int height,
 	const char* buffer)
-	: width(width)
-	, height(height)
-	, texture_id(0)
+	: width{ width }
+	, height{ height }
+	, texture_id{ 0 }
 {
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);

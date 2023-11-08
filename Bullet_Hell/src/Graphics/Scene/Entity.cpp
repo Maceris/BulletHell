@@ -9,7 +9,7 @@ Entity::Entity(const std::string model_ID)
 	, position{ 0.0f }
 	, rotation{}
 	, scale{ 1 }
-	, animation_data(std::shared_ptr<Animation>())
+	, animation_data{ std::shared_ptr<Animation>() }
 {}
 
 void Entity::add_rotation(const float x, const float y, const float z,

@@ -34,11 +34,11 @@ void ResourceHandle::set_extra(std::shared_ptr<ResourceExtraData> extra)
 
 ResourceHandle::ResourceHandle(Resource& resource, char* buffer,
 	size_t size, ResourceCache* resource_cache)
-	: resource(resource)
-	, buffer(buffer)
-	, size(size)
-	, extra(std::shared_ptr<ResourceExtraData>())
-	, resource_cache(resource_cache)
+	: resource{ resource }
+	, buffer{ buffer }
+	, size{ size }
+	, extra{ std::shared_ptr<ResourceExtraData>() }
+	, resource_cache{ resource_cache }
 {}
 
 ResourceHandle::~ResourceHandle()

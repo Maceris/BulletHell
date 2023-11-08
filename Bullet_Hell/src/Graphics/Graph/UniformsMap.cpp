@@ -6,7 +6,7 @@
 #include "Debugging/Logger.h"
 
 UniformsMap::UniformsMap(GLuint program_id)
-	: program_id(program_id)
+	: program_id{ program_id }
 {}
 
 GLint UniformsMap::get_uniform_location(const std::string& name)

@@ -63,7 +63,7 @@ public:
 	/// </summary>
 	/// <param name="critical_section_to_use">The section to lock.</param>
 	ScopedCriticalSection(CriticalSection& critical_section_to_use)
-		: critical_section(critical_section_to_use)
+		: critical_section{ critical_section_to_use }
 	{
 		critical_section.lock();
 	}

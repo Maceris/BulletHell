@@ -1,26 +1,26 @@
 #include "Graphics/Scene/Lights/PointLight.h"
 
 PointLight::PointLight(const glm::vec3& position)
-	: attenuation()
-	, color(1.0f, 1.0f, 1.0f)
-	, position(position)
-	, intensity(1.0f)
+	: attenuation{}
+	, color{ 1.0f, 1.0f, 1.0f }
+	, position{ position }
+	, intensity{ 1.0f }
 {}
 
 PointLight::PointLight(const glm::vec3& color, const glm::vec3& position,
 	const float intensity)
-	: attenuation()
-	, color(color)
-	, position(position)
-	, intensity(intensity)
+	: attenuation{}
+	, color{ color }
+	, position{ position }
+	, intensity{ intensity }
 {}
 
 PointLight::PointLight(const glm::vec3& color, const glm::vec3& position,
 const float intensity, const Attenuation& attenuation)
-	: attenuation(attenuation)
-	, color(color)
-	, position(position)
-	, intensity(intensity)
+	: attenuation{ attenuation }
+	, color{ color }
+	, position{ position }
+	, intensity{ intensity }
 {}
 
 void PointLight::set_color(const float r, const float g, const float b)

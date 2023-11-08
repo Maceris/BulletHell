@@ -7,8 +7,8 @@
 
 SpotLight::SpotLight(const PointLight& point_light, const glm::vec3& cone_direction,
 	float cut_off_degrees)
-	: point_light(point_light)
-	, cone_direction(cone_direction)
+	: point_light{ point_light }
+	, cone_direction{ cone_direction }
 {
 	set_cut_off_angle(cut_off_degrees);
 }

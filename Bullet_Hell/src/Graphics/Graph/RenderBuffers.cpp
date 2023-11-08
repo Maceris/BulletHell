@@ -11,14 +11,14 @@
 #include "Graphics/Graph/AnimationResource.h"
 
 RenderBuffers::RenderBuffers()
-	: vbo_list(std::vector<GLuint>())
-	, animated_vao(0)
-	, static_vao(0)
-	, binding_poses_vbo(0)
-	, bones_indices_weights_vbo(0)
-	, bones_matrices_vbo(0)
-	, dest_animation_vbo(0)
-	, buffers_populated(false)
+	: vbo_list{}
+	, animated_vao{ 0 }
+	, static_vao{ 0 }
+	, binding_poses_vbo{ 0 }
+	, bones_indices_weights_vbo{ 0 }
+	, bones_matrices_vbo{ 0 }
+	, dest_animation_vbo{ 0 }
+	, buffers_populated{ false }
 {}
 
 RenderBuffers::~RenderBuffers()

@@ -7,8 +7,8 @@
 #include "Debugging/Logger.h"
 
 ResourceZipFile::ResourceZipFile(const std::string resource_file_name)
-	: zip_file(nullptr)
-	, resource_file_name(resource_file_name)
+	: zip_file{ nullptr }
+	, resource_file_name{ resource_file_name }
 {
 	LOG_INFO("Opening the resource zip file " + resource_file_name);
 }

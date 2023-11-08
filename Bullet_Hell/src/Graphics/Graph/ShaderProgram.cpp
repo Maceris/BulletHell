@@ -7,9 +7,9 @@
 
 ShaderModuleData::ShaderModuleData(const char* source, int length, 
 	const GLuint type)
-	: source_code(source)
-	, source_length(length)
-	, shader_type(type)
+	: source_code{ source }
+	, source_length{ length }
+	, shader_type{ type }
 {}
 
 ShaderProgram::ShaderProgram(std::vector<ShaderModuleData> modules)

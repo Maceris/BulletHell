@@ -3,10 +3,10 @@
 #include "glad.h"
 
 GBuffer::GBuffer(const unsigned int width, const unsigned int height)
-	: width(width)
-	, height(height)
-	, gBuffer_ID(0)
-	, texture_IDs()
+	: width{ width }
+	, height{ height }
+	, gBuffer_ID{ 0 }
+	, texture_IDs{}
 {
 	glGenFramebuffers(1, &gBuffer_ID);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer_ID);

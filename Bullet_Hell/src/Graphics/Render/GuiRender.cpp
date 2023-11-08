@@ -52,7 +52,7 @@ void main()
 #pragma endregion
 
 GuiRender::GuiRender(const Window& window)
-	: scale(glm::vec2(window.width, window.height))
+	: scale{ window.width, window.height }
 {
 	std::vector<ShaderModuleData> shader_modules;
 	shader_modules.emplace_back(vertex_shader_source,

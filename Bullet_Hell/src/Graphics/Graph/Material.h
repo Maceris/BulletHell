@@ -62,13 +62,13 @@ struct Material
 	/// Create a material with all default values.
 	/// </summary>
 	Material()
-		: ambient_color(MATERIAL_DEFAULT_COLOR)
-		, diffuse_color(MATERIAL_DEFAULT_COLOR)
-		, specular_color(MATERIAL_DEFAULT_COLOR)
-		, reflectance(0.0f)
-		, texture_name("")
-		, normal_map_name("")
-		, material_id(0)
+		: ambient_color{ MATERIAL_DEFAULT_COLOR }
+		, diffuse_color{ MATERIAL_DEFAULT_COLOR }
+		, specular_color{ MATERIAL_DEFAULT_COLOR }
+		, reflectance{ 0.0f }
+		, texture_name{ "" }
+		, normal_map_name{ "" }
+		, material_id{ 0 }
 	{}
 
 	Material(const Material&) = default;

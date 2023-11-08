@@ -6,9 +6,9 @@
 #include "imgui_impl_opengl3.h"
 
 GuiMesh::GuiMesh()
-	: indices_VBO(0)
-	, VAO(0)
-	, vertices_VBO(0)
+	: indices_VBO{ 0 }
+	, VAO{ 0 }
+	, vertices_VBO{ 0 }
 {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
