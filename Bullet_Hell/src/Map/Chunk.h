@@ -4,7 +4,7 @@
 
 #include <compare>
 
-#include "Tile.h"
+#include "Map/Tile.h"
 
 /// <summary>
 /// The number of tiles per side of a chunk.

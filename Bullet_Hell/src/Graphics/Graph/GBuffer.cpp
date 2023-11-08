@@ -1,4 +1,4 @@
-#include "GBuffer.h"
+#include "Graphics/Graph/GBuffer.h"
 
 #include "glad.h"
 

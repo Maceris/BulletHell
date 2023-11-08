@@ -1,6 +1,4 @@
-#pragma once
-
-#include "CascadeShadowSlice.h"
+#include "Graphics/Graph/CascadeShadowSlice.h"
 
 #include "gtc/matrix_transform.hpp"
 

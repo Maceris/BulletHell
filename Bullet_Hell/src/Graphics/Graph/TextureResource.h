@@ -2,9 +2,9 @@
 
 #include "Globals.h"
 
-#include "Resource.h"
-#include "ResourceLoader.h"
-#include "Texture.h"
+#include "Graphics/Graph/Texture.h"
+#include "ResourceCache/Resource.h"
+#include "ResourceCache/ResourceLoader.h"
 
 class TextureExtraData : public ResourceExtraData
 {

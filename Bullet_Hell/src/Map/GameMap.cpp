@@ -1,10 +1,9 @@
-#include "GameMap.h"
+#include "Map/GameMap.h"
 
-#include "ChunkLoaded.h"
-#include "GameLogic.h"
-#include "Logger.h"
-
-#include "CriticalSection.h"
+#include "Debugging/Logger.h"
+#include "Event/ChunkLoaded.h"
+#include "Main/GameLogic.h"
+#include "Memory/CriticalSection.h"
 
 /// <summary>
 /// Ensure thread safety when modifying the chunks.

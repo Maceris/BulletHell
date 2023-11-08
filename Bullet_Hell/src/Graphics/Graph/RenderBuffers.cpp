@@ -1,13 +1,14 @@
+#include "Graphics/Graph/RenderBuffers.h"
+
 #include <cmath>
 #include <memory>
 #include <set>
 
-#include "RenderBuffers.h"
-#include "AnimationResource.h"
-#include "Logger.h"
-
 #include "glad.h"
 #include "gtc/type_ptr.hpp"
+
+#include "Debugging/Logger.h"
+#include "Graphics/Graph/AnimationResource.h"
 
 RenderBuffers::RenderBuffers()
 	: vbo_list(std::vector<GLuint>())

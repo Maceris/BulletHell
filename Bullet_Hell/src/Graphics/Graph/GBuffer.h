@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
 
 /// <summary>
 /// The maximum number of textures, which are used for albedo, normals,

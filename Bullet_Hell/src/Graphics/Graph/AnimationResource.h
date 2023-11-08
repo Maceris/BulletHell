@@ -2,9 +2,9 @@
 
 #include "Globals.h"
 
-#include "Animation.h"
-#include "Resource.h"
-#include "ResourceLoader.h"
+#include "Graphics/Graph/Animation.h"
+#include "ResourceCache/Resource.h"
+#include "ResourceCache/ResourceLoader.h"
 
 class AnimationExtraData : public ResourceExtraData
 {

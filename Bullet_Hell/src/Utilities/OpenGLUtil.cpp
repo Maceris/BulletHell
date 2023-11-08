@@ -1,8 +1,8 @@
-#include "OpenGLUtil.h"
-
-#include "Logger.h"
+#include "Utilities/OpenGLUtil.h"
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
 
 std::vector<std::string> OpenGLUtil::cached_extensions;
 

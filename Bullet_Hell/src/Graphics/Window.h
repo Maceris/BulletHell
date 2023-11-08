@@ -2,9 +2,9 @@
 
 #include "Globals.h"
 
-#include "MouseInput.h"
-
 #include <memory>
+
+#include "Graphics/MouseInput.h"
 
 /*
  * NOTE(ches) so we don't have to include glfw here, since it will interfere

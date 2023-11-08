@@ -1,4 +1,4 @@
-#include "Resource.h"
+#include "ResourceCache/Resource.h"
 
 #include <algorithm>
 

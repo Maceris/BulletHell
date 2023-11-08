@@ -1,8 +1,8 @@
-#include "ArrayOfTextures.h"
+#include "Graphics/Graph/ArrayOfTextures.h"
 
 #include "glad.h"
 
-#include "Logger.h"
+#include "Debugging/Logger.h"
 
 ArrayOfTextures::ArrayOfTextures(unsigned int texture_count, unsigned int width,
 	unsigned int height, int pixel_format)

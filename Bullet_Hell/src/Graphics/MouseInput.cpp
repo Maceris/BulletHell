@@ -1,4 +1,4 @@
-#include "MouseInput.h"
+#include "Graphics/MouseInput.h"
 
 MouseInput::MouseInput()
 	: current_position{ 0 }

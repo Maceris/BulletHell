@@ -2,13 +2,13 @@
 
 #include "Globals.h"
 
-#include "Logger.h"
-
 #include <fstream>
 #define NOMINMAX
 #include <winsock2.h>
 
 #include "glm.hpp"
+
+#include "Debugging/Logger.h"
 
 /// <summary>
 /// Represents using a raw char stream as if it was an io stream.

@@ -1,4 +1,4 @@
-#include "Fog.h"
+#include "Graphics/Scene/Fog.h"
 
 Fog::Fog()
 	: active(false)

@@ -2,16 +2,16 @@
 
 #include "Globals.h"
 
-#include "mat4x4.hpp"
-
-#include "Animation.h"
-#include "Entity.h"
-#include "MeshData.h"
-#include "MeshDrawData.h"
-
 #include <string>
 #include <memory>
 #include <vector>
+
+#include "mat4x4.hpp"
+
+#include "Graphics/Graph/Animation.h"
+#include "Graphics/Graph/MeshData.h"
+#include "Graphics/Graph/MeshDrawData.h"
+#include "Graphics/Scene/Entity.h"
 
 /// <summary>
 /// A list of pointers to entities.

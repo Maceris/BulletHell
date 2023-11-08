@@ -2,11 +2,10 @@
 
 #include "Globals.h"
 
-#include "Portability.h"
-
-#include "Model.h"
-#include "Resource.h"
-#include "ResourceLoader.h"
+#include "Graphics/Graph/Model.h"
+#include "ResourceCache/Resource.h"
+#include "ResourceCache/ResourceLoader.h"
+#include "Utilities/Portability.h"
 
 class ModelExtraData : public ResourceExtraData
 {

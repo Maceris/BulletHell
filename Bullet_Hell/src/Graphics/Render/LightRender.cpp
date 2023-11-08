@@ -1,10 +1,15 @@
-#include "LightRender.h"
-
-#include "CascadeShadowSlice.h"
-#include "Logger.h"
-#include "RenderConstants.h"
+#include "Graphics/Render/LightRender.h"
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
+#include "Graphics/Graph/CascadeShadowSlice.h"
+#include "Graphics/Render/RenderConstants.h"
+#include "Graphics/Scene/Lights/AmbientLight.h"
+#include "Graphics/Scene/Lights/DirectionalLight.h"
+#include "Graphics/Scene/Lights/PointLight.h"
+#include "Graphics/Scene/Lights/SceneLights.h"
+#include "Graphics/Scene/Lights/SpotLight.h"
 
 #pragma region Shader code
 

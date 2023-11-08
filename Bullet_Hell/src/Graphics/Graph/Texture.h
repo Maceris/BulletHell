@@ -5,7 +5,7 @@
 #include <string>
 #include <memory>
 
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
 
 class Texture
 {

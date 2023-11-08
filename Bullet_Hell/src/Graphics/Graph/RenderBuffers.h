@@ -4,10 +4,9 @@
 
 #include <vector>
 
-#include "MeshDrawData.h"
-#include "Scene.h"
-
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
+#include "Graphics/Graph/MeshDrawData.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// A list of pointers to models.

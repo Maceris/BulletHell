@@ -1,9 +1,9 @@
-#include "Logger.h"
-
-#include "CriticalSection.h"
+#include "Debugging/Logger.h"
 
 #include <list>
 #include <map>
+
+#include "Memory/CriticalSection.h"
 
 static const char* ERROR_LOG_FILENAME = "log.txt";
 

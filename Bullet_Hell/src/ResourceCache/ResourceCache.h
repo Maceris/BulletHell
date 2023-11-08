@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-#include "ResourceFile.h"
-#include "ResourceHandle.h"
-#include "ResourceLoader.h"
+#include "ResourceCache/ResourceFile.h"
+#include "ResourceCache/ResourceHandle.h"
+#include "ResourceCache/ResourceLoader.h"
 
 using ResourceHandleList = std::list<std::shared_ptr<ResourceHandle>>;
 using ResourceHandleMap = std::map<std::string, std::shared_ptr<ResourceHandle>>;

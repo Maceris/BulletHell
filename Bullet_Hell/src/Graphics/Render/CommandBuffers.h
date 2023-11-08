@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
 
 /// <summary>
 /// References to buffers for rendering entities, so buffers can be cached.

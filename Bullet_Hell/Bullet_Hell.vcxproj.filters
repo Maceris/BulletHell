@@ -225,9 +225,6 @@
     <ClCompile Include="src\Map\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Event\EventManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -246,9 +243,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utilities\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Utilities\OpenGLUtil.h">
@@ -489,6 +483,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\GladTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

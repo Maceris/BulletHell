@@ -5,12 +5,11 @@
 #include <string>
 #include <memory>
 
-#include "QuadMesh.h"
-#include "ShaderProgram.h"
-#include "Scene.h"
-#include "UniformsMap.h"
-
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
+#include "Graphics/Graph/QuadMesh.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// Handles post-processing filters

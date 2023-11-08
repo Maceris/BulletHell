@@ -1,8 +1,9 @@
-#include "ModelResource.h"
+#include "Graphics/Graph/ModelResource.h"
 
-#include "GameLogic.h"
-#include "MaterialResource.h"
-#include "MeshData.h"
+#include "Debugging/Logger.h"
+#include "Graphics/Graph/MaterialResource.h"
+#include "Graphics/Graph/MeshData.h"
+#include "Main/GameLogic.h"
 
 /// <summary>
 /// What is the latest model file verison we support loading.

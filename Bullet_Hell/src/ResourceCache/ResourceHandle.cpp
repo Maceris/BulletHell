@@ -1,6 +1,6 @@
-#include "ResourceHandle.h"
+#include "ResourceCache/ResourceHandle.h"
 
-#include "ResourceCache.h"
+#include "ResourceCache/ResourceCache.h"
 
 const std::string ResourceHandle::get_name()
 {

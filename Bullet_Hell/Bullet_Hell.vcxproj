@@ -116,7 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Event;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/GUI;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Map;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src/Debugging;$(ProjectDir)/src/Event;$(ProjectDir)/src/Graphics;$(ProjectDir)/src/Graphics/Graph;$(ProjectDir)/src/Graphics/GUI;$(ProjectDir)/src/Graphics/Render;$(ProjectDir)/src/Graphics/Scene;$(ProjectDir)/src/Graphics/Scene/Lights;$(ProjectDir)/src/Main;$(ProjectDir)/src/Map;$(ProjectDir)/src/Memory;$(ProjectDir)/src/ResourceCache;$(ProjectDir)/src/Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -158,7 +158,6 @@
     <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\Debugging\Timer.cpp" />
     <ClCompile Include="src\Event\ChunkLoaded.cpp" />
-    <ClCompile Include="src\Event\Event.cpp" />
     <ClCompile Include="src\Event\EventManager.cpp" />
     <ClCompile Include="src\Graphics\Graph\Animation.cpp" />
     <ClCompile Include="src\Graphics\Graph\AnimationResource.cpp" />
@@ -239,6 +238,7 @@
     <ClInclude Include="src\Event\ChunkLoaded.h" />
     <ClInclude Include="src\Event\Event.h" />
     <ClInclude Include="src\Event\EventManager.h" />
+    <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\Graphics\GladTypes.h" />
     <ClInclude Include="src\Graphics\Graph\Animation.h" />
     <ClInclude Include="src\Graphics\Graph\AnimationResource.h" />
@@ -300,7 +300,6 @@
     <ClInclude Include="src\ResourceCache\ResourceHandle.h" />
     <ClInclude Include="src\ResourceCache\ResourceLoader.h" />
     <ClInclude Include="src\ResourceCache\ResourceZipFile.h" />
-    <ClInclude Include="src\Utilities\Globals.h" />
     <ClInclude Include="src\Utilities\MathUtil.h" />
     <ClInclude Include="src\Utilities\OpenGLUtil.h" />
     <ClInclude Include="src\Utilities\Portability.h" />

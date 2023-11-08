@@ -5,12 +5,12 @@
 #include <memory>
 #include <vector>
 
-#include "CascadeShadowSlice.h"
-#include "CommandBuffers.h"
-#include "RenderBuffers.h"
-#include "ShaderProgram.h"
-#include "ShadowBuffer.h"
-#include "UniformsMap.h"
+#include "Graphics/Graph/CascadeShadowSlice.h"
+#include "Graphics/Graph/RenderBuffers.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/ShadowBuffer.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Render/CommandBuffers.h"
 
 /// <summary>
 /// Handles rendering for shadows.

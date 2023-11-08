@@ -4,9 +4,9 @@
 
 #include <memory>
 
-#include "Entity.h"
-#include "Material.h"
-#include "Model.h"
+#include "Graphics/Graph/Material.h"
+#include "Graphics/Graph/Model.h"
+#include "Graphics/Scene/Entity.h"
 
 constexpr auto SKYBOX_VBO_COUNT = 3;
 

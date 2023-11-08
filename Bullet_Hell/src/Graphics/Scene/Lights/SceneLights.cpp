@@ -1,4 +1,4 @@
-#include "SceneLights.h"
+#include "Graphics/Scene/Lights/SceneLights.h"
 
 SceneLights::SceneLights()
 	: ambient_light{}

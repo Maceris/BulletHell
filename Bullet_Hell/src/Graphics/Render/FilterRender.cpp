@@ -1,11 +1,10 @@
-#include "Globals.h"
-
-#include "GameLogic.h"
-#include "Logger.h"
-#include "ResourceCache.h"
-#include "FilterRender.h"
+#include "Graphics/Render/FilterRender.h"
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
+#include "Main/GameLogic.h"
+#include "ResourceCache/ResourceCache.h"
 
 FilterRender::FilterRender()
 {

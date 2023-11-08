@@ -1,11 +1,11 @@
-#include "SceneRender.h"
-
-#include "GameLogic.h"
-#include "Logger.h"
-#include "RenderConstants.h"
-#include "TextureResource.h"
+#include "Graphics/Render/SceneRender.h"
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
+#include "Main/GameLogic.h"
+#include "Graphics/Graph/TextureResource.h"
+#include "Graphics/Render/RenderConstants.h"
 
 #pragma region Shader code
 

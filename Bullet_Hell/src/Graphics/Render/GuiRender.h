@@ -2,15 +2,15 @@
 
 #include "Globals.h"
 
+#include <memory>
+
 #include "glm.hpp"
 
-#include "Scene.h"
-#include "ShaderProgram.h"
-#include "Texture.h"
-#include "UniformsMap.h"
-#include "Window.h"
-
-#include <memory>
+#include "Graphics/Window.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/Texture.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// Handles Graphical User Interface rendering.

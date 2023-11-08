@@ -1,10 +1,10 @@
-#include "UI.h"
-
-#if DEBUG
-#include "DebugUI.h"
-#endif
+#include "Graphics/GUI/UI.h"
 
 #include "imgui.h"
+
+#if DEBUG
+#include "Graphics/GUI/DebugUI.h"
+#endif
 
 void UI::draw()
 {

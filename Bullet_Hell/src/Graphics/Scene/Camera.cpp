@@ -1,6 +1,6 @@
-#include "Camera.h"
+#include "Graphics/Scene/Camera.h"
 
-#include "MathUtil.h"
+#include "Utilities/MathUtil.h"
 
 Camera::Camera()
 	: position{ 0.0f }

@@ -4,7 +4,7 @@
 
 #include "glm.hpp"
 
-#include "PointLight.h"
+#include "Graphics/Scene/Lights/PointLight.h"
 
 /// <summary>
 /// A light that shines in a cone.

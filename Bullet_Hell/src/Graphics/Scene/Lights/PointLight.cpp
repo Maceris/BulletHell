@@ -1,4 +1,4 @@
-#include "PointLight.h"
+#include "Graphics/Scene/Lights/PointLight.h"
 
 PointLight::PointLight(const glm::vec3& position)
 	: attenuation()

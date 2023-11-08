@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Event.h"
-
 #include <list>
 #include <map>
 #include <vector>
 
-#include "ConcurrentQueue.h"
 #include "Delegate.h"
+
+#include "Event/Event.h"
+#include "Memory/ConcurrentQueue.h"
 
 /// <summary>
 /// A delegate that will process an event when passed one.

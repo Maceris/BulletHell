@@ -2,8 +2,8 @@
 
 #include "Globals.h"
 
-#include "Chunk.h"
-#include "Tile.h"
+#include "Map/Chunk.h"
+#include "Map/Tile.h"
 
 namespace MapGenerator
 {

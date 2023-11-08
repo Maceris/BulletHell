@@ -1,9 +1,10 @@
-#include "ResourceZipFile.h"
+#include "ResourceCache/ResourceZipFile.h"
 
 #include <climits>
 
-#include "Logger.h"
 #include "ZipFile.h"
+
+#include "Debugging/Logger.h"
 
 ResourceZipFile::ResourceZipFile(const std::string resource_file_name)
 	: zip_file(nullptr)

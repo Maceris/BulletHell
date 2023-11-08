@@ -1,4 +1,4 @@
-#include "Chunk.h"
+#include "Map/Chunk.h"
 
 Chunk::Chunk()
 	: location{ 0 }

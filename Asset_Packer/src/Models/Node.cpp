@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "Models/Node.h"
 
 Node::Node(std::string name, Node* parent, 
 	const glm::mat4& node_transformation)

@@ -1,4 +1,4 @@
-#include "MapGenerator.h"
+#include "Map/MapGenerator.h"
 
 /// <summary>
 /// Calculate the global coordinate of a tile, based on the chunk coordinate

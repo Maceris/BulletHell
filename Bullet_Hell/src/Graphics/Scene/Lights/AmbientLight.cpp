@@ -1,4 +1,4 @@
-#include "AmbientLight.h"
+#include "Graphics/Scene/Lights/AmbientLight.h"
 
 AmbientLight::AmbientLight()
 	: color (1.0f, 1.0f, 1.0f)

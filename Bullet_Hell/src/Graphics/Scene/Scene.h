@@ -2,21 +2,20 @@
 
 #include "Globals.h"
 
-#include "Camera.h"
-#include "Entity.h"
-#include "Fog.h"
-#include "Model.h"
-#include "Projection.h"
-#include "SceneLights.h"
-#include "SkyBox.h"
-
-#include "ChunkLoaded.h"
-
 #include <map>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <vector>
+
+#include "Event/ChunkLoaded.h"
+#include "Graphics/Graph/Model.h"
+#include "Graphics/Scene/Camera.h"
+#include "Graphics/Scene/Entity.h"
+#include "Graphics/Scene/Fog.h"
+#include "Graphics/Scene/Projection.h"
+#include "Graphics/Scene/SkyBox.h"
+#include "Graphics/Scene/Lights/SceneLights.h"
 
 /// <summary>
 /// A scene to be rendered, including entities and lighting.

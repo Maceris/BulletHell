@@ -4,8 +4,8 @@
 
 #include "glm.hpp"
 
-#include "RenderConstants.h"
-#include "Scene.h"
+#include "Graphics/Render/RenderConstants.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 

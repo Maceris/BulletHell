@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "GladTypes.h"
-
+#include "Graphics/GladTypes.h"
 
 /// <summary>
 /// Details about a shader.

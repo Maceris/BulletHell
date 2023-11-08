@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "Resource.h"
+#include "ResourceCache/Resource.h"
 
 /// <summary>
 /// A resource that is loaded from file. Also tracks detials like its size and

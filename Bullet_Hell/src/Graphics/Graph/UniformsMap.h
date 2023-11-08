@@ -5,8 +5,9 @@
 #include <map>
 #include <string>
 
-#include "GladTypes.h"
 #include "glm.hpp"
+
+#include "Graphics/GladTypes.h"
 
 /// <summary>
 /// Allows for creation and usage of uniforms for a shader program.

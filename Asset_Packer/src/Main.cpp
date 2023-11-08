@@ -1,5 +1,5 @@
 #include "FileUtils.h"
-#include "Logger.h"
+#include "Debugging/Logger.h"
 
 const std::string version = "0.0.1";
 

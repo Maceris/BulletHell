@@ -2,12 +2,12 @@
 
 #include "Globals.h"
 
-#include "AnimationData.h"
-
 #include <string>
 
 #include "glm.hpp"
 #include "gtx/quaternion.hpp"
+
+#include "Graphics/Scene/AnimationData.h"
 
 /// <summary>
 /// Something that is part of the 3D scene.

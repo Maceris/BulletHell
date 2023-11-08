@@ -1,7 +1,8 @@
-#include "SpotLight.h"
+#include "Graphics/Scene/Lights/SpotLight.h"
 
 #include <cmath>
 #include <numbers>
+
 #define degreesToRadians(angleInDegrees) ((angleInDegrees) * std::numbers::pi / 180.0)
 
 SpotLight::SpotLight(const PointLight& point_light, const glm::vec3& cone_direction,

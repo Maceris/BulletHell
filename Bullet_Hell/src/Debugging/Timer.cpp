@@ -1,8 +1,8 @@
-#include "Timer.h"
+#include "Debugging/Timer.h"
 
 #include <map>
 
-#include "Logger.h"
+#include "Debugging/Logger.h"
 
 /// <summary>
 /// Used by the time manager to track times.

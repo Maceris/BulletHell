@@ -2,19 +2,18 @@
 
 #include <filesystem>
 
-#include "GameMap.h"
-
-#include "Logger.h"
-#include "AnimationResource.h"
-#include "MaterialResource.h"
-#include "ModelResource.h"
-#include "ResourceZipFile.h"
-#include "TextureResource.h"
-#include "Timer.h"
-
 #include "glad.h"
 #include "glfw3.h"
 #include "imgui.h"
+
+#include "Debugging/Logger.h"
+#include "Debugging/Timer.h"
+#include "Graphics/Graph/AnimationResource.h"
+#include "Graphics/Graph/MaterialResource.h"
+#include "Graphics/Graph/ModelResource.h"
+#include "Graphics/Graph/TextureResource.h"
+#include "Map/GameMap.h"
+#include "ResourceCache/ResourceZipFile.h"
 
 GameLogic* g_game_logic = nullptr;
 EventManager* g_event_manager = nullptr;

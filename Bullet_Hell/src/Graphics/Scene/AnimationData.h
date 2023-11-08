@@ -2,11 +2,11 @@
 
 #include "Globals.h"
 
+#include <memory>
+
 #include "glm.hpp"
 
-#include "Animation.h"
-
-#include <memory>
+#include "Graphics/Graph/Animation.h"
 
 /// <summary>
 /// Tracks an animation and what frame we are on within it.

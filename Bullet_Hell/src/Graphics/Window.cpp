@@ -1,32 +1,29 @@
-#include "Window.h"
+#include "Graphics/Window.h"
 
 #include "Globals.h"
 
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
-#include <stdio.h>
-#include <stdlib.h>
 
-#include "GameLogic.h"
-#include "Logger.h"
-#include "OpenGLUtil.h"
-
+#include "glad.h"
+#include "glfw3.h"
 #include "glm.hpp"
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
-
-#include "glad.h"
-#include "glfw3.h"
-
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
+
+#include "Debugging/Logger.h"
+#include "Main/GameLogic.h"
+#include "Utilities/OpenGLUtil.h"
 
 /// <summary>
 /// The callback to register for handling errors.

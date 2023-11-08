@@ -6,8 +6,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "Chunk.h"
-#include "MapGenerator.h"
+#include "Map/Chunk.h"
+#include "Map/MapGenerator.h"
 
 /// <summary>
 /// Represents the radius (in chunks) of the fully loaded area, around the

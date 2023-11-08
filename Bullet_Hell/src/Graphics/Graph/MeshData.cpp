@@ -1,4 +1,4 @@
-#include "MeshData.h"
+#include "Graphics/Graph/MeshData.h"
 
 void MeshData::append_vertices_to_buffer(std::vector<float>& buffer)
 {

@@ -4,12 +4,12 @@
 
 #include <memory>
 
-#include "CommandBuffers.h"
-#include "GBuffer.h"
-#include "RenderBuffers.h"
-#include "Scene.h"
-#include "ShaderProgram.h"
-#include "UniformsMap.h"
+#include "Graphics/Graph/GBuffer.h"
+#include "Graphics/Graph/RenderBuffers.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Render/CommandBuffers.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// Handles rendering for the scene geometry.

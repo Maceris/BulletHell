@@ -2,20 +2,18 @@
 
 #include "Globals.h"
 
-#include "AnimationRender.h"
-#include "CommandBuffers.h"
-#include "FilterRender.h"
-#include "GuiRender.h"
-#include "LightRender.h"
-#include "RenderBuffers.h"
-#include "SceneRender.h"
-#include "ShadowRender.h"
-#include "SkyBoxRender.h"
-#include "Window.h"
-
-#include "GBuffer.h"
-
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
+#include "Graphics/Window.h"
+#include "Graphics/Graph/GBuffer.h"
+#include "Graphics/Graph/RenderBuffers.h"
+#include "Graphics/Render/AnimationRender.h"
+#include "Graphics/Render/CommandBuffers.h"
+#include "Graphics/Render/FilterRender.h"
+#include "Graphics/Render/GuiRender.h"
+#include "Graphics/Render/LightRender.h"
+#include "Graphics/Render/SceneRender.h"
+#include "Graphics/Render/ShadowRender.h"
+#include "Graphics/Render/SkyBoxRender.h"
 
 /// <summary>
 /// Configuration for tweaking the rendering pipeline.

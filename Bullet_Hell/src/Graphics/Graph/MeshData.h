@@ -4,8 +4,8 @@
 
 #include <vector>
 
-#include "Animation.h"
-#include "Material.h"
+#include "Graphics/Graph/Animation.h"
+#include "Graphics/Graph/Material.h"
 
 #pragma pack(push,1)
 /// <summary>

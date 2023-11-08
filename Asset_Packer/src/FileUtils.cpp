@@ -4,10 +4,10 @@
 
 #include "ZipFile.h"
 
-#include "Logger.h"
-#include "ImageConverter.h"
-#include "MeshConverter.h"
 #include "PackerConstants.h"
+#include "Debugging/Logger.h"
+#include "Images/ImageConverter.h"
+#include "Models/MeshConverter.h"
 
 int FileUtils::process_all_files()
 {

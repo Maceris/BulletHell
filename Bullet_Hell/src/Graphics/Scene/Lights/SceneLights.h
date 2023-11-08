@@ -2,12 +2,12 @@
 
 #include "Globals.h"
 
-#include "AmbientLight.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
-#include "SpotLight.h"
-
 #include <vector>
+
+#include "Graphics/Scene/Lights/AmbientLight.h"
+#include "Graphics/Scene/Lights/DirectionalLight.h"
+#include "Graphics/Scene/Lights/PointLight.h"
+#include "Graphics/Scene/Lights/SpotLight.h"
 
 /// <summary>
 /// Lighting information for a scene.

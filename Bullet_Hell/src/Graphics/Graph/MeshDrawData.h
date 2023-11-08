@@ -4,8 +4,8 @@
 
 #include <memory>
 
-#include "Entity.h"
-#include "Material.h"
+#include "Graphics/Graph/Material.h"
+#include "Graphics/Scene/Entity.h"
 
 /// <summary>
 /// Data used for drawing animated meshes.

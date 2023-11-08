@@ -2,11 +2,11 @@
 
 #include "Globals.h"
 
-#include "glm.hpp"
-
 #include <memory>
 
-#include "Texture.h"
+#include "glm.hpp"
+
+#include "Graphics/Graph/Texture.h"
 
 /// <summary>
 /// Used to identify materials in the material cache.

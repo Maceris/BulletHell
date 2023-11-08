@@ -1,8 +1,9 @@
-#include "UniformsMap.h"
-#include "Logger.h"
+#include "Graphics/Graph/UniformsMap.h"
 
 #include "glad.h"
 #include "gtc/type_ptr.hpp"
+
+#include "Debugging/Logger.h"
 
 UniformsMap::UniformsMap(GLuint program_id)
 	: program_id(program_id)

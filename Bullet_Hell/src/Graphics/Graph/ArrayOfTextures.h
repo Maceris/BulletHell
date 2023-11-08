@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "GladTypes.h"
+#include "Graphics/GladTypes.h"
 
 /// <summary>
 /// An array of textures, all of the same size and pixel format.

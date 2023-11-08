@@ -2,8 +2,8 @@
 
 #include "Globals.h"
 
-#include "Event.h"
-#include "Chunk.h"
+#include "Event/Event.h"
+#include "Map/Chunk.h"
 
 class ChunkLoaded : public BaseEvent
 {

@@ -1,11 +1,11 @@
-#include "DebugUI.h"
+#include "Graphics/GUI/DebugUI.h"
+
+#include <format>
 
 #include "imgui.h"
 
-#include "GameLogic.h"
-#include "Timer.h"
-
-#include <format>
+#include "Debugging/Timer.h"
+#include "Main/GameLogic.h"
 
 #pragma region Variables
 bool DebugUI::show_debug_window = true;

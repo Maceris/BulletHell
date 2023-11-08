@@ -2,9 +2,9 @@
 
 #include "Globals.h"
 
-#include "Material.h"
-#include "Resource.h"
-#include "ResourceLoader.h"
+#include "Graphics/Graph/Material.h"
+#include "ResourceCache/Resource.h"
+#include "ResourceCache/ResourceLoader.h"
 
 class MaterialExtraData : public ResourceExtraData
 {

@@ -1,4 +1,4 @@
-#include "QuadMesh.h"
+#include "Graphics/Graph/QuadMesh.h"
 
 #include "glad.h"
 

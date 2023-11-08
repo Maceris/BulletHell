@@ -1,10 +1,10 @@
 #pragma once
 
-#include "glm.hpp"
-
 #include <vector>
 
-#include "Animation.h"
+#include "glm.hpp"
+
+#include "Graphics/Graph/Animation.h"
 
 /// <summary>
 /// The maximum number of weights that can affect a vertex.

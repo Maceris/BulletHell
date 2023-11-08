@@ -1,6 +1,6 @@
-#include "EventManager.h"
+#include "Event/EventManager.h"
 
-#include "Logger.h"
+#include "Debugging/Logger.h"
 
 EventManager::EventManager()
 	: handlers{}

@@ -1,6 +1,4 @@
-#include "StringUtil.h"
-
-
+#include "Utilities/StringUtil.h"
 
 /// <summary>
 /// The following function was found on

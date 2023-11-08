@@ -1,4 +1,4 @@
-#include "ChunkLoaded.h"
+#include "Event/ChunkLoaded.h"
 
 const EventType ChunkLoaded::event_type = 0xf8b52643;
 

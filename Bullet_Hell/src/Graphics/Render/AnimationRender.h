@@ -4,11 +4,11 @@
 
 #include <memory>
 
-#include "QuadMesh.h"
-#include "RenderBuffers.h"
-#include "Scene.h"
-#include "ShaderProgram.h"
-#include "UniformsMap.h"
+#include "Graphics/Graph/QuadMesh.h"
+#include "Graphics/Graph/RenderBuffers.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Scene/Scene.h"
 
 /// <summary>
 /// Handles compute shaders for animated models.

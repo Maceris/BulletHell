@@ -5,11 +5,11 @@
 #include <chrono>
 #include <memory>
 
-#include "GameOptions.h"
-#include "EventManager.h"
-#include "ResourceCache.h"
-#include "Render.h"
-#include "Window.h"
+#include "Event/EventManager.h"
+#include "Graphics/Render/Render.h"
+#include "Graphics/Window.h"
+#include "Main/GameOptions.h"
+#include "ResourceCache/ResourceCache.h"
 
 /// <summary>
 /// Where we are in the program lifecycle.

@@ -7,8 +7,9 @@
 
 #include <memory>
 
-#include "ResourceFile.h"
 #include "ZipArchive.h"
+
+#include "ResourceCache/ResourceFile.h"
 
 /// <summary>
 /// A resource file that loads from a .zip file.

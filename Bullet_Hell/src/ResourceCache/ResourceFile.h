@@ -5,9 +5,9 @@
 	ResourceCache.h instead.
 */
 
-#include "Resource.h"
-
 #include <string>
+
+#include "ResourceCache/Resource.h"
 
 /// <summary>
 /// A file that can be opened and closed, and provides the application with

@@ -4,9 +4,9 @@
 
 #include <memory>
 
-#include "Scene.h"
-#include "ShaderProgram.h"
-#include "UniformsMap.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Scene/Scene.h"
 
 // Handles rendering for the skybox
 class SkyBoxRender

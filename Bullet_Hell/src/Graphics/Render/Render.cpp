@@ -1,11 +1,10 @@
-#include "Render.h"
-
-#include "gtc/type_ptr.hpp"
-
-#include "Logger.h"
-#include "Timer.h"
+#include "Graphics/Render/Render.h"
 
 #include "glad.h"
+#include "gtc/type_ptr.hpp"
+
+#include "Debugging/Logger.h"
+#include "Debugging/Timer.h"
 
 Configuration Render::configuration;
 

@@ -1,6 +1,4 @@
-#include "GuiRender.h"
-
-#include "UI.h"
+#include "Graphics/Render/GuiRender.h"
 
 #include "glad.h"
 #include "imgui.h"
@@ -11,6 +9,8 @@
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
+
+#include "Graphics/GUI/UI.h"
 
 #pragma region Shader code
 

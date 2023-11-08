@@ -1,8 +1,8 @@
-#include "MaterialResource.h"
+#include "Graphics/Graph/MaterialResource.h"
 
-#include "Portability.h"
-
-#include "GameLogic.h"
+#include "Debugging/Logger.h"
+#include "Main/GameLogic.h"
+#include "Utilities/Portability.h"
 
 /// <summary>
 /// What is the latest material file verison we support loading.

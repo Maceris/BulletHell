@@ -5,8 +5,8 @@
 	ResourceCache.h instead.
 */
 
-#include "ResourceLoader.h"
-#include "ResourceHandle.h"
+#include "ResourceCache/ResourceHandle.h"
+#include "ResourceCache/ResourceLoader.h"
 
 /// <summary>
 /// The default resource loader, which just loads a resource exactly as it is

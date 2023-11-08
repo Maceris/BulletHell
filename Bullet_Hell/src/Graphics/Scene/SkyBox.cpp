@@ -1,11 +1,11 @@
-#include "SkyBox.h"
-
-#include "GameLogic.h"
-#include "Logger.h"
-#include "ModelResource.h"
-#include "ResourceCache.h"
+#include "Graphics/Scene/SkyBox.h"
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
+#include "Graphics/Graph/ModelResource.h"
+#include "Main/GameLogic.h"
+#include "ResourceCache/ResourceCache.h"
 
 SkyBox::SkyBox()
 {

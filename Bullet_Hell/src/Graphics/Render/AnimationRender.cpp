@@ -1,11 +1,11 @@
-#include "AnimationRender.h"
-
-#include "Logger.h"
+#include "Graphics/Render/AnimationRender.h"
 
 #include <cmath>
 #include <vector>
 
 #include "glad.h"
+
+#include "Debugging/Logger.h"
 
 #pragma region Shader code
 const char compute_shader_source[] = R"glsl(

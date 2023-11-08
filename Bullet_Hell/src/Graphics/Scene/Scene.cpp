@@ -1,10 +1,10 @@
-#include "Scene.h"
+#include "Graphics/Scene/Scene.h"
 
 #include "Delegate.h"
 
-#include "Entity.h"
-#include "GameLogic.h"
-#include "Logger.h"
+#include "Debugging/Logger.h"
+#include "Main/GameLogic.h"
+#include "Graphics/Scene/Entity.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
 	: camera{}

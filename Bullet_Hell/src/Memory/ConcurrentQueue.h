@@ -2,7 +2,7 @@
 
 #include <queue>
 
-#include "CriticalSection.h"
+#include "Memory/CriticalSection.h"
 
 /// <summary>
 /// A concurrent queue. Written by Anthony Williams, found at
