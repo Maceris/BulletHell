@@ -228,9 +228,6 @@
     <ClCompile Include="src\Event\EventManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Event\ChunkLoaded.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\3rdParty\CppDelegates\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -238,6 +235,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Render\CommandBuffers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Event\Map\ChunkLoaded.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Event\Map\ChunkUnloaded.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -476,9 +479,6 @@
     <ClInclude Include="src\Event\EventManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Event\ChunkLoaded.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Memory\ConcurrentQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -486,6 +486,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\Map\ChunkLoaded.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\Map\ChunkUnloaded.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Scene\SceneCluster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

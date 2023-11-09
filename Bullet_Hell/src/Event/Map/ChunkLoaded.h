@@ -5,13 +5,16 @@
 #include "Event/Event.h"
 #include "Map/Chunk.h"
 
+/// <summary>
+/// A section of the map that has been loaded and needs graphics.
+/// </summary>
 class ChunkLoaded : public BaseEvent
 {
 public:
-	const ChunkCoordinates coordinates;
+	const Chunk* chunk;
 	static const EventType event_type;
 
-	explicit ChunkLoaded(const ChunkCoordinates& coordinates);
+	explicit ChunkLoaded(const Chunk* chunk);
 	ChunkLoaded(const ChunkLoaded&) = delete;
 	ChunkLoaded& operator=(const ChunkLoaded&) = delete;
 	~ChunkLoaded() = default;

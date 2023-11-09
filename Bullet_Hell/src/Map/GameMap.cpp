@@ -1,7 +1,8 @@
 #include "Map/GameMap.h"
 
 #include "Debugging/Logger.h"
-#include "Event/ChunkLoaded.h"
+#include "Event/Map/ChunkLoaded.h"
+#include "Event/Map/ChunkUnloaded.h"
 #include "Main/GameLogic.h"
 #include "Memory/CriticalSection.h"
 
@@ -240,7 +241,7 @@ void GameMap::hot_load(const ChunkCoordinates& coordinates)
 	cold_cache.erase(coordinates.combined);
 	hot_cache.insert(std::make_pair(coordinates.combined, loaded));
 
-	g_event_manager->queue(std::make_shared<ChunkLoaded>(coordinates));
+	g_event_manager->queue(std::make_shared<ChunkLoaded>(loaded));
 }
 
 void GameMap::cold_unload(const ChunkCoordinates& coordinates)
@@ -258,7 +259,8 @@ void GameMap::cold_unload(const ChunkCoordinates& coordinates)
 	hot_cache.erase(coordinates.combined);
 	cold_cache.insert(std::make_pair(coordinates.combined, loaded));
 
-	//TODO(ches) Inform other systems about the unload
+	g_event_manager->queue(std::make_shared<ChunkUnloaded>(coordinates, 
+		loaded));
 }
 
 void GameMap::full_unload(const ChunkCoordinates& coordinates)

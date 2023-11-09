@@ -8,12 +8,14 @@
 #include <string>
 #include <vector>
 
-#include "Event/ChunkLoaded.h"
+#include "Event/Map/ChunkLoaded.h"
+#include "Event/Map/ChunkUnloaded.h"
 #include "Graphics/Graph/Model.h"
 #include "Graphics/Scene/Camera.h"
 #include "Graphics/Scene/Entity.h"
 #include "Graphics/Scene/Fog.h"
 #include "Graphics/Scene/Projection.h"
+#include "Graphics/Scene/SceneCluster.h"
 #include "Graphics/Scene/SkyBox.h"
 #include "Graphics/Scene/Lights/SceneLights.h"
 
@@ -102,10 +104,16 @@ private:
 	std::vector<std::shared_ptr<Entity>> entities_pending_models;
 
 	/// <summary>
+	/// Tracks the rendering related things that we have loaded for each chunk.
+	/// </summary>
+	std::map<ChunkCoordinates, SceneCluster> chunk_contents;
+
+	/// <summary>
 	/// Used to synchronize access to the list of entities that are awaiting
 	/// models.
 	/// </summary>
 	std::mutex pending_models_mutex;
 
 	void handle_chunk_loading(EventPointer event);
+	void handle_chunk_unloading(EventPointer event);
 };
