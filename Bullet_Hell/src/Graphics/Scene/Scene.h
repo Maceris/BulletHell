@@ -116,4 +116,14 @@ private:
 
 	void handle_chunk_loading(EventPointer event);
 	void handle_chunk_unloading(EventPointer event);
+
+	/// <summary>
+	/// Given a tile and coordinates, load the appropriate model.
+	/// </summary>
+	/// <param name="x">The global x coordinate of the tile.</param>
+	/// <param name="z">The global x coordinate of the tile.</param>
+	/// <param name="tile">The tile we are loading.</param>
+	/// <param name="cluster">The cluster we are loading into.</param>
+	void load_tile(const int& x, const int& z, const Tile& tile,
+		SceneCluster& cluster);
 };

@@ -3,7 +3,10 @@
 #include "Delegate.h"
 
 #include "Debugging/Logger.h"
+#include "Event/Map/ChunkLoaded.h"
+#include "Event/Map/ChunkUnloaded.h"
 #include "Main/GameLogic.h"
+#include "Graphics/Graph/ModelResource.h"
 #include "Graphics/Scene/Entity.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
@@ -70,12 +73,60 @@ void Scene::resize(const unsigned int width, const unsigned int height)
 
 void Scene::handle_chunk_loading(EventPointer event)
 {
-	//TODO(ches) handle loading models for all the tiles in the chunk
-	LOG_INFO("We are doing something with a loaded chunk");
+	LOG_ASSERT(event && "Our event is null");
+	std::shared_ptr<ChunkLoaded> loaded_event = 
+		std::static_pointer_cast<ChunkLoaded>(event);
+
+	const Tile (*tiles)[CHUNK_WIDTH][CHUNK_WIDTH] = &(loaded_event->chunk->tiles);
+	const ChunkCoordinates* chunk_location = &(loaded_event->chunk->location);
+
+	SceneCluster cluster;
+
+	for (int x = 0; x < CHUNK_WIDTH; ++x)
+	{
+		for (int z = 0; z < CHUNK_WIDTH; ++z)
+		{
+			const Tile* tile = tiles[x][z];
+			const int world_x = chunk_location->x * CHUNK_WIDTH + x;
+			const int world_z = chunk_location->z * CHUNK_WIDTH + z;
+			load_tile(world_x, world_z, *tile, cluster);
+		}
+	}
+
+	chunk_contents.insert(std::make_pair(*chunk_location, cluster));
 }
 
 void Scene::handle_chunk_unloading(EventPointer event)
 {
 	//TODO(ches) handle unloading models for all the tiles in the chunk
 	LOG_INFO("We are doing something with a loaded chunk");
+}
+
+void Scene::load_tile(const int& x, const int& z, const Tile& tile,
+	SceneCluster& cluster)
+{
+	const char* model_name;
+
+	switch (tile.id)
+	{
+	case TILE_GROUND:
+		model_name = "models/map/tile_001.model";
+		break;
+	case TILE_VOID:
+	default:
+		 model_name = "";
+		 break;
+	}
+
+	if (model_name && model_name != "")
+	{
+		//TODO(ches) Fix logic 
+		auto tile_model = load_model(model_name);
+		auto tile_entity = std::make_shared<Entity>(tile_model->id);
+		
+		tile_entity->set_position(x, 0, z);
+		tile_entity->update_model_matrix();
+
+		cluster.entities[tile_model].push_back(tile_entity);
+	}
 }
