@@ -9,6 +9,7 @@
 #include "Graphics/Render/Render.h"
 #include "Graphics/Window.h"
 #include "Main/GameOptions.h"
+#include "Map/GameMap.h"
 #include "ResourceCache/ResourceCache.h"
 
 /// <summary>
@@ -110,10 +111,8 @@ public:
 	/// </summary>
 	std::unique_ptr<Render> render;
 
-	/// <summary>
-	/// The scene we are currently in.
-	/// </summary>
 	std::shared_ptr<Scene> current_scene;
+	std::shared_ptr<GameMap> current_map;
 };
 
 /// <summary>

@@ -73,14 +73,9 @@ void RenderBuffers::define_vertex_attributes()
 void RenderBuffers::load_animated_models(const Scene& scene)
 {
 	buffers_populated = true;
-	ModelList model_list;
-	for (auto& entry : scene.model_map)
-	{
-		if (entry.second->is_animated())
-		{
-			model_list.push_back(entry.second);
-		}
-	}
+	const std::vector<std::shared_ptr<Model>>& model_list =
+		scene.get_animated_model_list();
+
 	load_binding_poses(model_list);
 	load_bones_matrices_buffer(model_list);
 	load_bones_indices_weights(model_list);
@@ -266,14 +261,8 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 void RenderBuffers::load_static_models(const Scene& scene)
 {
 	buffers_populated = true;
-	ModelList model_list;
-	for (auto& entry : scene.model_map)
-	{
-		if (!entry.second->is_animated())
-		{
-			model_list.push_back(entry.second);
-		}
-	}
+	const std::vector<std::shared_ptr<Model>>& model_list =
+		scene.get_static_model_list();
 
 	glGenVertexArrays(1, &static_vao);
 	glBindVertexArray(static_vao);
@@ -288,20 +277,17 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			= model->mesh_draw_data_list;
 
 		mesh_draw_data_list.clear();
-		for (auto& entity : entities)
+		for (MeshData mesh_data : model->mesh_data_list)
 		{
-			for (MeshData mesh_data : model->mesh_data_list)
-			{
-				vertices_size += mesh_data.vertices.size();
-				const size_t mesh_size_in_bytes = sizeof(MeshVertex)
-					* mesh_data.vertices.size();
+			vertices_size += mesh_data.vertices.size();
+			const size_t mesh_size_in_bytes = sizeof(MeshVertex)
+				* mesh_data.vertices.size();
 
-				mesh_draw_data_list.emplace_back(mesh_size_in_bytes,
-					mesh_data.material->material_id, offset,
-					mesh_data.indices.size());
+			mesh_draw_data_list.emplace_back(mesh_size_in_bytes,
+				mesh_data.material->material_id, offset,
+				mesh_data.indices.size());
 				
-				offset = vertices_size;
-			}
+			offset = vertices_size;
 		}
 	}
 

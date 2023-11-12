@@ -5,6 +5,7 @@
 
 #include "Debugging/Logger.h"
 #include "Debugging/Timer.h"
+#include "Utilities/OpenGLUtil.h"
 
 Configuration Render::configuration;
 
@@ -179,15 +180,8 @@ void Render::setup_data(const Scene& scene)
 
 void Render::setup_animated_command_buffer(const Scene& scene)
 {
-	std::vector<std::shared_ptr<Model>> model_list;
-	
-	for (const auto& pair : scene.model_map)
-	{
-		if (pair.second->is_animated())
-		{
-			model_list.push_back(pair.second);
-		}
-	}
+	const std::vector<std::shared_ptr<Model>>& model_list = 
+		scene.get_animated_model_list();
 
 	size_t mesh_count = 0;
 	size_t draw_element_count = 0;
@@ -200,7 +194,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		entity_count += model->entity_list.size();
 	}
 
-	std::map<uint64_t, int> entity_index_map;
+	std::map<const uint64_t, int> entity_index_map;
 
 	float* model_matrices = ALLOC float[entity_count * 16];
 
@@ -217,7 +211,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 				model_matrices[entity_index + i] = *(matrix + i);
 			}
 			entity_index_map.emplace(
-				std::pair(entity->entity_ID, entity_index));
+				std::make_pair(entity->entity_ID, entity_index));
 			++entity_index;
 		}
 	}
@@ -233,6 +227,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 	int first_index = 0;
 	int base_instance = 0;
 
+	int command_buffer_index = 0;
 	int draw_element_index = 0;
 	const int COMMAND_SIZE = 5;
 	const int DRAW_ELEMENT_SIZE = 2;
@@ -246,18 +241,21 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
 		{
 			// count
-			command_buffer[base_instance * COMMAND_SIZE] = 
+			command_buffer[command_buffer_index * COMMAND_SIZE + 0] =
 				mesh_draw_data.indices;
 			// instance count
-			command_buffer[base_instance * COMMAND_SIZE + 1] = 1;
-			command_buffer[base_instance * COMMAND_SIZE + 2] = first_index;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 1] = 1;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 2] =
+				first_index;
 			// base vertex
-			command_buffer[base_instance * COMMAND_SIZE + 3] = 
+			command_buffer[command_buffer_index * COMMAND_SIZE + 3] =
 				mesh_draw_data.offset;
-			command_buffer[base_instance * COMMAND_SIZE + 4] = base_instance;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 4] =
+				base_instance;
 
 			first_index += mesh_draw_data.indices;
 			++base_instance;
+			++command_buffer_index;
 
 			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
 			//NOTE(ches) it should (tm) be in the map
@@ -295,15 +293,8 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 
 void Render::setup_static_command_buffer(const Scene& scene)
 {
-	std::vector<std::shared_ptr<Model>> model_list;
-
-	for (const auto& pair : scene.model_map)
-	{
-		if (!pair.second->is_animated())
-		{
-			model_list.push_back(pair.second);
-		}
-	}
+	const std::vector<std::shared_ptr<Model>>& model_list =
+		scene.get_static_model_list();
 
 	size_t mesh_count = 0;
 	size_t draw_element_count = 0;
@@ -316,7 +307,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		entity_count += model->entity_list.size();
 	}
 
-	std::map<uint64_t, int> entity_index_map;
+	std::map<const uint64_t, int> entity_index_map;
 
 	float* model_matrices = ALLOC float[entity_count * 16];
 
@@ -333,12 +324,11 @@ void Render::setup_static_command_buffer(const Scene& scene)
 				model_matrices[entity_index + i] = *(matrix + i);
 			}
 			entity_index_map.emplace(
-				std::pair(entity->entity_ID, entity_index));
+				std::make_pair(entity->entity_ID, entity_index));
 			++entity_index;
 		}
 	}
-	size_t data_size_in_bytes =
-		static_cast<size_t>(entity_count) * 16 * sizeof(float);
+	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
 
 	glGenBuffers(1, &command_buffers.static_model_matrices_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
@@ -350,6 +340,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	int first_index = 0;
 	int base_instance = 0;
 
+	int command_buffer_index = 0;
 	int draw_element_index = 0;
 	const int COMMAND_SIZE = 5;
 	const int DRAW_ELEMENT_SIZE = 2;
@@ -365,24 +356,32 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
 		{
 			// count
-			command_buffer[base_instance * COMMAND_SIZE] =
+			command_buffer[command_buffer_index * COMMAND_SIZE + 0] =
 				mesh_draw_data.indices;
-			command_buffer[base_instance * COMMAND_SIZE + 1] = entity_count;
-			command_buffer[base_instance * COMMAND_SIZE + 2] = first_index;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 1] =
+				entity_count;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 2] =
+				first_index;
 			// base vertex
-			command_buffer[base_instance * COMMAND_SIZE + 3] =
+			command_buffer[command_buffer_index * COMMAND_SIZE + 3] =
 				mesh_draw_data.offset;
-			command_buffer[base_instance * COMMAND_SIZE + 4] = base_instance;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 4] =
+				base_instance;
 
 			first_index += mesh_draw_data.indices;
 			base_instance += entity_count;
+			++command_buffer_index;
 
 			const MaterialID material_index = mesh_draw_data.material;
 			for (const auto& entity : entities)
 			{
 				//NOTE(ches) it should (tm) be in the map
+				auto index = entity_index_map.find(entity->entity_ID);
+				LOG_ASSERT(index != entity_index_map.end()
+					&& "Our entity ID is missing");
+				const auto id = index->second;
 				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE] =
-					entity_index_map.find(entity->entity_ID)->second;
+					id;
 				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
 					material_index;
 

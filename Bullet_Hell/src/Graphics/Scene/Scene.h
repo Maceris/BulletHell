@@ -96,6 +96,47 @@ public:
 	/// <param name="height">The new window height, in pixels.</param>
 	void resize(const unsigned int width, const unsigned int height);
 
+	/// <summary>
+	/// Whether the scene has been modified since last time we rendered.
+	/// 
+	/// Since some things are exposed to modification externally, a value of 
+	/// true means that the scene is definitely dirty, but false only means
+	/// that it's probably not dirty.
+	/// </summary>
+	bool dirty;
+
+	/// <summary>
+	/// Tracks the rendering related things that we have loaded for each chunk.
+	/// </summary>
+	std::map<ChunkCoordinates, std::shared_ptr<SceneCluster>> chunk_contents;
+
+	/// <summary>
+	/// Fetch a list of all the models currently loaded in the scene. This
+	/// includes all of the chunks, and every model should be unique.
+	/// </summary>
+	/// <returns>All of the scenes models.</returns>
+	const std::vector<std::shared_ptr<Model>>& get_model_list() const;
+
+	/// <summary>
+	/// Fetch a list of all the static models currently loaded in the scene.
+	/// This includes all of the chunks, and every model should be unique.
+	/// </summary>
+	/// <returns>All of the scenes models.</returns>
+	const std::vector<std::shared_ptr<Model>>& get_static_model_list() const;
+
+	/// <summary>
+	/// Fetch a list of all the animated models currently loaded in the scene.
+	/// This includes all of the chunks, and every model should be unique.
+	/// </summary>
+	/// <returns>All of the scenes models.</returns>
+	const std::vector<std::shared_ptr<Model>>& get_animated_model_list() const;
+
+	/// <summary>
+	/// Recalculate the list of models when something has changed, since we
+	/// cache the list to save redundant calculations several times a frame.
+	/// </summary>
+	void rebuild_model_lists();
+
 private:
 	/// <summary>
 	/// A list of entities that we have added, but which we did not yet have
@@ -103,10 +144,9 @@ private:
 	/// </summary>
 	std::vector<std::shared_ptr<Entity>> entities_pending_models;
 
-	/// <summary>
-	/// Tracks the rendering related things that we have loaded for each chunk.
-	/// </summary>
-	std::map<ChunkCoordinates, SceneCluster> chunk_contents;
+	std::vector<std::shared_ptr<Model>> cached_model_list;
+	std::vector<std::shared_ptr<Model>> cached_static_model_list;
+	std::vector<std::shared_ptr<Model>> cached_animated_model_list;
 
 	/// <summary>
 	/// Used to synchronize access to the list of entities that are awaiting

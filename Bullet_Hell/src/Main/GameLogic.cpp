@@ -12,7 +12,6 @@
 #include "Graphics/Graph/MaterialResource.h"
 #include "Graphics/Graph/ModelResource.h"
 #include "Graphics/Graph/TextureResource.h"
-#include "Map/GameMap.h"
 #include "ResourceCache/ResourceZipFile.h"
 
 GameLogic* g_game_logic = nullptr;
@@ -93,10 +92,14 @@ bool GameLogic::initialize()
 	current_scene->camera.set_position(-11.0f, 11.0f, 0.0f);
 	current_scene->camera.add_rotation(0.42f, 1.92f);
 
+	current_scene->rebuild_model_lists();
 	render->recalculate_materials(*current_scene);
 	render->setup_data(*current_scene);
 
-	GameMap map;
+	TIME_START("Map Init");
+	current_map = std::make_shared<GameMap>();
+	g_event_manager->update();
+	TIME_END("Map Init");
 
 	return true;
 }
@@ -191,6 +194,15 @@ void GameLogic::run_game()
 		calculate_delta_time();
 		process_input();
 		g_event_manager->update(10);
+
+		if (current_scene->dirty)
+		{
+			current_scene->rebuild_model_lists();
+			render->recalculate_materials(*current_scene);
+			render->setup_data(*current_scene);
+			current_scene->dirty = false;
+		}
+
 		current_scene->player->animation_data.next_frame();
 		render->render(*window, *current_scene);
 		window->render();

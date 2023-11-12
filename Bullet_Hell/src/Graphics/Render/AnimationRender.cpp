@@ -172,10 +172,11 @@ void AnimationRender::render(const Scene& scene,
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
         render_buffer.dest_animation_vbo);
 
+    const auto& model_list = scene.get_model_list();
+
     int destination_offset = 0;
-    for (auto& entry : scene.model_map)
+    for (auto& model : model_list)
     {
-        std::shared_ptr<Model> model = entry.second;
         if (!model->is_animated())
         {
             continue;

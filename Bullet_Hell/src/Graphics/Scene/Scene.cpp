@@ -1,5 +1,7 @@
 #include "Graphics/Scene/Scene.h"
 
+#include <unordered_set>
+
 #include "Delegate.h"
 
 #include "Debugging/Logger.h"
@@ -17,6 +19,7 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, scene_lights{}
 	, sky_box{}
 	, player{}
+	, dirty{ true }
 {
 	g_event_manager->register_handler(
 		EventHandler::create<Scene, &Scene::handle_chunk_loading>(this),
@@ -45,6 +48,7 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 	{
 		entities_pending_models.push_back(entity);
 	}
+	dirty = true;
 }
 
 void Scene::add_model(std::shared_ptr<Model> model)
@@ -64,11 +68,63 @@ void Scene::add_model(std::shared_ptr<Model> model)
 			++it;
 		}
 	}
+	dirty = true;
 }
 
 void Scene::resize(const unsigned int width, const unsigned int height)
 {
 	projection.update_matrices(width, height);
+}
+
+const std::vector<std::shared_ptr<Model>>& Scene::get_model_list() const
+{
+	return cached_model_list;
+}
+
+const std::vector<std::shared_ptr<Model>>& Scene::get_static_model_list() const
+{
+	return cached_static_model_list;
+}
+
+const std::vector<std::shared_ptr<Model>>& Scene::get_animated_model_list() const
+{
+	return cached_animated_model_list;
+}
+
+void Scene::rebuild_model_lists()
+{
+	cached_model_list.clear();
+	cached_static_model_list.clear();
+	cached_animated_model_list.clear();
+
+	std::unordered_set<std::shared_ptr<Model>> models;
+
+	for (auto& entry : model_map)
+	{
+		models.insert(entry.second);
+	}
+
+	for (auto& cluster_pair : chunk_contents)
+	{
+		auto& entity_map = cluster_pair.second->entities;
+		for (auto& pair : entity_map)
+		{
+			models.insert(pair.first);
+		}
+	}
+
+	for (auto& model : models)
+	{
+		cached_model_list.push_back(model);
+		if (model->is_animated())
+		{
+			cached_animated_model_list.push_back(model);
+		}
+		else
+		{
+			cached_static_model_list.push_back(model);
+		}
+	}
 }
 
 void Scene::handle_chunk_loading(EventPointer event)
@@ -80,32 +136,75 @@ void Scene::handle_chunk_loading(EventPointer event)
 	const Tile (*tiles)[CHUNK_WIDTH][CHUNK_WIDTH] = &(loaded_event->chunk->tiles);
 	const ChunkCoordinates* chunk_location = &(loaded_event->chunk->location);
 
-	SceneCluster cluster;
+	std::shared_ptr<SceneCluster> cluster = std::make_shared<SceneCluster>();
 
 	for (int x = 0; x < CHUNK_WIDTH; ++x)
 	{
 		for (int z = 0; z < CHUNK_WIDTH; ++z)
 		{
-			const Tile* tile = tiles[x][z];
+			const Tile tile = (*tiles)[x][z];
 			const int world_x = chunk_location->x * CHUNK_WIDTH + x;
 			const int world_z = chunk_location->z * CHUNK_WIDTH + z;
-			load_tile(world_x, world_z, *tile, cluster);
+			load_tile(world_x, world_z, tile, *cluster);
 		}
 	}
 
 	chunk_contents.insert(std::make_pair(*chunk_location, cluster));
+	LOG_INFO("Loading a chunk, now we have "
+		+ std::to_string(chunk_contents.size()) + " chunks right now.");
+
+	dirty = true;
 }
 
 void Scene::handle_chunk_unloading(EventPointer event)
 {
 	//TODO(ches) handle unloading models for all the tiles in the chunk
 	LOG_INFO("We are doing something with a loaded chunk");
+
+	LOG_ASSERT(event && "Our event is null");
+	std::shared_ptr<ChunkUnloaded> unloaded_event =
+		std::static_pointer_cast<ChunkUnloaded>(event);
+
+	const auto& cluster = chunk_contents.find(unloaded_event->coordinates);
+
+	LOG_ASSERT(cluster != chunk_contents.end()
+		&& "Unloading a chunk that does not appear to be loaded");
+
+	for (auto& entity_mapping : cluster->second->entities)
+	{
+		EntityList to_keep;
+		auto& entity_list = entity_mapping.first->entity_list;
+		for (auto& existing : entity_list)
+		{
+			bool found = false;
+			for (auto& to_remove : entity_mapping.second)
+			{
+				if (to_remove == existing)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				to_keep.push_back(existing);
+			}
+		}
+
+		entity_list.clear();
+		for (auto& entity : to_keep)
+		{
+			entity_list.push_back(entity);
+		}
+	}
+
+	dirty = true;
 }
 
 void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 	SceneCluster& cluster)
 {
-	const char* model_name;
+	std::string model_name = "";
 
 	switch (tile.id)
 	{
@@ -113,16 +212,18 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 		model_name = "models/map/tile_001.model";
 		break;
 	case TILE_VOID:
+		//NOTE(ches) Nothing required here.
+		break;
 	default:
-		 model_name = "";
+		LOG_ERROR("Unsupported tile type");
 		 break;
 	}
 
-	if (model_name && model_name != "")
+	if (model_name != "")
 	{
-		//TODO(ches) Fix logic 
 		auto tile_model = load_model(model_name);
 		auto tile_entity = std::make_shared<Entity>(tile_model->id);
+		tile_model->entity_list.push_back(tile_entity);
 		
 		tile_entity->set_position(x, 0, z);
 		tile_entity->update_model_matrix();

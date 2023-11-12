@@ -156,10 +156,11 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
     glActiveTexture(GL_TEXTURE0);
     Texture::default_texture->bind();
 
+    const auto& model_list = scene.get_model_list();
+
     int next_texture = 1;
-    for (const auto& pair : scene.model_map)
+    for (const auto& model : model_list)
     {
-        const auto& model = pair.second;
         for (const auto& mesh_data : model->mesh_data_list)
         {
             const auto& material = mesh_data.material;
@@ -249,9 +250,10 @@ void SceneRender::setup_materials_uniform(const Scene& scene)
 
     texture_bindings.emplace("", 0);
 
-    for (const auto& pair : scene.model_map)
+    const auto& model_list = scene.get_model_list();
+
+    for (const auto& model: model_list)
     {
-        const auto& model = pair.second;
         for (const auto& mesh_data : model->mesh_data_list)
         {
             const auto& material = mesh_data.material;
