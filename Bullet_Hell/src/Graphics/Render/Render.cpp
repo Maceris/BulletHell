@@ -208,7 +208,8 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 				glm::value_ptr(entity->model_matrix));
 			for (size_t i = 0; i < 16; ++i)
 			{
-				model_matrices[entity_index + i] = *(matrix + i);
+				model_matrices[static_cast<size_t>(entity_index) * 16 + i] 
+					= matrix[i];
 			}
 			entity_index_map.emplace(
 				std::make_pair(entity->entity_ID, entity_index));
@@ -321,7 +322,8 @@ void Render::setup_static_command_buffer(const Scene& scene)
 				glm::value_ptr(entity->model_matrix));
 			for (size_t i = 0; i < 16; ++i)
 			{
-				model_matrices[entity_index + i] = *(matrix + i);
+				model_matrices[static_cast<size_t>(entity_index) * 16 + i]
+					= matrix[i];
 			}
 			entity_index_map.emplace(
 				std::make_pair(entity->entity_ID, entity_index));
@@ -429,9 +431,13 @@ void Render::update_model_buffer(
 	{
 		for (const auto& entity : model->entity_list)
 		{
-			auto matrix = glm::value_ptr(entity->model_matrix);
-			std::copy(matrix, matrix + 16,
-				model_matrices + (entity_index * 16));
+			const float* matrix = static_cast<const float*>(
+				glm::value_ptr(entity->model_matrix));
+			for (size_t i = 0; i < 16; ++i)
+			{
+				model_matrices[static_cast<size_t>(entity_index) * 16 + i]
+					= matrix[i];
+			}
 			++entity_index;
 		}
 	}

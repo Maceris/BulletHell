@@ -1,5 +1,6 @@
 #include "Graphics/Scene/Projection.h"
 
+#include "Debugging/Logger.h"
 #include "gtc/matrix_transform.hpp"
 
 Projection::Projection(const unsigned int width, const unsigned int height)
@@ -13,6 +14,12 @@ Projection::Projection(const unsigned int width, const unsigned int height)
 void Projection::update_matrices(const unsigned int width,
 	const unsigned int height)
 {
+	if (height == 0)
+	{
+		LOG_WARNING("Updating projection matrix with a height of 0");
+		return;
+	}
+	
 	projection_matrix = glm::perspectiveLH_NO(FOV,
 		static_cast<float>(width) / height, Z_NEAR, Z_FAR);
 	projection_matrix[2][2] *= -1.0f;

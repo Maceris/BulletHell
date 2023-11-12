@@ -141,13 +141,11 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	{
 		EntityList& entities = model->entity_list;
 		std::vector<MeshData>& mesh_data_list = model->mesh_data_list;
-		for (auto& entity : entities)
+		
+		for (auto& mesh_data : mesh_data_list)
 		{
-			for (auto& mesh_data : mesh_data_list)
-			{
-				mesh_data.append_vertices_to_buffer(meshes_buffer);
-				mesh_data.append_indices_to_buffer(indices_buffer);
-			}
+			mesh_data.append_vertices_to_buffer(meshes_buffer);
+			mesh_data.append_indices_to_buffer(indices_buffer);
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, dest_animation_vbo);
@@ -308,13 +306,11 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	{
 		EntityList& entities = model->entity_list;
 		std::vector<MeshData>& mesh_data_list = model->mesh_data_list;
-		for (auto& entity : entities)
+		
+		for (auto& mesh_data : mesh_data_list)
 		{
-			for (auto& mesh_data : mesh_data_list)
-			{
-				mesh_data.append_vertices_to_buffer(meshes_buffer);
-				mesh_data.append_indices_to_buffer(indices_buffer);
-			}
+			mesh_data.append_vertices_to_buffer(meshes_buffer);
+			mesh_data.append_indices_to_buffer(indices_buffer);
 		}
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, meshes_vbo);

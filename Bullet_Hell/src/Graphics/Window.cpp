@@ -61,6 +61,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 /// <param name="height">The new height, in pixels, of the framebuffer.</param>
 static void resize_callback(GLFWwindow* window, int width, int height)
 {
+    if (width == 0 || height == 0)
+    {
+        LOG_WARNING("Updating size with a width of " + std::to_string(width)
+            + " and height of " + std::to_string(height));
+        return;
+    }
     g_game_logic->notify_about_resize(width, height);
 }
 
