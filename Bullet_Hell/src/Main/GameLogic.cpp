@@ -192,9 +192,15 @@ void GameLogic::run_game()
 	while (current_state == running)
 	{
 		calculate_delta_time();
+		TIME_START("Processing Input");
 		process_input();
-		g_event_manager->update(10);
+		TIME_END("Processing Input");
 
+		TIME_START("Processing Events");
+		g_event_manager->update(10);
+		TIME_END("Processing Events");
+
+		TIME_START("Updating Scene");
 		if (current_scene->dirty)
 		{
 			current_scene->rebuild_model_lists();
@@ -202,6 +208,7 @@ void GameLogic::run_game()
 			render->setup_data(*current_scene);
 			current_scene->dirty = false;
 		}
+		TIME_END("Updating Scene");
 
 		current_scene->player->animation_data.next_frame();
 		render->render(*window, *current_scene);
