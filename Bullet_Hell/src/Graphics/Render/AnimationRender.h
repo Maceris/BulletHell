@@ -5,9 +5,9 @@
 #include <memory>
 
 #include "Graphics/Graph/QuadMesh.h"
-#include "Graphics/Graph/RenderBuffers.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Render/RenderBuffers.h"
 #include "Graphics/Scene/Scene.h"
 
 /// <summary>

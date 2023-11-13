@@ -173,7 +173,6 @@
     <ClCompile Include="src\Graphics\Graph\Model.cpp" />
     <ClCompile Include="src\Graphics\Graph\ModelResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\QuadMesh.cpp" />
-    <ClCompile Include="src\Graphics\Graph\RenderBuffers.cpp" />
     <ClCompile Include="src\Graphics\Graph\ShaderProgram.cpp" />
     <ClCompile Include="src\Graphics\Graph\ShadowBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\Texture.cpp" />
@@ -188,6 +187,7 @@
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
     <ClCompile Include="src\Graphics\Render\LightRender.cpp" />
     <ClCompile Include="src\Graphics\Render\Render.cpp" />
+    <ClCompile Include="src\Graphics\Render\RenderBuffers.cpp" />
     <ClCompile Include="src\Graphics\Render\SceneRender.cpp" />
     <ClCompile Include="src\Graphics\Render\ShadowRender.cpp" />
     <ClCompile Include="src\Graphics\Render\SkyBoxRender.cpp" />
@@ -255,7 +255,6 @@
     <ClInclude Include="src\Graphics\Graph\Model.h" />
     <ClInclude Include="src\Graphics\Graph\ModelResource.h" />
     <ClInclude Include="src\Graphics\Graph\QuadMesh.h" />
-    <ClInclude Include="src\Graphics\Graph\RenderBuffers.h" />
     <ClInclude Include="src\Graphics\Graph\ShaderProgram.h" />
     <ClInclude Include="src\Graphics\Graph\ShadowBuffer.h" />
     <ClInclude Include="src\Graphics\Graph\Texture.h" />
@@ -270,6 +269,7 @@
     <ClInclude Include="src\Graphics\Render\GuiRender.h" />
     <ClInclude Include="src\Graphics\Render\LightRender.h" />
     <ClInclude Include="src\Graphics\Render\Render.h" />
+    <ClInclude Include="src\Graphics\Render\RenderBuffers.h" />
     <ClInclude Include="src\Graphics\Render\RenderConstants.h" />
     <ClInclude Include="src\Graphics\Render\SceneRender.h" />
     <ClInclude Include="src\Graphics\Render\ShadowRender.h" />

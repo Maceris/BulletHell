@@ -1,4 +1,4 @@
-#include "Graphics/Graph/RenderBuffers.h"
+#include "Graphics/Render/RenderBuffers.h"
 
 #include <cmath>
 #include <memory>
