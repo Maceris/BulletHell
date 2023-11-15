@@ -42,7 +42,7 @@ void RenderBuffers::cleanup()
 
 void RenderBuffers::define_vertex_attributes()
 {
-	const int stride = (3 * 4 + 2) * 4;
+	const int stride = (3 * 4 + 2) * (int) sizeof(float);
 	int pointer = 0;
 
 	// Positions
