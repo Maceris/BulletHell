@@ -6,6 +6,7 @@
 #include "Graphics/Window.h"
 #include "Graphics/Graph/GBuffer.h"
 #include "Graphics/Render/AnimationRender.h"
+#include "Graphics/Render/DebugRender.h"
 #include "Graphics/Render/CommandBuffers.h"
 #include "Graphics/Render/FilterRender.h"
 #include "Graphics/Render/GuiRender.h"
@@ -98,6 +99,7 @@ private:
 	LightRender light_render;
 	SceneRender scene_render;
 	ShadowRender shadow_render;
+	DebugRender debug_render;
 	SkyBoxRender sky_box_render;
 
 	/// <summary>

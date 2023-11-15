@@ -183,6 +183,7 @@
     <ClCompile Include="src\Graphics\MouseInput.cpp" />
     <ClCompile Include="src\Graphics\Render\AnimationRender.cpp" />
     <ClCompile Include="src\Graphics\Render\CommandBuffers.cpp" />
+    <ClCompile Include="src\Graphics\Render\DebugRender.cpp" />
     <ClCompile Include="src\Graphics\Render\FilterRender.cpp" />
     <ClCompile Include="src\Graphics\Render\GuiRender.cpp" />
     <ClCompile Include="src\Graphics\Render\LightRender.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="src\Graphics\MouseInput.h" />
     <ClInclude Include="src\Graphics\Render\AnimationRender.h" />
     <ClInclude Include="src\Graphics\Render\CommandBuffers.h" />
+    <ClInclude Include="src\Graphics\Render\DebugRender.h" />
     <ClInclude Include="src\Graphics\Render\FilterRender.h" />
     <ClInclude Include="src\Graphics\Render\GuiRender.h" />
     <ClInclude Include="src\Graphics\Render\LightRender.h" />

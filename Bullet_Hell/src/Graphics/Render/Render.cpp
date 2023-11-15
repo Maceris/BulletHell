@@ -16,6 +16,7 @@ Render::Render(const Window& window)
 	, light_render{}
 	, scene_render{}
 	, shadow_render{}
+	, debug_render{}
 	, sky_box_render{}
 	, filter_render{}
 	, render_buffers{}
@@ -144,6 +145,10 @@ void Render::render(const Window& window, const Scene& scene)
 	filter_render.render(scene, screen_texture);
 	TIME_END("Filter Render");
 
+	TIME_START("Debug Render");
+	debug_render.render(scene);
+	TIME_END("Debug Render");
+
 	TIME_START("Gui Render");
 	gui_render.render(scene);
 	TIME_END("Gui Render");
@@ -175,6 +180,7 @@ void Render::setup_data(const Scene& scene)
 	scene_render.setup_materials_uniform(scene);
 	setup_animated_command_buffer(scene);
 	setup_static_command_buffer(scene);
+	debug_render.update_lines(scene);
 	buffers_populated = true;
 }
 
