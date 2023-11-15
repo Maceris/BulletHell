@@ -225,7 +225,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.animated_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
-		GL_STATIC_DRAW);
+		GL_DYNAMIC_DRAW);
 	SAFE_DELETE_ARRAY(model_matrices);
 
 	int first_index = 0;
@@ -336,7 +336,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.static_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
-		GL_STATIC_DRAW);
+		GL_DYNAMIC_DRAW);
 	SAFE_DELETE_ARRAY(model_matrices);
 
 	int first_index = 0;
@@ -443,7 +443,7 @@ void Render::update_model_buffer(
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer_id);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes,
-		model_matrices, GL_STATIC_DRAW);
+		model_matrices, GL_DYNAMIC_DRAW);
 
 	SAFE_DELETE_ARRAY(model_matrices);
 }
