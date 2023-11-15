@@ -172,11 +172,7 @@ void Render::resize(const unsigned int width, const unsigned int height)
 
 void Render::setup_data(const Scene& scene)
 {
-	if (buffers_populated.exchange(false))
-	{
-		render_buffers.cleanup();
-		command_buffers.cleanup();
-	}
+	buffers_populated = false;
 	render_buffers.load_static_models(scene);
 	render_buffers.load_animated_models(scene);
 	scene_render.setup_materials_uniform(scene);
@@ -225,8 +221,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		}
 	}
 	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
-
-	glGenBuffers(1, &command_buffers.animated_model_matrices_buffer);
+	
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.animated_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
@@ -283,7 +278,6 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 
 	command_buffers.animated_draw_count = static_cast<unsigned int>(mesh_count);
 
-	glGenBuffers(1, &command_buffers.animated_command_buffer);
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
 		command_buffers.animated_command_buffer);
 	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
@@ -292,7 +286,6 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 
 	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
-	glGenBuffers(1, &command_buffers.animated_draw_element_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.animated_draw_element_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
@@ -340,7 +333,6 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	}
 	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
 
-	glGenBuffers(1, &command_buffers.static_model_matrices_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.static_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
@@ -406,7 +398,6 @@ void Render::setup_static_command_buffer(const Scene& scene)
 
 	command_buffers.static_draw_count = static_cast<unsigned int>(mesh_count);
 
-	glGenBuffers(1, &command_buffers.static_command_buffer);
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
 		command_buffers.static_command_buffer);
 	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
@@ -415,7 +406,6 @@ void Render::setup_static_command_buffer(const Scene& scene)
 
 	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
-	glGenBuffers(1, &command_buffers.static_draw_element_buffer);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.static_draw_element_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
@@ -460,20 +450,8 @@ void Render::update_model_buffer(
 
 void Render::update_model_matrices(const Scene& scene)
 {
-	std::vector<std::shared_ptr<Model>> animated_models;
-	std::vector<std::shared_ptr<Model>> static_models;
-
-	for (const auto& pair : scene.model_map)
-	{
-		if (pair.second->is_animated())
-		{
-			animated_models.push_back(pair.second);
-		}
-		else
-		{
-			static_models.push_back(pair.second);
-		}
-	}
+	ModelList animated_models = scene.get_animated_model_list();
+	ModelList static_models = scene.get_static_model_list();
 
 	GLuint animated_buffer = command_buffers.animated_model_matrices_buffer;
 	GLuint static_buffer = command_buffers.static_model_matrices_buffer;

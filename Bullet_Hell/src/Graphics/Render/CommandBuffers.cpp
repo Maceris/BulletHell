@@ -48,7 +48,15 @@ CommandBuffers::CommandBuffers()
 	, static_draw_count{ 0 }
 	, static_draw_element_buffer{ 0 }
 	, static_model_matrices_buffer{ 0 }
-{}
+{
+	glGenBuffers(1, &animated_command_buffer);
+	glGenBuffers(1, &animated_model_matrices_buffer);
+	glGenBuffers(1, &animated_draw_element_buffer);
+
+	glGenBuffers(1, &static_command_buffer);
+	glGenBuffers(1, &static_model_matrices_buffer);
+	glGenBuffers(1, &static_draw_element_buffer);
+}
 	
 CommandBuffers::~CommandBuffers()
 {
