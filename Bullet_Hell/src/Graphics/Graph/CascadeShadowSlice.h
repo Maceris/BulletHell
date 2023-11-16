@@ -7,6 +7,13 @@
 #include "Graphics/Render/RenderConstants.h"
 #include "Graphics/Scene/Scene.h"
 
+#if DEBUG
+struct Frustrum
+{
+	glm::vec3 corners[8];
+};
+#endif
+
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 
 /// view matrix and distance to this split.
@@ -38,6 +45,10 @@ struct CascadeShadowSlice
 	CascadeShadowSlice& operator=(const CascadeShadowSlice&) = default;
 
 	~CascadeShadowSlice() = default;
+
+#if DEBUG
+	static Frustrum* cached_frustrums;
+#endif
 
 private:
 	/// <summary>

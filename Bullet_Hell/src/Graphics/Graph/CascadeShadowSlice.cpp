@@ -37,6 +37,10 @@ constexpr float* calculate_slices()
 
 float* CascadeShadowSlice::cached_splits = calculate_slices();
 
+#if DEBUG
+Frustrum* CascadeShadowSlice::cached_frustrums = ALLOC Frustrum[SHADOW_MAP_CASCADE_COUNT];
+#endif
+
 /*
 	Function is derived from Vulkan examples from Sascha Willems, and
 	licensed under the MIT License :
@@ -88,6 +92,15 @@ void CascadeShadowSlice::updateCascadeShadows(
 			frustrum_corners[i + 4] = frustrum_corners[i] + (dist * splitDist);
 			frustrum_corners[i] = frustrum_corners[i] + (dist * lastSplitDist);
 		}
+
+#if DEBUG
+		Frustrum frustrum;
+		for (int i = 0; i < 8; ++i)
+		{
+			frustrum.corners[i] = frustrum_corners[i];
+		}
+		cached_frustrums[cascade] = frustrum;
+#endif
 
 		glm::vec3 frustrum_center = glm::vec3(0.0f);
 		for (int i = 0; i < 8; ++i)

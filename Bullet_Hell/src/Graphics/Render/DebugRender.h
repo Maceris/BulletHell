@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Graphics/GladTypes.h"
+#include "Graphics/Graph/CascadeShadowSlice.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
 #include "Graphics/Scene/Scene.h"
@@ -26,19 +27,31 @@ public:
 	/// <param name="scene">The scene we are rendering.</param>
 	void render(const Scene& scene);
 
+	/// <summary>
+	/// Update the debug lines based on the scene.
+	/// </summary>
+	/// <param name="scene">The scene we are rendering.</param>
 	void update_lines(const Scene& scene);
 
 private:
 	std::unique_ptr<ShaderProgram> shader_program;
 	std::unique_ptr<UniformsMap> uniforms_map;
 
-	int line_count;
-
 	/// <summary>
 	/// Set up uniforms for this stage.
 	/// </summary>
 	void create_uniforms();
 
-	GLuint line_vao;
-	GLuint line_data;
+	/// <summary>
+	/// Update the line buffer for the shadow render frustrums.
+	/// </summary>
+	void update_frustrums();
+
+	GLuint map_line_vao;
+	GLuint map_line_data;
+	int map_line_count;
+
+	GLuint frustrum_vao;
+	GLuint frustrum_data;
+	int frustrum_line_count;
 };

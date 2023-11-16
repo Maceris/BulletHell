@@ -55,8 +55,10 @@ struct Line
 #pragma pack(pop)
 
 DebugRender::DebugRender()
-    : line_vao{ 0 }
-    , line_data{ 0 }
+    : map_line_vao{ 0 }
+    , map_line_data{ 0 }
+    , frustrum_vao{ 0 }
+    , frustrum_data{ 0 }
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
@@ -68,17 +70,22 @@ DebugRender::DebugRender()
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     create_uniforms();
 
-    glGenVertexArrays(1, &line_vao);
-    glGenBuffers(1, &line_data);
-
-    glBindVertexArray(line_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, line_data);
-
+    glGenVertexArrays(1, &map_line_vao);
+    glGenBuffers(1, &map_line_data);
+    glBindVertexArray(map_line_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, map_line_data);
     glEnableVertexAttribArray(0);
-
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 
         (const void*)0);
-    
+    glBindVertexArray(0);
+
+    glGenVertexArrays(1, &frustrum_vao);
+    glGenBuffers(1, &frustrum_data);
+    glBindVertexArray(frustrum_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, frustrum_data);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+        (const void*)0);
     glBindVertexArray(0);
 }
 
@@ -92,9 +99,17 @@ void DebugRender::render(const Scene& scene)
     uniforms_map->set_uniform("view_matrix", scene.camera.view_matrix);
     uniforms_map->set_uniform("line_color", RED);
 
-    glBindVertexArray(line_vao);
-    
-    glDrawArrays(GL_LINES, 0, line_count * 2);
+    glBindVertexArray(map_line_vao);
+    glDrawArrays(GL_LINES, 0, map_line_count * 2);
+
+    update_frustrums();
+    glBindVertexArray(frustrum_vao);
+    const int line_group = 4 * 3 * 2;
+    glDrawArrays(GL_LINES, 0, line_group);
+    uniforms_map->set_uniform("line_color", GREEN);
+    glDrawArrays(GL_LINES, line_group, line_group);
+    uniforms_map->set_uniform("line_color", BLUE);
+    glDrawArrays(GL_LINES, line_group * 2, line_group);
 
     glBindVertexArray(0);
 
@@ -102,13 +117,42 @@ void DebugRender::render(const Scene& scene)
     shader_program->unbind();
 }
 
+void DebugRender::update_frustrums()
+{
+    glBindBuffer(GL_ARRAY_BUFFER, frustrum_data);
+
+    std::vector<Line> frustrum_lines;
+    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+    {
+        Frustrum& frustrum = CascadeShadowSlice::cached_frustrums[i];
+        frustrum_lines.emplace_back(frustrum.corners[0], frustrum.corners[1]);
+        frustrum_lines.emplace_back(frustrum.corners[1], frustrum.corners[2]);
+        frustrum_lines.emplace_back(frustrum.corners[2], frustrum.corners[3]);
+        frustrum_lines.emplace_back(frustrum.corners[3], frustrum.corners[0]);
+
+        frustrum_lines.emplace_back(frustrum.corners[4], frustrum.corners[5]);
+        frustrum_lines.emplace_back(frustrum.corners[5], frustrum.corners[6]);
+        frustrum_lines.emplace_back(frustrum.corners[6], frustrum.corners[7]);
+        frustrum_lines.emplace_back(frustrum.corners[7], frustrum.corners[4]);
+
+        frustrum_lines.emplace_back(frustrum.corners[0], frustrum.corners[4]);
+        frustrum_lines.emplace_back(frustrum.corners[1], frustrum.corners[5]);
+        frustrum_lines.emplace_back(frustrum.corners[2], frustrum.corners[6]);
+        frustrum_lines.emplace_back(frustrum.corners[3], frustrum.corners[7]);
+    }
+
+    frustrum_line_count = frustrum_lines.size();
+    glBufferData(GL_ARRAY_BUFFER, frustrum_line_count * sizeof(Line),
+        frustrum_lines.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void DebugRender::update_lines(const Scene& scene)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, line_data);
+    glBindBuffer(GL_ARRAY_BUFFER, map_line_data);
 
-    line_count = 0;
-
-    std::vector<Line> lines;
+    std::vector<Line> map_lines;
     for (auto& chunk_pair : scene.chunk_contents)
     {
         for (auto& model_pair : chunk_pair.second->entities)
@@ -117,15 +161,15 @@ void DebugRender::update_lines(const Scene& scene)
             {
                 glm::vec3 start = entity->position;
                 glm::vec3 end = start + glm::vec3(0.0f, 1.0f, 0.0f);
-                lines.emplace_back(start, end);
+                map_lines.emplace_back(start, end);
             }
         }
     }
 
-    line_count = lines.size();
+    map_line_count = map_lines.size();
 
-    glBufferData(GL_ARRAY_BUFFER, line_count * sizeof(Line), lines.data(), 
-        GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, map_line_count * sizeof(Line), 
+        map_lines.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
