@@ -110,7 +110,6 @@ void CascadeShadowSlice::updateCascadeShadows(
 		cached_frustrums[cascade] = frustrum;
 #endif
 
-
 		float radius = 0.0f;
 		for (int i = 0; i < 8; ++i)
 		{
