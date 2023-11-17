@@ -11,6 +11,7 @@
 struct Frustrum
 {
 	glm::vec3 corners[8];
+	glm::vec3 center;
 };
 #endif
 

@@ -93,21 +93,23 @@ void CascadeShadowSlice::updateCascadeShadows(
 			frustrum_corners[i] = frustrum_corners[i] + (dist * lastSplitDist);
 		}
 
-#if DEBUG
-		Frustrum frustrum;
-		for (int i = 0; i < 8; ++i)
-		{
-			frustrum.corners[i] = frustrum_corners[i];
-		}
-		cached_frustrums[cascade] = frustrum;
-#endif
-
 		glm::vec3 frustrum_center = glm::vec3(0.0f);
 		for (int i = 0; i < 8; ++i)
 		{
 			frustrum_center += frustrum_corners[i];
 		}
 		frustrum_center /= 8.0f;
+
+#if DEBUG
+		Frustrum frustrum;
+		for (int i = 0; i < 8; ++i)
+		{
+			frustrum.corners[i] = frustrum_corners[i];
+		}
+		frustrum.center = frustrum_center;
+		cached_frustrums[cascade] = frustrum;
+#endif
+
 
 		float radius = 0.0f;
 		for (int i = 0; i < 8; ++i)

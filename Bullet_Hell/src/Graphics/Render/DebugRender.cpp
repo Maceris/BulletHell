@@ -104,7 +104,7 @@ void DebugRender::render(const Scene& scene)
 
     update_frustrums();
     glBindVertexArray(frustrum_vao);
-    const int line_group = 4 * 3 * 2;
+    const int line_group = (4 * 3 + 2) * 2;
     glDrawArrays(GL_LINES, 0, line_group);
     uniforms_map->set_uniform("line_color", GREEN);
     glDrawArrays(GL_LINES, line_group, line_group);
@@ -139,6 +139,16 @@ void DebugRender::update_frustrums()
         frustrum_lines.emplace_back(frustrum.corners[1], frustrum.corners[5]);
         frustrum_lines.emplace_back(frustrum.corners[2], frustrum.corners[6]);
         frustrum_lines.emplace_back(frustrum.corners[3], frustrum.corners[7]);
+
+        glm::vec3 center = frustrum.center;
+        frustrum_lines.emplace_back(
+            center - glm::vec3(1.0f, 1.0f, 0.0f),
+            center + glm::vec3(1.0f, 1.0f, 0.0f)
+        );
+        frustrum_lines.emplace_back(
+            center - glm::vec3(1.0f, -1.0f, 0.0f),
+            center + glm::vec3(1.0f, -1.0f, 0.0f)
+        );
     }
 
     frustrum_line_count = frustrum_lines.size();
