@@ -43,15 +43,15 @@ private:
 	void create_uniforms();
 
 	/// <summary>
-	/// Update the line buffer for the shadow render frustrums.
+	/// Update the line buffer for the shadow render frustums.
 	/// </summary>
-	void update_frustrums();
+	void update_frustums();
 
 	GLuint map_line_vao;
 	GLuint map_line_data;
 	int map_line_count;
 
-	GLuint frustrum_vao;
-	GLuint frustrum_data;
-	int frustrum_line_count;
+	GLuint frustum_vao;
+	GLuint frustum_data;
+	int frustum_line_count;
 };

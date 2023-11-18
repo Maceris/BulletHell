@@ -38,7 +38,7 @@ constexpr float* calculate_slices()
 float* CascadeShadowSlice::cached_splits = calculate_slices();
 
 #if DEBUG
-Frustrum* CascadeShadowSlice::cached_frustrums = ALLOC Frustrum[SHADOW_MAP_CASCADE_COUNT];
+Frustum* CascadeShadowSlice::cached_frustums = ALLOC Frustum[SHADOW_MAP_CASCADE_COUNT];
 #endif
 
 /*
@@ -65,7 +65,7 @@ void CascadeShadowSlice::updateCascadeShadows(
 	{
 		const float splitDist = cached_splits[cascade];
 
-		glm::vec3 frustrum_corners[8] =
+		glm::vec3 frustum_corners[8] =
 		{
 			glm::vec3(-1.0f,  1.0f, -1.0f),
 			glm::vec3( 1.0f,  1.0f, -1.0f),
@@ -82,48 +82,48 @@ void CascadeShadowSlice::updateCascadeShadows(
 		for (int i = 0; i < 8; ++i)
 		{
 			glm::vec4 invCorner = inverse_camera * 
-				glm::vec4(frustrum_corners[i], 1.0f);
-			frustrum_corners[i] = invCorner / invCorner.w;
+				glm::vec4(frustum_corners[i], 1.0f);
+			frustum_corners[i] = invCorner / invCorner.w;
 		}
 
 		for (int i = 0; i < 4; ++i)
 		{
-			glm::vec3 dist = frustrum_corners[i + 4] - frustrum_corners[i];
-			frustrum_corners[i + 4] = frustrum_corners[i] + (dist * splitDist);
-			frustrum_corners[i] = frustrum_corners[i] + (dist * lastSplitDist);
+			glm::vec3 dist = frustum_corners[i + 4] - frustum_corners[i];
+			frustum_corners[i + 4] = frustum_corners[i] + (dist * splitDist);
+			frustum_corners[i] = frustum_corners[i] + (dist * lastSplitDist);
 		}
 
-		glm::vec3 frustrum_center = glm::vec3(0.0f);
+		glm::vec3 frustum_center = glm::vec3(0.0f);
 		for (int i = 0; i < 8; ++i)
 		{
-			frustrum_center += frustrum_corners[i];
+			frustum_center += frustum_corners[i];
 		}
-		frustrum_center /= 8.0f;
+		frustum_center /= 8.0f;
 
 #if DEBUG
-		Frustrum frustrum;
+		Frustum frustum;
 		for (int i = 0; i < 8; ++i)
 		{
-			frustrum.corners[i] = frustrum_corners[i];
+			frustum.corners[i] = frustum_corners[i];
 		}
-		frustrum.center = frustrum_center;
-		cached_frustrums[cascade] = frustrum;
+		frustum.center = frustum_center;
+		cached_frustums[cascade] = frustum;
 #endif
 
 		float radius = 0.0f;
 		for (int i = 0; i < 8; ++i)
 		{
 			float distance =
-				glm::length(frustrum_corners[i] - frustrum_center);
+				glm::length(frustum_corners[i] - frustum_center);
 			radius = glm::max(radius, distance);
 		}
 		radius = std::ceil(radius * 16.0f) / 16.0f;
 
 		glm::vec3 light_dir = glm::normalize(-light_direction);
-		glm::vec3 eye = frustrum_center + (light_dir * radius);
+		glm::vec3 eye = frustum_center + (light_dir * radius);
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-		glm::mat4 lightViewMatrix = glm::lookAtLH(eye, frustrum_center, up);
+		glm::mat4 lightViewMatrix = glm::lookAtLH(eye, frustum_center, up);
 		glm::mat4 lightOrthoMatrix = glm::orthoRH_ZO(-radius, radius, -radius, 
 			radius, 0.0f, 2 * radius);
 

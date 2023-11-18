@@ -8,7 +8,7 @@
 #include "Graphics/Scene/Scene.h"
 
 #if DEBUG
-struct Frustrum
+struct Frustum
 {
 	glm::vec3 corners[8];
 	glm::vec3 center;
@@ -48,7 +48,7 @@ struct CascadeShadowSlice
 	~CascadeShadowSlice() = default;
 
 #if DEBUG
-	static Frustrum* cached_frustrums;
+	static Frustum* cached_frustums;
 #endif
 
 private:
