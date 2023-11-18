@@ -157,6 +157,9 @@
     <ClCompile Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\Debugging\Timer.cpp" />
+    <ClCompile Include="src\Entities\Bullet.cpp" />
+    <ClCompile Include="src\Entities\Pawn.cpp" />
+    <ClCompile Include="src\Entities\PawnManager.cpp" />
     <ClCompile Include="src\Event\EventManager.cpp" />
     <ClCompile Include="src\Event\Map\ChunkLoaded.cpp" />
     <ClCompile Include="src\Event\Map\ChunkUnloaded.cpp" />
@@ -237,6 +240,10 @@
     <ClInclude Include="src\3rdParty\imgui-1.89.9\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\Timer.h" />
+    <ClInclude Include="src\Entities\Bullet.h" />
+    <ClInclude Include="src\Entities\EntityTypes.h" />
+    <ClInclude Include="src\Entities\Pawn.h" />
+    <ClInclude Include="src\Entities\PawnManager.h" />
     <ClInclude Include="src\Event\Event.h" />
     <ClInclude Include="src\Event\EventManager.h" />
     <ClInclude Include="src\Event\Map\ChunkLoaded.h" />
