@@ -11,6 +11,31 @@
 #include "Graphics/Scene/Scene.h"
 
 /// <summary>
+/// A set of lines to draw.
+/// </summary>
+struct LineGroup
+{
+	/// <summary>
+	/// The VAO for this group.
+	/// </summary>
+	GLuint vao;
+	/// <summary>
+	/// The buffer handle for the line data.
+	/// </summary>
+	GLuint data;
+	/// <summary>
+	/// The number of lines. Notably, not the number of points like 
+	/// glDrawArrays expects.
+	/// </summary>
+	int count;
+
+	LineGroup();
+	LineGroup(const LineGroup&) = delete;
+	LineGroup& operator=(const LineGroup&) = delete;
+	~LineGroup();
+};
+
+/// <summary>
 /// Handles rendering for debug lines.
 /// </summary>
 class DebugRender
@@ -47,11 +72,7 @@ private:
 	/// </summary>
 	void update_frustums();
 
-	GLuint map_line_vao;
-	GLuint map_line_data;
-	int map_line_count;
-
-	GLuint frustum_vao;
-	GLuint frustum_data;
-	int frustum_line_count;
+	LineGroup map_lines;
+	LineGroup frustum_lines;
+	LineGroup AABB_lines;
 };

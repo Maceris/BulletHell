@@ -54,11 +54,31 @@ struct Line
 };
 #pragma pack(pop)
 
+LineGroup::LineGroup()
+    : vao{ 0 }
+    , data{ 0 }
+    , count{ 0 }
+{
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &data);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, data);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+        (const void*)0);
+    glBindVertexArray(0);
+}
+
+LineGroup::~LineGroup()
+{
+    glDeleteBuffers(1, &data);
+    glDeleteVertexArrays(1, &vao);
+}
+
 DebugRender::DebugRender()
-    : map_line_vao{ 0 }
-    , map_line_data{ 0 }
-    , frustum_vao{ 0 }
-    , frustum_data{ 0 }
+    : map_lines{}
+    , frustum_lines{}
+    , AABB_lines{}
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
@@ -69,24 +89,6 @@ DebugRender::DebugRender()
 
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     create_uniforms();
-
-    glGenVertexArrays(1, &map_line_vao);
-    glGenBuffers(1, &map_line_data);
-    glBindVertexArray(map_line_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, map_line_data);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 
-        (const void*)0);
-    glBindVertexArray(0);
-
-    glGenVertexArrays(1, &frustum_vao);
-    glGenBuffers(1, &frustum_data);
-    glBindVertexArray(frustum_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, frustum_data);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-        (const void*)0);
-    glBindVertexArray(0);
 }
 
 void DebugRender::render(const Scene& scene)
@@ -99,13 +101,13 @@ void DebugRender::render(const Scene& scene)
     uniforms_map->set_uniform("view_matrix", scene.camera.view_matrix);
     uniforms_map->set_uniform("line_color", RED);
 
-    glBindVertexArray(map_line_vao);
-    glDrawArrays(GL_LINES, 0, map_line_count * 2);
+    glBindVertexArray(map_lines.vao);
+    glDrawArrays(GL_LINES, 0, map_lines.count * 2);
 
 #if 0
     //TODO(ches) decide if we want to keep this
     update_frustums();
-    glBindVertexArray(frustum_vao);
+    glBindVertexArray(frustum_lines.vao);
     const int line_group = (4 * 3 + 3) * 2;
     glDrawArrays(GL_LINES, 0, line_group);
     uniforms_map->set_uniform("line_color", GREEN);
@@ -122,54 +124,54 @@ void DebugRender::render(const Scene& scene)
 
 void DebugRender::update_frustums()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, frustum_data);
+    glBindBuffer(GL_ARRAY_BUFFER, frustum_lines.data);
 
-    std::vector<Line> frustum_lines;
+    std::vector<Line> lines;
     for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
     {
         Frustum& frustum = CascadeShadowSlice::cached_frustums[i];
-        frustum_lines.emplace_back(frustum.corners[0], frustum.corners[1]);
-        frustum_lines.emplace_back(frustum.corners[1], frustum.corners[2]);
-        frustum_lines.emplace_back(frustum.corners[2], frustum.corners[3]);
-        frustum_lines.emplace_back(frustum.corners[3], frustum.corners[0]);
+        lines.emplace_back(frustum.corners[0], frustum.corners[1]);
+        lines.emplace_back(frustum.corners[1], frustum.corners[2]);
+        lines.emplace_back(frustum.corners[2], frustum.corners[3]);
+        lines.emplace_back(frustum.corners[3], frustum.corners[0]);
 
-        frustum_lines.emplace_back(frustum.corners[4], frustum.corners[5]);
-        frustum_lines.emplace_back(frustum.corners[5], frustum.corners[6]);
-        frustum_lines.emplace_back(frustum.corners[6], frustum.corners[7]);
-        frustum_lines.emplace_back(frustum.corners[7], frustum.corners[4]);
+        lines.emplace_back(frustum.corners[4], frustum.corners[5]);
+        lines.emplace_back(frustum.corners[5], frustum.corners[6]);
+        lines.emplace_back(frustum.corners[6], frustum.corners[7]);
+        lines.emplace_back(frustum.corners[7], frustum.corners[4]);
 
-        frustum_lines.emplace_back(frustum.corners[0], frustum.corners[4]);
-        frustum_lines.emplace_back(frustum.corners[1], frustum.corners[5]);
-        frustum_lines.emplace_back(frustum.corners[2], frustum.corners[6]);
-        frustum_lines.emplace_back(frustum.corners[3], frustum.corners[7]);
+        lines.emplace_back(frustum.corners[0], frustum.corners[4]);
+        lines.emplace_back(frustum.corners[1], frustum.corners[5]);
+        lines.emplace_back(frustum.corners[2], frustum.corners[6]);
+        lines.emplace_back(frustum.corners[3], frustum.corners[7]);
 
         glm::vec3 center = frustum.center;
-        frustum_lines.emplace_back(
+        lines.emplace_back(
             center - glm::vec3(1.0f, 0.0f, 0.0f),
             center + glm::vec3(1.0f, 0.0f, 0.0f)
         );
-        frustum_lines.emplace_back(
+        lines.emplace_back(
             center - glm::vec3(0.0f, 1.0f, 0.0f),
             center + glm::vec3(0.0f, 1.0f, 0.0f)
         );
-        frustum_lines.emplace_back(
+        lines.emplace_back(
             center - glm::vec3(0.0f, 0.0f, 1.0f),
             center + glm::vec3(0.0f, 0.0f, 1.0f)
         );
     }
 
-    frustum_line_count = frustum_lines.size();
-    glBufferData(GL_ARRAY_BUFFER, frustum_line_count * sizeof(Line),
-        frustum_lines.data(), GL_STATIC_DRAW);
+    frustum_lines.count = lines.size();
+    glBufferData(GL_ARRAY_BUFFER, frustum_lines.count * sizeof(Line),
+        lines.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void DebugRender::update_lines(const Scene& scene)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, map_line_data);
+    glBindBuffer(GL_ARRAY_BUFFER, map_lines.data);
 
-    std::vector<Line> map_lines;
+    std::vector<Line> lines;
     for (auto& chunk_pair : scene.chunk_contents)
     {
         for (auto& model_pair : chunk_pair.second->entities)
@@ -178,25 +180,25 @@ void DebugRender::update_lines(const Scene& scene)
             {
                 glm::vec3 start = entity->position;
                 glm::vec3 end = start + glm::vec3(0.0f, 1.0f, 0.0f);
-                map_lines.emplace_back(start, end);
+                lines.emplace_back(start, end);
                 
                 glm::vec3 corner1 = start + glm::vec3(-1.0f, 0.0f, -1.0f);
                 glm::vec3 corner2 = start + glm::vec3( 1.0f, 0.0f, -1.0f);
                 glm::vec3 corner3 = start + glm::vec3( 1.0f, 0.0f,  1.0f);
                 glm::vec3 corner4 = start + glm::vec3(-1.0f, 0.0f,  1.0f);
 
-                map_lines.emplace_back(corner1, corner2);
-                map_lines.emplace_back(corner2, corner3);
-                map_lines.emplace_back(corner3, corner4);
-                map_lines.emplace_back(corner4, corner1);
+                lines.emplace_back(corner1, corner2);
+                lines.emplace_back(corner2, corner3);
+                lines.emplace_back(corner3, corner4);
+                lines.emplace_back(corner4, corner1);
             }
         }
     }
 
-    map_line_count = map_lines.size();
+    map_lines.count = lines.size();
 
-    glBufferData(GL_ARRAY_BUFFER, map_line_count * sizeof(Line), 
-        map_lines.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, map_lines.count * sizeof(Line),
+        lines.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
