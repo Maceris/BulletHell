@@ -44,15 +44,86 @@ struct Line
     glm::vec4 start;
     glm::vec4 end;
 
-    Line(glm::vec3 start, glm::vec3 end)
+    Line(const glm::vec3& start, const glm::vec3& end)
         : start{ start, 1.0f }
         , end{ end, 1.0f }
     {}
     Line(const Line&) = default;
     Line& operator=(const Line&) = default;
     ~Line() = default;
+
+    Line operator+(const glm::vec3& displacement) const
+    {
+        const glm::vec4 displace_vec4(displacement, 0.0f);
+        return Line(start + displace_vec4, end + displace_vec4);
+    }
 };
 #pragma pack(pop)
+
+struct AABBLines
+{
+    std::vector<Line> lines;
+
+    AABBLines(const glm::vec3& aabb_min, const glm::vec3& aabb_max)
+    {
+        //NOTE(ches) min corner
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z), 
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z)
+        );
+
+        //NOTE(ches) max corner
+        lines.emplace_back(
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+        );
+        
+        //NOTE(ches) The rest of the lines
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
+            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+        );
+        lines.emplace_back(
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
+            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+        );
+    }
+    AABBLines(const AABBLines&) = default;
+    AABBLines& operator=(const AABBLines&) = default;
+    ~AABBLines() = default;
+};
 
 LineGroup::LineGroup()
     : vao{ 0 }
@@ -104,11 +175,17 @@ void DebugRender::render(const Scene& scene)
     glBindVertexArray(map_lines.vao);
     glDrawArrays(GL_LINES, 0, map_lines.count * 2);
 
+    update_AABBs(scene);
+    uniforms_map->set_uniform("line_color", GREEN);
+    glBindVertexArray(AABB_lines.vao);
+    glDrawArrays(GL_LINES, 0, AABB_lines.count * 2);
+
 #if 0
     //TODO(ches) decide if we want to keep this
     update_frustums();
     glBindVertexArray(frustum_lines.vao);
     const int line_group = (4 * 3 + 3) * 2;
+    uniforms_map->set_uniform("line_color", RED);
     glDrawArrays(GL_LINES, 0, line_group);
     uniforms_map->set_uniform("line_color", GREEN);
     glDrawArrays(GL_LINES, line_group, line_group);
@@ -120,6 +197,41 @@ void DebugRender::render(const Scene& scene)
 
     glDepthMask(GL_TRUE);
     shader_program->unbind();
+}
+
+void DebugRender::update_AABBs(const Scene& scene)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, AABB_lines.data);
+
+    std::vector<Line> lines;
+    for (auto& model : scene.get_model_list())
+    {
+        std::vector<AABBLines> boxes;
+        for (auto& mesh_data : model->mesh_data_list)
+        {
+            boxes.emplace_back(mesh_data.aabb_min, mesh_data.aabb_max);
+        }
+
+        for (auto& entity : model->entity_list)
+        {
+            glm::vec3 position = entity->position;
+                
+            for (const auto& box : boxes)
+            {
+                for (const auto& line : box.lines)
+                {
+                    lines.push_back(line + position);
+                }
+            }
+        }
+    }
+
+    AABB_lines.count = lines.size();
+
+    glBufferData(GL_ARRAY_BUFFER, AABB_lines.count * sizeof(Line),
+        lines.data(), GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void DebugRender::update_frustums()

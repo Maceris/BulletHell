@@ -68,6 +68,11 @@ private:
 	void create_uniforms();
 
 	/// <summary>
+	/// Update the lines for AABB's of entities.
+	/// </summary>
+	void update_AABBs(const Scene& scene);
+
+	/// <summary>
 	/// Update the line buffer for the shadow render frustums.
 	/// </summary>
 	void update_frustums();
