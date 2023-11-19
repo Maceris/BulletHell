@@ -16,6 +16,7 @@
 
 GameLogic* g_game_logic = nullptr;
 EventManager* g_event_manager = nullptr;
+PawnManager* g_pawn_manager = nullptr;
 
 GameLogic::GameLogic()
 	: current_state{ starting_up }
@@ -100,6 +101,8 @@ bool GameLogic::initialize()
 	current_map = std::make_shared<GameMap>();
 	g_event_manager->update();
 	TIME_END("Map Init");
+
+	g_pawn_manager = ALLOC PawnManager();
 
 	return true;
 }

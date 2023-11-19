@@ -5,6 +5,7 @@
 #include <chrono>
 #include <memory>
 
+#include "Entities/PawnManager.h"
 #include "Event/EventManager.h"
 #include "Graphics/Render/Render.h"
 #include "Graphics/Window.h"
@@ -116,11 +117,16 @@ public:
 };
 
 /// <summary>
-/// A global reference to the game logic object.
+/// A global reference to the game logic.
 /// </summary>
 extern GameLogic* g_game_logic;
 
 /// <summary>
-/// A global reference to the event manager object.
+/// A global reference to the event manager.
 /// </summary>
 extern EventManager* g_event_manager;
+
+/// <summary>
+/// A global reference to the pawn manager.
+/// </summary>
+extern PawnManager* g_pawn_manager;

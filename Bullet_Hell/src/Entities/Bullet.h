@@ -2,6 +2,8 @@
 
 #include "Globals.h"
 
+#include "glm.hpp"
+
 #include "Entities/EntityTypes.h"
 
 /// <summary>
@@ -11,13 +13,17 @@ struct Bullet
 {
 	/// <summary>
 	/// How much damage this bullet will do if it collides with something
-	/// it is hostile to. Player bullets hurt enemies, enemy bullets hurt 
-	/// players.
+	/// it is hostile to.
 	/// </summary>
 	Health damage;
 
 	/// <summary>
-	/// True if this was fired by a player, otherwise false.
+	/// The direction the projectile is moving in.
 	/// </summary>
-	bool player_owned;
+	glm::vec3 direction;
+
+	/// <summary>
+	/// The speed of the projectile.
+	/// </summary>
+	glm::vec3 speed;
 };
