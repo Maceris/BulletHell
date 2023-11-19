@@ -948,7 +948,7 @@ std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 	}
 
 	aiString aiNormalPath;
-	aiGetMaterialTexture(assimp_material, aiTextureType_DIFFUSE, 0,
+	aiGetMaterialTexture(assimp_material, aiTextureType_NORMALS, 0,
 		&aiNormalPath);
 	std::string normalPath(aiNormalPath.C_Str());
 
