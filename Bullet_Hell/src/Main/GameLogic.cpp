@@ -70,10 +70,10 @@ bool GameLogic::initialize()
 	player_entity->animation_data.set_current_animation(idle);
 	current_scene->player = player_entity;
 
-	current_scene->scene_lights.ambient_light.intensity = 0.5f;
+	current_scene->scene_lights.ambient_light.intensity = 0.1f;
 	current_scene->scene_lights.ambient_light.set_color(0.3f, 0.3f, 0.3f);
 
-	current_scene->scene_lights.directional_light.intensity = 0.75f;
+	current_scene->scene_lights.directional_light.intensity = 0.5f;
 	current_scene->scene_lights.directional_light.set_color(1.0f, 1.0f, 1.0f);
 	current_scene->scene_lights.directional_light.
 		set_direction(-0.91f, 1.0f, -0.43f);
