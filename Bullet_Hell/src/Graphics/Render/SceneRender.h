@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include <memory>
+#include <vector>
 
 #include "Graphics/Graph/GBuffer.h"
 #include "Graphics/Graph/ShaderProgram.h"
@@ -44,9 +45,10 @@ private:
 	std::unique_ptr<UniformsMap> uniforms_map;
 
 	/// <summary>
-	/// A cached set of bindings from texture name to ID.
+	/// The name of all the textures we are going to use. This does not include
+	/// the default texture, which is at index 0 when actually binding things.
 	/// </summary>
-	std::map<std::string, int> texture_bindings;
+	std::vector<std::string> texture_bindings;
 
 	/// <summary>
 	/// Set up uniforms for the shader.

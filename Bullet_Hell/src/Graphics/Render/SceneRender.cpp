@@ -158,40 +158,17 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
 
     const auto& model_list = scene.get_model_list();
 
-    int next_texture = 1;
-    for (const auto& model : model_list)
+    int start_texture = 1;
+    for (int i = 0; i < texture_bindings.size(); ++i)
     {
-        for (const auto& mesh_data : model->mesh_data_list)
-        {
-            const auto& material = mesh_data.material;
-            auto normal = texture_bindings.find(material->normal_map_name);
-            LOG_ASSERT(normal != texture_bindings.end()
-                && "We found an unknown texture");
-            if (normal->second == next_texture)
-            {
-                auto texture = load_texture(material->normal_map_name);
-                glActiveTexture(GL_TEXTURE0 + next_texture);
-                texture->bind();
-                uniforms_map->set_uniform("texture_sampler["
-                    + std::to_string(next_texture) + "]", next_texture);
-                ++next_texture;
-            }
-
-            auto texture = texture_bindings.find(material->texture_name);
-            LOG_ASSERT(texture != texture_bindings.end()
-                && "We found an unknown texture");
-            if (texture->second == next_texture)
-            {
-                auto texture = load_texture(material->texture_name);
-                glActiveTexture(GL_TEXTURE0 + next_texture);
-                texture->bind();
-                uniforms_map->set_uniform("texture_sampler["
-                    + std::to_string(next_texture) + "]", next_texture);
-                ++next_texture;
-            }
-        }
+        const std::string& texture_name = texture_bindings[i];
+        auto texture = load_texture(texture_name);
+        glActiveTexture(GL_TEXTURE0 + start_texture + i);
+        texture->bind();
+        uniforms_map->set_uniform("texture_sampler["
+            + std::to_string(start_texture + i) + "]", start_texture + i);
     }
-
+    
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
         command_buffers.static_draw_element_buffer);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, MODEL_MATRICES_BINDING,
@@ -239,16 +216,28 @@ void SceneRender::create_uniforms()
     }
 }
 
+template<typename T>
+int constexpr find(const std::vector<T>& list, const T& value)
+{
+    int i = 0;
+    for (i = 0; i < list.size(); ++i)
+    {
+        if (list[i] == value)
+        {
+            return i;
+        }
+    }
+    return i;
+}
+
 void SceneRender::setup_materials_uniform(const Scene& scene)
 {
     shader_program->bind();
     MaterialID next_ID = 0;
 
-    int next_texture = 1;
+    const int first_index = 1;
 
     texture_bindings.clear();
-
-    texture_bindings.emplace("", 0);
 
     const auto& model_list = scene.get_model_list();
 
@@ -273,33 +262,24 @@ void SceneRender::setup_materials_uniform(const Scene& scene)
             int index = 0;
             if (material->texture_name != "")
             {
-                auto result = texture_bindings.find(material->texture_name);
-                if (result == texture_bindings.end()) {
-                    texture_bindings.emplace(
-                        std::make_pair(material->texture_name, next_texture));
-                    index = next_texture;
-                    ++next_texture;
+                int position_in_vector = 
+                    find(texture_bindings, material->texture_name);
+                if (position_in_vector == texture_bindings.size()) {
+                    texture_bindings.push_back(material->texture_name);
                 }
-                else {
-                    index = result->second;
-                }
+                index = position_in_vector + first_index;
             }
             uniforms_map->set_uniform(prefix + "texture_index", index);
 
             index = 0;
             if (material->normal_map_name != "")
             {
-                auto result = texture_bindings.find(material->normal_map_name);
-                if (result == texture_bindings.end()) {
-                    texture_bindings.emplace(
-                        std::make_pair(material->normal_map_name, next_texture)
-                    );
-                    index = next_texture;
-                    ++next_texture;
+                int position_in_vector = 
+                    find(texture_bindings, material->normal_map_name);
+                if (position_in_vector == texture_bindings.size()) {
+                    texture_bindings.push_back(material->normal_map_name);
                 }
-                else {
-                    index = result->second;
-                }
+                index = position_in_vector + first_index;
             }
             uniforms_map->set_uniform(prefix + "normal_map_index", index);
         }
