@@ -51,7 +51,8 @@ struct AmbientLight
     float intensity;
     vec3 color;
 };
-struct PointLight {
+struct PointLight
+{
     vec3 position;
     float padding;
     vec3 color;
@@ -76,7 +77,8 @@ struct Fog
     vec3 color;
     float density;
 };
-struct CascadeShadow {
+struct CascadeShadow
+{
     mat4 projection_view_matrix;
     float split_distance;
 };
@@ -89,12 +91,13 @@ uniform sampler2D depth_sampler;
 uniform mat4 inverse_projection_matrix;
 uniform mat4 inverse_view_matrix;
 
-layout (std430, binding=0) readonly buffer PointLights {
+layout (std430, binding=0) readonly buffer PointLights
+{
     PointLight point_lights[];
-
 };
 
-layout (std430, binding=1) readonly buffer SpotLights {
+layout (std430, binding=1) readonly buffer SpotLights
+{
     SpotLight spot_lights[];
 };
 
@@ -108,17 +111,22 @@ uniform sampler2D shadow_map_0;
 uniform sampler2D shadow_map_1;
 uniform sampler2D shadow_map_2;
 
-vec4 calculate_ambient(AmbientLight ambient_light, vec4 ambient) {
+vec4 calculate_ambient(AmbientLight ambient_light, vec4 ambient)
+{
     return vec4(ambient_light.intensity * ambient_light.color, 1) * ambient;
 }
 
-vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 light_color, float light_intensity, vec3 view_position, vec3 direction_to_light, vec3 normal) {
+vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, 
+    vec3 light_color, float light_intensity, vec3 view_position, 
+    vec3 direction_to_light, vec3 normal)
+{
     vec4 diffuse_color = vec4(0, 0, 0, 1);
     vec4 specular_color = vec4(0, 0, 0, 1);
 
     // Diffuse Light
     float diffuse_factor = max(dot(normal, direction_to_light), 0.0);
-    diffuse_color = diffuse * vec4(light_color, 1.0) * light_intensity * diffuse_factor;
+    diffuse_color = 
+        diffuse * vec4(light_color, 1.0) * light_intensity * diffuse_factor;
 
     // Specular Light
     vec3 camera_direction = normalize(-view_position);
@@ -126,73 +134,108 @@ vec4 calculate_light_color(vec4 diffuse, vec4 specular, float reflectance, vec3 
     vec3 reflected_light = normalize(reflect(direction_from_light, normal));
     float specular_factor = max(dot(camera_direction, reflected_light), 0.0);
     specular_factor = pow(specular_factor, SPECULAR_POWER);
-    specular_color = specular * light_intensity  * specular_factor * reflectance * vec4(light_color, 1.0);
+    specular_color = specular * light_intensity * specular_factor 
+        * reflectance * vec4(light_color, 1.0);
 
     return (diffuse_color + specular_color);
 }
 
-vec4 calculate_point_light(vec4 diffuse, vec4 specular, float reflectance, PointLight light, vec3 view_position, vec3 normal) {
-    vec3 direction_to_light = normalize(light.position - view_position);
-    vec4 light_color = calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, view_position, direction_to_light, normal);
+vec4 calculate_point_light(vec4 diffuse, vec4 specular, float reflectance,
+    PointLight light, vec3 view_position, vec3 normal)
+{
+    vec3 direction_to_light = light.position - view_position;
+    vec3 normalized_direction = normalize(direction_to_light);
+    vec4 light_color = calculate_light_color(diffuse, specular, reflectance, 
+        light.color, light.intensity, view_position, normalized_direction,
+        normal
+    );
 
     // Apply Attenuation
     float distance = length(direction_to_light);
-    float attenuationInv = light.attenuation.constant + light.attenuation.linear * distance +
-    light.attenuation.exponent * distance * distance;
-    return light_color / attenuationInv;
+    float inverse_attenuation = light.attenuation.constant 
+        + light.attenuation.linear * distance + light.attenuation.exponent
+        * distance * distance;
+    return light_color / inverse_attenuation;
 }
 
-vec4 calculate_spot_light(vec4 diffuse, vec4 specular, float reflectance, SpotLight light, vec3 view_position, vec3 normal) {
-    vec3 direction_from_light = -normalize(light.point_light.position - view_position);
-    float spot_light_alpha = dot(direction_from_light, normalize(light.cone_direction));
+vec4 calculate_spot_light(vec4 diffuse, vec4 specular, float reflectance,
+    SpotLight light, vec3 view_position, vec3 normal)
+{
+    vec3 direction_from_light = 
+        -normalize(light.point_light.position - view_position);
+    float spot_light_alpha = 
+        dot(direction_from_light, normalize(light.cone_direction));
 
     vec4 color = vec4(0, 0, 0, 0);
 
     if (spot_light_alpha > light.cutoff)
     {
-        color = calculate_point_light(diffuse, specular, reflectance, light.point_light, view_position, normal);
+        color =
+            calculate_point_light(diffuse, specular, reflectance,
+                light.point_light, view_position, normal
+            );
         color *= (1.0 - (1.0 - spot_light_alpha)/(1.0 - light.cutoff));
     }
     return color;
 }
 
-vec4 calculate_directional_light(vec4 diffuse, vec4 specular, float reflectance, DirectionalLight light, vec3 view_position, vec3 normal) {
-    return calculate_light_color(diffuse, specular, reflectance, light.color, light.intensity, view_position, normalize(light.direction), normal);
+vec4 calculate_directional_light(vec4 diffuse, vec4 specular,
+    float reflectance, DirectionalLight light, vec3 view_position, vec3 normal)
+{
+    return calculate_light_color(diffuse, specular, reflectance, light.color,
+        light.intensity, view_position, normalize(light.direction), normal);
 }
 
-vec4 calculate_fog(vec3 pos, vec4 color, Fog fog, vec3 ambient_light, DirectionalLight directional_light) {
-    vec3 fog_color = fog.color * (ambient_light + directional_light.color * directional_light.intensity);
+vec4 calculate_fog(vec3 pos, vec4 color, Fog fog, vec3 ambient_light,
+    DirectionalLight directional_light)
+{
+    vec3 fog_color = fog.color * (ambient_light + directional_light.color 
+        * directional_light.intensity);
     float distance = length(pos);
-    float fog_factor = 1.0 / exp((distance * fog.density) * (distance * fog.density));
+    float fog_factor = 
+        1.0 / exp((distance * fog.density) * (distance * fog.density));
     fog_factor = clamp(fog_factor, 0.0, 1.0);
 
     vec3 resulting_color = mix(fog_color, color.xyz, fog_factor);
     return vec4(resulting_color.xyz, color.w);
 }
 
-float project_texture(vec4 shadow_coordinates, vec2 offset, int index) {
+float project_texture(vec4 shadow_coordinates, vec2 offset, int index)
+{
     float shadow = 1.0;
 
     if (shadow_coordinates.z > -1.0 && shadow_coordinates.z < 1.0) {
         float dist = 0.0;
-        if (index == 0) {
-            dist = texture(shadow_map_0, vec2(shadow_coordinates.xy + offset)).r;
-        } else if (index == 1) {
-            dist = texture(shadow_map_1, vec2(shadow_coordinates.xy + offset)).r;
-        } else {
-            dist = texture(shadow_map_2, vec2(shadow_coordinates.xy + offset)).r;
+        if (index == 0)
+        {
+            dist = texture(shadow_map_0, 
+                vec2(shadow_coordinates.xy + offset)).r;
         }
-        if (shadow_coordinates.w > 0 && dist < shadow_coordinates.z - BIAS) {
+        else if (index == 1)
+        {
+            dist = texture(shadow_map_1,
+                vec2(shadow_coordinates.xy + offset)).r;
+        }
+        else
+        {
+            dist = texture(shadow_map_2,
+                vec2(shadow_coordinates.xy + offset)).r;
+        }
+        if (shadow_coordinates.w > 0 && dist < shadow_coordinates.z - BIAS)
+        {
             shadow = SHADOW_FACTOR;
         }
     }
     return shadow;
 }
 
-float calculate_shadow(vec4 world_position, int index) {
-    vec4 shadow_map_position = cascade_shadows[index].projection_view_matrix * world_position;
+float calculate_shadow(vec4 world_position, int index)
+{
+    vec4 shadow_map_position = 
+        cascade_shadows[index].projection_view_matrix * world_position;
     float shadow = 1.0;
-    vec4 shadow_coordinates = (shadow_map_position / shadow_map_position.w) * 0.5 + 0.5;
+    vec4 shadow_coordinates = 
+        (shadow_map_position / shadow_map_position.w) * 0.5 + 0.5;
     shadow = project_texture(shadow_coordinates, vec2(0, 0), index);
     return shadow;
 }
@@ -204,39 +247,53 @@ void main()
     vec4 diffuse = vec4(albedo, 1);
 
     float reflectance = albedo_sampler_value.a;
-    vec3 normal = normalize(2.0 * texture(normal_sampler, texture_coordinate).rgb  - 1.0);
+    vec3 normal = normalize(
+        2.0 * texture(normal_sampler, texture_coordinate).rgb  - 1.0);
     vec4 specular = texture(specular_sampler, texture_coordinate);
 
     // Retrieve position from depth
     float depth = texture(depth_sampler, texture_coordinate).x * 2.0 - 1.0;
-    if (depth == 1) {
+    if (depth == 1)
+    {
         discard;
     }
-    vec4 clip = vec4(texture_coordinate.x * 2.0 - 1.0, texture_coordinate.y * 2.0 - 1.0, depth, 1.0);
+    vec4 clip = vec4(texture_coordinate.x * 2.0 - 1.0, 
+        texture_coordinate.y * 2.0 - 1.0, depth, 1.0);
     vec4 view_w = inverse_projection_matrix * clip;
     vec3 view_position = view_w.xyz / view_w.w;
     vec4 world_position = inverse_view_matrix * vec4(view_position, 1);
 
-    vec4 diffucse_specular_component = calculate_directional_light(diffuse, specular, reflectance, directional_light, view_position, normal);
+    vec4 diffucse_specular_component = 
+        calculate_directional_light(diffuse, specular, reflectance,
+            directional_light, view_position, normal
+        );
 
     int cascade_index;
-    for (int i=0; i < NUM_CASCADES - 1; i++) {
-        if (view_position.z < cascade_shadows[i].split_distance) {
+    for (int i=0; i < NUM_CASCADES - 1; i++)
+    {
+        if (view_position.z < cascade_shadows[i].split_distance)
+        {
             cascade_index = i + 1;
             break;
         }
     }
     float shadow_factor = calculate_shadow(world_position, cascade_index);
 
-    for (int i=0; i < point_light_count; i++) {
-        if (point_lights[i].intensity > 0) {
-            diffucse_specular_component += calculate_point_light(diffuse, specular, reflectance, point_lights[i], view_position, normal);
+    for (int i=0; i < point_light_count; i++)
+    {
+        if (point_lights[i].intensity > 0)
+        {
+            diffucse_specular_component += calculate_point_light(diffuse, 
+                specular, reflectance, point_lights[i], view_position, normal);
         }
     }
 
-    for (int i=0; i < spot_light_count; i++) {
-        if (spot_lights[i].point_light.intensity > 0) {
-            diffucse_specular_component += calculate_spot_light(diffuse, specular, reflectance, spot_lights[i], view_position, normal);
+    for (int i=0; i < spot_light_count; i++)
+    {
+        if (spot_lights[i].point_light.intensity > 0)
+        {
+            diffucse_specular_component += calculate_spot_light(diffuse,
+                specular, reflectance, spot_lights[i], view_position, normal);
         }
     }
 	
@@ -244,8 +301,10 @@ void main()
     fragment_color_out = ambient + diffucse_specular_component;
     fragment_color_out.rgb = fragment_color_out.rgb * shadow_factor;
 
-    if (fog.enabled == 1) {
-        fragment_color_out = calculate_fog(view_position, fragment_color_out, fog, ambient_light.color, directional_light);
+    if (fog.enabled == 1)
+    {
+        fragment_color_out = calculate_fog(view_position, fragment_color_out,
+            fog, ambient_light.color, directional_light);
     }
 }
 )glsl";
@@ -487,9 +546,11 @@ void LightRender::setup_spot_light_buffer(const Scene& scene)
         light_buffer[i * SPOT_LIGHT_SIZE + 9] = light.point_light.attenuation.linear;
         light_buffer[i * SPOT_LIGHT_SIZE + 10] = light.point_light.attenuation.exponent;
         light_buffer[i * SPOT_LIGHT_SIZE + 11] = padding;
-        light_buffer[i * SPOT_LIGHT_SIZE + 12] = light.cone_direction.x;
-        light_buffer[i * SPOT_LIGHT_SIZE + 13] = light.cone_direction.y;
-        light_buffer[i * SPOT_LIGHT_SIZE + 14] = light.cone_direction.z;
+        glm::vec4 light_direction{ light.cone_direction, 1 };
+        light_direction = view_matrix * light_direction;
+        light_buffer[i * SPOT_LIGHT_SIZE + 12] = light_direction.x;
+        light_buffer[i * SPOT_LIGHT_SIZE + 13] = light_direction.y;
+        light_buffer[i * SPOT_LIGHT_SIZE + 14] = light_direction.z;
         light_buffer[i * SPOT_LIGHT_SIZE + 15] = light.cut_off;
     }
 
