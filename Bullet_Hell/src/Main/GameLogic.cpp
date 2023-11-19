@@ -124,6 +124,7 @@ void GameLogic::on_close()
 
 	window->terminate();
 
+	SAFE_DELETE(g_pawn_manager);
 	SAFE_DELETE(g_event_manager);
 }
 
