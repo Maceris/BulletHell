@@ -22,6 +22,9 @@
 struct Configuration
 {
 	bool wireframe;
+#if DEBUG
+	bool debug_lines;
+#endif
 };
 
 /// <summary>

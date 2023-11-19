@@ -12,6 +12,7 @@ bool DebugUI::show_debug_window = true;
 bool DebugUI::show_scene_window = false;
 bool DebugUI::show_timing_window = false;
 bool DebugUI::wireframe = false;
+bool DebugUI::debug_lines = false;
 #pragma endregion
 
 constexpr ImVec4 RED = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
@@ -30,6 +31,7 @@ void DebugUI::draw()
 		if (ImGui::BeginMenu("Render Controls"))
 		{
 			ImGui::Checkbox("Wireframe", &DebugUI::wireframe);
+			ImGui::Checkbox("Debug lines", &DebugUI::debug_lines);
 			ImGui::EndMenu();
 		}
 		ImGui::PushStyleColor(ImGuiCol_Text, RED);
@@ -191,5 +193,6 @@ void DebugUI::handle_input()
 	if (render)
 	{
 		render->configuration.wireframe = DebugUI::wireframe;
+		render->configuration.debug_lines = DebugUI::debug_lines;
 	}
 }

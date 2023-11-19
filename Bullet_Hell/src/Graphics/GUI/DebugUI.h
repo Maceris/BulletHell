@@ -52,4 +52,9 @@ private:
 	/// Whether we should render in wireframe mode.
 	/// </summary>
 	static bool wireframe;
+
+	/// <summary>
+	/// Whether we should show debug lines.
+	/// </summary>
+	static bool debug_lines;
 };

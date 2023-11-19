@@ -146,9 +146,12 @@ void Render::render(const Window& window, const Scene& scene)
 	TIME_END("Filter Render");
 
 #if DEBUG
-	TIME_START("Debug Render");
-	debug_render.render(scene);
-	TIME_END("Debug Render");
+	if (Render::configuration.debug_lines)
+	{
+		TIME_START("Debug Render");
+		debug_render.render(scene);
+		TIME_END("Debug Render");
+	}
 #endif // DEBUG
 
 	TIME_START("Gui Render");
