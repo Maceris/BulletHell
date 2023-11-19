@@ -940,6 +940,8 @@ std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 		diffusePath.begin(), (int (*)(int)) std::tolower);
 	diffusePath = swap_extension(diffusePath, IMAGE_OUTPUT_EXTENSION);
 
+	std::replace(diffusePath.begin(), diffusePath.end(), '\\', '/');
+
 	if (!diffusePath.empty())
 	{
 		material->texture_name = diffusePath;
@@ -953,6 +955,8 @@ std::shared_ptr<Material> process_material(const aiMaterial* assimp_material)
 	std::transform(normalPath.begin(), normalPath.end(),
 		normalPath.begin(), (int (*)(int)) std::tolower);
 	normalPath = swap_extension(normalPath, IMAGE_OUTPUT_EXTENSION);
+
+	std::replace(normalPath.begin(), normalPath.end(), '\\', '/');
 
 	if (!normalPath.empty())
 	{
