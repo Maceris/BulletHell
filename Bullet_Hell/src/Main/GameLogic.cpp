@@ -61,14 +61,6 @@ bool GameLogic::initialize()
 	render = std::make_unique<Render>(*window);
 	//TODO(ches) handle all the scene stuff elsewhere, and after a menu
 	current_scene = std::make_shared<Scene>(window->width, window->height);
-	auto player_model = load_model("models/player/human_male.model");
-	current_scene->add_model(player_model);
-	auto player_entity = std::make_shared<Entity>(player_model->id);
-	current_scene->add_entity(player_entity);
-	player_entity->update_model_matrix();
-	auto idle = load_animation("models/player/human_male.human_malehuman_male_idle.animation");
-	player_entity->animation_data.set_current_animation(idle);
-	current_scene->player = player_entity;
 
 	current_scene->scene_lights.ambient_light.intensity = 0.1f;
 	current_scene->scene_lights.ambient_light.set_color(0.3f, 0.3f, 0.3f);
@@ -97,16 +89,16 @@ bool GameLogic::initialize()
 	current_scene->camera.set_position(-11.0f, 11.0f, 0.0f);
 	current_scene->camera.add_rotation(0.42f, 1.92f);
 
-	current_scene->rebuild_model_lists();
-	render->recalculate_materials(*current_scene);
-	render->setup_data(*current_scene);
-
 	TIME_START("Map Init");
 	current_map = std::make_shared<GameMap>();
 	g_event_manager->update();
 	TIME_END("Map Init");
 
 	g_pawn_manager = ALLOC PawnManager();
+
+	current_scene->rebuild_model_lists();
+	render->recalculate_materials(*current_scene);
+	render->setup_data(*current_scene);
 
 	return true;
 }
@@ -218,7 +210,7 @@ void GameLogic::run_game()
 		}
 		TIME_END("Updating Scene");
 
-		current_scene->player->animation_data.next_frame();
+		g_pawn_manager->player->scene_entity->animation_data.next_frame();
 		render->render(*window, *current_scene);
 		window->render();
 	}

@@ -84,18 +84,21 @@ void DebugUI::draw_window_debug()
 	const long long fps = 1000000 / LAST_TIME("Last Frame");
 	ImGui::Text(std::format("FPS: {}", std::to_string(fps)).c_str());
 
-	const glm::vec3& player_position = scene->player->position;
+	const glm::vec3& player_position = 
+		g_pawn_manager->player->scene_entity->position;
 	ImGui::Text(std::format("Player position: ({}, {}, {})",
 		std::to_string(player_position.x),
 		std::to_string(player_position.y),
 		std::to_string(player_position.z)).c_str());
 
-	const glm::quat& player_rotation = scene->player->rotation;
+	const glm::quat& player_rotation = 
+		g_pawn_manager->player->scene_entity->rotation;
 	ImGui::Text(std::format("Player rotation: ({}, {})",
 		std::to_string(player_rotation.x),
 		std::to_string(player_rotation.y)).c_str());
 
-	const auto& animation_data = scene->player->animation_data;
+	const auto& animation_data = 
+		g_pawn_manager->player->scene_entity->animation_data;
 	ImGui::Text(std::format("Player animation: {}",
 		animation_data.current_animation != nullptr 
 		? animation_data.current_animation->name :"(none)").c_str());

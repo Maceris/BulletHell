@@ -56,11 +56,6 @@ public:
 	SkyBox sky_box;
 
 	/// <summary>
-	/// A reference to the entity representing the player character.
-	/// </summary>
-	std::shared_ptr<Entity> player;
-
-	/// <summary>
 	/// Set up a new scene.
 	/// </summary>
 	/// <param name="width">The window width, in pixels.</param>

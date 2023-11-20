@@ -5,6 +5,7 @@
 #include "boost/circular_buffer.hpp"
 
 #include "Entities/Bullet.h"
+#include "Entities/Pawn.h"
 
 /// <summary>
 /// Tracks all the players, bullets, and enemies.
@@ -30,4 +31,7 @@ public:
 
 	boost::circular_buffer<Bullet> player_bullets;
 	boost::circular_buffer<Bullet> enemy_bullets;
+
+	std::shared_ptr<Pawn> player;
+	std::vector<Pawn> enemies;
 };

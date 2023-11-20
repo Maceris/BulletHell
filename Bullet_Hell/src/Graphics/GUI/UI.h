@@ -17,4 +17,7 @@ public:
 	/// Process any inputs to the UI.
 	/// </summary>
 	static void handle_input();
+
+private:
+	static void draw_player_health();
 };

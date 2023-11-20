@@ -18,7 +18,6 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, model_map{}
 	, scene_lights{}
 	, sky_box{}
-	, player{}
 	, dirty{ true }
 {
 	g_event_manager->register_handler(
