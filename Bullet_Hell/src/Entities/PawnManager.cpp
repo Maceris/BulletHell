@@ -24,12 +24,24 @@ PawnManager::PawnManager()
 	player->desired_facing = glm::vec2(0, 0);
 }
 
-void PawnManager::tick_ai()
+void PawnManager::tick()
+{
+	tick_ai();
+	tick_bullets();
+	tick_movement();
+}
+
+void inline PawnManager::tick_ai()
 {
 
 }
 
-void PawnManager::tick_bullets()
+void inline PawnManager::tick_bullets()
+{
+
+}
+
+void inline PawnManager::tick_movement()
 {
 
 }

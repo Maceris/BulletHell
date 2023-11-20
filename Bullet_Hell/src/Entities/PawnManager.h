@@ -20,18 +20,30 @@ public:
 	~PawnManager() = default;
 
 	/// <summary>
-	/// Update all of the AIs.
+	/// Update everything the pawn manager cares about.
 	/// </summary>
-	void tick_ai();
-
-	/// <summary>
-	/// Update all of the bullets.
-	/// </summary>
-	void tick_bullets();
+	void tick();
 
 	boost::circular_buffer<Bullet> player_bullets;
 	boost::circular_buffer<Bullet> enemy_bullets;
 
 	std::shared_ptr<Pawn> player;
 	std::vector<Pawn> enemies;
+
+private:
+	/// <summary>
+	/// Update all of the AIs, deciding if they want to move, attack, look
+	/// in a different direction, stop, etc.
+	/// </summary>
+	void inline tick_ai();
+
+	/// <summary>
+	/// Update all of the bullets.
+	/// </summary>
+	void inline tick_bullets();
+
+	/// <summary>
+	/// Move the entities that want to do so.
+	/// </summary>
+	void inline tick_movement();
 };

@@ -157,6 +157,27 @@ void GameLogic::process_input()
 		camera.move_up(move_amount);
 	}
 
+	glm::vec2 movement(0, 0);
+	if (window->is_key_pressed(GLFW_KEY_UP))
+	{
+		movement += glm::vec2(1.0f, 0.0f);
+	}
+	if (window->is_key_pressed(GLFW_KEY_DOWN))
+	{
+		movement += glm::vec2(-1.0f, 0.0f);
+	}
+	if (window->is_key_pressed(GLFW_KEY_LEFT))
+	{
+		movement += glm::vec2(0.0f, -1.0f);
+	}
+	if (window->is_key_pressed(GLFW_KEY_RIGHT))
+	{
+		movement += glm::vec2(0.0f, 1.0f);
+	}
+	movement = glm::normalize(movement);
+
+	g_pawn_manager->player->desired_movement = movement;
+
 	if (window->mouse_input.right_button_pressed 
 		&& !ImGui::GetIO().WantCaptureMouse)
 	{
@@ -195,6 +216,10 @@ void GameLogic::run_game()
 		TIME_START("Processing Input");
 		process_input();
 		TIME_END("Processing Input");
+
+		TIME_START("Updating Pawns");
+		
+		TIME_END("Updating Pawns");
 
 		TIME_START("Processing Events");
 		g_event_manager->update(10);
