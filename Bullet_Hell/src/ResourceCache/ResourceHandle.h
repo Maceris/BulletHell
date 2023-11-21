@@ -10,6 +10,8 @@
 
 #include "ResourceCache/Resource.h"
 
+class ResourceCache;
+
 /// <summary>
 /// A resource that is loaded from file. Also tracks detials like its size and
 /// which resource cache was used to load it.

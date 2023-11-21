@@ -6,7 +6,8 @@
 
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Scene/Scene.h"
+
+class Scene;
 
 // Handles rendering for the skybox
 class SkyBoxRender

@@ -1,9 +1,9 @@
 #include "Graphics/Graph/ShaderProgram.h"
 
-#include "glad.h"
-
 #include "Debugging/Logger.h"
 #include "Utilities/OpenGLUtil.h"
+
+#include "glad.h"
 
 ShaderModuleData::ShaderModuleData(const char* source, int length, 
 	const GLuint type)

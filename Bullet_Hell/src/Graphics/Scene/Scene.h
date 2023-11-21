@@ -8,16 +8,18 @@
 #include <string>
 #include <vector>
 
-#include "Event/Map/ChunkLoaded.h"
-#include "Event/Map/ChunkUnloaded.h"
-#include "Graphics/Graph/Model.h"
+#include "Event/Event.h"
 #include "Graphics/Scene/Camera.h"
-#include "Graphics/Scene/Entity.h"
 #include "Graphics/Scene/Fog.h"
 #include "Graphics/Scene/Projection.h"
 #include "Graphics/Scene/SceneCluster.h"
 #include "Graphics/Scene/SkyBox.h"
 #include "Graphics/Scene/Lights/SceneLights.h"
+#include "Map/ChunkCoordinates.h"
+
+struct Entity;
+struct Model;
+struct Tile;
 
 /// <summary>
 /// A scene to be rendered, including entities and lighting.

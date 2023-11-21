@@ -5,11 +5,15 @@
 #include "Delegate.h"
 
 #include "Debugging/Logger.h"
+#include "Event/EventManager.h"
 #include "Event/Map/ChunkLoaded.h"
 #include "Event/Map/ChunkUnloaded.h"
 #include "Main/GameLogic.h"
+#include "Map/Chunk.h"
+#include "Map/Tile.h"
 #include "Graphics/Graph/ModelResource.h"
 #include "Graphics/Scene/Entity.h"
+#include "Graphics/Graph/Model.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
 	: camera{}
@@ -224,7 +228,7 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 		auto tile_entity = std::make_shared<Entity>(tile_model->id);
 		tile_model->entity_list.push_back(tile_entity);
 		
-		tile_entity->set_position(x * 2, 0, z * 2);
+		tile_entity->set_position(x * 2.0f, 0.0f, z * 2.0f);
 		tile_entity->update_model_matrix();
 
 		cluster.entities[tile_model].push_back(tile_entity);

@@ -2,6 +2,8 @@
 
 #include "gtc/matrix_transform.hpp"
 
+#include "Graphics/Scene/Scene.h"
+
 CascadeShadowSlice::CascadeShadowSlice()
 	: projection_view_matrix{ 1 }
 	, split_distance{ 0 }

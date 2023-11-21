@@ -2,21 +2,30 @@
 
 #include <filesystem>
 
-#include "glad.h"
-#include "glfw3.h"
 #include "imgui.h"
 
+#include "Entities/Pawn.h"
+#include "Entities/PawnManager.h"
+#include "Event/EventManager.h"
 #include "Debugging/Logger.h"
 #include "Debugging/Timer.h"
+#include "Graphics/Window.h"
 #include "Graphics/Graph/AnimationResource.h"
 #include "Graphics/Graph/MaterialResource.h"
 #include "Graphics/Graph/ModelResource.h"
+#include "Graphics/Graph/Texture.h"
 #include "Graphics/Graph/TextureResource.h"
+#include "Graphics/Render/Render.h"
+#include "Graphics/Scene/Scene.h"
+#include "Main/GameOptions.h"
+#include "Map/GameMap.h"
+#include "ResourceCache/ResourceCache.h"
 #include "ResourceCache/ResourceZipFile.h"
 
+#include "glad.h"
+#include "glfw3.h"
+
 GameLogic* g_game_logic = nullptr;
-EventManager* g_event_manager = nullptr;
-PawnManager* g_pawn_manager = nullptr;
 
 GameLogic::GameLogic()
 	: current_state{ starting_up }
@@ -25,6 +34,7 @@ GameLogic::GameLogic()
 	, current_scene{ nullptr }
 	, last_frame{ std::chrono::steady_clock::now() }
 	, seconds_since_last_frame{ 0 }
+	, window{ nullptr }
 {
 	g_game_logic = this;
 }
@@ -51,7 +61,7 @@ bool GameLogic::initialize()
 
 	g_event_manager = ALLOC EventManager();
 
-	window = std::unique_ptr<Window>(ALLOC Window());
+	window = ALLOC Window();
 	TIME_START("Window Init");
 	window->initialize();
 	TIME_END("Window Init");
@@ -122,6 +132,7 @@ void GameLogic::on_close()
 
 	SAFE_DELETE(g_pawn_manager);
 	SAFE_DELETE(g_event_manager);
+	SAFE_DELETE(window);
 }
 
 void GameLogic::process_input()

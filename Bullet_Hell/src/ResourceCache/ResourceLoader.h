@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "ResourceCache/ResourceHandle.h"
+class ResourceHandle;
 
 /// <summary>
 /// Used to load resources from file. There may be several resource loaders,

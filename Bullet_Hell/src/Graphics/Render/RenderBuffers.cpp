@@ -3,12 +3,16 @@
 #include <cmath>
 #include <memory>
 #include <set>
-
-#include "glad.h"
 #include "gtc/type_ptr.hpp"
 
 #include "Debugging/Logger.h"
 #include "Graphics/Graph/AnimationResource.h"
+#include "Graphics/Graph/Material.h"
+#include "Graphics/Graph/MeshData.h"
+#include "Graphics/Graph/MeshDrawData.h"
+#include "Graphics/Scene/Scene.h"
+
+#include "glad.h"
 
 RenderBuffers::RenderBuffers()
 	: vbo_list{}

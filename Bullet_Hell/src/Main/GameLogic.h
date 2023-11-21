@@ -5,13 +5,15 @@
 #include <chrono>
 #include <memory>
 
-#include "Entities/PawnManager.h"
-#include "Event/EventManager.h"
-#include "Graphics/Render/Render.h"
-#include "Graphics/Window.h"
 #include "Main/GameOptions.h"
 #include "Map/GameMap.h"
-#include "ResourceCache/ResourceCache.h"
+#include "Graphics/Render/Render.h"
+#include "Graphics/Scene/Scene.h"
+
+class EventManager;
+class PawnManager;
+class ResourceCache;
+class Window;
 
 /// <summary>
 /// Where we are in the program lifecycle.
@@ -75,7 +77,7 @@ public:
 	/// <summary>
 	/// The window we are showing.
 	/// </summary>
-	std::unique_ptr<Window> window;
+	Window* window;
 	
 	/// <summary>
 	/// Set up data before anything loads.
@@ -120,13 +122,3 @@ public:
 /// A global reference to the game logic.
 /// </summary>
 extern GameLogic* g_game_logic;
-
-/// <summary>
-/// A global reference to the event manager.
-/// </summary>
-extern EventManager* g_event_manager;
-
-/// <summary>
-/// A global reference to the pawn manager.
-/// </summary>
-extern PawnManager* g_pawn_manager;

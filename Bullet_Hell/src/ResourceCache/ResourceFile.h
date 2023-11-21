@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "ResourceCache/Resource.h"
+class Resource;
 
 /// <summary>
 /// A file that can be opened and closed, and provides the application with

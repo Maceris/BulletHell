@@ -4,8 +4,7 @@
 
 #include <memory>
 
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Scene/Entity.h"
+struct Entity;
 
 /// <summary>
 /// Data used for drawing animated meshes.
@@ -53,7 +52,7 @@ struct MeshDrawData
 	/// <summary>
 	/// The material ID that the mesh is associated with.
 	/// </summary>
-	const MaterialID material;
+	const int material;
 
 	/// <summary>
 	/// The offset, in rows.
@@ -84,7 +83,7 @@ struct MeshDrawData
 	/// with.</param>
 	/// <param name="offset">The offset to the base vertex.</param>
 	/// <param name="indices">The number of indices.</param>
-	MeshDrawData(const int size_in_bytes, const MaterialID material,
+	MeshDrawData(const int size_in_bytes, const int material,
 		const int offset, const int indices);
 
 	/// <summary>
@@ -97,7 +96,7 @@ struct MeshDrawData
 	/// <param name="indices">The number of indices.</param>
 	/// <param name="animated_mesh_draw_data">The animation mesh draw data.
 	/// </param>
-	MeshDrawData(const int size_in_bytes, const MaterialID material,
+	MeshDrawData(const int size_in_bytes, const int material,
 		const int offset, const int indices, 
 		const AnimMeshDrawData& animated_mesh_draw_data);
 

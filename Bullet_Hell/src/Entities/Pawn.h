@@ -7,7 +7,8 @@
 #include "vec2.hpp"
 
 #include "Entities/EntityTypes.h"
-#include "Graphics/Scene/Entity.h"
+
+struct Entity;
 
 /// <summary>
 /// Some kind of entity that is controllable by the player or AI.

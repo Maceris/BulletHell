@@ -2,9 +2,9 @@
 
 #include "Globals.h"
 
-#include <numbers>
-
-#include "glm.hpp"
+#include "mat4x4.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
 #include "gtc/matrix_transform.hpp"
 
 /// <summary>
@@ -120,8 +120,5 @@ private:
 	/// </summary>
 	void recalculate();
 
-	/// <summary>
-	/// A constant value used to clamp rotation, precomputed for convenience.
-	/// </summary>
-	static inline constexpr float TWO_PI = (float) (2 * std::numbers::pi);
+	
 };

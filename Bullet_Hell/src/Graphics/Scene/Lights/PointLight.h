@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glm.hpp"
+#include "vec3.hpp"
 
 /// <summary>
 /// A point light in the scene.

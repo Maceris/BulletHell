@@ -1,11 +1,18 @@
 #include "Graphics/Render/SceneRender.h"
 
-#include "glad.h"
-
 #include "Debugging/Logger.h"
 #include "Main/GameLogic.h"
 #include "Graphics/Graph/TextureResource.h"
+#include "Graphics/Graph/GBuffer.h"
+#include "Graphics/Graph/Material.h"
+#include "Graphics/Graph/MeshData.h"
+#include "Graphics/Graph/Texture.h"
+#include "Graphics/Render/CommandBuffers.h"
+#include "Graphics/Render/RenderBuffers.h"
 #include "Graphics/Render/RenderConstants.h"
+#include "Graphics/Scene/Scene.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 
@@ -233,7 +240,7 @@ int constexpr find(const std::vector<T>& list, const T& value)
 void SceneRender::setup_materials_uniform(const Scene& scene)
 {
     shader_program->bind();
-    MaterialID next_ID = 0;
+    int next_ID = 0;
 
     const int first_index = 1;
 

@@ -3,7 +3,9 @@
 #include "Globals.h"
 
 #include "Event/Event.h"
-#include "Map/Chunk.h"
+#include "Map/ChunkCoordinates.h"
+
+struct Chunk;
 
 /// <summary>
 /// A region of the map that is being partially unloaded, and needs models

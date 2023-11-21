@@ -1,10 +1,14 @@
 #include "Graphics/Render/SkyBoxRender.h"
 
-#include "glad.h"
-
+#include "Graphics/Graph/Material.h"
+#include "Graphics/Graph/MeshData.h"
 #include "Graphics/Graph/TextureResource.h"
+#include "Graphics/Graph/Texture.h"
+#include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
 #include "ResourceCache/ResourceCache.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 const char fragment_shader_source[] = R"glsl(

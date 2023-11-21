@@ -4,12 +4,14 @@
 
 #include <memory>
 
-#include "Graphics/Graph/GBuffer.h"
+#include "Graphics/GladTypes.h"
 #include "Graphics/Graph/QuadMesh.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Render/ShadowRender.h"
-#include "Graphics/Scene/Scene.h"
+
+struct GBuffer;
+class Scene;
+class ShadowRender;
 
 /// <summary>
 /// Handles light rendering.

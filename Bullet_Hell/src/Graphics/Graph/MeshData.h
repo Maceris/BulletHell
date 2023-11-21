@@ -2,7 +2,10 @@
 
 #include "Globals.h"
 
+#include <memory>
 #include <vector>
+
+#include "vec3.hpp"
 
 #include "Graphics/Graph/Animation.h"
 #include "Graphics/Graph/Material.h"

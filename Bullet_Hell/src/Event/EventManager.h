@@ -100,3 +100,8 @@ private:
 	/// </summary>
 	ThreadSafeEventQueue threadsafe_queue;
 };
+
+/// <summary>
+/// A global reference to the event manager.
+/// </summary>
+extern EventManager* g_event_manager;

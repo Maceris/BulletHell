@@ -5,10 +5,10 @@
 #include <memory>
 
 #include "Graphics/GladTypes.h"
-#include "Graphics/Graph/CascadeShadowSlice.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Scene/Scene.h"
+
+class Scene;
 
 /// <summary>
 /// A set of lines to draw.

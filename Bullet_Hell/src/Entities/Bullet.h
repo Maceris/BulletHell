@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glm.hpp"
+#include "vec3.hpp"
 
 #include "Entities/EntityTypes.h"
 

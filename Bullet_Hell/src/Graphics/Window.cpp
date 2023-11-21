@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-
-#include "glad.h"
 #include "glfw3.h"
 #include "glm.hpp"
 #include "ext/matrix_clip_space.hpp"
@@ -24,6 +22,8 @@
 #include "Debugging/Logger.h"
 #include "Main/GameLogic.h"
 #include "Utilities/OpenGLUtil.h"
+
+#include "glad.h"
 
 /// <summary>
 /// The callback to register for handling errors.

@@ -7,8 +7,9 @@
 #include "Graphics/Graph/QuadMesh.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Render/RenderBuffers.h"
-#include "Graphics/Scene/Scene.h"
+
+class RenderBuffers;
+class Scene;
 
 /// <summary>
 /// Handles compute shaders for animated models.

@@ -1,6 +1,5 @@
 #include "Graphics/Render/GuiRender.h"
 
-#include "glad.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -10,7 +9,11 @@
 #include <GLES2/gl2.h>
 #endif
 
+#include "Graphics/Window.h"
+#include "Graphics/Scene/Scene.h"
 #include "Graphics/GUI/UI.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 

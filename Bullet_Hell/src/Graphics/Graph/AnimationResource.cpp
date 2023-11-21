@@ -2,6 +2,8 @@
 
 #include "Debugging/Logger.h"
 #include "Main/GameLogic.h"
+#include "Graphics/Graph/Animation.h"
+#include "ResourceCache/ResourceCache.h"
 #include "Utilities/Portability.h"
 
 /// <summary>

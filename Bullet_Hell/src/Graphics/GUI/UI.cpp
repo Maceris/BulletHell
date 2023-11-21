@@ -5,6 +5,7 @@
 #if DEBUG
 #include "Graphics/GUI/DebugUI.h"
 #endif
+#include "Entities/PawnManager.h"
 #include "Main/GameLogic.h"
 
 void UI::draw()

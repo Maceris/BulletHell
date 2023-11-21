@@ -1,9 +1,13 @@
 #include "Graphics/Graph/ModelResource.h"
 
 #include "Debugging/Logger.h"
+#include "Graphics/Graph/Animation.h"
 #include "Graphics/Graph/MaterialResource.h"
 #include "Graphics/Graph/MeshData.h"
+#include "Graphics/Graph/Model.h"
 #include "Main/GameLogic.h"
+#include "ResourceCache/ResourceCache.h"
+#include "Utilities/Portability.h"
 
 /// <summary>
 /// What is the latest model file verison we support loading.

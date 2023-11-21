@@ -9,8 +9,10 @@
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/ShadowBuffer.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Render/CommandBuffers.h"
-#include "Graphics/Render/RenderBuffers.h"
+
+struct CommandBuffers;
+class RenderBuffers;
+class Scene;
 
 /// <summary>
 /// Handles rendering for shadows.

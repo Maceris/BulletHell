@@ -6,10 +6,11 @@
 #include <memory>
 
 #include "Graphics/GladTypes.h"
-#include "Graphics/Graph/QuadMesh.h"
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Scene/Scene.h"
+
+struct QuadMesh;
+class Scene;
+class ShaderProgram;
+class UniformsMap;
 
 /// <summary>
 /// Handles post-processing filters

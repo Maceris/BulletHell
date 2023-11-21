@@ -3,14 +3,16 @@
 #include "Globals.h"
 
 #include <memory>
+#include <string>
 #include <vector>
 
-#include "Graphics/Graph/GBuffer.h"
 #include "Graphics/Graph/ShaderProgram.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Render/CommandBuffers.h"
-#include "Graphics/Render/RenderBuffers.h"
-#include "Graphics/Scene/Scene.h"
+
+struct CommandBuffers;
+struct GBuffer;
+class RenderBuffers;
+class Scene;
 
 /// <summary>
 /// Handles rendering for the scene geometry.

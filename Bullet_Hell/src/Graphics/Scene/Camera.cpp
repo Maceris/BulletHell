@@ -1,6 +1,13 @@
 #include "Graphics/Scene/Camera.h"
 
+#include <numbers>
+
 #include "Utilities/MathUtil.h"
+
+/// <summary>
+/// A constant value used to clamp rotation, precomputed for convenience.
+/// </summary>
+constexpr float TWO_PI = (float)(2 * std::numbers::pi);
 
 Camera::Camera()
 	: position{ 0.0f }

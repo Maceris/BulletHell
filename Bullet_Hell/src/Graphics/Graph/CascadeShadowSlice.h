@@ -2,10 +2,13 @@
 
 #include "Globals.h"
 
+#include <vector>
+
 #include "glm.hpp"
 
 #include "Graphics/Render/RenderConstants.h"
-#include "Graphics/Scene/Scene.h"
+
+class Scene;
 
 #if DEBUG
 struct Frustum

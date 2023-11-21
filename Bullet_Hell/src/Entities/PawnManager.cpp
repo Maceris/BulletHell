@@ -1,8 +1,14 @@
 #include "Entities/PawnManager.h"
 
+#include "Entities/Bullet.h"
+#include "Entities/Pawn.h"
 #include "Graphics/Graph/AnimationResource.h"
 #include "Graphics/Graph/ModelResource.h"
+#include "Graphics/Scene/Entity.h"
+#include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
+
+PawnManager* g_pawn_manager = nullptr;
 
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }

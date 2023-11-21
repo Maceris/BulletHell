@@ -2,6 +2,8 @@
 
 #include "Debugging/Logger.h"
 
+EventManager* g_event_manager = nullptr;
+
 EventManager::EventManager()
 	: handlers{}
 	, main_queue{}

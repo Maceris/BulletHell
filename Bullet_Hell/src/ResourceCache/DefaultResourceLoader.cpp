@@ -1,5 +1,7 @@
 #include "ResourceCache/DefaultResourceLoader.h"
 
+#include "ResourceCache/ResourceHandle.h"
+
 bool DefaultResourceLoader::use_raw_file()
 {
 	return true;

@@ -1,5 +1,7 @@
 #include "Graphics/Graph/MeshData.h"
 
+#include "Graphics/Graph/Animation.h"
+
 void MeshData::append_vertices_to_buffer(std::vector<float>& buffer)
 {
 	const size_t data_size = vertices.size() 

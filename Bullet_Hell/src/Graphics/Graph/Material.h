@@ -3,15 +3,9 @@
 #include "Globals.h"
 
 #include <memory>
+#include <string>
 
-#include "glm.hpp"
-
-#include "Graphics/Graph/Texture.h"
-
-/// <summary>
-/// Used to identify materials in the material cache.
-/// </summary>
-using MaterialID = int;
+#include "vec4.hpp"
 
 /// <summary>
 /// The default color for materials.
@@ -56,7 +50,7 @@ struct Material
 	/// <summary>
 	/// Where this material is referenced in the materials uniform.
 	/// </summary>
-	MaterialID material_id;
+	int material_id;
 
 	/// <summary>
 	/// Create a material with all default values.

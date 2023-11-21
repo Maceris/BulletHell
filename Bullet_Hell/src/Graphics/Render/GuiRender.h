@@ -4,13 +4,12 @@
 
 #include <memory>
 
-#include "glm.hpp"
-
-#include "Graphics/Window.h"
+#include "vec2.hpp"
 #include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/Texture.h"
 #include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Scene/Scene.h"
+
+class Scene;
+class Window;
 
 /// <summary>
 /// Handles Graphical User Interface rendering.

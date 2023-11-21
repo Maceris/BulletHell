@@ -3,7 +3,8 @@
 #include "Globals.h"
 
 #include "Event/Event.h"
-#include "Map/Chunk.h"
+
+struct Chunk;
 
 /// <summary>
 /// A section of the map that has been loaded and needs graphics.

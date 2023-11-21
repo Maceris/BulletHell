@@ -5,7 +5,10 @@
 #include <map>
 #include <string>
 
-#include "glm.hpp"
+#include "mat4x4.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "vec4.hpp"
 
 #include "Graphics/GladTypes.h"
 

@@ -1,10 +1,14 @@
 #include "Graphics/Render/DebugRender.h"
 
-#include "glad.h"
-
 #include "Graphics/Graph/TextureResource.h"
+#include "Graphics/Graph/CascadeShadowSlice.h"
+#include "Graphics/Graph/MeshData.h"
+#include "Graphics/Graph/Model.h"
+#include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
 #include "ResourceCache/ResourceCache.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 const char fragment_shader_source[] = R"glsl(
@@ -226,7 +230,7 @@ void DebugRender::update_AABBs(const Scene& scene)
         }
     }
 
-    AABB_lines.count = lines.size();
+    AABB_lines.count = static_cast<int>(lines.size());
 
     glBufferData(GL_ARRAY_BUFFER, AABB_lines.count * sizeof(Line),
         lines.data(), GL_DYNAMIC_DRAW);
@@ -272,7 +276,7 @@ void DebugRender::update_frustums()
         );
     }
 
-    frustum_lines.count = lines.size();
+    frustum_lines.count = static_cast<int>(lines.size());
     glBufferData(GL_ARRAY_BUFFER, frustum_lines.count * sizeof(Line),
         lines.data(), GL_STATIC_DRAW);
 
@@ -307,7 +311,7 @@ void DebugRender::update_lines(const Scene& scene)
         }
     }
 
-    map_lines.count = lines.size();
+    map_lines.count = static_cast<int>(lines.size());
 
     glBufferData(GL_ARRAY_BUFFER, map_lines.count * sizeof(Line),
         lines.data(), GL_STATIC_DRAW);

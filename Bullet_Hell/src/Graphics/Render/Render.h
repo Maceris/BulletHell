@@ -3,7 +3,6 @@
 #include "Globals.h"
 
 #include "Graphics/GladTypes.h"
-#include "Graphics/Window.h"
 #include "Graphics/Graph/GBuffer.h"
 #include "Graphics/Render/AnimationRender.h"
 #include "Graphics/Render/DebugRender.h"
@@ -15,6 +14,8 @@
 #include "Graphics/Render/SceneRender.h"
 #include "Graphics/Render/ShadowRender.h"
 #include "Graphics/Render/SkyBoxRender.h"
+
+class Window;
 
 /// <summary>
 /// Configuration for tweaking the rendering pipeline.

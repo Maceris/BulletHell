@@ -2,9 +2,16 @@
 
 #include <format>
 
+#include "glm.hpp"
 #include "imgui.h"
 
+#include "Entities/Pawn.h"
+#include "Entities/PawnManager.h"
 #include "Debugging/Timer.h"
+#include "Graphics/Graph/Animation.h"
+#include "Graphics/Render/Render.h"
+#include "Graphics/Scene/Entity.h"
+#include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
 
 #pragma region Variables

@@ -8,7 +8,6 @@
 
 #include "mat4x4.hpp"
 
-#include "Graphics/Graph/Animation.h"
 #include "Graphics/Graph/MeshData.h"
 #include "Graphics/Graph/MeshDrawData.h"
 #include "Graphics/Scene/Entity.h"

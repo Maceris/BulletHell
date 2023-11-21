@@ -1,9 +1,12 @@
 #include "Map/GameMap.h"
 
 #include "Debugging/Logger.h"
+#include "Event/EventManager.h"
 #include "Event/Map/ChunkLoaded.h"
 #include "Event/Map/ChunkUnloaded.h"
 #include "Main/GameLogic.h"
+#include "Map/Chunk.h"
+#include "Map/MapGenerator.h"
 #include "Memory/CriticalSection.h"
 
 /// <summary>

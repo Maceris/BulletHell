@@ -1,11 +1,15 @@
 #include "Graphics/Render/Render.h"
-
-#include "glad.h"
 #include "gtc/type_ptr.hpp"
 
 #include "Debugging/Logger.h"
 #include "Debugging/Timer.h"
+#include "Graphics/Window.h"
+#include "Graphics/Graph/MeshDrawData.h"
+#include "Graphics/Graph/QuadMesh.h"
+#include "Graphics/Scene/Scene.h"
 #include "Utilities/OpenGLUtil.h"
+
+#include "glad.h"
 
 Configuration Render::configuration;
 
@@ -377,7 +381,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 			base_instance += entity_count;
 			++command_buffer_index;
 
-			const MaterialID material_index = mesh_draw_data.material;
+			const int material_index = mesh_draw_data.material;
 			for (const auto& entity : entities)
 			{
 				//NOTE(ches) it should (tm) be in the map

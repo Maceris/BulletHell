@@ -1,9 +1,9 @@
 #include "Graphics/Graph/ShadowBuffer.h"
 
-#include "glad.h"
-
 #include "Debugging/Logger.h"
 #include "Graphics/Graph/CascadeShadowSlice.h"
+
+#include "glad.h"
 
 ShadowBuffer::ShadowBuffer()
 	: depth_map{ SHADOW_MAP_CASCADE_COUNT, SHADOW_MAP_WIDTH,

@@ -1,5 +1,9 @@
 #include "Graphics/Render/ShadowRender.h"
 
+#include "Graphics/Graph/ShadowBuffer.h"
+#include "Graphics/Render/CommandBuffers.h"
+#include "Graphics/Render/RenderBuffers.h"
+
 #include "glad.h"
 
 #pragma region Shader code

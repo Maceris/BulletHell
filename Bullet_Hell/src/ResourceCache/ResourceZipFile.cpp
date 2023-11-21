@@ -5,6 +5,7 @@
 #include "ZipFile.h"
 
 #include "Debugging/Logger.h"
+#include "ResourceCache/Resource.h"
 
 ResourceZipFile::ResourceZipFile(const std::string resource_file_name)
 	: zip_file{ nullptr }

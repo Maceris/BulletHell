@@ -524,6 +524,9 @@
     <ClInclude Include="src\Entities\EntityTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Map\ChunkCoordinates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\3rdParty\imgui-1.89.9\misc\debuggers\imgui.natvis" />

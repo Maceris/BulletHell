@@ -3,9 +3,13 @@
 #include <cmath>
 #include <vector>
 
-#include "glad.h"
-
 #include "Debugging/Logger.h"
+#include "Graphics/Graph/Animation.h"
+#include "Graphics/Graph/MeshDrawData.h"
+#include "Graphics/Render/RenderBuffers.h"
+#include "Graphics/Scene/Scene.h"
+
+#include "glad.h"
 
 #pragma region Shader code
 const char compute_shader_source[] = R"glsl(

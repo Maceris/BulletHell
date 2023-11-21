@@ -2,6 +2,8 @@
 
 #include "Globals.h"
 
+#include <vector>
+
 #include "boost/circular_buffer.hpp"
 
 #include "Entities/Bullet.h"
@@ -47,3 +49,8 @@ private:
 	/// </summary>
 	void inline tick_movement();
 };
+
+/// <summary>
+/// A global reference to the pawn manager.
+/// </summary>
+extern PawnManager* g_pawn_manager;

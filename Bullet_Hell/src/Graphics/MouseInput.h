@@ -2,7 +2,7 @@
 
 #include "Globals.h"
 
-#include "glm.hpp"
+#include "vec2.hpp"
 
 class MouseInput
 {

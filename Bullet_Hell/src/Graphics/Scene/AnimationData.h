@@ -4,9 +4,8 @@
 
 #include <memory>
 
-#include "glm.hpp"
-
-#include "Graphics/Graph/Animation.h"
+struct Animation;
+struct AnimatedFrame;
 
 /// <summary>
 /// Tracks an animation and what frame we are on within it.

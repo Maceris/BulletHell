@@ -4,7 +4,9 @@
 
 #include <string>
 
-#include "glm.hpp"
+#include "mat4x4.hpp"
+#include "vec3.hpp"
+#include "ext/quaternion_float.hpp"
 #include "gtx/quaternion.hpp"
 
 #include "Graphics/Scene/AnimationData.h"

@@ -4,9 +4,11 @@
 
 #include <memory>
 
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Graph/Model.h"
-#include "Graphics/Scene/Entity.h"
+#include "Graphics/GladTypes.h"
+
+struct Entity;
+struct MeshData;
+struct Model;
 
 constexpr auto SKYBOX_VBO_COUNT = 3;
 

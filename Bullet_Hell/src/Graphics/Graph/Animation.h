@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "glm.hpp"
+#include "mat4x4.hpp"
 
 /// <summary>
 /// A column-major 4x4 matrix of floats.

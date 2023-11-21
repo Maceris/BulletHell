@@ -1,10 +1,14 @@
 #include "Graphics/Render/FilterRender.h"
 
-#include "glad.h"
-
 #include "Debugging/Logger.h"
+#include "Graphics/Graph/QuadMesh.h"
+#include "Graphics/Graph/ShaderProgram.h"
+#include "Graphics/Graph/UniformsMap.h"
+#include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
 #include "ResourceCache/ResourceCache.h"
+
+#include "glad.h"
 
 FilterRender::FilterRender()
 {

@@ -2,8 +2,9 @@
 
 #include "Globals.h"
 
-#include "Map/Chunk.h"
 #include "Map/Tile.h"
+
+struct Chunk;
 
 namespace MapGenerator
 {

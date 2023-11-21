@@ -300,6 +300,7 @@
     <ClInclude Include="src\Main\GameLogic.h" />
     <ClInclude Include="src\Main\GameOptions.h" />
     <ClInclude Include="src\Map\Chunk.h" />
+    <ClInclude Include="src\Map\ChunkCoordinates.h" />
     <ClInclude Include="src\Map\GameMap.h" />
     <ClInclude Include="src\Map\MapGenerator.h" />
     <ClInclude Include="src\Map\Tile.h" />
