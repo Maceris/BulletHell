@@ -45,9 +45,14 @@ struct Pawn
 	glm::vec2 desired_movement;
 
 	/// <summary>
-	/// The direction the pawn wants to face, represented as a normalized
-	/// vector with x and z components. A value of (0, -1) would mean that
-	/// the pawn wants to face towards the -z axis.
+	/// The direction the pawn wants to face, represented as the angle 
+	/// of rotation, in degrees in the range [0, 360).
 	/// </summary>
-	glm::vec2 desired_facing;
+	float desired_facing;
+
+	Pawn();
+	Pawn(std::shared_ptr<Entity> entity, Health health = 0);
+	Pawn(const Pawn&) = default;
+	Pawn& operator=(const Pawn&) = default;
+	~Pawn() = default;
 };

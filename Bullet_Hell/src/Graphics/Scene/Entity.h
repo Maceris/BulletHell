@@ -76,7 +76,7 @@ struct Entity
 	/// <param name="x">The x component of the rotation axis.</param>
 	/// <param name="y">The Y component of the rotation axis.</param>
 	/// <param name="z">The z component of the rotation axis.</param>
-	/// <param name="angle">The angle in radians.</param>
+	/// <param name="angle">The angle in degrees.</param>
 	void add_rotation(const float x, const float y, const float z,
 		const float angle);
 
@@ -94,7 +94,7 @@ struct Entity
 	/// <param name="x">The x component of the rotation axis.</param>
 	/// <param name="y">The Y component of the rotation axis.</param>
 	/// <param name="z">The z component of the rotation axis.</param>
-	/// <param name="angle">The angle in radians.</param>
+	/// <param name="angle">The angle in degrees.</param>
 	void set_rotation(const float x, const float y, const float z, 
 		const float angle);
 

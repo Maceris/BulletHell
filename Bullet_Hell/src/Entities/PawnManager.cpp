@@ -1,5 +1,7 @@
 #include "Entities/PawnManager.h"
 
+#include <cmath>
+
 #include "Entities/Bullet.h"
 #include "Entities/Pawn.h"
 #include "Graphics/Graph/AnimationResource.h"
@@ -9,6 +11,29 @@
 #include "Main/GameLogic.h"
 
 PawnManager* g_pawn_manager = nullptr;
+
+/// <summary>
+/// The base movement speed of entities, in world units per second, which is
+/// used to calculate the move speed and also bullet speed.
+/// </summary>
+constexpr float entity_move_speed_per_second = 1.0f;
+
+/// <summary>
+/// The speed of rotation for entities, in degrees per timestep.
+/// </summary>
+constexpr float entity_rotation_speed = 360.0f * simulation_timestep;
+
+/// <summary>
+/// The base movement speed of entities, in world units per timestep.
+/// </summary>
+constexpr float entity_move_speed = 
+	entity_move_speed_per_second * simulation_timestep;
+
+/// <summary>
+/// The base movement speed of bullets, in world units per timestep.
+/// </summary>
+constexpr float bullet_move_speed = 
+	(entity_move_speed_per_second * 1.05f) * simulation_timestep;
 
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
@@ -27,7 +52,7 @@ PawnManager::PawnManager()
 	player->max_health = 1000;
 	player->health = player->max_health;
 	player->desired_movement = glm::vec2(0, 0);
-	player->desired_facing = glm::vec2(0, 0);
+	player->desired_facing = 0.0f;
 }
 
 void PawnManager::tick()
@@ -47,7 +72,38 @@ void inline PawnManager::tick_bullets()
 
 }
 
+void inline update_direction(const Pawn& pawn)
+{
+	const float current_rotation 
+		= glm::degrees(glm::eulerAngles(pawn.scene_entity->rotation).y);
+
+	const float actual_distance = 
+		std::abs(pawn.desired_facing - current_rotation);
+
+	if (actual_distance < 0.01)
+	{
+		return;
+	}
+
+	float amount_to_rotate = std::min(actual_distance, entity_rotation_speed);
+
+	const bool rotate_counter_clockwise = std::fmodf(
+		(pawn.desired_facing - current_rotation + 360.0f), 360.0f) > 180.0f;
+
+	if (rotate_counter_clockwise)
+	{
+		amount_to_rotate = -amount_to_rotate;
+	}
+
+	pawn.scene_entity->add_rotation(0.0f, 1.0f, 0.0f, amount_to_rotate);
+}
+
 void inline PawnManager::tick_movement()
 {
+	update_direction(*player);
+	for (const Pawn& pawn : enemies)
+	{
+		update_direction(pawn);
+	}
 
 }
