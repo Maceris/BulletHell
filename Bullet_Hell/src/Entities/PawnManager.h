@@ -10,6 +10,11 @@
 #include "Entities/Pawn.h"
 
 /// <summary>
+/// How long the fixed timestep is for the pawn manager, in seconds.
+/// </summary>
+constexpr double simulation_timestep = 1.0f / 60.0f;
+
+/// <summary>
 /// Tracks all the players, bullets, and enemies.
 /// </summary>
 class PawnManager

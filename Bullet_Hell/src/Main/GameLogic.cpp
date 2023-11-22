@@ -219,6 +219,7 @@ void GameLogic::calculate_delta_time()
 
 void GameLogic::run_game()
 {
+	double simulation_accumulator = 0.0f;
 	current_state = running;
 	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
 	while (current_state == running)
@@ -229,7 +230,12 @@ void GameLogic::run_game()
 		TIME_END("Processing Input");
 
 		TIME_START("Updating Pawns");
-		
+		simulation_accumulator += seconds_since_last_frame;
+		while (simulation_accumulator >= simulation_timestep)
+		{
+			g_pawn_manager->tick();
+			simulation_accumulator -= simulation_timestep;
+		}
 		TIME_END("Updating Pawns");
 
 		TIME_START("Processing Events");
