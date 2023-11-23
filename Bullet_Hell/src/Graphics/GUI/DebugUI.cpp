@@ -98,11 +98,18 @@ void DebugUI::draw_window_debug()
 		std::to_string(player_position.y),
 		std::to_string(player_position.z)).c_str());
 
+	const float& desired_player_rotation =
+		g_pawn_manager->player->desired_facing;
+	ImGui::Text(std::format("Desired player rotation: {}",
+		std::to_string(desired_player_rotation)).c_str());
+
 	const glm::quat& player_rotation = 
 		g_pawn_manager->player->scene_entity->rotation;
-	ImGui::Text(std::format("Player rotation: ({}, {})",
+	ImGui::Text(std::format("Actual player rotation: ({}, {}, {}, {})",
 		std::to_string(player_rotation.x),
-		std::to_string(player_rotation.y)).c_str());
+		std::to_string(player_rotation.y),
+		std::to_string(player_rotation.z), 
+		std::to_string(player_rotation.w)).c_str());
 
 	const auto& animation_data = 
 		g_pawn_manager->player->scene_entity->animation_data;

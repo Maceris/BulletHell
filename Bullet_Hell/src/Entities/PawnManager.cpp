@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+#include "Debugging/Logger.h"
 #include "Entities/Bullet.h"
 #include "Entities/Pawn.h"
 #include "Graphics/Graph/AnimationResource.h"
@@ -9,8 +10,25 @@
 #include "Graphics/Scene/Entity.h"
 #include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
+#include "Utilities/MathUtil.h"
 
 PawnManager* g_pawn_manager = nullptr;
+
+#define SMOOTH_ROTATION 1
+
+inline float normalize_float_angle(const float& degrees)
+{
+	if (MathUtil::close_enough(degrees, 0)
+		|| MathUtil::close_enough(degrees, 180))
+	{
+		return degrees;
+	}
+	if (degrees < 0)
+	{
+		return -degrees;
+	}
+	return 360.0f - degrees;
+}
 
 /// <summary>
 /// The base movement speed of entities, in world units per second, which is
@@ -18,10 +36,12 @@ PawnManager* g_pawn_manager = nullptr;
 /// </summary>
 constexpr float entity_move_speed_per_second = 1.0f;
 
+#if SMOOTH_ROTATION
 /// <summary>
 /// The speed of rotation for entities, in degrees per timestep.
 /// </summary>
-constexpr float entity_rotation_speed = 360.0f * simulation_timestep;
+constexpr float entity_rotation_speed = 360.0f * 2 * simulation_timestep;
+#endif
 
 /// <summary>
 /// The base movement speed of entities, in world units per timestep.
@@ -74,28 +94,30 @@ void inline PawnManager::tick_bullets()
 
 void inline update_direction(const Pawn& pawn)
 {
-	const float current_rotation 
-		= glm::degrees(glm::eulerAngles(pawn.scene_entity->rotation).y);
+	const glm::quat target_rotation = glm::angleAxis(
+		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
+	);
+#if SMOOTH_ROTATION
+	const glm::quat& current_rotation = pawn.scene_entity->rotation;
+	const float dot = glm::dot(current_rotation, target_rotation);
+	const float angle = 1 - dot * dot;
 
-	const float actual_distance = 
-		std::abs(pawn.desired_facing - current_rotation);
-
-	if (actual_distance < 0.01)
+	const float max_rotation = entity_rotation_speed / 180.0f;
+	if (angle > max_rotation)
 	{
-		return;
+		const float percentage = max_rotation / angle;
+		const glm::quat& result = 
+			glm::slerp(current_rotation, target_rotation, percentage);
+		pawn.scene_entity->set_rotation(result);
 	}
-
-	float amount_to_rotate = std::min(actual_distance, entity_rotation_speed);
-
-	const bool rotate_counter_clockwise = std::fmodf(
-		(pawn.desired_facing - current_rotation + 360.0f), 360.0f) > 180.0f;
-
-	if (rotate_counter_clockwise)
+	else
 	{
-		amount_to_rotate = -amount_to_rotate;
+		pawn.scene_entity->set_rotation(target_rotation);
 	}
-
-	pawn.scene_entity->add_rotation(0.0f, 1.0f, 0.0f, amount_to_rotate);
+#else
+	pawn.scene_entity->set_rotation(target_rotation);
+#endif
+	pawn.scene_entity->update_model_matrix();
 }
 
 void inline PawnManager::tick_movement()

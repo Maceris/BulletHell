@@ -34,6 +34,11 @@ void Entity::set_rotation(const float x, const float y, const float z,
 		glm::normalize(glm::vec3(x, y, z)));
 }
 
+void Entity::set_rotation(const glm::quat& new_rotation)
+{
+	rotation = new_rotation;
+}
+
 void Entity::update_model_matrix()
 {
 	model_matrix = glm::mat4(1.0f);

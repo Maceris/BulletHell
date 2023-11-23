@@ -46,7 +46,10 @@ struct Pawn
 
 	/// <summary>
 	/// The direction the pawn wants to face, represented as the angle 
-	/// of rotation, in degrees in the range [0, 360).
+	/// of rotation around the y axis in a clockwise direction (assuming 
+	/// looking from top down towards -y), where 
+	/// 0 represents the +x direction. The angle is in degrees in the range 
+	/// [0, 360).
 	/// </summary>
 	float desired_facing;
 

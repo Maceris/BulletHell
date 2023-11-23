@@ -98,6 +98,8 @@ struct Entity
 	void set_rotation(const float x, const float y, const float z, 
 		const float angle);
 
+	void set_rotation(const glm::quat& new_rotation);
+
 	/// <summary>
 	/// Update the model matrix based on the current position, rotation, and 
 	/// scale. To be called after making updates, after all updates are done.

@@ -1,5 +1,6 @@
 #include "GameLogic.h"
 
+#include <numbers>
 #include <filesystem>
 
 #include "imgui.h"
@@ -21,11 +22,34 @@
 #include "Map/GameMap.h"
 #include "ResourceCache/ResourceCache.h"
 #include "ResourceCache/ResourceZipFile.h"
+#include "Utilities/MathUtil.h"
 
 #include "glad.h"
 #include "glfw3.h"
 
 GameLogic* g_game_logic = nullptr;
+
+#pragma region Utility functions
+/// <summary>
+/// Take an angle in degrees as given by glm in the range (-180, 180],
+/// and convert it to [0, 360) starting at +x and going clockwise.
+/// </summary>
+/// <param name="degrees">The angle in degrees.</param>
+/// <returns>The degrees in a format that is nicer for use.</returns>
+float normalize_float_angle(const float& degrees)
+{
+	if (MathUtil::close_enough(degrees, 0)
+		|| MathUtil::close_enough(degrees, 180))
+	{
+		return degrees;
+	}
+	if (degrees < 0)
+	{
+		return -degrees;
+	}
+	return 360.0f - degrees;
+}
+#pragma endregion
 
 GameLogic::GameLogic()
 	: current_state{ starting_up }
@@ -168,7 +192,7 @@ void GameLogic::process_input()
 		camera.move_up(move_amount);
 	}
 
-	glm::vec2 movement(0, 0);
+	glm::vec2 movement(0.0f, 0.0f);
 	if (window->is_key_pressed(GLFW_KEY_UP))
 	{
 		movement += glm::vec2(1.0f, 0.0f);
@@ -185,9 +209,29 @@ void GameLogic::process_input()
 	{
 		movement += glm::vec2(0.0f, 1.0f);
 	}
-	movement = glm::normalize(movement);
 
+	if (movement.x != 0 || movement.y != 0)
+	{
+		movement = glm::normalize(movement);
+	}
 	g_pawn_manager->player->desired_movement = movement;
+
+	float angle = 0.0f;
+
+	if (MathUtil::close_enough(movement, 0.0f, 0.0f))
+	{
+		angle = g_pawn_manager->player->desired_facing;
+	}
+	else
+	{
+		//NOTE(ches) atan is in radians (+/-) with respect to the +x axis
+		angle = static_cast<float>(glm::degrees(
+			glm::atan(movement.x, movement.y))
+			);
+		angle = normalize_float_angle(angle);
+	}
+	
+	g_pawn_manager->player->desired_facing = angle;
 
 	if (window->mouse_input.right_button_pressed 
 		&& !ImGui::GetIO().WantCaptureMouse)
