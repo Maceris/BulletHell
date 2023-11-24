@@ -34,13 +34,14 @@ inline float normalize_float_angle(const float& degrees)
 /// The base movement speed of entities, in world units per second, which is
 /// used to calculate the move speed and also bullet speed.
 /// </summary>
-constexpr float entity_move_speed_per_second = 1.0f;
+constexpr float entity_move_speed_per_second = 5.0f;
 
 #if SMOOTH_ROTATION
 /// <summary>
 /// The speed of rotation for entities, in degrees per timestep.
 /// </summary>
-constexpr float entity_rotation_speed = 360.0f * 2 * simulation_timestep;
+constexpr float entity_rotation_speed = 
+	static_cast<float>(360.0f * 2 * simulation_timestep);
 #endif
 
 /// <summary>
@@ -53,7 +54,9 @@ constexpr float entity_move_speed =
 /// The base movement speed of bullets, in world units per timestep.
 /// </summary>
 constexpr float bullet_move_speed = 
-	(entity_move_speed_per_second * 1.05f) * simulation_timestep;
+	static_cast<float>(entity_move_speed_per_second * 1.05f * 
+		simulation_timestep
+	);
 
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
@@ -92,7 +95,7 @@ void inline PawnManager::tick_bullets()
 
 }
 
-void inline update_direction(const Pawn& pawn)
+void inline update_direction(Pawn& pawn)
 {
 	const glm::quat target_rotation = glm::angleAxis(
 		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
@@ -117,15 +120,38 @@ void inline update_direction(const Pawn& pawn)
 #else
 	pawn.scene_entity->set_rotation(target_rotation);
 #endif
-	pawn.scene_entity->update_model_matrix();
+}
+
+void inline update_movement(Pawn& pawn)
+{
+	glm::vec3 movement{
+		pawn.desired_movement.x,
+		0.0f, 
+		pawn.desired_movement.y 
+	};
+	movement *= entity_move_speed;
+	//TODO(ches) Check for collision
+	pawn.scene_entity->position += movement;
 }
 
 void inline PawnManager::tick_movement()
 {
 	update_direction(*player);
-	for (const Pawn& pawn : enemies)
+	for (Pawn& pawn : enemies)
 	{
 		update_direction(pawn);
+	}
+
+	update_movement(*player);
+	for (Pawn& pawn : enemies)
+	{
+		update_movement(pawn);
+	}
+
+	player->scene_entity->update_model_matrix();
+	for (Pawn& pawn : enemies)
+	{
+		pawn.scene_entity->update_model_matrix();
 	}
 
 }
