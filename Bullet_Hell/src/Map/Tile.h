@@ -10,6 +10,11 @@
 using TileID = uint8_t;
 
 /// <summary>
+/// The multiplier for tile scale, in world units.
+/// </summary>
+constexpr float TILE_SCALE = 3.0f;
+
+/// <summary>
 /// Represents a tile in the world map, something like ground, walls, 
 /// a pillar.
 /// </summary>

@@ -227,8 +227,9 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 		auto tile_model = load_model(model_name);
 		auto tile_entity = std::make_shared<Entity>(tile_model->id);
 		tile_model->entity_list.push_back(tile_entity);
-		
-		tile_entity->set_position(x * 2.0f, 0.0f, z * 2.0f);
+		tile_entity->scale = TILE_SCALE;
+		tile_entity->set_position(x * TILE_SCALE * 2, 0.0f, 
+			z * TILE_SCALE * 2);
 		tile_entity->update_model_matrix();
 
 		cluster.entities[tile_model].push_back(tile_entity);

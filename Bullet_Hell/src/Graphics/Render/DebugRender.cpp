@@ -6,6 +6,7 @@
 #include "Graphics/Graph/Model.h"
 #include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
+#include "Map/Tile.h"
 #include "ResourceCache/ResourceCache.h"
 
 #include "glad.h"
@@ -298,10 +299,14 @@ void DebugRender::update_lines(const Scene& scene)
                 glm::vec3 end = start + glm::vec3(0.0f, 1.0f, 0.0f);
                 lines.emplace_back(start, end);
                 
-                glm::vec3 corner1 = start + glm::vec3(-1.0f, 0.0f, -1.0f);
-                glm::vec3 corner2 = start + glm::vec3( 1.0f, 0.0f, -1.0f);
-                glm::vec3 corner3 = start + glm::vec3( 1.0f, 0.0f,  1.0f);
-                glm::vec3 corner4 = start + glm::vec3(-1.0f, 0.0f,  1.0f);
+                glm::vec3 corner1 = start 
+                    + glm::vec3(-1.0f, 0.0f, -1.0f) * TILE_SCALE;
+                glm::vec3 corner2 = start 
+                    + glm::vec3( 1.0f, 0.0f, -1.0f) * TILE_SCALE;
+                glm::vec3 corner3 = start 
+                    + glm::vec3( 1.0f, 0.0f,  1.0f) * TILE_SCALE;
+                glm::vec3 corner4 = start 
+                    + glm::vec3(-1.0f, 0.0f,  1.0f) * TILE_SCALE;
 
                 lines.emplace_back(corner1, corner2);
                 lines.emplace_back(corner2, corner3);
