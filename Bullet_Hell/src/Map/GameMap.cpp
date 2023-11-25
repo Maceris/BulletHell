@@ -32,7 +32,7 @@ GameMap::GameMap()
 	for (ChunkCoordinates& coordinates : cold_list)
 	{
 		cold_load(coordinates);
-	}
+ 	}
 }
 
 GameMap::~GameMap()
@@ -79,18 +79,18 @@ Chunk* GameMap::get_cached(const ChunkCoordinates& coordinates)
 	return fresh_result->second;
 }
 
-bool GameMap::is_cold(const ChunkCoordinates& coordinates)
+bool GameMap::is_cold(const ChunkCoordinates& coordinates) const
 {
 	return cold_cache.find(coordinates.combined) != cold_cache.end();
 }
 
-bool GameMap::is_hot(const ChunkCoordinates& coordinates)
+bool GameMap::is_hot(const ChunkCoordinates& coordinates) const
 {
-	return hot_cache.find(coordinates.combined) != cold_cache.end();
+	return hot_cache.find(coordinates.combined) != hot_cache.end();
 }
 
-void constexpr GameMap::hot_region(const ChunkCoordinates& region_center,
-	std::vector<ChunkCoordinates>& destination)
+void GameMap::hot_region(const ChunkCoordinates& region_center,
+	std::vector<ChunkCoordinates>& destination) const
 {
 	const int16_t start_x = region_center.x - HOT_CACHE_RADIUS;
 	const int16_t end_x = region_center.x + HOT_CACHE_RADIUS;
@@ -106,8 +106,8 @@ void constexpr GameMap::hot_region(const ChunkCoordinates& region_center,
 	}
 }
 
-void constexpr GameMap::cold_region(const ChunkCoordinates& region_center,
-	std::vector<ChunkCoordinates>& destination)
+void GameMap::cold_region(const ChunkCoordinates& region_center,
+	std::vector<ChunkCoordinates>& destination) const
 {
 	const int16_t start_x = region_center.x - COLD_CACHE_RADIUS;
 	const int16_t end_x = region_center.x + COLD_CACHE_RADIUS;
@@ -123,12 +123,17 @@ void constexpr GameMap::cold_region(const ChunkCoordinates& region_center,
 	{
 		for (int16_t z = start_z; z <= end_z; ++z)
 		{
+			if (x >= start_x_ignore && x <= end_x_ignore 
+				&& z >= start_z_ignore && z <= end_z_ignore)
+			{
+				continue;
+			}
 			destination.emplace_back(x, z);
 		}
 	}
 }
 
-void constexpr GameMap::recenter(const ChunkCoordinates& old_center,
+void GameMap::recenter(const ChunkCoordinates& old_center,
 	const ChunkCoordinates& new_center)
 {
 	ScopedCriticalSection lock(chunk_critical_section);
@@ -220,6 +225,7 @@ void constexpr GameMap::recenter(const ChunkCoordinates& old_center,
 	{
 		full_unload(to_load);
 	}
+	center = new_center;
 }
 
 void GameMap::cold_load(const ChunkCoordinates& coordinates)

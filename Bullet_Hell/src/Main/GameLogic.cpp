@@ -19,7 +19,9 @@
 #include "Graphics/Render/Render.h"
 #include "Graphics/Scene/Scene.h"
 #include "Main/GameOptions.h"
+#include "Map/Chunk.h"
 #include "Map/GameMap.h"
+#include "Map/Tile.h"
 #include "ResourceCache/ResourceCache.h"
 #include "ResourceCache/ResourceZipFile.h"
 #include "Utilities/MathUtil.h"
@@ -28,6 +30,11 @@
 #include "glfw3.h"
 
 GameLogic* g_game_logic = nullptr;
+
+/// <summary>
+/// The delay in seconds between recentering the map.
+/// </summary>
+constexpr double MAP_RECENTER_DELAY = 1;
 
 #pragma region Utility functions
 /// <summary>
@@ -57,7 +64,7 @@ GameLogic::GameLogic()
 	, render{ nullptr }
 	, current_scene{ nullptr }
 	, last_frame{ std::chrono::steady_clock::now() }
-	, seconds_since_last_frame{ 0 }
+	, last_map_recenter{ std::chrono::steady_clock::now() }
 	, window{ nullptr }
 {
 	g_game_logic = this;
@@ -261,6 +268,38 @@ void GameLogic::calculate_delta_time()
 	last_frame = current_frame;
 }
 
+void GameLogic::attempt_map_recenter()
+{
+	Instant now = std::chrono::steady_clock::now();
+	long long elapsed =
+		std::chrono::duration_cast<std::chrono::microseconds>(
+			now - last_map_recenter
+		).count();
+	double seconds_since_map_recenter = elapsed / 1'000'000.0;
+	if (seconds_since_map_recenter >= MAP_RECENTER_DELAY)
+	{
+		last_map_recenter = now;
+
+		const glm::vec3 player_position = 
+			g_pawn_manager->player->scene_entity->position;
+
+		glm::i16vec2 tile_coordinates{
+			std::floorf(player_position.x / (CHUNK_WIDTH * TILE_SCALE * 2)),
+			std::floorf(player_position.z / (CHUNK_WIDTH * TILE_SCALE * 2))
+		};
+
+		ChunkCoordinates actual_coordinates{
+			tile_coordinates.x,
+			tile_coordinates.y
+		};
+
+		if (current_map->center != actual_coordinates)
+		{
+			current_map->recenter(current_map->center, actual_coordinates);
+		}
+	}
+}
+
 void GameLogic::run_game()
 {
 	double simulation_accumulator = 0.0f;
@@ -281,6 +320,10 @@ void GameLogic::run_game()
 			simulation_accumulator -= simulation_timestep;
 		}
 		TIME_END("Updating Pawns");
+
+		TIME_START("Recentering Map");
+		attempt_map_recenter();
+		TIME_END("Recentering Map");
 
 		TIME_START("Processing Events");
 		g_event_manager->update(10);

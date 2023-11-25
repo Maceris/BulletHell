@@ -162,7 +162,6 @@ void Scene::handle_chunk_loading(EventPointer event)
 void Scene::handle_chunk_unloading(EventPointer event)
 {
 	//TODO(ches) handle unloading models for all the tiles in the chunk
-	LOG_INFO("We are doing something with a loaded chunk");
 
 	LOG_ASSERT(event && "Our event is null");
 	std::shared_ptr<ChunkUnloaded> unloaded_event =
@@ -182,7 +181,7 @@ void Scene::handle_chunk_unloading(EventPointer event)
 			bool found = false;
 			for (auto& to_remove : entity_mapping.second)
 			{
-				if (to_remove == existing)
+				if (to_remove->entity_ID == existing->entity_ID)
 				{
 					found = true;
 					break;

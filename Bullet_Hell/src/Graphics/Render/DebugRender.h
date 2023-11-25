@@ -77,7 +77,9 @@ private:
 	/// </summary>
 	void update_frustums();
 
-	LineGroup map_lines;
-	LineGroup frustum_lines;
-	LineGroup AABB_lines;
+	LineGroup map_lines{};
+	LineGroup hot_chunk_lines{};
+	LineGroup cold_chunk_lines{};
+	LineGroup frustum_lines{};
+	LineGroup AABB_lines{};
 };

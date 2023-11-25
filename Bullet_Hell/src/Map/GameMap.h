@@ -41,6 +41,8 @@ constexpr auto COLD_CACHE_CHUNK_WIDTH = 2 * COLD_CACHE_RADIUS + 1;
 
 struct GameMap
 {
+	friend class DebugRender;
+
 	/// <summary>
 	/// The coordinates of the central chunk, updated as we move around.
 	/// </summary>
@@ -66,7 +68,7 @@ struct GameMap
 	/// was located in.</param>
 	/// <param name="new_center">The location of the new chunk the player
 	/// is now located in.</param>
-	void constexpr recenter(const ChunkCoordinates& old_center,
+	void recenter(const ChunkCoordinates& old_center,
 		const ChunkCoordinates& new_center);
 
 private:
@@ -90,8 +92,8 @@ private:
 	/// center of the region.</param>
 	/// <param name="destination">Where to store the coordiantes of chunks
 	/// that are in the fully loaded region.</param>
-	void constexpr hot_region(const ChunkCoordinates& region_center,
-		std::vector<ChunkCoordinates>& destination);
+	void hot_region(const ChunkCoordinates& region_center,
+		std::vector<ChunkCoordinates>& destination) const;
 
 	/// <summary>
 	/// Calculate the coordinates that make up the partially-loaded region
@@ -101,8 +103,8 @@ private:
 	/// center of the region.</param>
 	/// <param name="destination">Where to store the coordiantes of chunks
 	/// that are in the partially loaded region.</param>
-	void constexpr cold_region(const ChunkCoordinates& region_center,
-		std::vector<ChunkCoordinates>& destination);
+	void cold_region(const ChunkCoordinates& region_center,
+		std::vector<ChunkCoordinates>& destination) const;
 
 	/// <summary>
 	/// Check if the supplied coordinates are in the cold cache.
@@ -110,7 +112,7 @@ private:
 	/// <param name="coordinates">The coordinates to look for.</param>
 	/// <returns>Whether the given coordinates are currently in the cold cache.
 	/// </returns>
-	bool is_cold(const ChunkCoordinates& coordinates);
+	bool is_cold(const ChunkCoordinates& coordinates) const;
 
 	/// <summary>
 	/// Check if the supplied coordinates are in the hot cache.
@@ -118,7 +120,7 @@ private:
 	/// <param name="coordinates">The coordinates to look for.</param>
 	/// <returns>Whether the given coordinates are currently in the hot cache.
 	/// </returns>
-	bool is_hot(const ChunkCoordinates& coordinates);
+	bool is_hot(const ChunkCoordinates& coordinates) const;
 
 	/// <summary>
 	/// Load a chunk into the cold cache.

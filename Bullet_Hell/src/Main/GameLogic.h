@@ -54,10 +54,16 @@ private:
 	void process_input();
 
 	Instant last_frame;
+	double seconds_since_last_frame = 0;
 
-	double seconds_since_last_frame;
+	Instant last_map_recenter;
 
 	void calculate_delta_time();
+
+	/// <summary>
+	/// Check if we need to recenter the map, and do so if required.
+	/// </summary>
+	void attempt_map_recenter();
 
 public:
 	GameLogic();

@@ -6,6 +6,7 @@
 #include "Graphics/Graph/Model.h"
 #include "Graphics/Scene/Scene.h"
 #include "Main/GameLogic.h"
+#include "Map/Chunk.h"
 #include "Map/Tile.h"
 #include "ResourceCache/ResourceCache.h"
 
@@ -40,6 +41,7 @@ void main()
 #pragma endregion
 
 constexpr glm::vec4 RED = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+constexpr glm::vec4 YELLOW = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 GREEN = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 BLUE = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -152,9 +154,6 @@ LineGroup::~LineGroup()
 }
 
 DebugRender::DebugRender()
-    : map_lines{}
-    , frustum_lines{}
-    , AABB_lines{}
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
@@ -197,6 +196,14 @@ void DebugRender::render(const Scene& scene)
     uniforms_map->set_uniform("line_color", BLUE);
     glDrawArrays(GL_LINES, line_group * 2, line_group);
 #endif
+
+    uniforms_map->set_uniform("line_color", BLUE);
+    glBindVertexArray(hot_chunk_lines.vao);
+    glDrawArrays(GL_LINES, 0, hot_chunk_lines.count * 2);
+    
+    uniforms_map->set_uniform("line_color", YELLOW);
+    glBindVertexArray(cold_chunk_lines.vao);
+    glDrawArrays(GL_LINES, 0, cold_chunk_lines.count * 2);
 
     glBindVertexArray(0);
 
@@ -284,6 +291,43 @@ void DebugRender::update_frustums()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+/// <summary>
+/// Add debug lines for all the chunks in the specified cache to the line list.
+/// </summary>
+/// <param name="cache">The cache to pull chunk information from.</param>
+/// <param name="lines">Where to store debug lines.</param>
+void add_chunks(const std::unordered_map<uint32_t, Chunk*>& cache, 
+    std::vector<Line>& lines)
+{
+    const float chunk_world_width = CHUNK_WIDTH * TILE_SCALE * 2;
+
+    for (const auto& pair : cache)
+    {
+        ChunkCoordinates coordinates{ pair.first };
+
+        glm::vec3 corner1{
+            coordinates.x * chunk_world_width,
+            0.0f,
+            coordinates.z * chunk_world_width
+        };
+
+        glm::vec3 corner2 = corner1
+            + glm::vec3(1.0f, 0.0f, 0.0f) * (TILE_SCALE * CHUNK_WIDTH * 2);
+        glm::vec3 corner3 = corner1
+            + glm::vec3(1.0f, 0.0f, 1.0f) * (TILE_SCALE * CHUNK_WIDTH * 2);
+        glm::vec3 corner4 = corner1
+            + glm::vec3(0.0f, 0.0f, 1.0f) * (TILE_SCALE * CHUNK_WIDTH * 2);
+
+        lines.emplace_back(corner1, corner2);
+        lines.emplace_back(corner2, corner3);
+        lines.emplace_back(corner3, corner4);
+        lines.emplace_back(corner4, corner1);
+
+        glm::vec3 middle = (corner3 - corner1) * 0.5f;
+        glm::vec3 end = middle + glm::vec3(0.0f, 1.0f, 0.0f);
+        lines.emplace_back(middle, end);
+    }
+}
 void DebugRender::update_lines(const Scene& scene)
 {
     glBindBuffer(GL_ARRAY_BUFFER, map_lines.data);
@@ -320,6 +364,23 @@ void DebugRender::update_lines(const Scene& scene)
 
     glBufferData(GL_ARRAY_BUFFER, map_lines.count * sizeof(Line),
         lines.data(), GL_STATIC_DRAW);
+    lines.clear();
+
+    std::vector<Line> hot_lines;
+    add_chunks(g_game_logic->current_map->hot_cache, hot_lines);
+    hot_chunk_lines.count = static_cast<int>(hot_lines.size());
+    glBindBuffer(GL_ARRAY_BUFFER, hot_chunk_lines.data);
+    glBufferData(GL_ARRAY_BUFFER, hot_chunk_lines.count * sizeof(Line),
+        hot_lines.data(), GL_STATIC_DRAW);
+    hot_lines.clear();
+
+    std::vector<Line> cold_lines;
+    add_chunks(g_game_logic->current_map->cold_cache, cold_lines);
+    cold_chunk_lines.count = static_cast<int>(cold_lines.size());
+    glBindBuffer(GL_ARRAY_BUFFER, cold_chunk_lines.data);
+    glBufferData(GL_ARRAY_BUFFER, cold_chunk_lines.count * sizeof(Line),
+        cold_lines.data(), GL_STATIC_DRAW);
+    cold_lines.clear();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
