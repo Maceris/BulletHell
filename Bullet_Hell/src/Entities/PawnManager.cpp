@@ -34,7 +34,7 @@ constexpr float entity_rotation_speed =
 /// The base movement speed of entities, in world units per timestep.
 /// </summary>
 constexpr float entity_move_speed = 
-	entity_move_speed_per_second * simulation_timestep;
+	static_cast<float>(entity_move_speed_per_second * simulation_timestep);
 
 /// <summary>
 /// The base movement speed of bullets, in world units per timestep.
