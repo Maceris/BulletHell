@@ -205,15 +205,37 @@ void GameMap::recenter(const ChunkCoordinates& old_center,
 			need_partial_loading.push_back(desired);
 		}
 	}
-
-	for (const auto& to_load : need_full_loading)
+	for (const auto& former : old_cold)
 	{
-		hot_load(to_load);
-	}
+		bool still_needed = false;
 
-	for (const auto& to_load : need_partial_loading)
-	{
-		cold_load(to_load);
+		for (const auto& desired : new_hot)
+		{
+			if (former == desired)
+			{
+				still_needed = true;
+				break;
+			}
+		}
+
+		if (still_needed)
+		{
+			continue;
+		}
+
+		for (const auto& desired : new_cold)
+		{
+			if (former == desired)
+			{
+				still_needed = true;
+				break;
+			}
+		}
+		
+		if (!still_needed)
+		{
+			need_full_unloading.push_back(former);
+		}
 	}
 
 	for (const auto& to_load : need_partial_unloading)
@@ -225,6 +247,17 @@ void GameMap::recenter(const ChunkCoordinates& old_center,
 	{
 		full_unload(to_load);
 	}
+
+	for (const auto& to_load : need_full_loading)
+	{
+		hot_load(to_load);
+	}
+
+	for (const auto& to_load : need_partial_loading)
+	{
+		cold_load(to_load);
+	}
+	
 	center = new_center;
 }
 
