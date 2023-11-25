@@ -161,8 +161,6 @@ void Scene::handle_chunk_loading(EventPointer event)
 
 void Scene::handle_chunk_unloading(EventPointer event)
 {
-	//TODO(ches) handle unloading models for all the tiles in the chunk
-
 	LOG_ASSERT(event && "Our event is null");
 	std::shared_ptr<ChunkUnloaded> unloaded_event =
 		std::static_pointer_cast<ChunkUnloaded>(event);
@@ -199,6 +197,8 @@ void Scene::handle_chunk_unloading(EventPointer event)
 			entity_list.push_back(entity);
 		}
 	}
+
+	chunk_contents.erase(unloaded_event->coordinates);
 
 	dirty = true;
 }
