@@ -193,12 +193,12 @@ void DebugUI::draw_window_timing()
 	ImGui::SetNextWindowPos(ImVec2(460, 30), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
 
-	ImGui::Begin("Timers");
+	ImGui::Begin("Timers (Average)");
 	
 	for (auto& stage : TIME_STAGES_LIST)
 	{
-		ImGui::Text(std::format("Stage {}: {} microseconds", stage, 
-			std::to_string(LAST_TIME(stage))).c_str());
+		ImGui::Text(std::format("{}: {} microseconds", stage, 
+			std::to_string(AVERAGE_TIME(stage))).c_str());
 	}
 
 	ImGui::End();

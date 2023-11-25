@@ -16,20 +16,6 @@ PawnManager* g_pawn_manager = nullptr;
 
 #define SMOOTH_ROTATION 1
 
-inline float normalize_float_angle(const float& degrees)
-{
-	if (MathUtil::close_enough(degrees, 0)
-		|| MathUtil::close_enough(degrees, 180))
-	{
-		return degrees;
-	}
-	if (degrees < 0)
-	{
-		return -degrees;
-	}
-	return 360.0f - degrees;
-}
-
 /// <summary>
 /// The base movement speed of entities, in world units per second, which is
 /// used to calculate the move speed and also bullet speed.
@@ -95,7 +81,7 @@ void inline PawnManager::tick_bullets()
 
 }
 
-void inline update_direction(Pawn& pawn)
+void update_direction(Pawn& pawn)
 {
 	const glm::quat target_rotation = glm::angleAxis(
 		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
@@ -122,7 +108,7 @@ void inline update_direction(Pawn& pawn)
 #endif
 }
 
-void inline update_movement(Pawn& pawn)
+void update_movement(Pawn& pawn)
 {
 	glm::vec3 movement{
 		pawn.desired_movement.x,

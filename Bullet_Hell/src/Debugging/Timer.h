@@ -35,6 +35,15 @@ namespace Timer
 	long long last_time(const std::string& stage_name);
 
 	/// <summary>
+	/// Calculates the average difference in time, in microseconds, between
+	/// for a timer. This is a rolling average based on recent history.
+	/// </summary>
+	/// <param name="stage_name">The name of what we were timing.</param>
+	/// <returns>The average time in microseconds between start and end.
+	/// </returns>
+	long long average_time(const std::string& stage_name);
+
+	/// <summary>
 	/// Fetch a list of stage names.
 	/// </summary>
 	/// <returns>The names of all currently used stages.</returns>
@@ -72,6 +81,12 @@ namespace Timer
 /// Fetch the elapsed time for a named section of code, in microseconds.
 /// </summary>
 #define LAST_TIME(str) Timer::last_time(std::string((str)))
+
+/// <summary>
+/// Fetch the average time for a named section of code, in microseconds.
+/// This is a rolling average based on recent history.
+/// </summary>
+#define AVERAGE_TIME(str) Timer::average_time(std::string((str)))
 
 /// <summary>
 /// Fetch a list of stage names.
