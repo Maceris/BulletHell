@@ -323,7 +323,7 @@ void add_chunks(const std::unordered_map<uint32_t, Chunk*>& cache,
         lines.emplace_back(corner3, corner4);
         lines.emplace_back(corner4, corner1);
 
-        glm::vec3 middle = (corner3 - corner1) * 0.5f;
+        glm::vec3 middle = (corner3 - corner1) * 0.5f + corner1;
         glm::vec3 end = middle + glm::vec3(0.0f, 1.0f, 0.0f);
         lines.emplace_back(middle, end);
     }
