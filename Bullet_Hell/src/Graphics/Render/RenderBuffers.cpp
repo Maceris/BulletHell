@@ -16,14 +16,26 @@
 
 RenderBuffers::RenderBuffers()
 	: vbo_list{}
-	, animated_vao{ 0 }
-	, static_vao{ 0 }
-	, binding_poses_vbo{ 0 }
-	, bones_indices_weights_vbo{ 0 }
-	, bones_matrices_vbo{ 0 }
-	, dest_animation_vbo{ 0 }
 	, buffers_populated{ false }
-{}
+{
+	glGenVertexArrays(1, &static_vao);
+	glGenBuffers(1, &static_meshes_vbo);
+	vbo_list.push_back(static_meshes_vbo);
+	glGenBuffers(1, &static_index_vbo);
+	vbo_list.push_back(static_index_vbo);
+
+	glGenVertexArrays(1, &animated_vao);
+	glGenBuffers(1, &dest_animation_vbo);
+	vbo_list.push_back(dest_animation_vbo);
+	glGenBuffers(1, &animated_index_vbo);
+	vbo_list.push_back(animated_index_vbo);
+	glGenBuffers(1, &bones_matrices_vbo);
+	vbo_list.push_back(bones_matrices_vbo);
+	glGenBuffers(1, &bones_indices_weights_vbo);
+	vbo_list.push_back(bones_indices_weights_vbo);
+	glGenBuffers(1, &binding_poses_vbo);
+	vbo_list.push_back(binding_poses_vbo);
+}
 
 RenderBuffers::~RenderBuffers()
 {
@@ -84,7 +96,6 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	load_bones_matrices_buffer(model_list);
 	load_bones_indices_weights(model_list);
 
-	glGenVertexArrays(1, &animated_vao);
 	glBindVertexArray(animated_vao);
 
 	size_t vertices_size = 0;
@@ -129,13 +140,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 		mesh_weights_offset += weights_offset;
 	}
 
-	glGenBuffers(1, &dest_animation_vbo);
-	vbo_list.push_back(dest_animation_vbo);
 	std::vector<float> meshes_buffer;
-
-	GLuint index_vbo = 0;
-	glGenBuffers(1, &index_vbo);
-	vbo_list.push_back(index_vbo);
 	std::vector<uint32_t> indices_buffer;
 
 	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
@@ -158,7 +163,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 
 	define_vertex_attributes();
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, animated_index_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);
@@ -169,9 +174,6 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 
 void RenderBuffers::load_binding_poses(const ModelList& models)
 {
-	glGenBuffers(1, &binding_poses_vbo);
-	vbo_list.push_back(binding_poses_vbo);
-
 	std::vector<float> meshes_buffer;
 	for (auto& model : models)
 	{
@@ -199,9 +201,6 @@ void RenderBuffers::load_bones_indices_weights(const ModelList& models)
 			mesh_data.append_weights_to_buffer(data_buffer);
 		}
 	}
-
-	glGenBuffers(1, &bones_indices_weights_vbo);
-	vbo_list.push_back(bones_indices_weights_vbo);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_indices_weights_vbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
@@ -245,9 +244,6 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 		}
 	}
 
-	glGenBuffers(1, &bones_matrices_vbo);
-	vbo_list.push_back(bones_matrices_vbo);
-
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_matrices_vbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
 		data_buffer.data(), GL_STATIC_DRAW);
@@ -261,8 +257,7 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	buffers_populated = true;
 	const std::vector<std::shared_ptr<Model>>& model_list =
 		scene.get_static_model_list();
-
-	glGenVertexArrays(1, &static_vao);
+	
 	glBindVertexArray(static_vao);
 
 	size_t vertices_size = 0;
@@ -288,15 +283,8 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			offset = vertices_size;
 		}
 	}
-
-	GLuint meshes_vbo = 0;
-	glGenBuffers(1, &meshes_vbo);
-	vbo_list.push_back(meshes_vbo);
+	
 	std::vector<float> meshes_buffer;
-
-	GLuint index_vbo = 0;
-	glGenBuffers(1, &index_vbo);
-	vbo_list.push_back(index_vbo);
 	std::vector<uint32_t> indices_buffer;
 
 	LOG_ASSERT(sizeof(GLuint) == sizeof(float)
@@ -313,13 +301,13 @@ void RenderBuffers::load_static_models(const Scene& scene)
 			mesh_data.append_indices_to_buffer(indices_buffer);
 		}
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, meshes_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, static_meshes_vbo);
 	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size() * sizeof(float), 
 		meshes_buffer.data(), GL_STATIC_DRAW);
 
 	define_vertex_attributes();
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_index_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
 		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);

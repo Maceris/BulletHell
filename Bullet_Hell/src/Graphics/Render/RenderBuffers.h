@@ -55,12 +55,12 @@ public:
 	/// <summary>
 	/// The Vertex Array Object ID for animated models.
 	/// </summary>
-	GLuint animated_vao;
+	GLuint animated_vao = 0;
 
 	/// <summary>
 	/// The Vertex Array Object ID for static models.
 	/// </summary>
-	GLuint static_vao;
+	GLuint static_vao = 0;
 
 	/// <summary>
 	/// A list of all the VBOs that have been set up.
@@ -70,26 +70,31 @@ public:
 	/// <summary>
 	/// The Vertex Buffer Object ID for binding poses of animated models.
 	/// </summary>
-	GLuint binding_poses_vbo;
+	GLuint binding_poses_vbo = 0;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for indices and weights of the bones of
 	/// animated models.
 	/// </summary>
-	GLuint bones_indices_weights_vbo;
+	GLuint bones_indices_weights_vbo = 0;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for bones matrices of animated models.
 	/// </summary>
-	GLuint bones_matrices_vbo;
+	GLuint bones_matrices_vbo = 0;
 
 	/// <summary>
 	/// The Vertex Buffer Object ID for the transformed animation vertices
 	/// after processing of animated models.
 	/// </summary>
-	GLuint dest_animation_vbo;
+	GLuint dest_animation_vbo = 0;
 
 private:
+
+	GLuint animated_index_vbo = 0;
+	GLuint static_meshes_vbo = 0;
+	GLuint static_index_vbo = 0;
+
 	/// <summary>
 	/// If we have populated any buffer since the last time we cleared them
 	/// out.
