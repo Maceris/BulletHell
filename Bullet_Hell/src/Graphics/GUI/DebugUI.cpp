@@ -89,7 +89,12 @@ void DebugUI::draw_window_debug()
 		std::to_string(models_loaded)).c_str());
 
 	const long long fps = 1000000 / LAST_TIME("Last Frame");
-	ImGui::Text(std::format("FPS: {}", std::to_string(fps)).c_str());
+	ImGui::Text(std::format("FPS for last frame: {}", 
+		std::to_string(fps)).c_str());
+
+	const long long actual_fps = g_game_logic->last_FPS;
+	ImGui::Text(std::format("FPS for the last second: {}", 
+		std::to_string(actual_fps)).c_str());
 
 	const glm::vec3& player_position = 
 		g_pawn_manager->player->scene_entity->position;

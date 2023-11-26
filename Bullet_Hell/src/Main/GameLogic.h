@@ -45,25 +45,9 @@ using Instant = std::chrono::steady_clock::time_point;
 /// </summary>
 class GameLogic
 {
-private:
-	/// <summary>
-	/// The current state of the game.
-	/// </summary>
-	GameState current_state;
-
-	void process_input();
-
-	Instant last_frame;
-	double seconds_since_last_frame = 0;
-
-	Instant last_map_recenter;
-
-	void calculate_delta_time();
-
-	/// <summary>
-	/// Check if we need to recenter the map, and do so if required.
-	/// </summary>
-	void attempt_map_recenter();
+#if DEBUG
+	friend class DebugUI;
+#endif
 
 public:
 	GameLogic();
@@ -122,6 +106,33 @@ public:
 
 	std::shared_ptr<Scene> current_scene;
 	std::shared_ptr<GameMap> current_map;
+
+private:
+	/// <summary>
+	/// The current state of the game.
+	/// </summary>
+	GameState current_state;
+
+	void process_input();
+
+	Instant last_frame;
+	double seconds_since_last_frame = 0;
+
+	/// <summary>
+	/// How many frames since we last checked FPS.
+	/// </summary>
+	int frame_count = 0;
+	double seconds_since_last_FPS_calcualation = 0;
+	int last_FPS = 0;
+
+	Instant last_map_recenter;
+
+	void calculate_delta_time();
+
+	/// <summary>
+	/// Check if we need to recenter the map, and do so if required.
+	/// </summary>
+	void attempt_map_recenter();
 };
 
 /// <summary>

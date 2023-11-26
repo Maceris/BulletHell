@@ -266,6 +266,14 @@ void GameLogic::calculate_delta_time()
 		current_frame - last_frame).count();
 	seconds_since_last_frame = elapsed / 1'000'000.0;
 	last_frame = current_frame;
+
+	seconds_since_last_FPS_calcualation += seconds_since_last_frame;
+	if (seconds_since_last_FPS_calcualation > 1.0)
+	{
+		last_FPS = frame_count;
+		frame_count = 0;
+		seconds_since_last_FPS_calcualation = 0;
+	}
 }
 
 void GameLogic::attempt_map_recenter()
@@ -342,6 +350,7 @@ void GameLogic::run_game()
 		g_pawn_manager->player->scene_entity->animation_data.next_frame();
 		render->render(*window, *current_scene);
 		window->render();
+		++frame_count;
 	}
 	
 }
