@@ -195,6 +195,11 @@ void DebugUI::draw_window_timing()
 
 	ImGui::Begin("Timers (Average)");
 	
+	if (ImGui::Button("Clear all timers"))
+	{
+		CLEAR_TIMER_HISTORY();
+	}
+
 	for (auto& stage : TIME_STAGES_LIST)
 	{
 		ImGui::Text(std::format("{}: {} microseconds", stage, 

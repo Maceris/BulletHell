@@ -11,6 +11,11 @@ using Instant = std::chrono::steady_clock::time_point;
 namespace Timer
 {
 	/// <summary>
+	/// Clear out all of the timers history except the last recorded time.
+	/// </summary>
+	void clear_timer_history();
+
+	/// <summary>
 	/// Marks down the instant we start timing a named section of code, like a 
 	/// stopwatch.
 	/// </summary>
@@ -93,11 +98,18 @@ namespace Timer
 /// </summary>
 #define TIME_STAGES_LIST Timer::time_stages_list()
 
+/// <summary>
+/// Clear out all of the timers history except the last recorded time.
+/// </summary>
+#define CLEAR_TIMER_HISTORY() Timer::clear_timer_history()
+
 #else // DEBUG
 
 #define TIME_START(str) do { (void)sizeof(str); } while (0)
 #define TIME_END(str) do { (void)sizeof(str); } while (0)
 #define LAST_TIME(str) 0
+#define AVERAGE_TIME(str) 0
 #define TIME_STAGES_LIST Timer::time_stages_list()
+#define CLEAR_TIMER_HISTORY() do { (void)sizeof(str); } while (0)
 
 #endif // DEBUG else

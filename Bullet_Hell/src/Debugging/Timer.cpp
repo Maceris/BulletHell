@@ -33,6 +33,14 @@ public:
 std::map<std::string, Stopwatch> TimerManager::times;
 std::vector<std::string> TimerManager::stages;
 
+void Timer::clear_timer_history()
+{
+	for (auto& pair : TimerManager::times)
+	{
+		pair.second.history.clear();
+	}
+}
+
 void Timer::time_start(const std::string& stage_name, const Instant& instant)
 {
 	auto result = TimerManager::times.find(stage_name);
@@ -83,7 +91,7 @@ long long Timer::average_time(const std::string& stage_name)
 	long long remainders = 0;
 	const size_t length = std::min(HISTORY_LENGTH, stopwatch.history.size());
 	
-	if (length == 1)
+	if (length <= 1)
 	{
 		return stopwatch.elapsed;
 	}
