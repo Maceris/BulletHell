@@ -8,6 +8,7 @@
 
 #include "mat4x4.hpp"
 
+#include "Graphics/Graph/Animation.h"
 #include "Graphics/Graph/MeshData.h"
 #include "Graphics/Graph/MeshDrawData.h"
 #include "Graphics/Scene/Entity.h"
@@ -30,7 +31,7 @@ struct Model
 	/// <summary>
 	/// A list of animation names that can be applied to the model.
 	/// </summary>
-	std::vector<std::string> animation_list;
+	std::vector<std::shared_ptr<Animation>> animation_list;
 
 	/// <summary>
 	/// A list of entities that use this model.

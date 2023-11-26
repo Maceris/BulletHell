@@ -54,8 +54,9 @@ PawnManager::PawnManager()
 	auto player_entity = std::make_shared<Entity>(player_model->id);
 	g_game_logic->current_scene->add_entity(player_entity);
 	player_entity->update_model_matrix();
-	auto idle = load_animation("models/player/human_male.human_malehuman_male_idle.animation");
-	player_entity->animation_data.set_current_animation(idle);
+	player_idle_animation = load_animation("models/player/human_male.human_malehuman_male_idle.animation");
+	player_running_animation = load_animation("models/player/human_male.human_malehuman_male_run.animation");
+	player_entity->animation_data.set_current_animation(player_idle_animation);
 
 	player->scene_entity = player_entity;
 	player->max_health = 1000;
@@ -129,6 +130,22 @@ void inline PawnManager::tick_movement()
 	}
 
 	update_movement(*player);
+	if (player->desired_movement.x != 0 || player->desired_movement.y != 0)
+	{
+		auto& animation_data = player->scene_entity->animation_data;
+		if (animation_data.current_animation != player_running_animation)
+		{
+			animation_data.set_current_animation(player_running_animation);
+		}
+	}
+	else
+	{
+		auto& animation_data = player->scene_entity->animation_data;
+		if (animation_data.current_animation != player_idle_animation)
+		{
+			animation_data.set_current_animation(player_idle_animation);
+		}
+	}
 	for (Pawn& pawn : enemies)
 	{
 		update_movement(pawn);

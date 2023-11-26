@@ -8,6 +8,7 @@
 
 #include "Entities/Bullet.h"
 #include "Entities/Pawn.h"
+#include "Graphics/Graph/Animation.h"
 
 /// <summary>
 /// How long the fixed timestep is for the pawn manager, in seconds.
@@ -53,6 +54,9 @@ private:
 	/// Move the entities that want to do so.
 	/// </summary>
 	void inline tick_movement();
+
+	std::shared_ptr<Animation> player_idle_animation;
+	std::shared_ptr<Animation> player_running_animation;
 };
 
 /// <summary>

@@ -220,13 +220,9 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 	{
 		std::set<std::shared_ptr<Animation>> animation_list;
 
-		for (auto& entity : model->entity_list)
+		for (auto& animation : model->animation_list)
 		{
-			auto& current_animation = entity->animation_data.current_animation;
-			if (current_animation)
-			{
-				animation_list.insert(current_animation);
-			}
+			animation_list.insert(animation);
 		}
 
 		for (auto& animation: animation_list)

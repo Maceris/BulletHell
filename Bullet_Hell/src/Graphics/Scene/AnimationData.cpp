@@ -33,4 +33,5 @@ void AnimationData::set_current_animation(
 {
 	LOG_ASSERT(animation != nullptr);
 	current_animation = animation;
+	current_frame_index = 0;
 }
