@@ -55,7 +55,7 @@ struct MeshDrawData
 	const int material;
 
 	/// <summary>
-	/// The offset, in rows.
+	/// The offset to the base vertex.
 	/// </summary>
 	const int offset;
 

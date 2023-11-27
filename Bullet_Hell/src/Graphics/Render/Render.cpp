@@ -195,13 +195,10 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		scene.get_animated_model_list();
 
 	size_t mesh_count = 0;
-	size_t draw_element_count = 0;
 	size_t entity_count = 0;
 	for (const auto& model : model_list)
 	{
 		mesh_count += model->mesh_draw_data_list.size();
-		draw_element_count += model->entity_list.size()
-			* model->mesh_draw_data_list.size();
 		entity_count += model->entity_list.size();
 	}
 
@@ -246,7 +243,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 	const int padding = 0;
 
 	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
-	int* draw_elements = ALLOC int[draw_element_count * DRAW_ELEMENT_SIZE];
+	int* draw_elements = ALLOC int[mesh_count * DRAW_ELEMENT_SIZE];
 	for (const auto& model : model_list)
 	{
 		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
@@ -268,10 +265,13 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 			++base_instance;
 			++command_buffer_index;
 
-			auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
-			//NOTE(ches) it should (tm) be in the map
+			const auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
+
+			const auto result = entity_index_map.find(entity->entity_ID);
+			LOG_ASSERT(result != entity_index_map.end()
+				&& "Entity ID not found in the index map");
 			draw_elements[draw_element_index * DRAW_ELEMENT_SIZE] =
-				entity_index_map.find(entity->entity_ID)->second;
+				result->second;
 			draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
 				mesh_draw_data.material;
 			++draw_element_index;
@@ -291,7 +291,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		GL_STATIC_DRAW);
 	SAFE_DELETE_ARRAY(command_buffer);
 
-	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
+	data_size_in_bytes = mesh_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
 		command_buffers.animated_draw_element_buffer);

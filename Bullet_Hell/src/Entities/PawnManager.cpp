@@ -1,6 +1,7 @@
 #include "Entities/PawnManager.h"
 
 #include <cmath>
+#include <cstdlib>
 
 #include "Debugging/Logger.h"
 #include "Entities/Bullet.h"
@@ -54,8 +55,9 @@ PawnManager::PawnManager()
 	auto player_entity = std::make_shared<Entity>(player_model->id);
 	g_game_logic->current_scene->add_entity(player_entity);
 	player_entity->update_model_matrix();
-	player_idle_animation = load_animation("models/player/human_male.human_malehuman_male_idle.animation");
-	player_running_animation = load_animation("models/player/human_male.human_malehuman_male_run.animation");
+	player_attack_animation = load_animation("models/player/human_male.human_male_cast_unarmed_magic.animation");
+	player_idle_animation = load_animation("models/player/human_male.human_male_idle.animation");
+	player_running_animation = load_animation("models/player/human_male.human_male_run.animation");
 	player_entity->animation_data.set_current_animation(player_idle_animation);
 
 	player->scene_entity = player_entity;
@@ -63,6 +65,21 @@ PawnManager::PawnManager()
 	player->health = player->max_health;
 	player->desired_movement = glm::vec2(0, 0);
 	player->desired_facing = 0.0f;
+
+	auto enemy_model = load_model("models/enemy/enemy.model");
+	g_game_logic->current_scene->add_model(enemy_model);
+	enemy_model_id = enemy_model->id;
+
+	enemy_attack_animation = load_animation("models/enemy/enemy.human_male_cast_unarmed_magic.animation");
+	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
+	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
+
+	for (int count = 0; count < 10; ++count)
+	{
+		float x = rand() % 20 - 10;
+		float z = rand() % 20 - 10;
+		spawn_enemy(x, z);
+	}
 }
 
 void PawnManager::tick()
@@ -157,4 +174,16 @@ void inline PawnManager::tick_movement()
 		pawn.scene_entity->update_model_matrix();
 	}
 
+}
+
+void PawnManager::spawn_enemy(const float& x, const float& z)
+{
+	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
+	g_game_logic->current_scene->add_entity(enemy_entity);
+	enemy_entity->position.x = x;
+	enemy_entity->position.z = z;
+	enemy_entity->update_model_matrix();
+	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
+
+	enemies.emplace_back(enemy_entity, 200);
 }

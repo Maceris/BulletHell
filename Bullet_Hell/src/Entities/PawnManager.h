@@ -55,8 +55,16 @@ private:
 	/// </summary>
 	void inline tick_movement();
 
+	void spawn_enemy(const float& x, const float& z);
+
+	std::shared_ptr<Animation> player_attack_animation;
 	std::shared_ptr<Animation> player_idle_animation;
 	std::shared_ptr<Animation> player_running_animation;
+
+	std::string enemy_model_id;
+	std::shared_ptr<Animation> enemy_attack_animation;
+	std::shared_ptr<Animation> enemy_idle_animation;
+	std::shared_ptr<Animation> enemy_running_animation;
 };
 
 /// <summary>
