@@ -57,14 +57,27 @@ vec3 calculate_normal(int index, vec3 normal, vec3 tangent, vec3 bitangent, vec2
 void main() {
     Material material = materials[material_index_out];
     vec4 texture_color = texture(texture_sampler[material.texture_index], texture_coordinate_out);
-    vec4 diffuse = texture_color + material.diffuse;
-    if (diffuse.a < 0.5) {
+    
+    vec4 diffuse;
+    vec4 specular;
+    if (material.texture_index > 0)
+    {
+        diffuse = texture_color;
+        specular = texture_color;
+    }
+    else
+    {
+        diffuse = material.diffuse;
+        specular = material.specular;
+    }
+    if (diffuse.a < 0.5)
+    {
         discard;
     }
-    vec4 specular = texture_color + material.specular;
 
     vec3 normal = normal_out;
-    if (material.normal_map_index > 0) {
+    if (material.normal_map_index > 0)
+    {
         normal = calculate_normal(material.normal_map_index, normal_out, tangent_out, bitangent_out, texture_coordinate_out);
     }
 
