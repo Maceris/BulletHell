@@ -103,10 +103,10 @@ bool GameLogic::initialize()
 	//TODO(ches) handle all the scene stuff elsewhere, and after a menu
 	current_scene = std::make_shared<Scene>(window->width, window->height);
 
-	current_scene->scene_lights.ambient_light.intensity = 0.1f;
+	current_scene->scene_lights.ambient_light.intensity = 0.3f;
 	current_scene->scene_lights.ambient_light.set_color(0.3f, 0.3f, 0.3f);
 
-	current_scene->scene_lights.directional_light.intensity = 0.5f;
+	current_scene->scene_lights.directional_light.intensity = 0.6f;
 	current_scene->scene_lights.directional_light.set_color(1.0f, 1.0f, 1.0f);
 	current_scene->scene_lights.directional_light.
 		set_direction(-0.91f, 1.0f, -0.43f);
