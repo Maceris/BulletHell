@@ -12,6 +12,7 @@
 #include "Debugging/Timer.h"
 #include "Graphics/Window.h"
 #include "Graphics/Graph/AnimationResource.h"
+#include "Graphics/Graph/IconResource.h"
 #include "Graphics/Graph/MaterialResource.h"
 #include "Graphics/Graph/ModelResource.h"
 #include "Graphics/Graph/Texture.h"
@@ -68,6 +69,7 @@ bool GameLogic::initialize()
 	resource_cache->register_loader(std::make_shared<ModelLoader>());
 	resource_cache->register_loader(std::make_shared<MaterialLoader>());
 	resource_cache->register_loader(std::make_shared<AnimationLoader>());
+	resource_cache->register_loader(std::make_shared<IconLoader>());
 
 	g_event_manager = ALLOC EventManager();
 

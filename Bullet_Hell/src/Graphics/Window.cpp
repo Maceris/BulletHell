@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+
 #include "glfw3.h"
 #include "glm.hpp"
 #include "ext/matrix_clip_space.hpp"
@@ -20,6 +21,7 @@
 #endif
 
 #include "Debugging/Logger.h"
+#include "Graphics/Graph/IconResource.h"
 #include "Main/GameLogic.h"
 #include "Utilities/OpenGLUtil.h"
 
@@ -191,6 +193,8 @@ void Window::initialize()
     gladLoadGL();
     glfwSwapInterval(1);
 
+    set_window_icon();
+
     LOG_INFO("Initialized window with opengl v" 
         + std::string((char*)glGetString(GL_VERSION)));
 #if 0
@@ -240,4 +244,11 @@ void Window::terminate()
 {
     glfwDestroyWindow(handle);
     glfwTerminate();
+}
+
+void Window::set_window_icon()
+{
+    auto icon = load_icon("textures/game_icon.image");
+    GLFWimage images[1]{ icon->width, icon->height, icon->data };
+    glfwSetWindowIcon(handle, 1, images);
 }

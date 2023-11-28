@@ -169,6 +169,7 @@
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />
     <ClCompile Include="src\Graphics\Graph\GBuffer.cpp" />
     <ClCompile Include="src\Graphics\Graph\GuiMesh.cpp" />
+    <ClCompile Include="src\Graphics\Graph\IconResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\Material.cpp" />
     <ClCompile Include="src\Graphics\Graph\MaterialResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp" />
@@ -256,6 +257,7 @@
     <ClInclude Include="src\Graphics\Graph\CascadeShadowSlice.h" />
     <ClInclude Include="src\Graphics\Graph\GBuffer.h" />
     <ClInclude Include="src\Graphics\Graph\GuiMesh.h" />
+    <ClInclude Include="src\Graphics\Graph\IconResource.h" />
     <ClInclude Include="src\Graphics\Graph\Material.h" />
     <ClInclude Include="src\Graphics\Graph\MaterialResource.h" />
     <ClInclude Include="src\Graphics\Graph\MeshData.h" />

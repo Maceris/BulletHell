@@ -107,4 +107,6 @@ public:
 	/// The window handle.
 	/// </summary>
 	GLFWwindow* handle;
+private:
+	void set_window_icon();
 };
