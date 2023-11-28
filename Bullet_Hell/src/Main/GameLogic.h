@@ -111,7 +111,7 @@ public:
 	/// The number of seconds that the current round has been going on. Counts
 	/// up from 0.
 	/// </summary>
-	double round_timer;
+	double round_timer = 0;
 
 private:
 	/// <summary>
@@ -131,6 +131,8 @@ private:
 	double seconds_since_last_FPS_calcualation = 0;
 	int last_FPS = 0;
 
+	Instant last_animation_tick;
+	double seconds_since_last_animation_tick = 0;
 	Instant last_map_recenter;
 
 	void calculate_delta_time();

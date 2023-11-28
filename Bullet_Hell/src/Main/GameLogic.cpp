@@ -38,11 +38,17 @@ GameLogic* g_game_logic = nullptr;
 /// </summary>
 constexpr double MAP_RECENTER_DELAY = 1;
 
+/// <summary>
+/// The delay between animation frames.
+/// </summary>
+constexpr double ANIMATION_FRAME_TIME = 1.0 / 24;
+
 GameLogic::GameLogic()
 	: current_state{ starting_up }
 	, resource_cache{ nullptr }
 	, render{ nullptr }
 	, current_scene{ nullptr }
+	, last_animation_tick{ std::chrono::steady_clock::now() }
 	, last_frame{ std::chrono::steady_clock::now() }
 	, last_map_recenter{ std::chrono::steady_clock::now() }
 	, window{ nullptr }
@@ -255,6 +261,9 @@ void GameLogic::calculate_delta_time()
 		frame_count = 0;
 		seconds_since_last_FPS_calcualation = 0;
 	}
+
+	seconds_since_last_animation_tick += seconds_since_last_frame;
+	
 }
 
 void GameLogic::attempt_map_recenter()
@@ -328,7 +337,13 @@ void GameLogic::run_game()
 		}
 		TIME_END("Updating Scene");
 
-		g_pawn_manager->player->scene_entity->animation_data.next_frame();
+		if (seconds_since_last_animation_tick >= ANIMATION_FRAME_TIME)
+		{
+			last_animation_tick = std::chrono::steady_clock::now();
+			seconds_since_last_animation_tick = 0;
+			g_pawn_manager->tick_animations();
+		}
+
 		render->render(*window, *current_scene);
 		window->render();
 		++frame_count;

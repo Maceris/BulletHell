@@ -10,13 +10,13 @@ AnimationData::AnimationData(std::shared_ptr<Animation> animation)
 
 AnimatedFrame& AnimationData::get_current_frame()
 {
-	LOG_ASSERT(current_animation.get() != nullptr);
+	LOG_ASSERT(current_animation);
 	return current_animation->frames[current_frame_index];
 }
 
 void AnimationData::next_frame()
 {
-	LOG_ASSERT(current_animation.get() != nullptr);
+	LOG_ASSERT(current_animation);
 	int next_frame = current_frame_index + 1;
 	if (next_frame >= current_animation->frames.size())
 	{
@@ -31,7 +31,7 @@ void AnimationData::next_frame()
 void AnimationData::set_current_animation(
 	std::shared_ptr<Animation> animation)
 {
-	LOG_ASSERT(animation != nullptr);
+	LOG_ASSERT(animation);
 	current_animation = animation;
 	current_frame_index = 0;
 }

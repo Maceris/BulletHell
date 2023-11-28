@@ -32,6 +32,11 @@ public:
 	/// </summary>
 	void tick();
 
+	/// <summary>
+	/// Update the animations for things that the pawn manager cares about.
+	/// </summary>
+	void tick_animations();
+
 	boost::circular_buffer<Bullet> player_bullets;
 	boost::circular_buffer<Bullet> enemy_bullets;
 

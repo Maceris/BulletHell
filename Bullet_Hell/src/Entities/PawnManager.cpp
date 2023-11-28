@@ -89,6 +89,20 @@ void PawnManager::tick()
 	tick_movement();
 }
 
+void PawnManager::tick_animations()
+{
+	player->scene_entity->animation_data.next_frame();
+	for (Pawn& pawn : enemies)
+	{
+		AnimationData& animation_data = pawn.scene_entity->animation_data;
+		if (animation_data.current_animation)
+		{
+			animation_data.next_frame();
+		}
+	}
+
+}
+
 void inline PawnManager::tick_ai()
 {
 	const glm::vec3& player_position = player->scene_entity->position;
