@@ -16,6 +16,7 @@
 #include "Graphics/Graph/ModelResource.h"
 #include "Graphics/Graph/Texture.h"
 #include "Graphics/Graph/TextureResource.h"
+#include "Graphics/GUI/UI.h"
 #include "Graphics/Render/Render.h"
 #include "Graphics/Scene/Scene.h"
 #include "Main/GameOptions.h"
@@ -78,6 +79,9 @@ bool GameLogic::initialize()
 	Texture::default_texture = load_texture("textures/default_texture.image");
 
 	render = std::make_unique<Render>(*window);
+
+	UI::first_time_setup();
+
 	//TODO(ches) handle all the scene stuff elsewhere, and after a menu
 	current_scene = std::make_shared<Scene>(window->width, window->height);
 
@@ -240,6 +244,7 @@ void GameLogic::calculate_delta_time()
 		current_frame - last_frame).count();
 	seconds_since_last_frame = elapsed / 1'000'000.0;
 	last_frame = current_frame;
+	round_timer += seconds_since_last_frame;
 
 	seconds_since_last_FPS_calcualation += seconds_since_last_frame;
 	if (seconds_since_last_FPS_calcualation > 1.0)
