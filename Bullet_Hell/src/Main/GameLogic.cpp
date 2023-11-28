@@ -36,28 +36,6 @@ GameLogic* g_game_logic = nullptr;
 /// </summary>
 constexpr double MAP_RECENTER_DELAY = 1;
 
-#pragma region Utility functions
-/// <summary>
-/// Take an angle in degrees as given by glm in the range (-180, 180],
-/// and convert it to [0, 360) starting at +x and going clockwise.
-/// </summary>
-/// <param name="degrees">The angle in degrees.</param>
-/// <returns>The degrees in a format that is nicer for use.</returns>
-float normalize_float_angle(const float& degrees)
-{
-	if (MathUtil::close_enough(degrees, 0)
-		|| MathUtil::close_enough(degrees, 180))
-	{
-		return degrees;
-	}
-	if (degrees < 0)
-	{
-		return -degrees;
-	}
-	return 360.0f - degrees;
-}
-#pragma endregion
-
 GameLogic::GameLogic()
 	: current_state{ starting_up }
 	, resource_cache{ nullptr }
@@ -231,11 +209,7 @@ void GameLogic::process_input()
 	}
 	else
 	{
-		//NOTE(ches) atan is in radians (+/-) with respect to the +x axis
-		angle = static_cast<float>(glm::degrees(
-			glm::atan(movement.x, movement.y))
-			);
-		angle = normalize_float_angle(angle);
+		angle = MathUtil::vector_to_angle(movement);
 	}
 	
 	g_pawn_manager->player->desired_facing = angle;

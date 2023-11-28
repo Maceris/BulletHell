@@ -44,4 +44,24 @@ namespace MathUtil
 	/// values for our purposes.</returns>
 	bool close_enough(const glm::vec2& vector, const float& y,
 		const float& x);
+
+	/// <summary>
+	/// Convert a normalized 2d vector to a float representing an angle in
+	/// degrees.
+	/// 
+	/// The angle will be within the range [0, 360), starting at 0 being
+	/// towards +x and going clockwise. 90 would be towards +z, 180 would be
+	/// towards -x, and 270 would be towards -z.
+	/// 
+	/// The normalized vector describes the components of the x and z axis
+	/// (respectively) that indicate a direction. For example, (1, 0) would
+	/// indicate facing towards +x, and (-sqrt(2), -sqrt(2)) would be facing
+	/// halfway between towards -x and towards -z, or a result of 225 degrees
+	/// in the ouptut coordinate system.
+	/// 
+	/// </summary>
+	/// <param name="direction">The vector indicating the direction.</param>
+	/// <returns>The corresponding angle in a convenient coordinate system.
+	/// </returns>
+	float vector_to_angle(const glm::vec2& direction);
 };

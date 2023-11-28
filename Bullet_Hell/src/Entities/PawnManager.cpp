@@ -91,7 +91,16 @@ void PawnManager::tick()
 
 void inline PawnManager::tick_ai()
 {
-
+	const glm::vec3& player_position = player->scene_entity->position;
+	for (Pawn& pawn : enemies)
+	{
+		const glm::vec3& pawn_position = pawn.scene_entity->position;
+		const glm::vec3 player_direction = player_position - pawn_position;
+		const float angle = MathUtil::vector_to_angle(
+			glm::vec2(player_direction.x, player_direction.z)
+		);
+		pawn.desired_facing = angle;
+	}
 }
 
 void inline PawnManager::tick_bullets()

@@ -107,6 +107,12 @@ public:
 	std::shared_ptr<Scene> current_scene;
 	std::shared_ptr<GameMap> current_map;
 
+	/// <summary>
+	/// The number of seconds that the current round has been going on. Counts
+	/// up from 0.
+	/// </summary>
+	double round_timer;
+
 private:
 	/// <summary>
 	/// The current state of the game.
