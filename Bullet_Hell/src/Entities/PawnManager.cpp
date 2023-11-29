@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "Debugging/Logger.h"
+#include "Debugging/Timer.h"
 #include "Entities/Bullet.h"
 #include "Entities/Pawn.h"
 #include "Graphics/Graph/AnimationResource.h"
@@ -127,52 +128,17 @@ void inline PawnManager::tick_bullets()
 
 }
 
-void update_direction(Pawn& pawn)
-{
-	const glm::quat target_rotation = glm::angleAxis(
-		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
-	);
-#if SMOOTH_ROTATION
-	const glm::quat& current_rotation = pawn.scene_entity->rotation;
-	const float dot = glm::dot(current_rotation, target_rotation);
-	const float angle = 1 - dot * dot;
-
-	const float max_rotation = entity_rotation_speed / 180.0f;
-	if (angle > max_rotation)
-	{
-		const float percentage = max_rotation / angle;
-		const glm::quat& result = 
-			glm::slerp(current_rotation, target_rotation, percentage);
-		pawn.scene_entity->set_rotation(result);
-	}
-	else
-	{
-		pawn.scene_entity->set_rotation(target_rotation);
-	}
-#else
-	pawn.scene_entity->set_rotation(target_rotation);
-#endif
-}
-
-void update_movement(Pawn& pawn)
-{
-	glm::vec3 movement{
-		pawn.desired_movement.x,
-		0.0f, 
-		pawn.desired_movement.y 
-	};
-	movement *= entity_move_speed;
-	//TODO(ches) Check for collision
-	pawn.scene_entity->position += movement;
-}
-
 void inline PawnManager::tick_movement()
 {
+	TIME_START("Updating direction");
 	update_direction(*player);
 	for (Pawn& pawn : enemies)
 	{
 		update_direction(pawn);
 	}
+	TIME_END("Updating direction");
+
+	TIME_START("Updating movement");
 
 	update_movement(*player);
 	if (player->desired_movement.x != 0 || player->desired_movement.y != 0)
@@ -195,12 +161,25 @@ void inline PawnManager::tick_movement()
 	{
 		update_movement(pawn);
 	}
+	TIME_END("Updating movement");
 
-	player->scene_entity->update_model_matrix();
+	TIME_START("Updating matrices");
+
+	if (player->needs_updating)
+	{
+		player->scene_entity->update_model_matrix();
+		player->needs_updating = false;
+	}
+	
 	for (Pawn& pawn : enemies)
 	{
-		pawn.scene_entity->update_model_matrix();
+		if (pawn.needs_updating)
+		{
+			pawn.scene_entity->update_model_matrix();
+			pawn.needs_updating = false;
+		}
 	}
+	TIME_END("Updating matrices");
 
 }
 
@@ -214,4 +193,53 @@ void PawnManager::spawn_enemy(const float& x, const float& z)
 	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
 
 	enemies.emplace_back(enemy_entity, 200);
+}
+
+void PawnManager::update_direction(Pawn& pawn)
+{
+	const glm::quat target_rotation = glm::angleAxis(
+		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
+	);
+#if SMOOTH_ROTATION
+	const glm::quat& current_rotation = pawn.scene_entity->rotation;
+	const float dot = glm::dot(current_rotation, target_rotation);
+	const float angle = 1 - dot * dot;
+
+	if (MathUtil::close_enough(angle, 0.0f))
+	{
+		return;
+	}
+
+	const float max_rotation = entity_rotation_speed / 180.0f;
+	if (angle > max_rotation)
+	{
+		const float percentage = max_rotation / angle;
+		const glm::quat& result =
+			glm::slerp(current_rotation, target_rotation, percentage);
+		pawn.scene_entity->set_rotation(result);
+	}
+	else
+	{
+		pawn.scene_entity->set_rotation(target_rotation);
+	}
+#else
+	pawn.scene_entity->set_rotation(target_rotation);
+#endif
+	pawn.needs_updating = true;
+}
+
+void PawnManager::update_movement(Pawn& pawn)
+{
+	glm::vec3 movement{
+		pawn.desired_movement.x,
+		0.0f,
+		pawn.desired_movement.y
+	};
+	movement *= entity_move_speed;
+	//TODO(ches) Check for collision
+	if (movement.x != 0 || movement.z != 0)
+	{
+		pawn.scene_entity->position += movement;
+		pawn.needs_updating = true;
+	}
 }

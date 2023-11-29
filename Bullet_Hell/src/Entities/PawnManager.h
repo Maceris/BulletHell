@@ -70,6 +70,18 @@ private:
 	std::shared_ptr<Animation> enemy_attack_animation;
 	std::shared_ptr<Animation> enemy_idle_animation;
 	std::shared_ptr<Animation> enemy_running_animation;
+
+	/// <summary>
+	/// Update the direction of the pawn based on the desired direction.
+	/// </summary>
+	/// <param name="pawn">The pawn to update.</param>
+	void update_direction(Pawn& pawn);
+
+	/// <summary>
+	/// Update the position of a pawn based on the desired movement.
+	/// </summary>
+	/// <param name="pawn">The pawn to update.</param>
+	void update_movement(Pawn& pawn);
 };
 
 /// <summary>

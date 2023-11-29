@@ -15,6 +15,8 @@ struct Entity;
 /// </summary>
 struct Pawn
 {
+	friend class PawnManager;
+
 	/// <summary>
 	/// The scene enitity that this pawn is tracking, so that we can move 
 	/// it around or trigger an animation.
@@ -58,4 +60,10 @@ struct Pawn
 	Pawn(const Pawn&) = default;
 	Pawn& operator=(const Pawn&) = default;
 	~Pawn() = default;
+
+private:
+	/// <summary>
+	/// Whether we have made an update to the corresponding scene entity.
+	/// </summary>
+	bool needs_updating = false;
 };
