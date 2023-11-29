@@ -100,7 +100,6 @@ void PawnManager::tick_animations()
 			animation_data.next_frame();
 		}
 	}
-
 }
 
 void inline PawnManager::tick_ai()
