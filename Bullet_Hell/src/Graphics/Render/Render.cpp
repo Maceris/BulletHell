@@ -25,7 +25,6 @@ Render::Render(const Window& window)
 	, filter_render{}
 	, render_buffers{}
 	, command_buffers{}
-	, buffers_populated{ false }
 	, screen_FBO{ 0 }
 	, screen_RBO_depth{ 0 }
 	, screen_texture{ 0 }
@@ -179,14 +178,12 @@ void Render::resize(const unsigned int width, const unsigned int height)
 
 void Render::setup_data(const Scene& scene)
 {
-	buffers_populated = false;
 	render_buffers.load_static_models(scene);
 	render_buffers.load_animated_models(scene);
 	scene_render.setup_materials_uniform(scene);
 	setup_animated_command_buffer(scene);
 	setup_static_command_buffer(scene);
 	debug_render.update_lines(scene);
-	buffers_populated = true;
 }
 
 void Render::setup_animated_command_buffer(const Scene& scene)

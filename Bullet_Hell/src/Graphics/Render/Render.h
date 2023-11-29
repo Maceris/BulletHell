@@ -91,13 +91,6 @@ private:
 	/// </summary>
 	RenderBuffers render_buffers;
 
-	/// <summary>
-	/// Whether we have set up the render and command buffers for the scene.
-	/// If we have, but need to set data up for the scene again, we will
-	/// need to clear them out and start over.
-	/// </summary>
-	std::atomic_bool buffers_populated;
-
 	AnimationRender animation_render;
 	GuiRender gui_render;
 	LightRender light_render;
