@@ -129,7 +129,7 @@ bool GameLogic::initialize()
 
 	current_scene->rebuild_model_lists();
 	render->recalculate_materials(*current_scene);
-	render->setup_data(*current_scene);
+	render->setup_all_data(*current_scene);
 
 	return true;
 }
@@ -331,9 +331,8 @@ void GameLogic::run_game()
 		if (current_scene->dirty)
 		{
 			current_scene->rebuild_model_lists();
-			render->recalculate_materials(*current_scene);
-			render->setup_data(*current_scene);
-			current_scene->dirty = false;
+			render->setup_all_data(*current_scene);
+			
 		}
 		TIME_END("Updating Scene");
 

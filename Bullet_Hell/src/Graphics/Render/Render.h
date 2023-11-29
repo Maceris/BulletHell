@@ -51,6 +51,18 @@ public:
 	void recalculate_materials(const Scene& scene);
 
 	/// <summary>
+	/// Refresh the buffers for animated models.
+	/// </summary>
+	/// <param name="scene">The scene to read models from.</param>
+	void refresh_animated_data(Scene& scene);
+
+	/// <summary>
+	/// Refresh the buffers for static models.
+	/// </summary>
+	/// <param name="scene">The scene to read models from.</param>
+	void refresh_static_data(Scene& scene);
+
+	/// <summary>
 	/// Render the scene.
 	/// </summary>
 	/// <param name="window">The window we are drawing in.</param>
@@ -68,7 +80,7 @@ public:
 	/// Set up the buffers before rendering.
 	/// </summary>
 	/// <param name="scene">The scene to read models from.</param>
-	void setup_data(const Scene& scene);
+	void setup_all_data(Scene& scene);
 
 	/// <summary>
 	/// Configuration for tweaking the rendering pipeline.

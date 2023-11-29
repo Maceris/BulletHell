@@ -45,6 +45,12 @@ constexpr float bullet_move_speed =
 		simulation_timestep
 	);
 
+/// <summary>
+/// The maximum number of enemies that we can ever have at once.
+/// </summary>
+constexpr int MAX_ENEMIES = 1000;
+
+
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
 	, enemy_bullets{ 1000 }
@@ -74,10 +80,10 @@ PawnManager::PawnManager()
 	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
 	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
 
-	for (int count = 0; count < 10; ++count)
+	for (int count = 0; count < MAX_ENEMIES; ++count)
 	{
-		float x = rand() % 20 - 10;
-		float z = rand() % 20 - 10;
+		float x = rand() % 100 - 50;
+		float z = rand() % 100 - 50;
 		spawn_enemy(x, z);
 	}
 }

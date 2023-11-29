@@ -100,7 +100,17 @@ public:
 	/// true means that the scene is definitely dirty, but false only means
 	/// that it's probably not dirty.
 	/// </summary>
-	bool dirty;
+	bool dirty = true;
+
+	/// <summary>
+	/// Whether the animated models have been changed since we have rendered.
+	/// </summary>
+	bool animated_models_dirty = true;
+
+	/// <summary>
+	/// Whether the static models have been changed since we have rendered.
+	/// </summary>
+	bool static_models_dirty = true;
 
 	/// <summary>
 	/// Tracks the rendering related things that we have loaded for each chunk.

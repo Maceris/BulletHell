@@ -100,6 +100,20 @@ void Render::recalculate_materials(const Scene& scene)
 	scene_render.setup_materials_uniform(scene);
 }
 
+void Render::refresh_animated_data(Scene& scene)
+{
+	render_buffers.load_animated_models(scene);
+	setup_animated_command_buffer(scene);
+	scene.animated_models_dirty = false;
+}
+
+void Render::refresh_static_data(Scene& scene)
+{
+	render_buffers.load_static_models(scene);
+	setup_static_command_buffer(scene);
+	scene.static_models_dirty = false;
+}
+
 void Render::render(const Window& window, const Scene& scene)
 {
 	TIME_END("Last Frame");
@@ -176,14 +190,19 @@ void Render::resize(const unsigned int width, const unsigned int height)
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-void Render::setup_data(const Scene& scene)
+void Render::setup_all_data(Scene& scene)
 {
-	render_buffers.load_static_models(scene);
-	render_buffers.load_animated_models(scene);
-	scene_render.setup_materials_uniform(scene);
-	setup_animated_command_buffer(scene);
-	setup_static_command_buffer(scene);
+	if (scene.static_models_dirty)
+	{
+		refresh_static_data(scene);
+	}
+	if (scene.animated_models_dirty)
+	{
+		refresh_animated_data(scene);
+	}
+	recalculate_materials(scene);
 	debug_render.update_lines(scene);
+	scene.dirty = false;
 }
 
 void Render::setup_animated_command_buffer(const Scene& scene)

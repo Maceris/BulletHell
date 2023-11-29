@@ -22,7 +22,6 @@ Scene::Scene(const unsigned int width, const unsigned int height)
 	, model_map{}
 	, scene_lights{}
 	, sky_box{}
-	, dirty{ true }
 {
 	g_event_manager->register_handler(
 		EventHandler::create<Scene, &Scene::handle_chunk_loading>(this),
@@ -46,12 +45,21 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 	{
 		auto& vec = result->second->entity_list;
 		vec.push_back(entity);
+		if (result->second->is_animated())
+		{
+			animated_models_dirty = true;
+		}
+		else
+		{
+			static_models_dirty = true;
+		}
 	}
 	else
 	{
 		entities_pending_models.push_back(entity);
 	}
 	dirty = true;
+	
 }
 
 void Scene::add_model(std::shared_ptr<Model> model)
@@ -72,6 +80,15 @@ void Scene::add_model(std::shared_ptr<Model> model)
 		}
 	}
 	dirty = true;
+
+	if (model->is_animated())
+	{
+		animated_models_dirty = true;
+	}
+	else
+	{
+		static_models_dirty = true;
+	}
 }
 
 void Scene::resize(const unsigned int width, const unsigned int height)
@@ -157,6 +174,7 @@ void Scene::handle_chunk_loading(EventPointer event)
 		+ std::to_string(chunk_contents.size()) + " chunks right now.");
 
 	dirty = true;
+	static_models_dirty = true;
 }
 
 void Scene::handle_chunk_unloading(EventPointer event)
@@ -201,6 +219,7 @@ void Scene::handle_chunk_unloading(EventPointer event)
 	chunk_contents.erase(unloaded_event->coordinates);
 
 	dirty = true;
+	static_models_dirty = true;
 }
 
 void Scene::load_tile(const int& x, const int& z, const Tile& tile,
