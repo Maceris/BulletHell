@@ -176,23 +176,18 @@ void AnimationRender::render(const Scene& scene,
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
         render_buffer.dest_animation_vbo);
 
-    const auto& model_list = scene.get_model_list();
+    const auto& model_list = scene.get_animated_model_list();
 
     int destination_offset = 0;
     for (auto& model : model_list)
     {
-        if (!model->is_animated())
-        {
-            continue;
-        }
         for (MeshDrawData mesh_draw_data : model->mesh_draw_data_list)
         {
             AnimMeshDrawData anim_mesh_draw_data = 
                 mesh_draw_data.animated_mesh_draw_data;
             std::shared_ptr<Entity> entity = anim_mesh_draw_data.entity;
             AnimatedFrame& frame = entity->animation_data.get_current_frame();
-            const int group_size = static_cast<int>(std::ceilf(
-                static_cast<float>(mesh_draw_data.size_in_bytes) / (14 * 4)));
+            const int group_size = mesh_draw_data.indices;
             
             uniforms_map->set_uniform("draw_parameters.source_offset", 
                 anim_mesh_draw_data.binding_pose_offset);
