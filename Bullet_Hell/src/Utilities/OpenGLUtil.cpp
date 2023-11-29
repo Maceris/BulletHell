@@ -103,7 +103,7 @@ bool OpenGLUtil::check_shader_compiled(const GLuint& shader_ID) {
         glGetShaderInfoLog(shader_ID, max_length, &max_length, &log[0]);
 
         LOG_ERROR("Shader " + std::to_string(shader_ID) 
-            + " failed to compile: " + log);
+            + " failed to compile:\n" + log.c_str());
 #endif //DEBUG
         glDeleteShader(shader_ID);// Don't leak the shader.
         return false;
@@ -126,7 +126,7 @@ bool OpenGLUtil::check_shader_program_linked(const GLuint& program_ID) {
         glGetProgramInfoLog(program_ID, max_length, &max_length, &log[0]);
 
         LOG_ERROR("Program " + std::to_string(program_ID)
-            + " failed to link. Error: '" + log + "'");
+            + " failed to link. Error: '" + log.c_str() + "'");
 #endif //DEBUG
         glDeleteProgram(program_ID);// Don't leak the program.
         return false;
