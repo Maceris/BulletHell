@@ -186,8 +186,14 @@ void AnimationRender::render(const Scene& scene,
     std::vector<int> parameter_list;
     for (const auto& model : model_list)
     {
+        if (model->entity_list.empty())
+        {
+            continue;
+        }
+
         int model_vertex_count = 0;
         const int entity_count = model->entity_list.size();
+
         for (const auto& mesh_data : model->mesh_data_list)
         {
             model_vertex_count += mesh_data.vertices.size();
@@ -237,7 +243,12 @@ void AnimationRender::render(const Scene& scene,
     int base_draw_parameter = 0;
     for (const auto& model : model_list)
     {
+        if (model->entity_list.empty())
+        {
+            continue;
+        }
         const RenderInfo& info = render_info.find(model->id)->second;
+        
         mesh_count = model->mesh_data_list.size();
         uniforms_map->set_uniform("base_draw_parameter", base_draw_parameter);
         glDispatchCompute(info.model_vertex_count, info.entity_count * mesh_count, 1);
