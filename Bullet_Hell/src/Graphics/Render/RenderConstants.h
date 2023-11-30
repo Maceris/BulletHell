@@ -46,7 +46,7 @@ constexpr auto SPOT_LIGHT_BINDING = 1;
 /// <summary>
 /// How many lights of each type (spot, point) we currently support.
 /// </summary>
-constexpr auto MAX_LIGHTS_SUPPORTED = 1000;
+constexpr auto MAX_LIGHTS_SUPPORTED = 500;
 
 /// <summary>
 /// Position (vec3 + ignored), color (vec3), intensity (1), Attenuation
