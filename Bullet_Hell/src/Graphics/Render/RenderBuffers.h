@@ -68,26 +68,31 @@ public:
 	std::vector<GLuint> vbo_list;
 	
 	/// <summary>
-	/// The Vertex Buffer Object ID for binding poses of animated models.
+	/// The storage for binding poses of animated models.
 	/// </summary>
-	GLuint binding_poses_vbo = 0;
+	GLuint binding_poses_ssbo = 0;
 
 	/// <summary>
-	/// The Vertex Buffer Object ID for indices and weights of the bones of
+	/// The storage for indices and weights of the bones of
 	/// animated models.
 	/// </summary>
-	GLuint bones_indices_weights_vbo = 0;
+	GLuint bones_indices_weights_ssbo = 0;
 
 	/// <summary>
-	/// The Vertex Buffer Object ID for bones matrices of animated models.
+	/// The storage for bones matrices of animated models.
 	/// </summary>
-	GLuint bones_matrices_vbo = 0;
+	GLuint bones_matrices_ssbo = 0;
 
 	/// <summary>
-	/// The Vertex Buffer Object ID for the transformed animation vertices
+	/// The storage for the transformed animation vertices
 	/// after processing of animated models.
 	/// </summary>
 	GLuint dest_animation_vbo = 0;
+
+	/// <summary>
+	/// The storage for the draw parameters of the animation compute shader.
+	/// </summary>
+	GLuint animation_draw_parameters_ssbo = 0;
 
 private:
 

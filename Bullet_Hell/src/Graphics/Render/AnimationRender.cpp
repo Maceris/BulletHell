@@ -15,6 +15,15 @@
 const char compute_shader_source[] = R"glsl(
 #version 460
 
+struct DrawParameters
+{
+    int source_offset;
+    int source_size;
+    int weights_offset;
+    int bones_matrices_offset;
+    int destination_offset;
+};
+
 layout (std430, binding=0) readonly buffer source_buffer {
     float data[];
 } source_vector;
@@ -31,28 +40,25 @@ layout (std430, binding=3) buffer destination_buffer {
     float data[];
 } destination_vector;
 
-struct DrawParameters
-{
-    int source_offset;
-    int source_size;
-    int weights_offset;
-    int bones_matrices_offset;
-    int destination_offset;
-};
-uniform DrawParameters draw_parameters;
+layout (std430, binding=4) readonly buffer draw_parameters_buffer {
+    DrawParameters data[];
+} draw_parameters;
 
 layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+
+uniform int base_draw_parameter;
 
 void main()
 {
     int base_index = int(gl_GlobalInvocationID.x) * 14;
-    uint weights_buffer_base_index  = draw_parameters.weights_offset + int(gl_GlobalInvocationID.x) * 8;
-    uint source_buffer_base_index = draw_parameters.source_offset + base_index;
-    uint destination_buffer_base_index = draw_parameters.destination_offset + base_index;
-    if (base_index >= draw_parameters.source_size) {
+    int draw_index = base_draw_parameter + int(gl_GlobalInvocationID.y);
+    if (base_index >= draw_parameters.data[draw_index].source_size) {
         return;
     }
-
+    
+    uint destination_buffer_base_index = draw_parameters.data[draw_index].destination_offset + base_index;
+    
+    uint weights_buffer_base_index = draw_parameters.data[draw_index].weights_offset + int(gl_GlobalInvocationID.x) * 8;
     vec4 weights = vec4(
         weights_vector.data[weights_buffer_base_index],
         weights_vector.data[weights_buffer_base_index + 1],
@@ -64,16 +70,22 @@ void main()
         weights_vector.data[weights_buffer_base_index + 6],
         weights_vector.data[weights_buffer_base_index + 7]);
 
+    mat4 bone_weights_x = weights.x * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.x];
+    mat4 bone_weights_y = weights.y * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.y];
+    mat4 bone_weights_z = weights.z * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.z];
+    mat4 bone_weights_w = weights.w * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.w];
+
+    uint source_buffer_base_index = draw_parameters.data[draw_index].source_offset + base_index;
     vec4 position = vec4(
         source_vector.data[source_buffer_base_index],
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
         1);
     position = 
-      weights.x * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.x] * position
-    + weights.y * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.y] * position
-    + weights.z * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.z] * position
-    + weights.w * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.w] * position;
+          bone_weights_x * position
+        + bone_weights_y * position
+        + bone_weights_z * position
+        + bone_weights_w * position;
 
     destination_vector.data[destination_buffer_base_index] = position.x / position.w;
     destination_vector.data[destination_buffer_base_index + 1] = position.y / position.w;
@@ -87,11 +99,11 @@ void main()
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
         0);
-    normal =
-      weights.x * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.x] * normal
-    + weights.y * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.y] * normal
-    + weights.z * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.z] * normal
-    + weights.w * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.w] * normal;
+    normal = 
+          bone_weights_x * normal
+        + bone_weights_y * normal
+        + bone_weights_z * normal
+        + bone_weights_w * normal;
 
     destination_vector.data[destination_buffer_base_index] = normal.x;
     destination_vector.data[destination_buffer_base_index + 1] = normal.y;
@@ -105,11 +117,11 @@ void main()
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
         0);
-    tangent =
-      weights.x * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.x] * tangent
-    + weights.y * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.y] * tangent
-    + weights.z * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.z] * tangent
-    + weights.w * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.w] * tangent;
+    tangent = 
+          bone_weights_x * tangent
+        + bone_weights_y * tangent
+        + bone_weights_z * tangent
+        + bone_weights_w * tangent;
 
     destination_vector.data[destination_buffer_base_index] = tangent.x;
     destination_vector.data[destination_buffer_base_index + 1] = tangent.y;
@@ -123,11 +135,11 @@ void main()
         source_vector.data[source_buffer_base_index + 1],
         source_vector.data[source_buffer_base_index + 2],
         0);
-    bitangent =
-      weights.x * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.x] * bitangent
-    + weights.y * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.y] * bitangent
-    + weights.z * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.z] * bitangent
-    + weights.w * bones_matrices.data[draw_parameters.bones_matrices_offset + bones_indices.w] * bitangent;
+    bitangent = 
+          bone_weights_x * bitangent
+        + bone_weights_y * bitangent
+        + bone_weights_z * bitangent
+        + bone_weights_w * bitangent;
 
     destination_vector.data[destination_buffer_base_index] = bitangent.x;
     destination_vector.data[destination_buffer_base_index + 1] = bitangent.y;
@@ -145,7 +157,6 @@ void main()
 )glsl";
 #pragma endregion
 
-
 AnimationRender::AnimationRender()
 {
     std::vector<ShaderModuleData> shader_modules;
@@ -155,55 +166,84 @@ AnimationRender::AnimationRender()
 
     shader_program = std::make_unique<ShaderProgram>(shader_modules);
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
-
-    uniforms_map->create_uniform("draw_parameters.source_offset");
-    uniforms_map->create_uniform("draw_parameters.source_size");
-    uniforms_map->create_uniform("draw_parameters.weights_offset");
-    uniforms_map->create_uniform("draw_parameters.bones_matrices_offset");
-    uniforms_map->create_uniform("draw_parameters.destination_offset");
+    uniforms_map->create_uniform("base_draw_parameter");
 }
+
+struct RenderInfo
+{
+    int model_vertex_count;
+    int entity_count;
+};
 
 void AnimationRender::render(const Scene& scene,
     const RenderBuffers& render_buffer)
 {
-    shader_program->bind();
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 
-        render_buffer.binding_poses_vbo);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1,
-        render_buffer.bones_indices_weights_vbo);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2,
-        render_buffer.bones_matrices_vbo);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
-        render_buffer.dest_animation_vbo);
-
     const auto& model_list = scene.get_animated_model_list();
 
     int destination_offset = 0;
-    for (auto& model : model_list)
+    std::map<std::string, RenderInfo> render_info;
+    int parameter_count = 0;
+    std::vector<int> parameter_list;
+    for (const auto& model : model_list)
     {
-        for (MeshDrawData mesh_draw_data : model->mesh_draw_data_list)
+        int model_vertex_count = 0;
+        const int entity_count = model->entity_list.size();
+        for (const auto& mesh_data : model->mesh_data_list)
         {
-            AnimMeshDrawData anim_mesh_draw_data = 
+            model_vertex_count += mesh_data.vertices.size();
+        }
+
+        for (const auto& mesh_draw_data : model->mesh_draw_data_list)
+        {
+            const AnimMeshDrawData& anim_mesh_draw_data =
                 mesh_draw_data.animated_mesh_draw_data;
             std::shared_ptr<Entity> entity = anim_mesh_draw_data.entity;
-            AnimatedFrame& frame = entity->animation_data.get_current_frame();
-            const int group_size = mesh_draw_data.indices;
+            const AnimatedFrame& frame = 
+                entity->animation_data.get_current_frame();
             
-            uniforms_map->set_uniform("draw_parameters.source_offset", 
-                anim_mesh_draw_data.binding_pose_offset);
-            uniforms_map->set_uniform("draw_parameters.source_size",
-                mesh_draw_data.size_in_bytes / 4);
-            uniforms_map->set_uniform("draw_parameters.weights_offset",
-                anim_mesh_draw_data.weights_offset);
-            uniforms_map->set_uniform("draw_parameters.bones_matrices_offset",
-               static_cast<int>(frame.offset));
-            uniforms_map->set_uniform("draw_parameters.destination_offset",
-                destination_offset);
-
-            glDispatchCompute(group_size, 1, 1);
+            parameter_list.push_back(anim_mesh_draw_data.binding_pose_offset);
+            parameter_list.push_back(mesh_draw_data.size_in_bytes / 4);
+            parameter_list.push_back(anim_mesh_draw_data.weights_offset);
+            parameter_list.push_back(static_cast<int>(frame.offset));
+            parameter_list.push_back(destination_offset);
+            ++parameter_count;
             destination_offset += mesh_draw_data.size_in_bytes / 4;
         }
+
+        render_info.emplace(
+            model->id, 
+            RenderInfo{ model_vertex_count, entity_count }
+        );
     }
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+        render_buffer.animation_draw_parameters_ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER,
+        parameter_list.size() * sizeof(int), parameter_list.data(),
+        GL_STATIC_DRAW);
+
+    shader_program->bind();
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0,
+        render_buffer.binding_poses_ssbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1,
+        render_buffer.bones_indices_weights_ssbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2,
+        render_buffer.bones_matrices_ssbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
+        render_buffer.dest_animation_vbo);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4,
+        render_buffer.animation_draw_parameters_ssbo);
+
+    int mesh_count = 0;
+    int base_draw_parameter = 0;
+    for (const auto& model : model_list)
+    {
+        const RenderInfo& info = render_info.find(model->id)->second;
+        mesh_count = model->mesh_data_list.size();
+        uniforms_map->set_uniform("base_draw_parameter", base_draw_parameter);
+        glDispatchCompute(info.model_vertex_count, info.entity_count * mesh_count, 1);
+        base_draw_parameter += info.entity_count * mesh_count;
+    }
+
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     shader_program->unbind();
 }

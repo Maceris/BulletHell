@@ -29,12 +29,14 @@ RenderBuffers::RenderBuffers()
 	vbo_list.push_back(dest_animation_vbo);
 	glGenBuffers(1, &animated_index_vbo);
 	vbo_list.push_back(animated_index_vbo);
-	glGenBuffers(1, &bones_matrices_vbo);
-	vbo_list.push_back(bones_matrices_vbo);
-	glGenBuffers(1, &bones_indices_weights_vbo);
-	vbo_list.push_back(bones_indices_weights_vbo);
-	glGenBuffers(1, &binding_poses_vbo);
-	vbo_list.push_back(binding_poses_vbo);
+	glGenBuffers(1, &bones_matrices_ssbo);
+	vbo_list.push_back(bones_matrices_ssbo);
+	glGenBuffers(1, &bones_indices_weights_ssbo);
+	vbo_list.push_back(bones_indices_weights_ssbo);
+	glGenBuffers(1, &binding_poses_ssbo);
+	vbo_list.push_back(binding_poses_ssbo);
+	glGenBuffers(1, &animation_draw_parameters_ssbo);
+	vbo_list.push_back(animation_draw_parameters_ssbo);
 }
 
 RenderBuffers::~RenderBuffers()
@@ -148,10 +150,10 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 
 	for (auto& model : model_list)
 	{
-		std::vector<MeshData>& mesh_data_list = model->mesh_data_list;
-		for (auto& entity : model->entity_list)
+		const std::vector<MeshData>& mesh_data_list = model->mesh_data_list;
+		for (const auto& entity : model->entity_list)
 		{
-			for (auto& mesh_data : mesh_data_list)
+			for (const auto& mesh_data : mesh_data_list)
 			{
 				mesh_data.append_vertices_to_buffer(meshes_buffer);
 				mesh_data.append_indices_to_buffer(indices_buffer);
@@ -160,7 +162,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, dest_animation_vbo);
 	glBufferData(GL_ARRAY_BUFFER, meshes_buffer.size() * sizeof(float),
-		meshes_buffer.data(), GL_STATIC_DRAW);
+		meshes_buffer.data(), GL_DYNAMIC_DRAW);
 
 	define_vertex_attributes();
 
@@ -169,7 +171,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
@@ -183,7 +185,7 @@ void RenderBuffers::load_binding_poses(const ModelList& models)
 			mesh_data.append_vertices_to_buffer(meshes_buffer);
 		}
 	}
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, binding_poses_vbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, binding_poses_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, 
 		meshes_buffer.size() * sizeof(float), meshes_buffer.data(),
 		GL_STATIC_DRAW);
@@ -203,7 +205,7 @@ void RenderBuffers::load_bones_indices_weights(const ModelList& models)
 		}
 	}
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_indices_weights_vbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_indices_weights_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
 		data_buffer.data(), GL_STATIC_DRAW);
 
@@ -245,7 +247,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 		}
 	}
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_matrices_vbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, bones_matrices_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_buffer.size() * sizeof(float),
 		data_buffer.data(), GL_STATIC_DRAW);
 

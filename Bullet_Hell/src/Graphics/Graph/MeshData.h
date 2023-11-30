@@ -80,19 +80,19 @@ struct MeshData
 	/// Append the raw vertex data to a buffer.
 	/// </summary>
 	/// <param name="buffer">The buffer to append to.</param>
-	void append_vertices_to_buffer(std::vector<float>& buffer);
+	void append_vertices_to_buffer(std::vector<float>& buffer) const;
 
 	/// <summary>
 	/// Append the bone index/weight data to a buffer.
 	/// </summary>
 	/// <param name="buffer">The buffer to append to.</param>
-	void append_weights_to_buffer(std::vector<float>& buffer);
+	void append_weights_to_buffer(std::vector<float>& buffer) const;
 
 	/// <summary>
 	/// Append the vertex indices to a buffer.
 	/// </summary>
 	/// <param name="buffer">The buffer to append to.</param>
-	void append_indices_to_buffer(std::vector<uint32_t>& buffer);
+	void append_indices_to_buffer(std::vector<uint32_t>& buffer) const;
 };
 
 
