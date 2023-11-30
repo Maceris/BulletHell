@@ -101,18 +101,6 @@ bool GameLogic::initialize()
 	current_scene->scene_lights.directional_light.
 		set_direction(-0.91f, 1.0f, -0.43f);
 
-	PointLight::Attenuation attenuation(0.0f, 0.0f, 1.0f);
-	PointLight p1(glm::vec3(1.0f, 0.1f, 0.1f), glm::vec3(10.0f, 0.1f, 10.0f), 1.0f, attenuation);
-	PointLight p2(glm::vec3(0.1f, 1.0f, 0.1f), glm::vec3(0.0f, 1.0f, -10.0f), 1.0f, attenuation);
-	PointLight p3(glm::vec3(0.1f, 0.1f, 1.0f), glm::vec3(-7.0f, 1.0f, 7.0f), 1.0f, attenuation);
-	current_scene->scene_lights.point_lights.push_back(p1);
-	current_scene->scene_lights.point_lights.push_back(p2);
-	current_scene->scene_lights.point_lights.push_back(p3);
-	
-	PointLight p4(glm::vec3(1.0f, 0.1f, 1.0f), glm::vec3(-13.0f, 1.0f, 27.0f), 1.0f, attenuation);
-	SpotLight s1(p4, glm::vec3(-3.0f, -1.0f, 0.0f), 30.0f);
-	current_scene->scene_lights.spot_lights.push_back(s1);
-
 	current_scene->fog.active = true;
 	current_scene->fog.color = glm::vec3(0.5f, 0.5f, 0.5f);
 	current_scene->fog.density = 0.02f;
@@ -129,7 +117,7 @@ bool GameLogic::initialize()
 
 	current_scene->rebuild_model_lists();
 	render->recalculate_materials(*current_scene);
-	render->setup_all_data(*current_scene);
+	current_scene->dirty = true;
 
 	return true;
 }

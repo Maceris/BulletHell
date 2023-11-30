@@ -1,7 +1,6 @@
 #include "Entities/PawnManager.h"
 
 #include <cmath>
-#include <cstdlib>
 
 #include "Debugging/Logger.h"
 #include "Debugging/Timer.h"
@@ -51,7 +50,6 @@ constexpr float bullet_move_speed =
 /// </summary>
 constexpr int MAX_ENEMIES = 1000;
 
-
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
 	, enemy_bullets{ 1000 }
@@ -80,13 +78,6 @@ PawnManager::PawnManager()
 	enemy_attack_animation = load_animation("models/enemy/enemy.human_male_cast_unarmed_magic.animation");
 	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
 	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
-
-	for (int count = 0; count < MAX_ENEMIES; ++count)
-	{
-		float x = rand() % 100 - 50;
-		float z = rand() % 100 - 50;
-		spawn_enemy(x, z);
-	}
 }
 
 void PawnManager::tick()
@@ -191,6 +182,7 @@ void PawnManager::spawn_enemy(const float& x, const float& z)
 	enemy_entity->position.z = z;
 	enemy_entity->update_model_matrix();
 	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
+	enemy_entity->animation_data.current_frame_index = rand() % enemy_idle_animation->frames.size();
 
 	enemies.emplace_back(enemy_entity, 200);
 }
