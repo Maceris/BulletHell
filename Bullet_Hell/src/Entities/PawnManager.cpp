@@ -50,10 +50,22 @@ constexpr float bullet_move_speed =
 /// </summary>
 constexpr int MAX_ENEMIES = 1000;
 
+/// <summary>
+/// How many seconds between pawn spawns.
+/// </summary>
+constexpr double seconds_per_spawn = 0.5;
+
+/// <summary>
+/// How far away from the player enemies can spawn.
+/// </summary>
+constexpr double spawn_radius = 50;
+
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
 	, enemy_bullets{ 1000 }
 	, player{ std::make_shared<Pawn>() }
+	, random{}
+	, spawn_offset{ -spawn_radius, spawn_radius }
 {
 	auto player_model = load_model("models/player/human_male.model");
 	g_game_logic->current_scene->add_model(player_model);
@@ -78,6 +90,9 @@ PawnManager::PawnManager()
 	enemy_attack_animation = load_animation("models/enemy/enemy.human_male_cast_unarmed_magic.animation");
 	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
 	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
+
+	std::random_device random_device;
+	random.seed(random_device());
 }
 
 void PawnManager::tick()
@@ -102,6 +117,19 @@ void PawnManager::tick_animations()
 
 void inline PawnManager::tick_ai()
 {
+	seconds_since_enemy_spawn += simulation_timestep;
+
+	while (enemies.size() < MAX_ENEMIES 
+		&& seconds_since_enemy_spawn >= seconds_per_spawn)
+	{
+		const double x = 
+			player->scene_entity->position.x + spawn_offset(random);
+		const double z = 
+			player->scene_entity->position.z + spawn_offset(random);
+		spawn_enemy(x, z);
+		seconds_since_enemy_spawn -= seconds_per_spawn;
+	}
+
 	const glm::vec3& player_position = player->scene_entity->position;
 	for (Pawn& pawn : enemies)
 	{

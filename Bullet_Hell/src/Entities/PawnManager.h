@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 
+#include <random>
 #include <vector>
 
 #include "boost/circular_buffer.hpp"
@@ -82,6 +83,10 @@ private:
 	/// </summary>
 	/// <param name="pawn">The pawn to update.</param>
 	void update_movement(Pawn& pawn);
+
+	double seconds_since_enemy_spawn = 0;
+	std::mt19937 random;
+	std::uniform_real_distribution<double> spawn_offset;
 };
 
 /// <summary>
