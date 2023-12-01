@@ -101,7 +101,7 @@ bool GameLogic::initialize()
 	current_scene->scene_lights.directional_light.
 		set_direction(-0.91f, 1.0f, -0.43f);
 
-	current_scene->fog.active = true;
+	current_scene->fog.active = false;
 	current_scene->fog.color = glm::vec3(0.5f, 0.5f, 0.5f);
 	current_scene->fog.density = 0.02f;
 
@@ -320,7 +320,6 @@ void GameLogic::run_game()
 		{
 			current_scene->rebuild_model_lists();
 			render->setup_all_data(*current_scene);
-			
 		}
 		TIME_END("Updating Scene");
 

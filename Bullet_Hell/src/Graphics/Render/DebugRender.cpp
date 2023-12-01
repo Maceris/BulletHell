@@ -184,7 +184,7 @@ void DebugRender::render(const Scene& scene)
     glBindVertexArray(AABB_lines.vao);
     glDrawArrays(GL_LINES, 0, AABB_lines.count * 2);
 
-#if 0
+#if 1
     //TODO(ches) decide if we want to keep this
     update_frustums();
     glBindVertexArray(frustum_lines.vao);

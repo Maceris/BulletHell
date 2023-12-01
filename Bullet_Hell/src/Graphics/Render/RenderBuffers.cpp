@@ -108,6 +108,10 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	size_t weights_offset = 0;
 	for (auto& model : model_list)
 	{
+		if (model->entity_list.empty())
+		{
+			continue;
+		}
 		EntityList& entities = model->entity_list;
 		std::vector<MeshDrawData>& mesh_draw_data_list 
 			= model->mesh_draw_data_list;
@@ -178,9 +182,13 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 void RenderBuffers::load_binding_poses(const ModelList& models)
 {
 	std::vector<float> meshes_buffer;
-	for (auto& model : models)
+	for (const auto& model : models)
 	{
-		for (auto& mesh_data : model->mesh_data_list)
+		if (model->entity_list.empty())
+		{
+			continue;
+		}
+		for (const auto& mesh_data : model->mesh_data_list)
 		{
 			mesh_data.append_vertices_to_buffer(meshes_buffer);
 		}
@@ -199,6 +207,10 @@ void RenderBuffers::load_bones_indices_weights(const ModelList& models)
 
 	for (auto& model : models)
 	{
+		if (model->entity_list.empty())
+		{
+			continue;
+		}
 		for (auto& mesh_data : model->mesh_data_list)
 		{
 			mesh_data.append_weights_to_buffer(data_buffer);
@@ -220,6 +232,10 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 	int current_offset = 0;
 	for (auto& model : models)
 	{
+		if (model->entity_list.empty())
+		{
+			continue;
+		}
 		std::set<std::shared_ptr<Animation>> animation_list;
 
 		for (auto& animation : model->animation_list)
