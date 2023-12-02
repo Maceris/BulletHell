@@ -85,7 +85,16 @@ private:
 	void update_movement(Pawn& pawn);
 
 	double seconds_since_enemy_spawn = 0;
+
+	/// <summary>
+	/// Used to generate random numbers for the manager.
+	/// </summary>
 	std::mt19937 random;
+	
+	/// <summary>
+	/// A random distribution used for calculating offsets from the player 
+	/// while spawning enemies.
+	/// </summary>
 	std::uniform_real_distribution<double> spawn_offset;
 };
 
