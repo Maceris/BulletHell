@@ -106,17 +106,6 @@ PawnManager::PawnManager()
 	random.seed(random_device());
 }
 
-void PawnManager::chase_player(Pawn& pawn)
-{
-	const glm::vec3& pawn_position = pawn.scene_entity->position;
-	const glm::vec3& player_position = player->scene_entity->position;
-	
-	const glm::vec3 delta = player_position - pawn_position;
-	const glm::vec2 normalized = glm::normalize(glm::vec2(delta.x, delta.z));
-	
-	pawn.desired_movement = normalized;
-}
-
 void PawnManager::spawn_enemy(const float& x, const float& z)
 {
 	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
@@ -174,6 +163,10 @@ void inline PawnManager::tick_ai()
 			glm::vec2(player_direction.x, player_direction.z)
 		);
 		pawn.desired_facing = angle;
+
+		const glm::vec2 normalized = 
+			glm::normalize(glm::vec2(player_direction.x, player_direction.z));
+		pawn.desired_movement = normalized;
 	}
 }
 
@@ -188,7 +181,6 @@ void inline PawnManager::tick_movement()
 	for (Pawn& pawn : enemies)
 	{
 		update_direction(pawn);
-		chase_player(pawn);
 	}
 
 	update_movement(*player, player_move_speed);

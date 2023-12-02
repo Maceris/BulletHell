@@ -69,12 +69,6 @@ private:
 	std::uniform_real_distribution<double> spawn_offset;
 
 	/// <summary>
-	/// Move a pawn towards the player.
-	/// </summary>
-	/// <param name="pawn">The pawn to move.</param>
-	void chase_player(Pawn& pawn);
-
-	/// <summary>
 	/// Spawn an enemy at the specified world coordiantes.
 	/// </summary>
 	/// <param name="x">The x location of the enemy.</param>
