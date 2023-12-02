@@ -45,6 +45,42 @@ public:
 	std::vector<Pawn> enemies;
 
 private:
+
+	std::shared_ptr<Animation> player_attack_animation;
+	std::shared_ptr<Animation> player_idle_animation;
+	std::shared_ptr<Animation> player_running_animation;
+
+	std::string enemy_model_id;
+	std::shared_ptr<Animation> enemy_attack_animation;
+	std::shared_ptr<Animation> enemy_idle_animation;
+	std::shared_ptr<Animation> enemy_running_animation;
+
+	double seconds_since_enemy_spawn = 0;
+
+	/// <summary>
+	/// Used to generate random numbers for the manager.
+	/// </summary>
+	std::mt19937 random;
+
+	/// <summary>
+	/// A random distribution used for calculating offsets from the player 
+	/// while spawning enemies.
+	/// </summary>
+	std::uniform_real_distribution<double> spawn_offset;
+
+	/// <summary>
+	/// Move a pawn towards the player.
+	/// </summary>
+	/// <param name="pawn">The pawn to move.</param>
+	void chase_player(Pawn& pawn);
+
+	/// <summary>
+	/// Spawn an enemy at the specified world coordiantes.
+	/// </summary>
+	/// <param name="x">The x location of the enemy.</param>
+	/// <param name="z">The z location of the enemy.</param>
+	void spawn_enemy(const float& x, const float& z);
+
 	/// <summary>
 	/// Update all of the AIs, deciding if they want to move, attack, look
 	/// in a different direction, stop, etc.
@@ -61,17 +97,6 @@ private:
 	/// </summary>
 	void inline tick_movement();
 
-	void spawn_enemy(const float& x, const float& z);
-
-	std::shared_ptr<Animation> player_attack_animation;
-	std::shared_ptr<Animation> player_idle_animation;
-	std::shared_ptr<Animation> player_running_animation;
-
-	std::string enemy_model_id;
-	std::shared_ptr<Animation> enemy_attack_animation;
-	std::shared_ptr<Animation> enemy_idle_animation;
-	std::shared_ptr<Animation> enemy_running_animation;
-
 	/// <summary>
 	/// Update the direction of the pawn based on the desired direction.
 	/// </summary>
@@ -82,20 +107,7 @@ private:
 	/// Update the position of a pawn based on the desired movement.
 	/// </summary>
 	/// <param name="pawn">The pawn to update.</param>
-	void update_movement(Pawn& pawn);
-
-	double seconds_since_enemy_spawn = 0;
-
-	/// <summary>
-	/// Used to generate random numbers for the manager.
-	/// </summary>
-	std::mt19937 random;
-	
-	/// <summary>
-	/// A random distribution used for calculating offsets from the player 
-	/// while spawning enemies.
-	/// </summary>
-	std::uniform_real_distribution<double> spawn_offset;
+	void update_movement(Pawn& pawn, const float move_speed);
 };
 
 /// <summary>

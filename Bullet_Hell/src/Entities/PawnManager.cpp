@@ -15,13 +15,14 @@
 
 PawnManager* g_pawn_manager = nullptr;
 
+#pragma region Constants
 #define SMOOTH_ROTATION 1
 
 /// <summary>
-/// The base movement speed of entities, in world units per second, which is
+/// The base movement speed of the player, in world units per second, which is
 /// used to calculate the move speed and also bullet speed.
 /// </summary>
-constexpr float entity_move_speed_per_second = 5.0f;
+constexpr float player_move_speed_per_second = 5.0f;
 
 #if SMOOTH_ROTATION
 /// <summary>
@@ -32,16 +33,24 @@ constexpr float entity_rotation_speed =
 #endif
 
 /// <summary>
-/// The base movement speed of entities, in world units per timestep.
+/// The base movement speed of the player, in world units per timestep.
 /// </summary>
-constexpr float entity_move_speed = 
-	static_cast<float>(entity_move_speed_per_second * simulation_timestep);
+constexpr float player_move_speed = 
+	static_cast<float>(player_move_speed_per_second * simulation_timestep);
+
+/// <summary>
+/// The base movement speed of enemies, in world units per timestep.
+/// </summary>
+constexpr float enemy_move_speed = 
+	static_cast<float>(player_move_speed_per_second * 0.40f *
+		simulation_timestep
+	);
 
 /// <summary>
 /// The base movement speed of bullets, in world units per timestep.
 /// </summary>
 constexpr float bullet_move_speed = 
-	static_cast<float>(entity_move_speed_per_second * 1.05f * 
+	static_cast<float>(player_move_speed_per_second * 1.05f *
 		simulation_timestep
 	);
 
@@ -59,6 +68,8 @@ constexpr double seconds_per_spawn = 0.5;
 /// How far away from the player enemies can spawn.
 /// </summary>
 constexpr double spawn_radius = 50;
+
+#pragma endregion
 
 PawnManager::PawnManager()
 	: player_bullets{ 1000 }
@@ -93,6 +104,30 @@ PawnManager::PawnManager()
 
 	std::random_device random_device;
 	random.seed(random_device());
+}
+
+void PawnManager::chase_player(Pawn& pawn)
+{
+	const glm::vec3& pawn_position = pawn.scene_entity->position;
+	const glm::vec3& player_position = player->scene_entity->position;
+	
+	const glm::vec3 delta = player_position - pawn_position;
+	const glm::vec2 normalized = glm::normalize(glm::vec2(delta.x, delta.z));
+	
+	pawn.desired_movement = normalized;
+}
+
+void PawnManager::spawn_enemy(const float& x, const float& z)
+{
+	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
+	g_game_logic->current_scene->add_entity(enemy_entity);
+	enemy_entity->position.x = x;
+	enemy_entity->position.z = z;
+	enemy_entity->update_model_matrix();
+	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
+	enemy_entity->animation_data.current_frame_index = rand() % enemy_idle_animation->frames.size();
+
+	enemies.emplace_back(enemy_entity, 200);
 }
 
 void PawnManager::tick()
@@ -149,40 +184,38 @@ void inline PawnManager::tick_bullets()
 
 void inline PawnManager::tick_movement()
 {
-	TIME_START("Updating direction");
 	update_direction(*player);
 	for (Pawn& pawn : enemies)
 	{
 		update_direction(pawn);
+		chase_player(pawn);
 	}
-	TIME_END("Updating direction");
 
-	TIME_START("Updating movement");
-
-	update_movement(*player);
+	update_movement(*player, player_move_speed);
 	if (player->desired_movement.x != 0 || player->desired_movement.y != 0)
 	{
 		auto& animation_data = player->scene_entity->animation_data;
-		if (animation_data.current_animation != player_running_animation)
-		{
-			animation_data.set_current_animation(player_running_animation);
-		}
+		animation_data.set_current_animation(player_running_animation);
 	}
 	else
 	{
 		auto& animation_data = player->scene_entity->animation_data;
-		if (animation_data.current_animation != player_idle_animation)
-		{
-			animation_data.set_current_animation(player_idle_animation);
-		}
+		animation_data.set_current_animation(player_idle_animation);
 	}
 	for (Pawn& pawn : enemies)
 	{
-		update_movement(pawn);
-	}
-	TIME_END("Updating movement");
+		update_movement(pawn, enemy_move_speed);
 
-	TIME_START("Updating matrices");
+		auto& animation_data = pawn.scene_entity->animation_data;
+		if (pawn.desired_movement.x != 0 || pawn.desired_movement.y != 0)
+		{
+			animation_data.set_current_animation(enemy_running_animation);
+		}
+		else
+		{
+			animation_data.set_current_animation(enemy_idle_animation);
+		}
+	}
 
 	if (player->needs_updating)
 	{
@@ -198,21 +231,6 @@ void inline PawnManager::tick_movement()
 			pawn.needs_updating = false;
 		}
 	}
-	TIME_END("Updating matrices");
-
-}
-
-void PawnManager::spawn_enemy(const float& x, const float& z)
-{
-	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
-	g_game_logic->current_scene->add_entity(enemy_entity);
-	enemy_entity->position.x = x;
-	enemy_entity->position.z = z;
-	enemy_entity->update_model_matrix();
-	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
-	enemy_entity->animation_data.current_frame_index = rand() % enemy_idle_animation->frames.size();
-
-	enemies.emplace_back(enemy_entity, 200);
 }
 
 void PawnManager::update_direction(Pawn& pawn)
@@ -248,14 +266,14 @@ void PawnManager::update_direction(Pawn& pawn)
 	pawn.needs_updating = true;
 }
 
-void PawnManager::update_movement(Pawn& pawn)
+void PawnManager::update_movement(Pawn& pawn, const float move_speed)
 {
 	glm::vec3 movement{
 		pawn.desired_movement.x,
 		0.0f,
 		pawn.desired_movement.y
 	};
-	movement *= entity_move_speed;
+	movement *= move_speed;
 	//TODO(ches) Check for collision
 	if (movement.x != 0 || movement.z != 0)
 	{
