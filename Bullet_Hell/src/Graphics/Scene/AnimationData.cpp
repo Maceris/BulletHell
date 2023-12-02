@@ -32,6 +32,10 @@ void AnimationData::set_current_animation(
 	std::shared_ptr<Animation> animation)
 {
 	LOG_ASSERT(animation);
+	if (animation == current_animation)
+	{
+		return;
+	}
 	current_animation = animation;
 	current_frame_index = 0;
 }
