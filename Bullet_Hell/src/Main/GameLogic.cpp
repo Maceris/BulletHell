@@ -300,10 +300,10 @@ void GameLogic::run_game()
 
 		TIME_START("Updating Pawns");
 		simulation_accumulator += seconds_since_last_frame;
-		while (simulation_accumulator >= simulation_timestep)
+		while (simulation_accumulator >= SIMULATION_TIMESTEP)
 		{
 			g_pawn_manager->tick();
-			simulation_accumulator -= simulation_timestep;
+			simulation_accumulator -= SIMULATION_TIMESTEP;
 		}
 		TIME_END("Updating Pawns");
 

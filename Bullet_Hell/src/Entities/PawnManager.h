@@ -14,7 +14,7 @@
 /// <summary>
 /// How long the fixed timestep is for the pawn manager, in seconds.
 /// </summary>
-constexpr double simulation_timestep = 1.0f / 60.0f;
+constexpr double SIMULATION_TIMESTEP = 1.0f / 60.0f;
 
 /// <summary>
 /// Tracks all the players, bullets, and enemies.
@@ -22,6 +22,7 @@ constexpr double simulation_timestep = 1.0f / 60.0f;
 class PawnManager
 {
 public:
+	friend class Brain;
 
 	PawnManager();
 	PawnManager(const PawnManager&) = delete;

@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+#include "AI/Brain.h"
 #include "Debugging/Logger.h"
 #include "Debugging/Timer.h"
 #include "Entities/Bullet.h"
@@ -22,36 +23,36 @@ PawnManager* g_pawn_manager = nullptr;
 /// The base movement speed of the player, in world units per second, which is
 /// used to calculate the move speed and also bullet speed.
 /// </summary>
-constexpr float player_move_speed_per_second = 5.0f;
+constexpr float PLAYER_MOVE_SPEED_PER_SECOND = 5.0f;
 
 #if SMOOTH_ROTATION
 /// <summary>
 /// The speed of rotation for entities, in degrees per timestep.
 /// </summary>
-constexpr float entity_rotation_speed = 
-	static_cast<float>(360.0f * 2 * simulation_timestep);
+constexpr float ENTITY_ROTATION_SPEED = 
+	static_cast<float>(360.0f * 2 * SIMULATION_TIMESTEP);
 #endif
 
 /// <summary>
 /// The base movement speed of the player, in world units per timestep.
 /// </summary>
-constexpr float player_move_speed = 
-	static_cast<float>(player_move_speed_per_second * simulation_timestep);
+constexpr float PLAYER_MOVE_SPEED = 
+	static_cast<float>(PLAYER_MOVE_SPEED_PER_SECOND * SIMULATION_TIMESTEP);
 
 /// <summary>
 /// The base movement speed of enemies, in world units per timestep.
 /// </summary>
-constexpr float enemy_move_speed = 
-	static_cast<float>(player_move_speed_per_second * 0.40f *
-		simulation_timestep
+constexpr float ENEMY_MOVE_SPEED = 
+	static_cast<float>(PLAYER_MOVE_SPEED_PER_SECOND * 0.40f *
+		SIMULATION_TIMESTEP
 	);
 
 /// <summary>
 /// The base movement speed of bullets, in world units per timestep.
 /// </summary>
-constexpr float bullet_move_speed = 
-	static_cast<float>(player_move_speed_per_second * 1.05f *
-		simulation_timestep
+constexpr float BULLET_MOVE_SPEED = 
+	static_cast<float>(PLAYER_MOVE_SPEED_PER_SECOND * 1.05f *
+		SIMULATION_TIMESTEP
 	);
 
 /// <summary>
@@ -62,12 +63,12 @@ constexpr int MAX_ENEMIES = 1000;
 /// <summary>
 /// How many seconds between pawn spawns.
 /// </summary>
-constexpr double seconds_per_spawn = 0.5;
+constexpr double SECONDS_PER_SPAWN = 0.5;
 
 /// <summary>
 /// How far away from the player enemies can spawn.
 /// </summary>
-constexpr double spawn_radius = 50;
+constexpr double SPAWN_RADIUS = 50;
 
 #pragma endregion
 
@@ -76,7 +77,7 @@ PawnManager::PawnManager()
 	, enemy_bullets{ 1000 }
 	, player{ std::make_shared<Pawn>() }
 	, random{}
-	, spawn_offset{ -spawn_radius, spawn_radius }
+	, spawn_offset{ -SPAWN_RADIUS, SPAWN_RADIUS }
 {
 	auto player_model = load_model("models/player/human_male.model");
 	g_game_logic->current_scene->add_model(player_model);
@@ -141,32 +142,24 @@ void PawnManager::tick_animations()
 
 void inline PawnManager::tick_ai()
 {
-	seconds_since_enemy_spawn += simulation_timestep;
+	seconds_since_enemy_spawn += SIMULATION_TIMESTEP;
 
 	while (enemies.size() < MAX_ENEMIES 
-		&& seconds_since_enemy_spawn >= seconds_per_spawn)
+		&& seconds_since_enemy_spawn >= SECONDS_PER_SPAWN)
 	{
 		const double x = 
 			player->scene_entity->position.x + spawn_offset(random);
 		const double z = 
 			player->scene_entity->position.z + spawn_offset(random);
-		spawn_enemy(x, z);
-		seconds_since_enemy_spawn -= seconds_per_spawn;
+		spawn_enemy(static_cast<float>(x), static_cast<float>(z));
+		seconds_since_enemy_spawn -= SECONDS_PER_SPAWN;
 	}
 
 	const glm::vec3& player_position = player->scene_entity->position;
-	for (Pawn& pawn : enemies)
+	for (Pawn& enemy : enemies)
 	{
-		const glm::vec3& pawn_position = pawn.scene_entity->position;
-		const glm::vec3 player_direction = player_position - pawn_position;
-		const float angle = MathUtil::vector_to_angle(
-			glm::vec2(player_direction.x, player_direction.z)
-		);
-		pawn.desired_facing = angle;
-
-		const glm::vec2 normalized = 
-			glm::normalize(glm::vec2(player_direction.x, player_direction.z));
-		pawn.desired_movement = normalized;
+		enemy.seconds_since_attack += SIMULATION_TIMESTEP;
+		Brain::update(enemy, *player);
 	}
 }
 
@@ -183,7 +176,7 @@ void inline PawnManager::tick_movement()
 		update_direction(pawn);
 	}
 
-	update_movement(*player, player_move_speed);
+	update_movement(*player, PLAYER_MOVE_SPEED);
 	if (player->desired_movement.x != 0 || player->desired_movement.y != 0)
 	{
 		auto& animation_data = player->scene_entity->animation_data;
@@ -196,17 +189,9 @@ void inline PawnManager::tick_movement()
 	}
 	for (Pawn& pawn : enemies)
 	{
-		update_movement(pawn, enemy_move_speed);
+		update_movement(pawn, ENEMY_MOVE_SPEED);
 
 		auto& animation_data = pawn.scene_entity->animation_data;
-		if (pawn.desired_movement.x != 0 || pawn.desired_movement.y != 0)
-		{
-			animation_data.set_current_animation(enemy_running_animation);
-		}
-		else
-		{
-			animation_data.set_current_animation(enemy_idle_animation);
-		}
 	}
 
 	if (player->needs_updating)
@@ -240,7 +225,7 @@ void PawnManager::update_direction(Pawn& pawn)
 		return;
 	}
 
-	const float max_rotation = entity_rotation_speed / 180.0f;
+	const float max_rotation = ENTITY_ROTATION_SPEED / 180.0f;
 	if (angle > max_rotation)
 	{
 		const float percentage = max_rotation / angle;

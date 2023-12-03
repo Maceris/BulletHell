@@ -6,9 +6,20 @@
 
 #include "vec2.hpp"
 
+#include "AI/AIState.h"
 #include "Entities/EntityTypes.h"
 
 struct Entity;
+
+/// <summary>
+/// The number of seconds between enmey attacks.
+/// </summary>
+constexpr double TIME_BETWEEN_ENEMY_ATTACKS = 1.0;
+
+/// <summary>
+/// The duration of an attack in seconds.
+/// </summary>
+constexpr double ATTACK_DURATION = 20.0 / 24.0;
 
 /// <summary>
 /// Some kind of entity that is controllable by the player or AI.
@@ -16,23 +27,16 @@ struct Entity;
 struct Pawn
 {
 	friend class PawnManager;
+	friend class Brain;
 
 	/// <summary>
-	/// The scene enitity that this pawn is tracking, so that we can move 
-	/// it around or trigger an animation.
+	/// The direction the pawn wants to face, represented as the angle 
+	/// of rotation around the y axis in a clockwise direction (assuming 
+	/// looking from top down towards -y), where 
+	/// 0 represents the +x direction. The angle is in degrees in the range 
+	/// [0, 360).
 	/// </summary>
-	std::shared_ptr<Entity> scene_entity;
-
-	/// <summary>
-	/// The current health of this pawn.
-	/// </summary>
-	Health health;
-
-	/// <summary>
-	/// The maximum health of the pawn, so we can tell what percentage of 
-	/// health it has.
-	/// </summary>
-	Health max_health;
+	float desired_facing;
 
 	/// <summary>
 	/// The delta direction describing the direction the pawn wants to move 
@@ -47,13 +51,21 @@ struct Pawn
 	glm::vec2 desired_movement;
 
 	/// <summary>
-	/// The direction the pawn wants to face, represented as the angle 
-	/// of rotation around the y axis in a clockwise direction (assuming 
-	/// looking from top down towards -y), where 
-	/// 0 represents the +x direction. The angle is in degrees in the range 
-	/// [0, 360).
+	/// The current health of this pawn.
 	/// </summary>
-	float desired_facing;
+	Health health;
+
+	/// <summary>
+	/// The maximum health of the pawn, so we can tell what percentage of 
+	/// health it has.
+	/// </summary>
+	Health max_health;
+
+	/// <summary>
+	/// The scene enitity that this pawn is tracking, so that we can move 
+	/// it around or trigger an animation.
+	/// </summary>
+	std::shared_ptr<Entity> scene_entity;
 
 	Pawn();
 	Pawn(std::shared_ptr<Entity> entity, Health health = 0);
@@ -66,4 +78,15 @@ private:
 	/// Whether we have made an update to the corresponding scene entity.
 	/// </summary>
 	bool needs_updating = false;
+
+	/// <summary>
+	/// What the pawn is currently doing. Only relevant for AI controlled
+	/// pawns.
+	/// </summary>
+	AIState state;
+
+	/// <summary>
+	/// How many seconds it has been since the enemy has attacked.
+	/// </summary>
+	double seconds_since_attack = 0;
 };
