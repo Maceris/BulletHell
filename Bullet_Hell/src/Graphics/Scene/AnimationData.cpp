@@ -20,6 +20,11 @@ void AnimationData::next_frame()
 	int next_frame = current_frame_index + 1;
 	if (next_frame >= current_animation->frames.size())
 	{
+		if (interrupted_animation)
+		{
+			current_animation = interrupted_animation;
+			interrupted_animation = nullptr;
+		}
 		current_frame_index = 0;
 	}
 	else
@@ -28,14 +33,32 @@ void AnimationData::next_frame()
 	}
 }
 
-void AnimationData::set_current_animation(
-	std::shared_ptr<Animation> animation)
+void AnimationData::run_immediate_once(std::shared_ptr<Animation> animation)
 {
 	LOG_ASSERT(animation);
 	if (animation == current_animation)
 	{
 		return;
 	}
+	if (interrupted_animation != nullptr)
+	{
+		interrupted_animation = current_animation;
+	}
 	current_animation = animation;
 	current_frame_index = 0;
+}
+
+void AnimationData::set_current_animation(
+	std::shared_ptr<Animation> animation)
+{
+	LOG_ASSERT(animation);
+	if (interrupted_animation == nullptr && animation != current_animation)
+	{
+		current_animation = animation;
+		current_frame_index = 0;
+	}
+	else if (animation != interrupted_animation)
+	{
+		interrupted_animation = animation;
+	}
 }

@@ -46,8 +46,26 @@ public:
 	void next_frame();
 
 	/// <summary>
-	/// Swap to a different animation and start at the beginning.
+	/// Start using a specific animation until it ends, then go back to
+	/// whatever we had been animating. If a one-time animation is already
+	/// running, it will be replaced with this and once we complete an
+	/// immediate animation then we will return to the animation that was
+	/// first interrupted.
+	/// </summary>
+	/// <param name="animation">The animation to run.</param>
+	void run_immediate_once(std::shared_ptr<Animation> animation);
+
+	/// <summary>
+	/// Swap to a different animation and start at the beginning. If we are
+	/// currently running an immediate animation, this will set the animation
+	/// to return to once that is done.
 	/// </summary>
 	/// <param name="animation">The new animation to use.</param>
 	void set_current_animation(std::shared_ptr<Animation> animation);
+
+private:
+	/// <summary>
+	/// The animation that we had been using until an immediate one was run.
+	/// </summary>
+	std::shared_ptr<Animation> interrupted_animation = nullptr;
 };
