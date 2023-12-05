@@ -1,5 +1,12 @@
 #include "Graphics/Render/DebugRender.h"
 
+#include <numbers>
+
+#include "mat4x4.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "gtc/matrix_transform.hpp"
+
 #include "Graphics/Graph/TextureResource.h"
 #include "Graphics/Graph/CascadeShadowSlice.h"
 #include "Graphics/Graph/MeshData.h"
@@ -9,6 +16,7 @@
 #include "Map/Chunk.h"
 #include "Map/Tile.h"
 #include "ResourceCache/ResourceCache.h"
+#include "Utilities/MathUtil.h"
 
 #include "glad.h"
 
@@ -44,6 +52,8 @@ constexpr glm::vec4 RED = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 constexpr glm::vec4 YELLOW = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 GREEN = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 BLUE = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+#pragma region Structs
 
 #pragma pack(push,1)
 struct Line
@@ -131,6 +141,7 @@ struct AABBLines
     AABBLines& operator=(const AABBLines&) = default;
     ~AABBLines() = default;
 };
+#pragma endregion
 
 LineGroup::LineGroup()
     : vao{ 0 }
@@ -166,6 +177,27 @@ DebugRender::DebugRender()
     create_uniforms();
 }
 
+glm::mat4 default_camera_view()
+{
+    const float TWO_PI = (float)(2 * std::numbers::pi);
+
+    glm::vec3 position(-11.0f, 11.0f, 0.0f);
+    glm::vec2 rotation(0.42f, 1.92f);
+    rotation.x = MathUtil::clamp_float(rotation.x, glm::radians(-90.0f),
+        glm::radians(90.0f));
+    rotation.y = fmodf(rotation.y, TWO_PI);
+    rotation.y = fmodf(rotation.y + TWO_PI, TWO_PI);
+
+    glm::mat4 view_matrix(1.0f);
+    view_matrix = glm::rotate(view_matrix, rotation.x,
+        glm::vec3(1.0f, 0.0f, 0.0f));
+    view_matrix = glm::rotate(view_matrix, rotation.y,
+        glm::vec3(0.0f, 1.0f, 0.0f));
+    view_matrix = glm::translate(view_matrix, -position);
+
+    return view_matrix;
+}
+
 void DebugRender::render(const Scene& scene)
 {
     shader_program->bind();
@@ -175,7 +207,6 @@ void DebugRender::render(const Scene& scene)
         scene.projection.projection_matrix);
     uniforms_map->set_uniform("view_matrix", scene.camera.view_matrix);
     uniforms_map->set_uniform("line_color", RED);
-
     glBindVertexArray(map_lines.vao);
     glDrawArrays(GL_LINES, 0, map_lines.count * 2);
 
@@ -183,19 +214,6 @@ void DebugRender::render(const Scene& scene)
     uniforms_map->set_uniform("line_color", GREEN);
     glBindVertexArray(AABB_lines.vao);
     glDrawArrays(GL_LINES, 0, AABB_lines.count * 2);
-
-#if 1
-    //TODO(ches) decide if we want to keep this
-    update_frustums();
-    glBindVertexArray(frustum_lines.vao);
-    const int line_group = (4 * 3 + 3) * 2;
-    uniforms_map->set_uniform("line_color", RED);
-    glDrawArrays(GL_LINES, 0, line_group);
-    uniforms_map->set_uniform("line_color", GREEN);
-    glDrawArrays(GL_LINES, line_group, line_group);
-    uniforms_map->set_uniform("line_color", BLUE);
-    glDrawArrays(GL_LINES, line_group * 2, line_group);
-#endif
 
     uniforms_map->set_uniform("line_color", BLUE);
     glBindVertexArray(hot_chunk_lines.vao);
@@ -242,51 +260,6 @@ void DebugRender::update_AABBs(const Scene& scene)
 
     glBufferData(GL_ARRAY_BUFFER, AABB_lines.count * sizeof(Line),
         lines.data(), GL_DYNAMIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void DebugRender::update_frustums()
-{
-    glBindBuffer(GL_ARRAY_BUFFER, frustum_lines.data);
-
-    std::vector<Line> lines;
-    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
-    {
-        Frustum& frustum = CascadeShadowSlice::cached_frustums[i];
-        lines.emplace_back(frustum.corners[0], frustum.corners[1]);
-        lines.emplace_back(frustum.corners[1], frustum.corners[2]);
-        lines.emplace_back(frustum.corners[2], frustum.corners[3]);
-        lines.emplace_back(frustum.corners[3], frustum.corners[0]);
-
-        lines.emplace_back(frustum.corners[4], frustum.corners[5]);
-        lines.emplace_back(frustum.corners[5], frustum.corners[6]);
-        lines.emplace_back(frustum.corners[6], frustum.corners[7]);
-        lines.emplace_back(frustum.corners[7], frustum.corners[4]);
-
-        lines.emplace_back(frustum.corners[0], frustum.corners[4]);
-        lines.emplace_back(frustum.corners[1], frustum.corners[5]);
-        lines.emplace_back(frustum.corners[2], frustum.corners[6]);
-        lines.emplace_back(frustum.corners[3], frustum.corners[7]);
-
-        glm::vec3 center = frustum.center;
-        lines.emplace_back(
-            center - glm::vec3(1.0f, 0.0f, 0.0f),
-            center + glm::vec3(1.0f, 0.0f, 0.0f)
-        );
-        lines.emplace_back(
-            center - glm::vec3(0.0f, 1.0f, 0.0f),
-            center + glm::vec3(0.0f, 1.0f, 0.0f)
-        );
-        lines.emplace_back(
-            center - glm::vec3(0.0f, 0.0f, 1.0f),
-            center + glm::vec3(0.0f, 0.0f, 1.0f)
-        );
-    }
-
-    frustum_lines.count = static_cast<int>(lines.size());
-    glBufferData(GL_ARRAY_BUFFER, frustum_lines.count * sizeof(Line),
-        lines.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

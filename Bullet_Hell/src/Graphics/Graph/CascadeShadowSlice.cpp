@@ -39,10 +39,6 @@ constexpr float* calculate_slices()
 
 float* CascadeShadowSlice::cached_splits = calculate_slices();
 
-#if DEBUG
-Frustum* CascadeShadowSlice::cached_frustums = ALLOC Frustum[SHADOW_MAP_CASCADE_COUNT];
-#endif
-
 /*
 	Function is derived from Vulkan examples from Sascha Willems, and
 	licensed under the MIT License :
@@ -102,16 +98,6 @@ void CascadeShadowSlice::updateCascadeShadows(
 		}
 		frustum_center /= 8.0f;
 
-#if DEBUG
-		Frustum frustum;
-		for (int i = 0; i < 8; ++i)
-		{
-			frustum.corners[i] = frustum_corners[i];
-		}
-		frustum.center = frustum_center;
-		cached_frustums[cascade] = frustum;
-#endif
-
 		float radius = 0.0f;
 		for (int i = 0; i < 8; ++i)
 		{
@@ -121,16 +107,20 @@ void CascadeShadowSlice::updateCascadeShadows(
 		}
 		radius = std::ceil(radius * 16.0f) / 16.0f;
 
-		glm::vec3 light_dir = glm::normalize(-light_direction);
-		glm::vec3 eye = frustum_center + (light_dir * radius);
+		glm::vec3 light_dir = glm::normalize(light_direction);
+		glm::vec3 eye = frustum_center - (light_dir * radius);
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-		glm::mat4 lightViewMatrix = glm::lookAtLH(eye, frustum_center, up);
-		glm::mat4 lightOrthoMatrix = glm::orthoRH_ZO(-radius, radius, -radius, 
-			radius, 0.0f, 2 * radius);
+		glm::mat4 light_view_matrix = glm::lookAtLH(eye, frustum_center, up);
+	
+		glm::mat4 light_projection_matrix = glm::orthoRH_ZO(
+			-radius, radius,
+			-radius, radius,
+			0.0f, 2 * radius
+		);
 
 		shadows[cascade].split_distance = (Z_NEAR + splitDist * clip_range) * -1.0f;
-		shadows[cascade].projection_view_matrix = lightOrthoMatrix * lightViewMatrix;
+		shadows[cascade].projection_view_matrix = light_projection_matrix * light_view_matrix;
 
 		lastSplitDist = cached_splits[cascade];
 	}

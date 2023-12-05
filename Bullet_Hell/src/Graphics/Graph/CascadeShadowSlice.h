@@ -10,14 +10,6 @@
 
 class Scene;
 
-#if DEBUG
-struct Frustum
-{
-	glm::vec3 corners[8];
-	glm::vec3 center;
-};
-#endif
-
 /// <summary>
 /// Used for cascaded shadow mapping, defines details for each slice like the 
 /// view matrix and distance to this split.
@@ -49,10 +41,6 @@ struct CascadeShadowSlice
 	CascadeShadowSlice& operator=(const CascadeShadowSlice&) = default;
 
 	~CascadeShadowSlice() = default;
-
-#if DEBUG
-	static Frustum* cached_frustums;
-#endif
 
 private:
 	/// <summary>

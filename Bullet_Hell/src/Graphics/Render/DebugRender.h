@@ -72,11 +72,6 @@ private:
 	/// </summary>
 	void update_AABBs(const Scene& scene);
 
-	/// <summary>
-	/// Update the line buffer for the shadow render frustums.
-	/// </summary>
-	void update_frustums();
-
 	LineGroup map_lines{};
 	LineGroup hot_chunk_lines{};
 	LineGroup cold_chunk_lines{};
