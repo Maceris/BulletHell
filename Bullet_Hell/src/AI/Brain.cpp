@@ -68,8 +68,11 @@ void Brain::update(Pawn& enemy, const Pawn& player)
 	case ATTACKING:
 		enemy.desired_movement = glm::vec2(0, 0);
 		enemy.scene_entity->animation_data.
-			set_current_animation(g_pawn_manager->enemy_attack_animation);
-		//TODO(ches) fire a bullet, here or in the pawn manager.
+			run_immediate_once(g_pawn_manager->enemy_attack_animation);
+		if (enemy.seconds_since_attack >= TIME_BETWEEN_ENEMY_ATTACKS)
+		{
+			g_pawn_manager->fire_bullet(enemy);
+		}
 		break;
 	case CHASING:
 		enemy.desired_movement = glm::normalize(player_direction);

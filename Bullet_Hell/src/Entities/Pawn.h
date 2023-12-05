@@ -14,7 +14,7 @@ struct Entity;
 /// <summary>
 /// The number of seconds between enmey attacks.
 /// </summary>
-constexpr double TIME_BETWEEN_ENEMY_ATTACKS = 1.0;
+constexpr double TIME_BETWEEN_ENEMY_ATTACKS = 2.0;
 
 /// <summary>
 /// The duration of an attack in seconds.

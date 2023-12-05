@@ -107,6 +107,12 @@ PawnManager::PawnManager()
 	random.seed(random_device());
 }
 
+void PawnManager::fire_bullet(Pawn& enemy)
+{
+	enemy.seconds_since_attack = 0;
+
+}
+
 void PawnManager::spawn_enemy(const float& x, const float& z)
 {
 	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);

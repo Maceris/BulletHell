@@ -70,6 +70,12 @@ private:
 	std::uniform_real_distribution<double> spawn_offset;
 
 	/// <summary>
+	/// Called when an enemy wants to fire a bullet wherever they are looking.
+	/// </summary>
+	/// <param name="enemy">The enemy that is attacking.</param>
+	void fire_bullet(Pawn& enemy);
+
+	/// <summary>
 	/// Spawn an enemy at the specified world coordiantes.
 	/// </summary>
 	/// <param name="x">The x location of the enemy.</param>
