@@ -59,6 +59,11 @@ struct Entity
 	float scale;
 
 	/// <summary>
+	/// Whether the scene entity should be removed.
+	/// </summary>
+	bool dead = false;
+
+	/// <summary>
 	/// Construct an entity.
 	/// </summary>
 	/// <param name="model_ID">The ID of the modal associated with this
