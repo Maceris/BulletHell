@@ -30,11 +30,14 @@ struct Pawn
 	friend class Brain;
 
 	/// <summary>
-	/// The direction the pawn wants to face, represented as the angle 
-	/// of rotation around the y axis in a clockwise direction (assuming 
-	/// looking from top down towards -y), where 
-	/// 0 represents the +x direction. The angle is in degrees in the range 
-	/// [0, 360).
+	/// The delta direction describing the direction the pawn wants to face 
+	/// towards.
+	/// 
+	/// Represents the x and z coordinates in the world, and should be
+	/// normalized if not zero.
+	/// 
+	/// A value of (+1, 0) would mean that the pawn wants to face in
+	/// the +x direction.
 	/// </summary>
 	glm::vec2 desired_facing;
 

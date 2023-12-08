@@ -113,8 +113,13 @@ void PawnManager::fire_bullet(Pawn& enemy)
 {
 	enemy.seconds_since_attack = 0;
 	auto bullet = std::make_shared<Entity>(bullet_model_id);
-	glm::vec3 position = enemy.scene_entity->position;
-	bullet->position = position;
+	const glm::vec3 position = enemy.scene_entity->position;
+	const glm::vec3 offset{ 
+		enemy.desired_facing.x,
+		3.0f,
+		enemy.desired_facing.y
+	};
+	bullet->position = position + offset;
 	g_game_logic->current_scene->add_entity(bullet);
 	bullet->update_model_matrix();
 
