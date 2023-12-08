@@ -201,18 +201,10 @@ void GameLogic::process_input()
 	}
 	g_pawn_manager->player->desired_movement = movement;
 
-	float angle = 0.0f;
-
-	if (MathUtil::close_enough(movement, 0.0f, 0.0f))
+	if (!MathUtil::close_enough(movement, 0.0f, 0.0f))
 	{
-		angle = g_pawn_manager->player->desired_facing;
+		g_pawn_manager->player->desired_facing = movement;
 	}
-	else
-	{
-		angle = MathUtil::vector_to_angle(movement);
-	}
-	
-	g_pawn_manager->player->desired_facing = angle;
 
 	if (window->mouse_input.right_button_pressed 
 		&& !ImGui::GetIO().WantCaptureMouse)

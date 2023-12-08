@@ -39,8 +39,8 @@ public:
 	/// </summary>
 	void tick_animations();
 
-	boost::circular_buffer<Bullet> player_bullets;
-	boost::circular_buffer<Bullet> enemy_bullets;
+	boost::circular_buffer<std::shared_ptr<Bullet>> player_bullets;
+	boost::circular_buffer<std::shared_ptr<Bullet>> enemy_bullets;
 
 	std::shared_ptr<Pawn> player;
 	std::vector<Pawn> enemies;
@@ -55,6 +55,8 @@ private:
 	std::shared_ptr<Animation> enemy_attack_animation;
 	std::shared_ptr<Animation> enemy_idle_animation;
 	std::shared_ptr<Animation> enemy_running_animation;
+
+	std::string bullet_model_id;
 
 	double seconds_since_enemy_spawn = 0;
 

@@ -36,7 +36,7 @@ struct Pawn
 	/// 0 represents the +x direction. The angle is in degrees in the range 
 	/// [0, 360).
 	/// </summary>
-	float desired_facing;
+	glm::vec2 desired_facing;
 
 	/// <summary>
 	/// The delta direction describing the direction the pawn wants to move 

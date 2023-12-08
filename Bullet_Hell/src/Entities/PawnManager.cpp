@@ -92,8 +92,6 @@ PawnManager::PawnManager()
 	player->scene_entity = player_entity;
 	player->max_health = 1000;
 	player->health = player->max_health;
-	player->desired_movement = glm::vec2(0, 0);
-	player->desired_facing = 0.0f;
 
 	auto enemy_model = load_model("models/enemy/enemy.model");
 	g_game_logic->current_scene->add_model(enemy_model);
@@ -103,6 +101,10 @@ PawnManager::PawnManager()
 	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
 	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
 
+	auto bullet_model = load_model("models/projectile/gem.model");
+	g_game_logic->current_scene->add_model(bullet_model);
+	bullet_model_id = bullet_model->id;
+
 	std::random_device random_device;
 	random.seed(random_device());
 }
@@ -110,7 +112,16 @@ PawnManager::PawnManager()
 void PawnManager::fire_bullet(Pawn& enemy)
 {
 	enemy.seconds_since_attack = 0;
+	auto bullet = std::make_shared<Entity>(bullet_model_id);
+	glm::vec3 position = enemy.scene_entity->position;
+	bullet->position = position;
+	g_game_logic->current_scene->add_entity(bullet);
+	bullet->update_model_matrix();
 
+	std::shared_ptr<Bullet> projectile = std::make_shared<Bullet>(100,
+		enemy.desired_facing, BULLET_MOVE_SPEED, bullet);
+
+	enemy_bullets.push_back(projectile);
 }
 
 void PawnManager::spawn_enemy(const float& x, const float& z)
@@ -161,7 +172,6 @@ void inline PawnManager::tick_ai()
 		seconds_since_enemy_spawn -= SECONDS_PER_SPAWN;
 	}
 
-	const glm::vec3& player_position = player->scene_entity->position;
 	for (Pawn& enemy : enemies)
 	{
 		enemy.seconds_since_attack += SIMULATION_TIMESTEP;
@@ -219,7 +229,8 @@ void inline PawnManager::tick_movement()
 void PawnManager::update_direction(Pawn& pawn)
 {
 	const glm::quat target_rotation = glm::angleAxis(
-		glm::radians(-pawn.desired_facing), glm::vec3(0.0f, 1.0f, 0.0f)
+		glm::radians(-MathUtil::vector_to_angle(pawn.desired_facing)), 
+		glm::vec3(0.0f, 1.0f, 0.0f)
 	);
 #if SMOOTH_ROTATION
 	const glm::quat& current_rotation = pawn.scene_entity->rotation;

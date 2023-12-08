@@ -2,9 +2,12 @@
 
 #include "Globals.h"
 
-#include "vec3.hpp"
+#include <memory>
+
+#include "vec2.hpp"
 
 #include "Entities/EntityTypes.h"
+#include "Graphics/Scene/Entity.h"
 
 /// <summary>
 /// Used to track the projectiles in the scene.
@@ -20,10 +23,21 @@ struct Bullet
 	/// <summary>
 	/// The direction the projectile is moving in.
 	/// </summary>
-	glm::vec3 direction;
+	glm::vec2 direction;
 
 	/// <summary>
-	/// The speed of the projectile.
+	/// The speed of the projectile, in world units per second.
 	/// </summary>
-	glm::vec3 speed;
+	float speed;
+
+	/// <summary>
+	/// The scene entity.
+	/// </summary>
+	std::shared_ptr<Entity> scene_entity;
+
+	Bullet(const Health damage, const glm::vec2& direction, const float speed, 
+		std::shared_ptr<Entity> scene_entity);
+	Bullet(const Bullet&) = delete;
+	Bullet& operator=(const Bullet&) = delete;
+	~Bullet();
 };

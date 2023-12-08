@@ -32,7 +32,8 @@ void UI::first_time_setup()
 	ImFontConfig font_cfg;
 	font_cfg.FontDataOwnedByAtlas = false;
 	void* raw_data = static_cast<void*>(handle->get_writeable_buffer());
-	font_noirden = io.Fonts->AddFontFromMemoryTTF(raw_data, handle->get_size(),
+	font_noirden = io.Fonts->AddFontFromMemoryTTF(raw_data, 
+		static_cast<int>(handle->get_size()),
 		32.0f, &font_cfg);
 }
 

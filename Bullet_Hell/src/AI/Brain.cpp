@@ -54,13 +54,13 @@ void Brain::update(Pawn& enemy, const Pawn& player)
 	{
 	case ATTACKING:
 	case CHASING:
-		enemy.desired_facing = MathUtil::vector_to_angle(player_direction);
+		enemy.desired_facing = player_direction;
 		break;
 	case IDLE:
 	default:
 		break;
 	case FLEEING:
-		enemy.desired_facing = MathUtil::vector_to_angle(-player_direction);
+		enemy.desired_facing = -player_direction;
 	}
 
 	switch (enemy.state)
