@@ -9,6 +9,9 @@
 #include "Entities/EntityTypes.h"
 #include "Graphics/Scene/Entity.h"
 
+/// <summary>
+/// How long bullets last before despawning, measured in seconds.
+/// </summary>
 constexpr double BULLET_LIFESPAN = 3.0;
 
 /// <summary>
@@ -38,7 +41,7 @@ struct Bullet
 	std::shared_ptr<Entity> scene_entity;
 
 	/// <summary>
-	/// How long the bullet has left before it despawns.
+	/// How long the bullet has left before it despawns, measured in seconds.
 	/// </summary>
 	double lifetime = BULLET_LIFESPAN;
 
