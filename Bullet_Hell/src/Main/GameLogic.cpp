@@ -308,6 +308,7 @@ void GameLogic::run_game()
 		TIME_END("Processing Events");
 
 		TIME_START("Updating Scene");
+		current_scene->prune_models();
 		if (current_scene->dirty)
 		{
 			current_scene->rebuild_model_lists();

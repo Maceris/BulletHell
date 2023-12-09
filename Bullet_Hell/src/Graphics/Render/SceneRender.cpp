@@ -268,6 +268,9 @@ void SceneRender::setup_materials_uniform(const Scene& scene)
             const auto& material = mesh_data.material;
             material->material_id = next_ID++;
 
+            LOG_ASSERT(next_ID <= MAX_TEXTURES 
+                && "We have more textures than we can bind in one draw call");
+
             const std::string prefix = "materials[" 
                 + std::to_string(material->material_id) + "].";
 

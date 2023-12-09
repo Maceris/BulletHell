@@ -91,6 +91,59 @@ void Scene::add_model(std::shared_ptr<Model> model)
 	}
 }
 
+void Scene::prune_models()
+{
+	for (auto& model_mapping : model_map)
+	{
+		bool removed_any = false;
+
+		EntityList to_keep;
+		auto& entity_list = model_mapping.second->entity_list;
+		for (auto& entity : entity_list)
+		{
+			if (!entity->dead)
+			{
+				to_keep.push_back(entity);
+			}
+			else
+			{
+				removed_any = true;
+			}
+		}
+		if (removed_any)
+		{
+			entity_list.clear();
+			for (auto& entity : to_keep)
+			{
+				entity_list.push_back(entity);
+			}
+
+			dirty = true;
+			if (model_mapping.second->is_animated())
+			{
+				animated_models_dirty = true;
+			}
+			else
+			{
+				static_models_dirty = true;
+			}
+		}
+	}
+#if PRUNE_MODELS_WITHOUT_ENTITIES
+	for (auto iterator = model_map.cbegin(); iterator != model_map.cend();/**/)
+	{
+		if (iterator->second->entity_list.empty())
+		{
+			iterator = model_map.erase(iterator);
+		}
+		else
+		{
+			++iterator;
+		}
+	}
+#endif
+}
+
 void Scene::resize(const unsigned int width, const unsigned int height)
 {
 	projection.update_matrices(width, height);
@@ -117,24 +170,9 @@ void Scene::rebuild_model_lists()
 	cached_static_model_list.clear();
 	cached_animated_model_list.clear();
 
-	std::unordered_set<std::shared_ptr<Model>> models;
-
-	for (auto& entry : model_map)
+	for (auto& model_mapping : model_map)
 	{
-		models.insert(entry.second);
-	}
-
-	for (auto& cluster_pair : chunk_contents)
-	{
-		auto& entity_map = cluster_pair.second->entities;
-		for (auto& pair : entity_map)
-		{
-			models.insert(pair.first);
-		}
-	}
-
-	for (auto& model : models)
-	{
+		auto& model = model_mapping.second;
 		cached_model_list.push_back(model);
 		if (model->is_animated())
 		{
@@ -190,30 +228,12 @@ void Scene::handle_chunk_unloading(EventPointer event)
 
 	for (auto& entity_mapping : cluster->second->entities)
 	{
-		EntityList to_keep;
-		auto& entity_list = entity_mapping.first->entity_list;
+		auto& entity_list = entity_mapping.second;
 		for (auto& existing : entity_list)
 		{
-			bool found = false;
-			for (auto& to_remove : entity_mapping.second)
-			{
-				if (to_remove->entity_ID == existing->entity_ID)
-				{
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-			{
-				to_keep.push_back(existing);
-			}
+			existing->dead = true;
 		}
-
 		entity_list.clear();
-		for (auto& entity : to_keep)
-		{
-			entity_list.push_back(entity);
-		}
 	}
 
 	chunk_contents.erase(unloaded_event->coordinates);
@@ -242,7 +262,16 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 
 	if (model_name != "")
 	{
-		auto tile_model = load_model(model_name);
+		std::shared_ptr<Model> tile_model;
+		if (!model_map.contains(model_name))
+		{
+			tile_model = load_model(model_name);
+			model_map.emplace(std::make_pair(model_name, tile_model));
+		}
+		else
+		{
+			tile_model = model_map.find(model_name)->second;
+		}
 		auto tile_entity = std::make_shared<Entity>(tile_model->id);
 		tile_model->entity_list.push_back(tile_entity);
 		tile_entity->scale = TILE_SCALE;
@@ -250,6 +279,6 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 			z * TILE_SCALE * 2);
 		tile_entity->update_model_matrix();
 
-		cluster.entities[tile_model].push_back(tile_entity);
+		cluster.entities[model_name].push_back(tile_entity);
 	}
 }

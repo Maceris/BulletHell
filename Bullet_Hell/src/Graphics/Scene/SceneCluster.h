@@ -26,7 +26,7 @@ struct SceneCluster
 	std::vector<SpotLight> spot_lights;
 
 	/// <summary>
-	/// A map from models to the list of the entities of that model.
+	/// A map from model names to the list of the entities of that model.
 	/// </summary>
-	std::unordered_map<std::shared_ptr<Model>, EntityList> entities;
+	std::unordered_map<std::string, EntityList> entities;
 };

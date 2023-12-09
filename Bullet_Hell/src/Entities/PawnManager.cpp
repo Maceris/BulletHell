@@ -112,6 +112,13 @@ PawnManager::PawnManager()
 void PawnManager::fire_bullet(Pawn& enemy)
 {
 	enemy.seconds_since_attack = 0;
+#if PRUNE_MODELS_WITHOUT_ENTITIES
+	if (!g_game_logic->current_scene->model_map.contains(bullet_model_id))
+	{
+		auto bullet_model = load_model("models/projectile/gem.model");
+		g_game_logic->current_scene->add_model(bullet_model);
+	}
+#endif
 	auto bullet = std::make_shared<Entity>(bullet_model_id);
 	const glm::vec3 position = enemy.scene_entity->position;
 	const glm::vec3 offset{ 
@@ -131,6 +138,13 @@ void PawnManager::fire_bullet(Pawn& enemy)
 
 void PawnManager::spawn_enemy(const float& x, const float& z)
 {
+#if PRUNE_MODELS_WITHOUT_ENTITIES
+	if (!g_game_logic->current_scene->model_map.contains(enemy_model_id))
+	{
+		auto enemy_model = load_model("models/enemy/enemy.model");
+		g_game_logic->current_scene->add_model(enemy_model);
+	}
+#endif
 	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
 	g_game_logic->current_scene->add_entity(enemy_entity);
 	enemy_entity->position.x = x;
