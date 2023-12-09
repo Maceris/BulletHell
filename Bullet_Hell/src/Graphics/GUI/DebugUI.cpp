@@ -125,6 +125,18 @@ void DebugUI::draw_window_debug()
 	ImGui::Text(std::format("Player animation frame: {}",
 		std::to_string(animation_data.current_frame_index)).c_str());
 
+	const size_t enemy_count = g_pawn_manager->enemies.size();
+	ImGui::Text(std::format("Enemy count: {}",
+		std::to_string(enemy_count)).c_str());
+	
+	const size_t enemy_bullet_count = g_pawn_manager->enemy_bullets.size();
+	ImGui::Text(std::format("Enemy bullet count: {}",
+		std::to_string(enemy_bullet_count)).c_str());
+
+	const size_t player_bullet_count = g_pawn_manager->player_bullets.size();
+	ImGui::Text(std::format("Player bullet count: {}",
+		std::to_string(player_bullet_count)).c_str());
+
 	ImGui::End();
 }
 
