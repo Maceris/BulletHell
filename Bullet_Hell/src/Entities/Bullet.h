@@ -9,6 +9,8 @@
 #include "Entities/EntityTypes.h"
 #include "Graphics/Scene/Entity.h"
 
+constexpr double BULLET_LIFESPAN = 3.0;
+
 /// <summary>
 /// Used to track the projectiles in the scene.
 /// </summary>
@@ -34,6 +36,11 @@ struct Bullet
 	/// The scene entity.
 	/// </summary>
 	std::shared_ptr<Entity> scene_entity;
+
+	/// <summary>
+	/// How long the bullet has left before it despawns.
+	/// </summary>
+	double lifetime = BULLET_LIFESPAN;
 
 	Bullet(const Health damage, const glm::vec2& direction, const float speed, 
 		std::shared_ptr<Entity> scene_entity);

@@ -186,7 +186,19 @@ void inline PawnManager::tick_ai()
 
 void inline PawnManager::tick_bullets()
 {
+	for (std::shared_ptr<Bullet> bullet : enemy_bullets)
+	{
+		bullet->scene_entity->position +=
+			glm::vec3(bullet->direction.x, 0, bullet->direction.y);
+		bullet->scene_entity->update_model_matrix();
 
+		bullet->lifetime -= SIMULATION_TIMESTEP;
+	}
+
+	while (!enemy_bullets.empty() && enemy_bullets.front()->lifetime <= 0)
+	{
+		enemy_bullets.pop_front();
+	}
 }
 
 void inline PawnManager::tick_movement()
