@@ -130,27 +130,6 @@ void Scene::prune_models()
 			dirty = true;
 		}
 	}
-#if PRUNE_MODELS_WITHOUT_ENTITIES
-	for (auto iterator = model_map.cbegin(); iterator != model_map.cend();/**/)
-	{
-		if (iterator->second->entity_list.empty())
-		{
-			if (iterator->second->is_animated())
-			{
-				animated_models_dirty = true;
-			}
-			else
-			{
-				static_models_dirty = true;
-			}
-			iterator = model_map.erase(iterator);
-		}
-		else
-		{
-			++iterator;
-		}
-	}
-#endif
 }
 
 void Scene::resize(const unsigned int width, const unsigned int height)

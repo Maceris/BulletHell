@@ -23,13 +23,6 @@ struct Model;
 struct Tile;
 
 /// <summary>
-/// If we clean out models without any associated entities while pruning dead
-/// entities. If this is true (1), when spawning things we should check that
-/// the model actaully exists in the scene.
-/// </summary>
-#define PRUNE_MODELS_WITHOUT_ENTITIES 0
-
-/// <summary>
 /// A scene to be rendered, including entities and lighting.
 /// </summary>
 class Scene

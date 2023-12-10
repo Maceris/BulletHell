@@ -215,6 +215,16 @@ void GameLogic::process_input()
 			displace.y * mouse_sensitivity
 		);
 	}
+
+	if (window->is_key_pressed(GLFW_KEY_E))
+	{
+		g_pawn_manager->player->wants_to_attack = true;
+	}
+	else
+	{
+		g_pawn_manager->player->wants_to_attack = false;
+	}
+
 }
 
 void GameLogic::request_close()

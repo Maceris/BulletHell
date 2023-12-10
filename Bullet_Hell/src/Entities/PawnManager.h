@@ -72,10 +72,15 @@ private:
 	std::uniform_real_distribution<double> spawn_offset;
 
 	/// <summary>
-	/// Called when an enemy wants to fire a bullet wherever they are looking.
+	/// Fires a bullet wherever the enemy is looking.
 	/// </summary>
 	/// <param name="enemy">The enemy that is attacking.</param>
-	void fire_bullet(Pawn& enemy);
+	void fire_enemy_bullet(Pawn& enemy);
+
+	/// <summary>
+	/// Fires a player bullet.
+	/// </summary>
+	void fire_player_bullet();
 
 	/// <summary>
 	/// Spawn an enemy at the specified world coordiantes.
@@ -89,6 +94,11 @@ private:
 	/// in a different direction, stop, etc.
 	/// </summary>
 	void inline tick_ai();
+
+	/// <summary>
+	/// Execute on the desire for attacks.
+	/// </summary>
+	void inline tick_attacks();
 
 	/// <summary>
 	/// Update all of the bullets.

@@ -67,26 +67,24 @@ void Brain::update(Pawn& enemy, const Pawn& player)
 	{
 	case ATTACKING:
 		enemy.desired_movement = glm::vec2(0, 0);
-		enemy.scene_entity->animation_data.
-			run_immediate_once(g_pawn_manager->enemy_attack_animation);
-		if (enemy.seconds_since_attack >= TIME_BETWEEN_ENEMY_ATTACKS)
-		{
-			g_pawn_manager->fire_bullet(enemy);
-		}
+		enemy.wants_to_attack = true;
 		break;
 	case CHASING:
 		enemy.desired_movement = glm::normalize(player_direction);
+		enemy.wants_to_attack = false;
 		enemy.scene_entity->animation_data.
 			set_current_animation(g_pawn_manager->enemy_running_animation);
 		break;
 	case FLEEING:
 		enemy.desired_movement = -glm::normalize(player_direction);
+		enemy.wants_to_attack = false;
 		enemy.scene_entity->animation_data.
 			set_current_animation(g_pawn_manager->enemy_running_animation);
 		break;
 	case IDLE:
 	default:
 		enemy.desired_movement = glm::vec2(0, 0);
+		enemy.wants_to_attack = false;
 		enemy.scene_entity->animation_data.
 			set_current_animation(g_pawn_manager->enemy_idle_animation);
 		break;

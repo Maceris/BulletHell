@@ -17,6 +17,11 @@ struct Entity;
 constexpr double TIME_BETWEEN_ENEMY_ATTACKS = 2.0;
 
 /// <summary>
+/// The number of seconds between player attacks.
+/// </summary>
+constexpr double TIME_BETWEEN_PLAYER_ATTACKS = 0.5;
+
+/// <summary>
 /// The duration of an attack in seconds.
 /// </summary>
 constexpr double ATTACK_DURATION = 20.0 / 24.0;
@@ -69,6 +74,11 @@ struct Pawn
 	/// it around or trigger an animation.
 	/// </summary>
 	std::shared_ptr<Entity> scene_entity;
+
+	/// <summary>
+	/// Indicates that the pawn wants to attack.
+	/// </summary>
+	bool wants_to_attack = false;
 
 	Pawn();
 	Pawn(std::shared_ptr<Entity> entity, Health health = 0);

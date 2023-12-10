@@ -92,6 +92,7 @@ PawnManager::PawnManager()
 	player->scene_entity = player_entity;
 	player->max_health = 1000;
 	player->health = player->max_health;
+	player->desired_facing = glm::vec2(0.0f, 1.0f);
 
 	auto enemy_model = load_model("models/enemy/enemy.model");
 	g_game_logic->current_scene->add_model(enemy_model);
@@ -109,16 +110,10 @@ PawnManager::PawnManager()
 	random.seed(random_device());
 }
 
-void PawnManager::fire_bullet(Pawn& enemy)
+void PawnManager::fire_enemy_bullet(Pawn& enemy)
 {
 	enemy.seconds_since_attack = 0;
-#if PRUNE_MODELS_WITHOUT_ENTITIES
-	if (!g_game_logic->current_scene->model_map.contains(bullet_model_id))
-	{
-		auto bullet_model = load_model("models/projectile/gem.model");
-		g_game_logic->current_scene->add_model(bullet_model);
-	}
-#endif
+
 	auto bullet = std::make_shared<Entity>(bullet_model_id);
 	const glm::vec3 position = enemy.scene_entity->position;
 	const glm::vec3 offset{ 
@@ -136,15 +131,29 @@ void PawnManager::fire_bullet(Pawn& enemy)
 	enemy_bullets.push_back(projectile);
 }
 
+void PawnManager::fire_player_bullet()
+{
+	player->seconds_since_attack = 0;
+
+	auto bullet = std::make_shared<Entity>(bullet_model_id);
+	const glm::vec3 position = player->scene_entity->position;
+	const glm::vec3 offset{
+		player->desired_facing.x,
+		3.0f,
+		player->desired_facing.y
+	};
+	bullet->position = position + offset;
+	g_game_logic->current_scene->add_entity(bullet);
+	bullet->update_model_matrix();
+
+	std::shared_ptr<Bullet> projectile = std::make_shared<Bullet>(100,
+		player->desired_facing, BULLET_MOVE_SPEED, bullet);
+
+	player_bullets.push_back(projectile);
+}
+
 void PawnManager::spawn_enemy(const float& x, const float& z)
 {
-#if PRUNE_MODELS_WITHOUT_ENTITIES
-	if (!g_game_logic->current_scene->model_map.contains(enemy_model_id))
-	{
-		auto enemy_model = load_model("models/enemy/enemy.model");
-		g_game_logic->current_scene->add_model(enemy_model);
-	}
-#endif
 	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
 	g_game_logic->current_scene->add_entity(enemy_entity);
 	enemy_entity->position.x = x;
@@ -159,6 +168,7 @@ void PawnManager::spawn_enemy(const float& x, const float& z)
 void PawnManager::tick()
 {
 	tick_ai();
+	tick_attacks();
 	tick_bullets();
 	tick_movement();
 }
@@ -196,6 +206,34 @@ void inline PawnManager::tick_ai()
 		enemy.seconds_since_attack += SIMULATION_TIMESTEP;
 		Brain::update(enemy, *player);
 	}
+	player->seconds_since_attack += SIMULATION_TIMESTEP;
+}
+
+void inline PawnManager::tick_attacks()
+{
+	for (Pawn& enemy : enemies)
+	{
+		if (!enemy.wants_to_attack)
+		{
+			continue;
+		}
+		if (enemy.seconds_since_attack >= TIME_BETWEEN_ENEMY_ATTACKS)
+		{
+			enemy.scene_entity->animation_data.
+				run_immediate_once(enemy_attack_animation);
+			fire_enemy_bullet(enemy);
+		}
+	}
+	if (player->wants_to_attack)
+	{
+		if (player->seconds_since_attack >= TIME_BETWEEN_PLAYER_ATTACKS)
+		{
+			player->scene_entity->animation_data.
+				run_immediate_once(player_attack_animation);
+			player->scene_entity->animation_data.current_frame_index = 0;
+			fire_player_bullet();
+		}
+	}
 }
 
 void inline PawnManager::tick_bullets()
@@ -212,6 +250,20 @@ void inline PawnManager::tick_bullets()
 	while (!enemy_bullets.empty() && enemy_bullets.front()->lifetime <= 0)
 	{
 		enemy_bullets.pop_front();
+	}
+
+	for (std::shared_ptr<Bullet> bullet : player_bullets)
+	{
+		bullet->scene_entity->position +=
+			glm::vec3(bullet->direction.x, 0, bullet->direction.y);
+		bullet->scene_entity->update_model_matrix();
+
+		bullet->lifetime -= SIMULATION_TIMESTEP;
+	}
+
+	while (!player_bullets.empty() && player_bullets.front()->lifetime <= 0)
+	{
+		player_bullets.pop_front();
 	}
 }
 
