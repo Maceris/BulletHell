@@ -40,7 +40,7 @@ void AnimationData::run_immediate_once(std::shared_ptr<Animation> animation)
 	{
 		return;
 	}
-	if (interrupted_animation != nullptr)
+	if (current_animation != nullptr)
 	{
 		interrupted_animation = current_animation;
 	}
@@ -57,7 +57,8 @@ void AnimationData::set_current_animation(
 		current_animation = animation;
 		current_frame_index = 0;
 	}
-	else if (animation != interrupted_animation)
+	else if (interrupted_animation != nullptr 
+		&& animation != interrupted_animation)
 	{
 		interrupted_animation = animation;
 	}
