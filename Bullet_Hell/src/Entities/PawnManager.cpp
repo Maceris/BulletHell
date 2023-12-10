@@ -102,9 +102,13 @@ PawnManager::PawnManager()
 	enemy_idle_animation = load_animation("models/enemy/enemy.human_male_idle.animation");
 	enemy_running_animation = load_animation("models/enemy/enemy.human_male_run.animation");
 
-	auto bullet_model = load_model("models/projectile/gem.model");
-	g_game_logic->current_scene->add_model(bullet_model);
-	bullet_model_id = bullet_model->id;
+	auto enemy_bullet_model = load_model("models/projectile/gem_red.model");
+	g_game_logic->current_scene->add_model(enemy_bullet_model);
+	enemy_bullet_model_id = enemy_bullet_model->id;
+
+	auto player_bullet_model = load_model("models/projectile/gem_blue.model");
+	g_game_logic->current_scene->add_model(player_bullet_model);
+	player_bullet_model_id = player_bullet_model->id;
 
 	std::random_device random_device;
 	random.seed(random_device());
@@ -114,7 +118,7 @@ void PawnManager::fire_enemy_bullet(Pawn& enemy)
 {
 	enemy.seconds_since_attack = 0;
 
-	auto bullet = std::make_shared<Entity>(bullet_model_id);
+	auto bullet = std::make_shared<Entity>(enemy_bullet_model_id);
 	const glm::vec3 position = enemy.scene_entity->position;
 	const glm::vec3 offset{ 
 		enemy.desired_facing.x,
@@ -135,7 +139,7 @@ void PawnManager::fire_player_bullet()
 {
 	player->seconds_since_attack = 0;
 
-	auto bullet = std::make_shared<Entity>(bullet_model_id);
+	auto bullet = std::make_shared<Entity>(player_bullet_model_id);
 	const glm::vec3 position = player->scene_entity->position;
 	const glm::vec3 offset{
 		player->desired_facing.x,

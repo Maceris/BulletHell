@@ -56,7 +56,8 @@ private:
 	std::shared_ptr<Animation> enemy_idle_animation;
 	std::shared_ptr<Animation> enemy_running_animation;
 
-	std::string bullet_model_id;
+	std::string enemy_bullet_model_id;
+	std::string player_bullet_model_id;
 
 	double seconds_since_enemy_spawn = 0;
 
