@@ -105,8 +105,8 @@ bool GameLogic::initialize()
 	current_scene->fog.color = glm::vec3(0.5f, 0.5f, 0.5f);
 	current_scene->fog.density = 0.02f;
 
-	current_scene->camera.set_position(-11.0f, 11.0f, 0.0f);
-	current_scene->camera.add_rotation(0.42f, 1.92f);
+	current_scene->camera.set_position(-18.0f, 20.0f, 0.0f);
+	current_scene->camera.add_rotation(0.82f, 1.57f);
 
 	TIME_START("Map Init");
 	current_map = std::make_shared<GameMap>();
