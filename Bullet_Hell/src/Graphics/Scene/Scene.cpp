@@ -47,11 +47,11 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 		vec.push_back(entity);
 		if (result->second->is_animated())
 		{
-			animated_models_dirty = true;
+			animated_entities_dirty = true;
 		}
 		else
 		{
-			static_models_dirty = true;
+			static_entities_dirty = true;
 		}
 	}
 	else
@@ -59,12 +59,12 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 		entities_pending_models.push_back(entity);
 	}
 	dirty = true;
-	
 }
 
 void Scene::add_model(std::shared_ptr<Model> model)
 {
 	model_map.emplace(std::make_pair(model->id, model));
+	bool found_pending_model = false;
 	for (auto it = entities_pending_models.begin(); 
 		it < entities_pending_models.end();)
 	{
@@ -73,6 +73,7 @@ void Scene::add_model(std::shared_ptr<Model> model)
 		{
 			model->entity_list.push_back(*it);
 			it = entities_pending_models.erase(it);
+			found_pending_model = true;
 		}
 		else
 		{
@@ -84,10 +85,18 @@ void Scene::add_model(std::shared_ptr<Model> model)
 	if (model->is_animated())
 	{
 		animated_models_dirty = true;
+		if (found_pending_model)
+		{
+			animated_entities_dirty = true;
+		}
 	}
 	else
 	{
 		static_models_dirty = true;
+		if (found_pending_model)
+		{
+			static_entities_dirty = true;
+		}
 	}
 }
 
@@ -119,14 +128,6 @@ void Scene::prune_models()
 			}
 
 			dirty = true;
-			if (model_mapping.second->is_animated())
-			{
-				animated_models_dirty = true;
-			}
-			else
-			{
-				static_models_dirty = true;
-			}
 		}
 	}
 #if PRUNE_MODELS_WITHOUT_ENTITIES
@@ -134,6 +135,14 @@ void Scene::prune_models()
 	{
 		if (iterator->second->entity_list.empty())
 		{
+			if (iterator->second->is_animated())
+			{
+				animated_models_dirty = true;
+			}
+			else
+			{
+				static_models_dirty = true;
+			}
 			iterator = model_map.erase(iterator);
 		}
 		else
@@ -212,7 +221,6 @@ void Scene::handle_chunk_loading(EventPointer event)
 		+ std::to_string(chunk_contents.size()) + " chunks right now.");
 
 	dirty = true;
-	static_models_dirty = true;
 }
 
 void Scene::handle_chunk_unloading(EventPointer event)
@@ -239,7 +247,6 @@ void Scene::handle_chunk_unloading(EventPointer event)
 	chunk_contents.erase(unloaded_event->coordinates);
 
 	dirty = true;
-	static_models_dirty = true;
 }
 
 void Scene::load_tile(const int& x, const int& z, const Tile& tile,
@@ -266,14 +273,14 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 		if (!model_map.contains(model_name))
 		{
 			tile_model = load_model(model_name);
-			model_map.emplace(std::make_pair(model_name, tile_model));
+			add_model(tile_model);
 		}
 		else
 		{
 			tile_model = model_map.find(model_name)->second;
 		}
 		auto tile_entity = std::make_shared<Entity>(tile_model->id);
-		tile_model->entity_list.push_back(tile_entity);
+		add_entity(tile_entity);
 		tile_entity->scale = TILE_SCALE;
 		tile_entity->set_position(x * TILE_SCALE * 2, 0.0f, 
 			z * TILE_SCALE * 2);

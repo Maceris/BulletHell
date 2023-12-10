@@ -308,11 +308,17 @@ void GameLogic::run_game()
 		TIME_END("Processing Events");
 
 		TIME_START("Updating Scene");
+		TIME_START("Updating Scene - Pruning Models");
 		current_scene->prune_models();
+		TIME_END("Updating Scene - Pruning Models");
 		if (current_scene->dirty)
 		{
+			TIME_START("Updating Scene - Updating Model Lists");
 			current_scene->rebuild_model_lists();
+			TIME_END("Updating Scene - Updating Model Lists");
+			TIME_START("Updating Scene - Updating Data");
 			render->setup_all_data(*current_scene);
+			TIME_END("Updating Scene - Updating Data");
 		}
 		TIME_END("Updating Scene");
 

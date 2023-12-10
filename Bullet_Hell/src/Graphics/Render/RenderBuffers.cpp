@@ -88,16 +88,11 @@ void RenderBuffers::define_vertex_attributes()
 	glVertexAttribPointer(4, 2, GL_FLOAT, false, stride, (void*)pointer);
 }
 
-void RenderBuffers::load_animated_models(const Scene& scene)
+void RenderBuffers::load_animated_entity_buffers(const Scene& scene)
 {
 	buffers_populated = true;
-	const std::vector<std::shared_ptr<Model>>& model_list =
-		scene.get_animated_model_list();
 
-	load_binding_poses(model_list);
-	load_bones_matrices_buffer(model_list);
-	load_bones_indices_weights(model_list);
-
+	const ModelList& model_list = scene.get_animated_model_list();
 	glBindVertexArray(animated_vao);
 
 	size_t vertices_size = 0;
@@ -113,7 +108,7 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 			continue;
 		}
 		EntityList& entities = model->entity_list;
-		std::vector<MeshDrawData>& mesh_draw_data_list 
+		std::vector<MeshDrawData>& mesh_draw_data_list
 			= model->mesh_draw_data_list;
 
 		mesh_draw_data_list.clear();
@@ -130,8 +125,8 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 				mesh_draw_data_list.emplace_back(mesh_size_in_bytes,
 					mesh_data.material->material_id, offset,
 					mesh_data.indices.size(), AnimMeshDrawData(
-						entity, 
-						static_cast<int>(binding_pose_offset), 
+						entity,
+						static_cast<int>(binding_pose_offset),
 						static_cast<int>(weights_offset)
 					)
 				);
@@ -171,12 +166,22 @@ void RenderBuffers::load_animated_models(const Scene& scene)
 	define_vertex_attributes();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, animated_index_vbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 		indices_buffer.size() * sizeof(uint32_t), indices_buffer.data(),
 		GL_STATIC_DRAW);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void RenderBuffers::load_animated_models(const Scene& scene)
+{
+	buffers_populated = true;
+	const ModelList& model_list = scene.get_animated_model_list();
+
+	load_binding_poses(model_list);
+	load_bones_matrices_buffer(model_list);
+	load_bones_indices_weights(model_list);
 }
 
 void RenderBuffers::load_binding_poses(const ModelList& models)

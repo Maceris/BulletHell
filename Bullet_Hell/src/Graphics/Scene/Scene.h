@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 
+#include <atomic>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -33,6 +34,9 @@ struct Tile;
 /// </summary>
 class Scene
 {
+#if DEBUG
+	friend class DebugUI;
+#endif
 public:
 	/// <summary>
 	/// Information about where the camera is and where it is looking.
@@ -48,11 +52,6 @@ public:
 	/// The projection matrix, taking into account screen size.
 	/// </summary>
 	Projection projection;
-
-	/// <summary>
-	/// A map of IDs to the corresponding model.
-	/// </summary>
-	std::map<const std::string, std::shared_ptr<Model>> model_map;
 
 	/// <summary>
 	/// All of the lights in the scene.
@@ -112,17 +111,27 @@ public:
 	/// true means that the scene is definitely dirty, but false only means
 	/// that it's probably not dirty.
 	/// </summary>
-	bool dirty = true;
+	std::atomic_bool dirty = true;
+
+	/// <summary>
+	/// Whether the animated entities have been changed since we have rendered.
+	/// </summary>
+	std::atomic_bool animated_entities_dirty = true;
 
 	/// <summary>
 	/// Whether the animated models have been changed since we have rendered.
 	/// </summary>
-	bool animated_models_dirty = true;
+	std::atomic_bool animated_models_dirty = true;
+
+	/// <summary>
+	/// Whether the static entities have been changed since we have rendered.
+	/// </summary>
+	std::atomic_bool static_entities_dirty = true;
 
 	/// <summary>
 	/// Whether the static models have been changed since we have rendered.
 	/// </summary>
-	bool static_models_dirty = true;
+	std::atomic_bool static_models_dirty = true;
 
 	/// <summary>
 	/// Tracks the rendering related things that we have loaded for each chunk.
@@ -157,15 +166,21 @@ public:
 	void rebuild_model_lists();
 
 private:
+
+	std::vector<std::shared_ptr<Model>> cached_model_list;
+	std::vector<std::shared_ptr<Model>> cached_static_model_list;
+	std::vector<std::shared_ptr<Model>> cached_animated_model_list;
+
 	/// <summary>
 	/// A list of entities that we have added, but which we did not yet have
 	/// models for.
 	/// </summary>
 	std::vector<std::shared_ptr<Entity>> entities_pending_models;
 
-	std::vector<std::shared_ptr<Model>> cached_model_list;
-	std::vector<std::shared_ptr<Model>> cached_static_model_list;
-	std::vector<std::shared_ptr<Model>> cached_animated_model_list;
+	/// <summary>
+	/// A map of IDs to the corresponding model.
+	/// </summary>
+	std::map<const std::string, std::shared_ptr<Model>> model_map;
 
 	/// <summary>
 	/// Used to synchronize access to the list of entities that are awaiting

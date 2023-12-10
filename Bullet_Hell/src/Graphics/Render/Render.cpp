@@ -102,15 +102,29 @@ void Render::recalculate_materials(const Scene& scene)
 
 void Render::refresh_animated_data(Scene& scene)
 {
-	render_buffers.load_animated_models(scene);
-	setup_animated_command_buffer(scene);
+	if (scene.animated_models_dirty)
+	{
+		render_buffers.load_animated_models(scene);
+	}
+	if (scene.animated_models_dirty || scene.animated_entities_dirty)
+	{
+		setup_animated_command_buffer(scene);
+	}
+	scene.animated_entities_dirty = false;
 	scene.animated_models_dirty = false;
 }
 
 void Render::refresh_static_data(Scene& scene)
 {
-	render_buffers.load_static_models(scene);
-	setup_static_command_buffer(scene);
+	if (scene.static_models_dirty)
+	{
+		render_buffers.load_static_models(scene);
+	}
+	if (scene.static_models_dirty || scene.static_entities_dirty)
+	{
+		setup_static_command_buffer(scene);
+	}
+	scene.static_entities_dirty = false;
 	scene.static_models_dirty = false;
 }
 
@@ -192,16 +206,27 @@ void Render::resize(const unsigned int width, const unsigned int height)
 
 void Render::setup_all_data(Scene& scene)
 {
-	if (scene.static_models_dirty)
+	TIME_START("Updating Scene - Updating Data - Static");
+	if (scene.static_models_dirty || scene.static_entities_dirty)
 	{
 		refresh_static_data(scene);
 	}
-	if (scene.animated_models_dirty)
+	TIME_END("Updating Scene - Updating Data - Static");
+	TIME_START("Updating Scene - Updating Data - Animated");
+	if (scene.animated_models_dirty || scene.animated_entities_dirty)
 	{
 		refresh_animated_data(scene);
 	}
+	TIME_END("Updating Scene - Updating Data - Animated");
+	TIME_START("Updating Scene - Updating Data - Materials");
 	recalculate_materials(scene);
-	debug_render.update_lines(scene);
+	TIME_END("Updating Scene - Updating Data - Materials");
+	TIME_START("Updating Scene - Updating Data - Debug Lines");
+	if (Render::configuration.debug_lines)
+	{
+		debug_render.update_lines(scene);
+	}
+	TIME_END("Updating Scene - Updating Data - Debug Lines");
 	scene.dirty = false;
 }
 
@@ -209,6 +234,8 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 {
 	const std::vector<std::shared_ptr<Model>>& model_list = 
 		scene.get_animated_model_list();
+
+	render_buffers.load_animated_entity_buffers(scene);
 
 	size_t mesh_count = 0;
 	size_t entity_count = 0;

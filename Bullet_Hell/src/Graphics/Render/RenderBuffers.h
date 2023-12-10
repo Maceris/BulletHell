@@ -39,16 +39,22 @@ public:
 	void cleanup();
 
 	/// <summary>
-	/// Load models with animation data in a scene. Make sure to clear out the
-	/// existing buffer data before doing this a second time.
+	/// Load all the buffers for animated models that are affected by how 
+	/// many animated entities there are.
+	/// </summary>
+	/// <param name="scene">The scene to load data from.</param>
+	void load_animated_entity_buffers(const Scene& scene);
+
+	/// <summary>
+	/// Load models with animation data in a scene. This just loads the 
+	/// binding poses and bone information, the buffers for the entities
+	/// still need setting up after this.
 	/// </summary>
 	/// <param name="scene">The scene to load data from.</param>
 	void load_animated_models(const Scene& scene);
 
 	/// <summary>
-	/// Load models with no animation data in a scene. Make sure to clear out
-	/// the existing buffer data before doing this a second time.
-	/// </summary>
+	/// Load models with no animation data in a scene.
 	/// <param name="scene">The scene to load data from.</param>
 	void load_static_models(const Scene& scene);
 
