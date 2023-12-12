@@ -107,11 +107,6 @@ void GuiRender::resize(const unsigned int width, const unsigned int height)
 	imGuiIO.DisplaySize.y = static_cast<float>(height);
 }
 
-void GuiRender::setup_imgui_keys()
-{
-	//TODO(ches) check if this is really still required after ImGui issue #4921
-}
-
 GuiRender::~GuiRender()
 {
 	ImGui_ImplOpenGL3_Shutdown();

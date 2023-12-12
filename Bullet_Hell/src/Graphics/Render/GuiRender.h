@@ -50,9 +50,4 @@ private:
 	/// Set up the uniform map.
 	/// </summary>
 	void create_uniforms();
-
-	/// <summary>
-	/// Set up nonstandard key codes to make sure they work.
-	/// </summary>
-	void setup_imgui_keys();
 };
