@@ -116,7 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/boost_1_83_0;$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/boost_1_83_0;$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/PerlinNoise;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/boost_1_83_0;$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/tmxlite/tmxlite/include;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src/3rdParty/boost_1_83_0;$(ProjectDir)/src/3rdParty/CppDelegates;$(ProjectDir)/src/3rdParty/glad/include/glad;$(ProjectDir)/src/3rdParty/glm/glm;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include;$(ProjectDir)/src/3rdParty/glfw-3.3.8/include/GLFW;$(ProjectDir)/src/3rdParty/imgui-1.89.9;$(ProjectDir)/src/3rdParty/imgui-1.89.9/backends;$(ProjectDir)/src/3rdParty/imgui-1.89.9/misc/cpp;$(ProjectDir)/src/3rdParty/PerlinNoise;$(ProjectDir)/src/3rdParty/ziplib/Source/ZipLib;$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
