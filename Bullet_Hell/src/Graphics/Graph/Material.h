@@ -68,5 +68,15 @@ struct Material
 	Material(const Material&) = default;
 	Material& operator=(const Material&) = default;
 	~Material() = default;
+
+	bool operator==(const Material&) const noexcept;
+	
 };
 
+/// <summary>
+/// Used to hash materials so we can reuse them.
+/// </summary>
+struct MaterialHash
+{
+	std::size_t operator()(const Material&) const noexcept;
+};
