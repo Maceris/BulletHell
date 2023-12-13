@@ -1,6 +1,12 @@
 #include "Map/MapGenerator.h"
 
+#include "PerlinNoise.hpp"
+
 #include "Chunk.h"
+
+const siv::PerlinNoise::seed_type seed = 1;
+
+const siv::BasicPerlinNoise<float> perlin{ seed };
 
 /// <summary>
 /// Calculate the global coordinate of a tile, based on the chunk coordinate
@@ -19,8 +25,14 @@ int constexpr global_coordinate(uint16_t chunk_coordinate,
 
 TileID MapGenerator::get_tile(int x, int y)
 {
-	//TODO(ches) actually generate tiles
-	return TILE_GROUND;
+	const float noise = perlin.octave2D(x, y, 4);
+
+	if (noise <= 0)
+	{
+		return TILE_GROUND;
+	}
+
+	return TILE_GROUND_DIRTY;
 }
 
 void MapGenerator::populate_chunk(Chunk& chunk)

@@ -238,6 +238,9 @@ void Scene::load_tile(const int& x, const int& z, const Tile& tile,
 	case TILE_GROUND:
 		model_name = "models/map/tile_001.model";
 		break;
+	case TILE_GROUND_DIRTY:
+		model_name = "models/map/tile_002.model";
+		break;
 	case TILE_VOID:
 		//NOTE(ches) Nothing required here.
 		break;

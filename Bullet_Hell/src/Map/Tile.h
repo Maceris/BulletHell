@@ -35,4 +35,5 @@ struct Tile
 #pragma region Tile ID constants
 constexpr TileID TILE_VOID = 0;
 constexpr TileID TILE_GROUND = 1;
+constexpr TileID TILE_GROUND_DIRTY = 2;
 #pragma endregion
