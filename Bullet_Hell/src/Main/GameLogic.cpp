@@ -116,7 +116,6 @@ bool GameLogic::initialize()
 	g_pawn_manager = ALLOC PawnManager();
 
 	current_scene->rebuild_model_lists();
-	render->recalculate_materials(*current_scene);
 	current_scene->dirty = true;
 
 	return true;

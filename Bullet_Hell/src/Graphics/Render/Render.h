@@ -45,12 +45,6 @@ public:
 	~Render();
 
 	/// <summary>
-	/// Set up uniforms for textures and materials.
-	/// </summary>
-	/// <param name="scene">The scene we will be rendering.</param>
-	void recalculate_materials(const Scene& scene);
-
-	/// <summary>
 	/// Refresh the buffers for animated models.
 	/// </summary>
 	/// <param name="scene">The scene to read models from.</param>
@@ -144,6 +138,12 @@ private:
 	/// <param name="height">The height of the window, in pixels.</param>
 	void light_render_start(const unsigned int width,
 		const unsigned int height);
+
+	/// <summary>
+	/// Set up material IDs.
+	/// </summary>
+	/// <param name="scene">The scene we will be rendering.</param>
+	void recalculate_materials(const Scene& scene);
 
 	/// <summary>
 	/// Set up the command buffers to render animated models, which should be

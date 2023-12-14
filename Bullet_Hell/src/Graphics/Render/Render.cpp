@@ -1,4 +1,7 @@
 #include "Graphics/Render/Render.h"
+
+#include <unordered_map>
+
 #include "gtc/type_ptr.hpp"
 
 #include "Debugging/Logger.h"
@@ -95,9 +98,46 @@ void Render::light_render_start(const unsigned int width,
 	glBlendFunc(GL_ONE, GL_ONE);
 }
 
+void calculate_materials(const Scene& scene, bool animated)
+{
+	int next_ID = 0;
+	std::unordered_map<Material, int, MaterialHash> materials;
+
+	const auto& model_list = animated
+		? scene.get_animated_model_list()
+		: scene.get_static_model_list();
+	
+	for (const auto& model : model_list)
+	{
+		for (const auto& mesh_data : model->mesh_data_list)
+		{
+			const std::shared_ptr<Material>& material = mesh_data.material;
+
+			int material_index = 0;
+			if (materials.contains(*material))
+			{
+				material_index = materials.find(*material)->second;
+			}
+			else
+			{
+				materials.insert(std::make_pair(*material, next_ID));
+				material_index = next_ID;
+				++next_ID;
+				LOG_ASSERT(next_ID <= MAX_MATERIALS
+					&& "We have more materials than we can bind in one draw call");
+			}
+			material->material_id = material_index;
+		}
+	}
+}
+
 void Render::recalculate_materials(const Scene& scene)
 {
-	scene_render.setup_materials_uniform(scene);
+	const bool for_animated_models = true;
+	const bool for_static_models = false;
+
+	calculate_materials(scene, for_animated_models);
+	calculate_materials(scene, for_static_models);
 }
 
 void Render::refresh_animated_data(Scene& scene)
@@ -206,21 +246,24 @@ void Render::resize(const unsigned int width, const unsigned int height)
 
 void Render::setup_all_data(Scene& scene)
 {
+	TIME_START("Updating Scene - Updating Data - Materials");
+	recalculate_materials(scene);
+	TIME_END("Updating Scene - Updating Data - Materials");
+
 	TIME_START("Updating Scene - Updating Data - Static");
 	if (scene.static_models_dirty || scene.static_entities_dirty)
 	{
 		refresh_static_data(scene);
 	}
 	TIME_END("Updating Scene - Updating Data - Static");
+
 	TIME_START("Updating Scene - Updating Data - Animated");
 	if (scene.animated_models_dirty || scene.animated_entities_dirty)
 	{
 		refresh_animated_data(scene);
 	}
 	TIME_END("Updating Scene - Updating Data - Animated");
-	TIME_START("Updating Scene - Updating Data - Materials");
-	recalculate_materials(scene);
-	TIME_END("Updating Scene - Updating Data - Materials");
+	
 	TIME_START("Updating Scene - Updating Data - Debug Lines");
 	if (Render::configuration.debug_lines)
 	{
@@ -404,7 +447,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 	for (const auto& model : model_list)
 	{
 		const EntityList& entities = model->entity_list;
-		const int entity_count = (int) entities.size();
+		const int entity_count = static_cast<int>(entities.size());
 		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
 		{
 			// count
@@ -427,7 +470,6 @@ void Render::setup_static_command_buffer(const Scene& scene)
 			const int material_index = mesh_draw_data.material;
 			for (const auto& entity : entities)
 			{
-				//NOTE(ches) it should (tm) be in the map
 				auto index = entity_index_map.find(entity->entity_ID);
 				LOG_ASSERT(index != entity_index_map.end()
 					&& "Our entity ID is missing");

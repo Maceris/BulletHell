@@ -1,5 +1,7 @@
 #include "Graphics/Render/SceneRender.h"
 
+#include <unordered_set>
+
 #include "Debugging/Logger.h"
 #include "Main/GameLogic.h"
 #include "Graphics/Graph/TextureResource.h"
@@ -146,7 +148,6 @@ void main()
 #pragma endregion
 
 SceneRender::SceneRender()
-    : texture_bindings{}
 {
     std::vector<ShaderModuleData> shader_modules;
     shader_modules.emplace_back(vertex_shader_source,
@@ -173,22 +174,11 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
     uniforms_map->set_uniform("view_matrix",
         scene.camera.view_matrix);
 
-    glActiveTexture(GL_TEXTURE0);
-    Texture::default_texture->bind();
-
-    const auto& model_list = scene.get_model_list();
-
-    int start_texture = 1;
-    for (int i = 0; i < texture_bindings.size(); ++i)
-    {
-        const std::string& texture_name = texture_bindings[i];
-        auto texture = load_texture(texture_name);
-        glActiveTexture(GL_TEXTURE0 + start_texture + i);
-        texture->bind();
-        uniforms_map->set_uniform("texture_sampler["
-            + std::to_string(start_texture + i) + "]", start_texture + i);
-    }
+    const bool for_animated_models = true;
+    const bool for_static_models = false;
     
+    setup_materials_uniform(scene, for_static_models);
+
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
         command_buffers.static_draw_element_buffer);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, MODEL_MATRICES_BINDING,
@@ -198,6 +188,8 @@ void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers
     glBindVertexArray(render_buffers.static_vao);
     glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr,
         command_buffers.static_draw_count, 0);
+
+    setup_materials_uniform(scene, for_animated_models);
 
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
         command_buffers.animated_draw_element_buffer);
@@ -250,26 +242,22 @@ int constexpr find(const std::vector<T>& list, const T& value)
     return i;
 }
 
-void SceneRender::setup_materials_uniform(const Scene& scene)
+void SceneRender::setup_materials_uniform(const Scene& scene, 
+    const bool animated)
 {
-    shader_program->bind();
-    int next_ID = 0;
-
     const int first_index = 1;
 
-    texture_bindings.clear();
+    std::vector<std::string> texture_bindings;
 
-    const auto& model_list = scene.get_model_list();
+    const auto& model_list = animated 
+        ? scene.get_animated_model_list() 
+        : scene.get_static_model_list();
 
     for (const auto& model: model_list)
     {
         for (const auto& mesh_data : model->mesh_data_list)
         {
             const auto& material = mesh_data.material;
-            material->material_id = next_ID++;
-
-            LOG_ASSERT(next_ID <= MAX_TEXTURES 
-                && "We have more textures than we can bind in one draw call");
 
             const std::string prefix = "materials[" 
                 + std::to_string(material->material_id) + "].";
@@ -307,5 +295,21 @@ void SceneRender::setup_materials_uniform(const Scene& scene)
             uniforms_map->set_uniform(prefix + "normal_map_index", index);
         }
     }
-    shader_program->unbind();
+
+    LOG_ASSERT(texture_bindings.size() + 1 <= MAX_TEXTURES
+        && "We have more textures than we can bind in one draw call");
+
+    glActiveTexture(GL_TEXTURE0);
+    Texture::default_texture->bind();
+
+    int start_texture = 1;
+    for (int i = 0; i < texture_bindings.size(); ++i)
+    {
+        const std::string& texture_name = texture_bindings[i];
+        auto texture = load_texture(texture_name);
+        glActiveTexture(GL_TEXTURE0 + start_texture + i);
+        texture->bind();
+        uniforms_map->set_uniform("texture_sampler["
+            + std::to_string(start_texture + i) + "]", start_texture + i);
+    }
 }
