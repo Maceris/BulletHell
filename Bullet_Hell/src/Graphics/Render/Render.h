@@ -64,6 +64,11 @@ public:
 	void render(const Window& window, const Scene& scene);
 
 	/// <summary>
+	/// Render the UI
+	/// </summary>
+	void render_just_ui(const Window& window, const Scene& scene);
+
+	/// <summary>
 	/// Update the buffers for when the window is resized.
 	/// </summary>
 	/// <param name="width">The new window width, in pixels.</param>

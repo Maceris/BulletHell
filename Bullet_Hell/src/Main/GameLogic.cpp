@@ -44,7 +44,7 @@ constexpr double MAP_RECENTER_DELAY = 1;
 constexpr double ANIMATION_FRAME_TIME = 1.0 / 24;
 
 GameLogic::GameLogic()
-	: current_state{ starting_up }
+	: current_state{ STARTING_UP }
 	, resource_cache{ nullptr }
 	, render{ nullptr }
 	, current_scene{ nullptr }
@@ -52,6 +52,7 @@ GameLogic::GameLogic()
 	, last_frame{ std::chrono::steady_clock::now() }
 	, last_map_recenter{ std::chrono::steady_clock::now() }
 	, window{ nullptr }
+	, action_state{}
 {
 	g_game_logic = this;
 }
@@ -83,6 +84,11 @@ bool GameLogic::initialize()
 	TIME_START("Window Init");
 	window->initialize();
 	TIME_END("Window Init");
+
+	for (Action action : ActionIterator())
+	{
+		action_state.emplace(std::make_pair(action, false));
+	}
 
 	Texture::default_texture = load_texture("textures/default_texture.image");
 
@@ -134,13 +140,34 @@ void GameLogic::notify_about_resize(const int width, const int height)
 
 void GameLogic::on_close()
 {
-	current_state = quitting;
+	current_state = QUITTING;
 
 	window->terminate();
 
 	SAFE_DELETE(g_pawn_manager);
 	SAFE_DELETE(g_event_manager);
 	SAFE_DELETE(window);
+}
+
+void GameLogic::on_key_pressed(int key, int scancode, int action, int mods)
+{
+	const auto& result = options.key_bindings.find(key);
+	if (result == options.key_bindings.end())
+	{
+		//NOTE(ches) special handling for non-bound keys could go here
+		return;
+	}
+	const Action mapped_action = result->second;
+
+	auto current_mapping = action_state.find(mapped_action);
+	if (action == GLFW_PRESS)
+	{
+		current_mapping->second = true;
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		current_mapping->second = false;
+	}
 }
 
 void GameLogic::process_input()
@@ -151,45 +178,45 @@ void GameLogic::process_input()
 	const float mouse_sensitivity = 0.02f;
 	const float move_amount = 
 		static_cast<float>(seconds_since_last_frame * move_speed_per_second);
-	if (window->is_key_pressed(GLFW_KEY_W))
+	if (action_desired(CAMERA_MOVE_FORWARD))
 	{
 		camera.move_forward(move_amount);
 	}
-	if (window->is_key_pressed(GLFW_KEY_S))
+	if (action_desired(CAMERA_MOVE_BACKWARD))
 	{
 		camera.move_backward(move_amount);
 	}
-	if (window->is_key_pressed(GLFW_KEY_A))
+	if (action_desired(CAMERA_MOVE_LEFT))
 	{
 		camera.move_left(move_amount);
 	}
-	if (window->is_key_pressed(GLFW_KEY_D))
+	if (action_desired(CAMERA_MOVE_RIGHT))
 	{
 		camera.move_right(move_amount);
 	}
-	if (window->is_key_pressed(GLFW_KEY_LEFT_SHIFT))
+	if (action_desired(CAMERA_MOVE_DOWN))
 	{
 		camera.move_down(move_amount);
 	}
-	if (window->is_key_pressed(GLFW_KEY_SPACE))
+	if (action_desired(CAMERA_MOVE_UP))
 	{
 		camera.move_up(move_amount);
 	}
 
 	glm::vec2 movement(0.0f, 0.0f);
-	if (window->is_key_pressed(GLFW_KEY_UP))
+	if (action_desired(PLAYER_MOVE_FORWARD))
 	{
 		movement += glm::vec2(1.0f, 0.0f);
 	}
-	if (window->is_key_pressed(GLFW_KEY_DOWN))
+	if (action_desired(PLAYER_MOVE_BACKWARD))
 	{
 		movement += glm::vec2(-1.0f, 0.0f);
 	}
-	if (window->is_key_pressed(GLFW_KEY_LEFT))
+	if (action_desired(PLAYER_MOVE_LEFT))
 	{
 		movement += glm::vec2(0.0f, -1.0f);
 	}
-	if (window->is_key_pressed(GLFW_KEY_RIGHT))
+	if (action_desired(PLAYER_MOVE_RIGHT))
 	{
 		movement += glm::vec2(0.0f, 1.0f);
 	}
@@ -215,7 +242,7 @@ void GameLogic::process_input()
 		);
 	}
 
-	if (window->is_key_pressed(GLFW_KEY_E))
+	if (action_desired(PLAYER_ATTACK))
 	{
 		g_pawn_manager->player->wants_to_attack = true;
 	}
@@ -224,13 +251,29 @@ void GameLogic::process_input()
 		g_pawn_manager->player->wants_to_attack = false;
 	}
 
+	if (action_desired(PAUSE_OR_UNPAUSE_GAME))
+	{
+		//NOTE(ches) immediately reset it to false to prevent spamming
+		auto current_mapping = action_state.find(PAUSE_OR_UNPAUSE_GAME);
+		current_mapping->second = false;
+		if (current_state == RUNNING)
+		{
+			on_pause();
+		}
+		else if (current_state == PAUSED)
+		{
+			on_resume();
+		}
+	}
 }
 
 void GameLogic::request_close()
 {
-	if (current_state == running || current_state == starting_up)
+	if (current_state == RUNNING 
+		|| current_state == STARTING_UP 
+		|| current_state == PAUSED)
 	{
-		current_state = quit_requested;
+		current_state = QUIT_REQUESTED;
 	}
 }
 
@@ -252,7 +295,12 @@ void GameLogic::calculate_delta_time()
 	}
 
 	seconds_since_last_animation_tick += seconds_since_last_frame;
-	
+}
+
+[[nodiscard]]
+bool GameLogic::action_desired(const Action& action) const noexcept
+{
+	return action_state.find(action)->second;
 }
 
 void GameLogic::attempt_map_recenter()
@@ -289,58 +337,96 @@ void GameLogic::attempt_map_recenter()
 
 void GameLogic::run_game()
 {
-	double simulation_accumulator = 0.0f;
-	current_state = running;
+	current_state = RUNNING;
 	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
-	while (current_state == running)
+	while (current_state != QUIT_REQUESTED)
 	{
-		calculate_delta_time();
 		TIME_START("Processing Input");
 		process_input();
 		TIME_END("Processing Input");
 
-		TIME_START("Updating Pawns");
-		simulation_accumulator += seconds_since_last_frame;
-		while (simulation_accumulator >= SIMULATION_TIMESTEP)
+		switch (current_state)
 		{
-			g_pawn_manager->tick();
-			simulation_accumulator -= SIMULATION_TIMESTEP;
+		case PAUSED:
+			render->render_just_ui(*window, *current_scene);
+			window->render();
+			break;
+		case RUNNING:
+			main_processing();
+			break;
+		case STARTING_UP:
+			LOG_ERROR("Somehow starting up during main loop");
+			break;
+		case QUIT_REQUESTED:
+			break;
+		case QUITTING:
+			LOG_ERROR("Somehow quitting during main loop");
 		}
-		TIME_END("Updating Pawns");
-
-		TIME_START("Recentering Map");
-		attempt_map_recenter();
-		TIME_END("Recentering Map");
-
-		TIME_START("Processing Events");
-		g_event_manager->update(10);
-		TIME_END("Processing Events");
-
-		TIME_START("Updating Scene");
-		TIME_START("Updating Scene - Pruning Models");
-		current_scene->prune_models();
-		TIME_END("Updating Scene - Pruning Models");
-		if (current_scene->dirty)
-		{
-			TIME_START("Updating Scene - Updating Model Lists");
-			current_scene->rebuild_model_lists();
-			TIME_END("Updating Scene - Updating Model Lists");
-			TIME_START("Updating Scene - Updating Data");
-			render->setup_all_data(*current_scene);
-			TIME_END("Updating Scene - Updating Data");
-		}
-		TIME_END("Updating Scene");
-
-		if (seconds_since_last_animation_tick >= ANIMATION_FRAME_TIME)
-		{
-			last_animation_tick = std::chrono::steady_clock::now();
-			seconds_since_last_animation_tick = 0;
-			g_pawn_manager->tick_animations();
-		}
-
-		render->render(*window, *current_scene);
-		window->render();
-		++frame_count;
+		
 	}
-	
+}
+
+void GameLogic::main_processing()
+{
+	calculate_delta_time();
+
+	TIME_START("Updating Pawns");
+	simulation_accumulator += seconds_since_last_frame;
+	while (simulation_accumulator >= SIMULATION_TIMESTEP)
+	{
+		g_pawn_manager->tick();
+		simulation_accumulator -= SIMULATION_TIMESTEP;
+	}
+	TIME_END("Updating Pawns");
+
+	TIME_START("Recentering Map");
+	attempt_map_recenter();
+	TIME_END("Recentering Map");
+
+	TIME_START("Processing Events");
+	g_event_manager->update(10);
+	TIME_END("Processing Events");
+
+	TIME_START("Updating Scene");
+	TIME_START("Updating Scene - Pruning Models");
+	current_scene->prune_models();
+	TIME_END("Updating Scene - Pruning Models");
+	if (current_scene->dirty)
+	{
+		TIME_START("Updating Scene - Updating Model Lists");
+		current_scene->rebuild_model_lists();
+		TIME_END("Updating Scene - Updating Model Lists");
+		TIME_START("Updating Scene - Updating Data");
+		render->setup_all_data(*current_scene);
+		TIME_END("Updating Scene - Updating Data");
+	}
+	TIME_END("Updating Scene");
+
+	if (seconds_since_last_animation_tick >= ANIMATION_FRAME_TIME)
+	{
+		last_animation_tick = std::chrono::steady_clock::now();
+		seconds_since_last_animation_tick = 0;
+		g_pawn_manager->tick_animations();
+	}
+
+	render->render(*window, *current_scene);
+	window->render();
+	++frame_count;
+}
+
+void GameLogic::on_pause()
+{
+	current_state = PAUSED;
+	//TODO(ches) pause the game
+}
+
+void GameLogic::on_resume()
+{
+	current_state = RUNNING;
+	//TODO(ches) resume the game
+}
+
+void GameLogic::reset()
+{
+
 }

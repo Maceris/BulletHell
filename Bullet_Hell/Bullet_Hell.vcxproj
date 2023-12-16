@@ -318,6 +318,7 @@
     <ClInclude Include="src\ResourceCache\ResourceHandle.h" />
     <ClInclude Include="src\ResourceCache\ResourceLoader.h" />
     <ClInclude Include="src\ResourceCache\ResourceZipFile.h" />
+    <ClInclude Include="src\Utilities\GenericIterator.h" />
     <ClInclude Include="src\Utilities\MathUtil.h" />
     <ClInclude Include="src\Utilities\OpenGLUtil.h" />
     <ClInclude Include="src\Utilities\Portability.h" />

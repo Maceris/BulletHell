@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include <chrono>
+#include <map>
 #include <memory>
 
 #include "Main/GameOptions.h"
@@ -21,21 +22,25 @@ class Window;
 enum GameState
 {
 	/// <summary>
+	/// The game is currently paused and not simulating game logic.
+	/// </summary>
+	PAUSED,
+	/// <summary>
 	/// The game is not done initializing.
 	/// </summary>
-	starting_up,
+	STARTING_UP,
 	/// <summary>
 	/// The game has loaded fully and is running in the main loop.
 	/// </summary>
-	running,
+	RUNNING,
 	/// <summary>
 	/// The game should shut down, but has not yet done so.
 	/// </summary>
-	quit_requested,
+	QUIT_REQUESTED,
 	/// <summary>
 	/// The game is in the process of shutting down.
 	/// </summary>
-	quitting
+	QUITTING
 };
 
 using Instant = std::chrono::steady_clock::time_point;
@@ -89,6 +94,17 @@ public:
 	void on_close();
 
 	/// <summary>
+	/// Handle a key being pressed by mapping it to actions to be processed
+	/// later. May do some immediate handling in edge cases.
+	/// </summary>
+	/// <param name="key">The keyboard key that was pressed or released.
+	/// </param>
+	/// <param name="scancode">The system-specific scancode of the key.</param>
+	/// <param name="action">GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT.</param>
+	/// <param name="mods">Bit field describing which modifier keys were
+	void on_key_pressed(int key, int scancode, int action, int mods);
+
+	/// <summary>
 	/// Called when we need to shut down.
 	/// </summary>
 	void request_close();
@@ -119,10 +135,15 @@ private:
 	/// </summary>
 	GameState current_state;
 
-	void process_input();
+	/// <summary>
+	/// A mapping from actions to booleans representing whether the player is
+	/// currently trying to do that action based on inputs.
+	/// </summary>
+	std::map<Action, bool> action_state;
 
 	Instant last_frame;
 	double seconds_since_last_frame = 0;
+	double simulation_accumulator = 0;
 
 	/// <summary>
 	/// How many frames since we last checked FPS.
@@ -135,12 +156,47 @@ private:
 	double seconds_since_last_animation_tick = 0;
 	Instant last_map_recenter;
 
-	void calculate_delta_time();
+	[[nodiscard]] bool action_desired(const Action& action) const noexcept;
 
 	/// <summary>
 	/// Check if we need to recenter the map, and do so if required.
 	/// </summary>
 	void attempt_map_recenter();
+
+	/// <summary>
+	/// Calculate ellapsed time since last frame and update our internal
+	/// timers.
+	/// </summary>
+	void calculate_delta_time();
+
+	/// <summary>
+	/// Handle the processing for one frame during normal gameplay.
+	/// </summary>
+	void main_processing();
+
+	/// <summary>
+	/// Handle input from the player.
+	/// </summary>
+	void process_input();
+
+	/// <summary>
+	/// Called to handle anything we have to do in order to put the game on
+	/// hold.
+	/// </summary>
+	void on_pause();
+
+	/// <summary>
+	/// Called when we are resuming, to start back up wiht simulating and
+	/// rendering.
+	/// </summary>
+	void on_resume();
+
+	/// <summary>
+	/// Called when we are resetting the game as if we just started playing for
+	/// the first time since opening the application.
+	/// </summary>
+	void reset();
+
 };
 
 /// <summary>

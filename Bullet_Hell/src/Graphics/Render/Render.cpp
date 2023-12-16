@@ -230,6 +230,16 @@ void Render::render(const Window& window, const Scene& scene)
 	TIME_END("Gui Render");
 }
 
+void Render::render_just_ui(const Window& window, const Scene& scene)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, window.width, window.height);
+
+	TIME_START("Gui Render");
+	gui_render.render(scene);
+	TIME_END("Gui Render");
+}
+
 void Render::resize(const unsigned int width, const unsigned int height)
 {
 	gui_render.resize(width, height);

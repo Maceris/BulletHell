@@ -48,11 +48,11 @@ static void error_callback(int error, const char* description)
 /// held down.</param>
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (ImGui::GetIO().WantCaptureKeyboard)
     {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-        g_game_logic->request_close();
+        return;
     }
+    g_game_logic->on_key_pressed(key, scancode, action, mods);
 }
 
 /// <summary>
@@ -218,15 +218,6 @@ void Window::initialize()
 
     OpenGLUtil::assert_extensions_exist(required_extensions);
 #endif
-}
-
-bool Window::is_key_pressed(int key_code)
-{
-    if (ImGui::GetIO().WantCaptureKeyboard)
-    {
-        return false;
-    }
-    return glfwGetKey(handle, key_code) == GLFW_PRESS;
 }
 
 bool Window::should_close()

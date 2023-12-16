@@ -24,13 +24,6 @@ public:
 	void initialize();
 
 	/// <summary>
-	/// Check if a key is pressed.
-	/// </summary>
-	/// <param name="key_code">The GLFW key code to look for.</param>
-	/// <returns>Whether the provided key is pressed.</returns>
-	bool is_key_pressed(int key_code);
-
-	/// <summary>
 	/// Render one frame.
 	/// </summary>
 	void render();
