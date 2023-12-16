@@ -42,18 +42,12 @@ constexpr float PLAYER_MOVE_SPEED =
 /// <summary>
 /// The base movement speed of enemies, in world units per timestep.
 /// </summary>
-constexpr float ENEMY_MOVE_SPEED = 
-	static_cast<float>(PLAYER_MOVE_SPEED_PER_SECOND * 0.40f *
-		SIMULATION_TIMESTEP
-	);
+constexpr float ENEMY_MOVE_SPEED = PLAYER_MOVE_SPEED * 0.40f;
 
 /// <summary>
 /// The base movement speed of bullets, in world units per timestep.
 /// </summary>
-constexpr float BULLET_MOVE_SPEED = 
-	static_cast<float>(PLAYER_MOVE_SPEED_PER_SECOND * 1.05f *
-		SIMULATION_TIMESTEP
-	);
+constexpr float BULLET_MOVE_SPEED = PLAYER_MOVE_SPEED * 1.10f;
 
 /// <summary>
 /// The maximum number of enemies that we can ever have at once.
@@ -63,12 +57,25 @@ constexpr int MAX_ENEMIES = 1000;
 /// <summary>
 /// How many seconds between pawn spawns.
 /// </summary>
-constexpr double SECONDS_PER_SPAWN = 0.5;
+constexpr double SECONDS_PER_SPAWN = 0.2;
 
 /// <summary>
 /// How far away from the player enemies can spawn.
 /// </summary>
 constexpr double SPAWN_RADIUS = 50;
+
+/// <summary>
+/// The distance from the center of a player or enemy that is considered
+/// to be within the collision area of the pawn.
+/// </summary>
+constexpr float COLLISION_RADIUS = 0.5;
+
+/// <summary>
+/// The squared value of the collision radius, to make distance calculations
+/// easier.
+/// </summary>
+constexpr float COLLISION_RADIUS_SQUARED = COLLISION_RADIUS 
+	* COLLISION_RADIUS;
 
 #pragma endregion
 
@@ -240,15 +247,41 @@ void inline PawnManager::tick_attacks()
 	}
 }
 
+[[nodiscard]] bool collides(const glm::vec3& bullet_position, 
+	const glm::vec3& pawn_position) noexcept
+{
+	const glm::vec2 bullet_position_2d{ bullet_position.x, bullet_position.z };
+	const glm::vec2 pawn_position_2d{ pawn_position.x, pawn_position.z };
+
+	const float distance2 = 
+		glm::distance2(bullet_position_2d, pawn_position_2d);
+
+	return distance2 <= COLLISION_RADIUS_SQUARED;
+}
+
 void inline PawnManager::tick_bullets()
 {
 	for (std::shared_ptr<Bullet> bullet : enemy_bullets)
 	{
 		bullet->scene_entity->position +=
-			glm::vec3(bullet->direction.x, 0, bullet->direction.y);
+			glm::vec3(bullet->direction.x, 0, bullet->direction.y) 
+			* BULLET_MOVE_SPEED;
 		bullet->scene_entity->update_model_matrix();
-
-		bullet->lifetime -= SIMULATION_TIMESTEP;
+		
+		if (collides(bullet->scene_entity->position,
+			player->scene_entity->position))
+		{
+			player->health -= bullet->damage;
+			if (player->health < 0)
+			{
+				player->health = 0;
+			}
+			bullet->scene_entity->dead = true;
+		}
+		else
+		{
+			bullet->lifetime -= SIMULATION_TIMESTEP;
+		}
 	}
 
 	while (!enemy_bullets.empty() && enemy_bullets.front()->lifetime <= 0)
@@ -259,8 +292,19 @@ void inline PawnManager::tick_bullets()
 	for (std::shared_ptr<Bullet> bullet : player_bullets)
 	{
 		bullet->scene_entity->position +=
-			glm::vec3(bullet->direction.x, 0, bullet->direction.y);
+			glm::vec3(bullet->direction.x, 0, bullet->direction.y)
+			* BULLET_MOVE_SPEED;
 		bullet->scene_entity->update_model_matrix();
+
+		for (Pawn& enemy : enemies)
+		{
+			if (collides(bullet->scene_entity->position,
+				enemy.scene_entity->position))
+			{
+				enemy.health -= bullet->damage;
+				bullet->scene_entity->dead = true;
+			}
+		}
 
 		bullet->lifetime -= SIMULATION_TIMESTEP;
 	}
