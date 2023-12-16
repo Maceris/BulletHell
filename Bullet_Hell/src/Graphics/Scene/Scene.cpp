@@ -140,6 +140,14 @@ void Scene::prune_models()
 			}
 
 			dirty = true;
+			if (model_mapping.second->is_animated())
+			{
+				animated_entities_dirty = true;
+			}
+			else
+			{
+				static_entities_dirty = true;
+			}
 		}
 	}
 }
