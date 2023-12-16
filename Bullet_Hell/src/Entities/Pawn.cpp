@@ -1,5 +1,7 @@
 #include "Entities/Pawn.h"
 
+#include "Graphics/Scene/Entity.h"
+
 Pawn::Pawn()
 	: desired_facing{ 0.0f, 0.0f }
 	, desired_movement{ 0.0f, 0.0f }
@@ -17,3 +19,8 @@ Pawn::Pawn(std::shared_ptr<Entity> entity, Health health)
 	, scene_entity{ entity }
 	, state{ AIState::IDLE }
 {}
+
+Pawn::~Pawn()
+{
+	scene_entity->dead = true;
+}

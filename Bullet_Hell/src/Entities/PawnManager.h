@@ -43,7 +43,7 @@ public:
 	boost::circular_buffer<std::shared_ptr<Bullet>> enemy_bullets;
 
 	std::shared_ptr<Pawn> player;
-	std::vector<Pawn> enemies;
+	std::vector<std::shared_ptr<Pawn>> enemies;
 
 private:
 

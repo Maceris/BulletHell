@@ -57,7 +57,7 @@ constexpr int MAX_ENEMIES = 1000;
 /// <summary>
 /// How many seconds between pawn spawns.
 /// </summary>
-constexpr double SECONDS_PER_SPAWN = 0.2;
+constexpr double SECONDS_PER_SPAWN = 5.0;
 
 /// <summary>
 /// How far away from the player enemies can spawn.
@@ -173,7 +173,7 @@ void PawnManager::spawn_enemy(const float& x, const float& z)
 	enemy_entity->animation_data.set_current_animation(enemy_idle_animation);
 	enemy_entity->animation_data.current_frame_index = rand() % enemy_idle_animation->frames.size();
 
-	enemies.emplace_back(enemy_entity, 200);
+	enemies.push_back(std::make_shared<Pawn>(enemy_entity, 200));
 }
 
 void PawnManager::tick()
@@ -187,9 +187,9 @@ void PawnManager::tick()
 void PawnManager::tick_animations()
 {
 	player->scene_entity->animation_data.next_frame();
-	for (Pawn& pawn : enemies)
+	for (auto& pawn : enemies)
 	{
-		AnimationData& animation_data = pawn.scene_entity->animation_data;
+		AnimationData& animation_data = pawn->scene_entity->animation_data;
 		if (animation_data.current_animation)
 		{
 			animation_data.next_frame();
@@ -200,6 +200,18 @@ void PawnManager::tick_animations()
 void inline PawnManager::tick_ai()
 {
 	seconds_since_enemy_spawn += SIMULATION_TIMESTEP;
+
+	for (auto iterator = enemies.begin(); iterator != enemies.end();)
+	{
+		if (iterator->get()->health <= 0)
+		{
+			iterator = enemies.erase(iterator);
+		}
+		else
+		{
+			++iterator;
+		}
+	}
 
 	while (enemies.size() < MAX_ENEMIES 
 		&& seconds_since_enemy_spawn >= SECONDS_PER_SPAWN)
@@ -212,27 +224,27 @@ void inline PawnManager::tick_ai()
 		seconds_since_enemy_spawn -= SECONDS_PER_SPAWN;
 	}
 
-	for (Pawn& enemy : enemies)
+	for (auto& enemy : enemies)
 	{
-		enemy.seconds_since_attack += SIMULATION_TIMESTEP;
-		Brain::update(enemy, *player);
+		enemy->seconds_since_attack += SIMULATION_TIMESTEP;
+		Brain::update(*enemy, *player);
 	}
 	player->seconds_since_attack += SIMULATION_TIMESTEP;
 }
 
 void inline PawnManager::tick_attacks()
 {
-	for (Pawn& enemy : enemies)
+	for (auto& enemy : enemies)
 	{
-		if (!enemy.wants_to_attack)
+		if (!enemy->wants_to_attack)
 		{
 			continue;
 		}
-		if (enemy.seconds_since_attack >= TIME_BETWEEN_ENEMY_ATTACKS)
+		if (enemy->seconds_since_attack >= TIME_BETWEEN_ENEMY_ATTACKS)
 		{
-			enemy.scene_entity->animation_data.
+			enemy->scene_entity->animation_data.
 				run_immediate_once(enemy_attack_animation);
-			fire_enemy_bullet(enemy);
+			fire_enemy_bullet(*enemy);
 		}
 	}
 	if (player->wants_to_attack)
@@ -296,12 +308,12 @@ void inline PawnManager::tick_bullets()
 			* BULLET_MOVE_SPEED;
 		bullet->scene_entity->update_model_matrix();
 
-		for (Pawn& enemy : enemies)
+		for (auto& enemy : enemies)
 		{
 			if (collides(bullet->scene_entity->position,
-				enemy.scene_entity->position))
+				enemy->scene_entity->position))
 			{
-				enemy.health -= bullet->damage;
+				enemy->health -= bullet->damage;
 				bullet->scene_entity->dead = true;
 			}
 		}
@@ -318,9 +330,9 @@ void inline PawnManager::tick_bullets()
 void inline PawnManager::tick_movement()
 {
 	update_direction(*player);
-	for (Pawn& pawn : enemies)
+	for (auto& pawn : enemies)
 	{
-		update_direction(pawn);
+		update_direction(*pawn);
 	}
 
 	update_movement(*player, PLAYER_MOVE_SPEED);
@@ -334,11 +346,11 @@ void inline PawnManager::tick_movement()
 		auto& animation_data = player->scene_entity->animation_data;
 		animation_data.set_current_animation(player_idle_animation);
 	}
-	for (Pawn& pawn : enemies)
+	for (auto& pawn : enemies)
 	{
-		update_movement(pawn, ENEMY_MOVE_SPEED);
+		update_movement(*pawn, ENEMY_MOVE_SPEED);
 
-		auto& animation_data = pawn.scene_entity->animation_data;
+		auto& animation_data = pawn->scene_entity->animation_data;
 	}
 
 	if (player->needs_updating)
@@ -347,12 +359,12 @@ void inline PawnManager::tick_movement()
 		player->needs_updating = false;
 	}
 	
-	for (Pawn& pawn : enemies)
+	for (auto& pawn : enemies)
 	{
-		if (pawn.needs_updating)
+		if (pawn->needs_updating)
 		{
-			pawn.scene_entity->update_model_matrix();
-			pawn.needs_updating = false;
+			pawn->scene_entity->update_model_matrix();
+			pawn->needs_updating = false;
 		}
 	}
 }

@@ -84,7 +84,7 @@ struct Pawn
 	Pawn(std::shared_ptr<Entity> entity, Health health = 0);
 	Pawn(const Pawn&) = default;
 	Pawn& operator=(const Pawn&) = default;
-	~Pawn() = default;
+	~Pawn();
 
 private:
 	/// <summary>
