@@ -44,6 +44,18 @@ void Scene::add_entity(std::shared_ptr<Entity> entity)
 	if (result != model_map.end())
 	{
 		auto& vec = result->second->entity_list;
+
+		if (vec.empty())
+		{
+			if (result->second->is_animated())
+			{
+				animated_models_dirty = true;
+			}
+			else
+			{
+				static_models_dirty = true;
+			}
+		}
 		vec.push_back(entity);
 		if (result->second->is_animated())
 		{
