@@ -47,7 +47,7 @@ constexpr float ENEMY_MOVE_SPEED = PLAYER_MOVE_SPEED * 0.40f;
 /// <summary>
 /// The base movement speed of bullets, in world units per timestep.
 /// </summary>
-constexpr float BULLET_MOVE_SPEED = PLAYER_MOVE_SPEED * 1.10f;
+constexpr float BULLET_MOVE_SPEED = PLAYER_MOVE_SPEED * 3.0f;
 
 /// <summary>
 /// The maximum number of enemies that we can ever have at once.
