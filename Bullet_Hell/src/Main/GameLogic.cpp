@@ -57,6 +57,11 @@ GameLogic::GameLogic()
 	g_game_logic = this;
 }
 
+GameState GameLogic::get_current_state() const noexcept
+{
+	return current_state;
+}
+
 bool GameLogic::initialize()
 {
 	std::filesystem::path resource_path{ "assets.zip" };

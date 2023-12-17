@@ -22,6 +22,10 @@ class Window;
 enum GameState
 {
 	/// <summary>
+	/// We are currently in a menu.
+	/// </summary>
+	MENU,
+	/// <summary>
 	/// The game is currently paused and not simulating game logic.
 	/// </summary>
 	PAUSED,
@@ -53,6 +57,7 @@ class GameLogic
 #if DEBUG
 	friend class DebugUI;
 #endif
+	friend class UI;
 
 public:
 	GameLogic();
@@ -74,6 +79,12 @@ public:
 	/// </summary>
 	Window* window;
 	
+	/// <summary>
+	/// Fetch the current state.
+	/// </summary>
+	/// <returns>The current game state.</returns>
+	GameState get_current_state() const noexcept;
+
 	/// <summary>
 	/// Set up data before anything loads.
 	/// </summary>
@@ -186,7 +197,7 @@ private:
 	void on_pause();
 
 	/// <summary>
-	/// Called when we are resuming, to start back up wiht simulating and
+	/// Called when we are resuming, to start back up with simulating and
 	/// rendering.
 	/// </summary>
 	void on_resume();

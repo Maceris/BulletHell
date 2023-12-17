@@ -12,13 +12,75 @@
 static ImFont* font_default;
 static ImFont* font_noirden;
 
-void UI::draw()
+void draw_centered_text(const char* text)
+{
+	const float text_width = ImGui::CalcTextSize(text).x;
+	const float window_width = ImGui::GetContentRegionAvail().x;
+	ImGui::SetCursorPosX((window_width - text_width) * 0.5f);
+	ImGui::Text(text);
+}
+
+bool draw_centered_button(const char* button_text)
+{
+	const float text_width = ImGui::CalcTextSize(button_text).x;
+	const float window_width = ImGui::GetContentRegionAvail().x;
+	ImGui::SetCursorPosX((window_width - text_width) * 0.5f);
+	return ImGui::Button(button_text);
+}
+
+void UI::draw_game_over()
+{
+	//TODO(ches) add a game over screen
+}
+
+void UI::draw_in_game()
 {
 #if DEBUG
 	DebugUI::draw();
 #endif
 	UI::draw_player_health();
 	UI::draw_round_timer();
+}
+
+void UI::draw_main_menu()
+{
+	//TODO(ches) add a main menu
+}
+
+void UI::draw_pause_menu()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowPos(
+		ImVec2(io.DisplaySize.x / 2 - 150, io.DisplaySize.y / 2 - 150),
+		ImGuiCond_FirstUseEver
+	);
+
+	bool is_open = true;
+	ImGui::Begin("Pause Menu", &is_open,
+		ImGuiWindowFlags_NoDecoration 
+		| ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoBackground
+	);
+
+	ImGui::PushFont(font_noirden);
+
+	draw_centered_text("Game Paused");
+
+	if (draw_centered_button("Resume"))
+	{
+		g_game_logic->on_resume();
+	}
+
+	if (draw_centered_button("Quit Game"))
+	{
+		g_game_logic->request_close();
+	}
+
+	ImGui::PopFont();
+
+	ImGui::End();
 }
 
 void UI::first_time_setup()
@@ -95,10 +157,7 @@ void UI::draw_round_timer()
 
 	ImGui::PushFont(font_noirden);
 
-	const float text_width = ImGui::CalcTextSize(timer_text.c_str()).x;
-	const float window_width = ImGui::GetContentRegionAvail().x;
-	ImGui::SetCursorPosX((window_width - text_width) * 0.5f);
-	ImGui::Text(timer_text.c_str());
+	draw_centered_text(timer_text.c_str());
 	
 	ImGui::PopFont();
 

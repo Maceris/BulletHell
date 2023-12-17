@@ -10,9 +10,24 @@ class UI
 public:
 
 	/// <summary>
-	/// Draw all of the UI elements for the game.
+	/// Draw the game over screen.
 	/// </summary>
-	static void draw();
+	static void draw_game_over();
+
+	/// <summary>
+	/// Draw the in-game GUI.
+	/// </summary>
+	static void draw_in_game();
+
+	/// <summary>
+	/// Draw the main menu.
+	/// </summary>
+	static void draw_main_menu();
+
+	/// <summary>
+	/// Draw the pause menu.
+	/// </summary>
+	static void draw_pause_menu();
 
 	/// <summary>
 	/// Set up the UI for the first time when the application starts.

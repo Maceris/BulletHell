@@ -9,9 +9,11 @@
 #include <GLES2/gl2.h>
 #endif
 
+#include "Debugging/Logger.h"
 #include "Graphics/Window.h"
 #include "Graphics/Scene/Scene.h"
 #include "Graphics/GUI/UI.h"
+#include "Main/GameLogic.h"
 
 #include "glad.h"
 
@@ -92,8 +94,26 @@ void GuiRender::render(const Scene& scene)
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
-	UI::draw();
+
+	switch (g_game_logic->get_current_state())
+	{
+	case MENU:
+		UI::draw_main_menu();
+		break;
+	case PAUSED:
+		UI::draw_pause_menu();
+		break;
+	case RUNNING:
+		UI::draw_in_game();
+		break;
+	case STARTING_UP:
+	case QUIT_REQUESTED:
+	case QUITTING:
+	default:
+		LOG_ERROR("Rending GUI during an invalid render state");
+		break;
+	}
+	
 	UI::handle_input();
 	ImGui::EndFrame();
 	ImGui::Render();
