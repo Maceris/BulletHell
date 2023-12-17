@@ -293,7 +293,8 @@ void inline PawnManager::tick_bullets()
 		bullet->scene_entity->update_model_matrix();
 		
 		if (collides(bullet->scene_entity->position,
-			player->scene_entity->position))
+			player->scene_entity->position)
+			&& !bullet->scene_entity->dead)
 		{
 			player->health -= bullet->damage;
 			if (player->health <= 0)
@@ -324,7 +325,8 @@ void inline PawnManager::tick_bullets()
 		for (auto& enemy : enemies)
 		{
 			if (collides(bullet->scene_entity->position,
-				enemy->scene_entity->position))
+				enemy->scene_entity->position)
+				&& !bullet->scene_entity->dead)
 			{
 				enemy->health -= bullet->damage;
 				bullet->scene_entity->dead = true;
