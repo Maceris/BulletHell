@@ -103,15 +103,15 @@ void RenderBuffers::load_animated_entity_buffers(const Scene& scene)
 	size_t weights_offset = 0;
 	for (auto& model : model_list)
 	{
-		if (model->entity_list.empty())
-		{
-			continue;
-		}
 		EntityList& entities = model->entity_list;
 		std::vector<MeshDrawData>& mesh_draw_data_list
 			= model->mesh_draw_data_list;
 
 		mesh_draw_data_list.clear();
+		if (model->entity_list.empty())
+		{
+			continue;
+		}
 		for (auto& entity : entities)
 		{
 			binding_pose_offset = mesh_binding_pose_offset;

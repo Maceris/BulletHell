@@ -22,6 +22,10 @@ class Window;
 enum GameState
 {
 	/// <summary>
+	/// The player has lost the game.
+	/// </summary>
+	GAME_OVER,
+	/// <summary>
 	/// We are currently in a menu.
 	/// </summary>
 	MENU,
@@ -78,6 +82,11 @@ public:
 	/// The window we are showing.
 	/// </summary>
 	Window* window;
+
+	/// <summary>
+	/// Signal that the player has died and the game is over.
+	/// </summary>
+	void end_game();
 	
 	/// <summary>
 	/// Fetch the current state.

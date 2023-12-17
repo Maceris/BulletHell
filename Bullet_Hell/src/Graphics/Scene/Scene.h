@@ -158,6 +158,11 @@ public:
 	/// </summary>
 	void rebuild_model_lists();
 
+	/// <summary>
+	/// Resets the scene as if we had just started a new game.
+	/// </summary>
+	void reset();
+
 private:
 
 	std::vector<std::shared_ptr<Model>> cached_model_list;

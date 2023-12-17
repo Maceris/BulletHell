@@ -193,6 +193,16 @@ void Scene::rebuild_model_lists()
 	}
 }
 
+void Scene::reset()
+{
+	dirty = true;
+	animated_entities_dirty = true;
+	animated_models_dirty = true;
+	static_entities_dirty = true;
+	static_models_dirty = true;
+	rebuild_model_lists();
+}
+
 void Scene::handle_chunk_loading(EventPointer event)
 {
 	LOG_ASSERT(event && "Our event is null");

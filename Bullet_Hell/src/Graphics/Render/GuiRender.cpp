@@ -97,6 +97,9 @@ void GuiRender::render(const Scene& scene)
 
 	switch (g_game_logic->get_current_state())
 	{
+	case GAME_OVER:
+		UI::draw_game_over();
+		break;
 	case MENU:
 		UI::draw_main_menu();
 		break;

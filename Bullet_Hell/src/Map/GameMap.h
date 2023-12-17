@@ -71,6 +71,11 @@ struct GameMap
 	void recenter(const ChunkCoordinates& old_center,
 		const ChunkCoordinates& new_center);
 
+	/// <summary>
+	/// Resets the map as if we had just started a new game.
+	/// </summary>
+	void reset();
+
 private:
 
 	/// <summary>

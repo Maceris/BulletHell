@@ -261,6 +261,12 @@ void GameMap::recenter(const ChunkCoordinates& old_center,
 	center = new_center;
 }
 
+void GameMap::reset()
+{
+	ScopedCriticalSection lock(chunk_critical_section);
+	recenter(center, ChunkCoordinates(0, 0));
+}
+
 void GameMap::cold_load(const ChunkCoordinates& coordinates)
 {
 	Chunk* fresh = ALLOC Chunk(coordinates);

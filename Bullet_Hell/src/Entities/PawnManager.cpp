@@ -163,6 +163,18 @@ void PawnManager::fire_player_bullet()
 	player_bullets.push_back(projectile);
 }
 
+void PawnManager::reset()
+{
+	player_bullets.clear();
+	enemy_bullets.clear();
+	enemies.clear();
+	player->max_health = 1000;
+	player->health = player->max_health;
+	player->desired_facing = glm::vec2(0.0f, 1.0f);
+	player->desired_movement = glm::vec2(0.0f, 0.0f);
+	player->scene_entity->position = glm::vec3(0);
+}
+
 void PawnManager::spawn_enemy(const float& x, const float& z)
 {
 	auto enemy_entity = std::make_shared<Entity>(enemy_model_id);
@@ -284,9 +296,10 @@ void inline PawnManager::tick_bullets()
 			player->scene_entity->position))
 		{
 			player->health -= bullet->damage;
-			if (player->health < 0)
+			if (player->health <= 0)
 			{
 				player->health = 0;
+				g_game_logic->end_game();
 			}
 			bullet->scene_entity->dead = true;
 		}

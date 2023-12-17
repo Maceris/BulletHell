@@ -30,7 +30,38 @@ bool draw_centered_button(const char* button_text)
 
 void UI::draw_game_over()
 {
-	//TODO(ches) add a game over screen
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowPos(
+		ImVec2(io.DisplaySize.x / 2 - 150, io.DisplaySize.y / 2 - 150),
+		ImGuiCond_FirstUseEver
+	);
+
+	bool is_open = true;
+	ImGui::Begin("Game Over", &is_open,
+		ImGuiWindowFlags_NoDecoration
+		| ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoBackground
+	);
+
+	ImGui::PushFont(font_noirden);
+
+	draw_centered_text("Game Over!");
+
+	if (draw_centered_button("Restart Game"))
+	{
+		g_game_logic->reset();
+	}
+
+	if (draw_centered_button("Quit Game"))
+	{
+		g_game_logic->request_close();
+	}
+
+	ImGui::PopFont();
+
+	ImGui::End();
 }
 
 void UI::draw_in_game()
@@ -44,7 +75,38 @@ void UI::draw_in_game()
 
 void UI::draw_main_menu()
 {
-	//TODO(ches) add a main menu
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowPos(
+		ImVec2(io.DisplaySize.x / 2 - 150, io.DisplaySize.y / 2 - 150),
+		ImGuiCond_FirstUseEver
+	);
+
+	bool is_open = true;
+	ImGui::Begin("Main Menu", &is_open,
+		ImGuiWindowFlags_NoDecoration
+		| ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoBackground
+	);
+
+	ImGui::PushFont(font_noirden);
+
+	draw_centered_text("Bullet Hell");
+
+	if (draw_centered_button("Start Game"))
+	{
+		g_game_logic->reset();
+	}
+
+	if (draw_centered_button("Quit Game"))
+	{
+		g_game_logic->request_close();
+	}
+
+	ImGui::PopFont();
+
+	ImGui::End();
 }
 
 void UI::draw_pause_menu()

@@ -57,6 +57,11 @@ GameLogic::GameLogic()
 	g_game_logic = this;
 }
 
+void GameLogic::end_game()
+{
+	current_state = GAME_OVER;
+}
+
 GameState GameLogic::get_current_state() const noexcept
 {
 	return current_state;
@@ -117,7 +122,7 @@ bool GameLogic::initialize()
 	current_scene->fog.density = 0.02f;
 
 	current_scene->camera.set_position(-18.0f, 20.0f, 0.0f);
-	current_scene->camera.add_rotation(0.82f, 1.57f);
+	current_scene->camera.set_rotation(0.82f, 1.57f);
 
 	TIME_START("Map Init");
 	current_map = std::make_shared<GameMap>();
@@ -342,7 +347,7 @@ void GameLogic::attempt_map_recenter()
 
 void GameLogic::run_game()
 {
-	current_state = RUNNING;
+	current_state = MENU;
 	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
 	while (current_state != QUIT_REQUESTED)
 	{
@@ -352,6 +357,8 @@ void GameLogic::run_game()
 
 		switch (current_state)
 		{
+		case GAME_OVER:
+		case MENU:
 		case PAUSED:
 			render->render_just_ui(*window, *current_scene);
 			window->render();
@@ -427,11 +434,47 @@ void GameLogic::on_pause()
 
 void GameLogic::on_resume()
 {
+	seconds_since_last_frame = 0;
+	simulation_accumulator = 0;
+	frame_count = 0;
+	seconds_since_last_FPS_calcualation = 0;
+	last_FPS = 0;
+	seconds_since_last_animation_tick = 0;
+
+	const Instant now = std::chrono::steady_clock::now();
+	last_frame = now;
+	last_animation_tick = now;
+	last_map_recenter = now;
+
 	current_state = RUNNING;
-	//TODO(ches) resume the game
 }
 
 void GameLogic::reset()
 {
+	//NOTE(ches) finish processing anything that had been happening
+	g_event_manager->update();
+	current_map->reset();
+	g_pawn_manager->reset();
+	current_scene->reset();
 
+	seconds_since_last_frame = 0;
+	simulation_accumulator = 0;
+	frame_count = 0;
+	seconds_since_last_FPS_calcualation = 0;
+	last_FPS = 0;
+	seconds_since_last_animation_tick = 0;
+
+	const Instant now = std::chrono::steady_clock::now();
+	last_frame = now;
+	last_animation_tick = now;
+	last_map_recenter = now;
+
+	round_timer = 0;
+
+	current_scene->camera.set_position(-18.0f, 20.0f, 0.0f);
+	current_scene->camera.set_rotation(0.82f, 1.57f);
+
+	//NOTE(ches) Process all the map loading stuff
+	g_event_manager->update();
+	current_state = RUNNING;
 }

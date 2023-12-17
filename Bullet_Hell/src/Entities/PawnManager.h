@@ -30,6 +30,11 @@ public:
 	~PawnManager() = default;
 
 	/// <summary>
+	/// Resets as if we had just started a new game.
+	/// </summary>
+	void reset();
+
+	/// <summary>
 	/// Update everything the pawn manager cares about.
 	/// </summary>
 	void tick();
