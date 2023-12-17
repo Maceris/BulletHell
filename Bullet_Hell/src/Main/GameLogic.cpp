@@ -279,12 +279,7 @@ void GameLogic::process_input()
 
 void GameLogic::request_close()
 {
-	if (current_state == RUNNING 
-		|| current_state == STARTING_UP 
-		|| current_state == PAUSED)
-	{
-		current_state = QUIT_REQUESTED;
-	}
+	current_state = QUIT_REQUESTED;
 }
 
 void GameLogic::calculate_delta_time()
