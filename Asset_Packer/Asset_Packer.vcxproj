@@ -139,7 +139,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mtd.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)src/Lib/$(Platform)$(Configuration)/bzip2.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/lzma.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/ZipLib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/zlib.lib;$(ProjectDir)src/Lib/$(Platform)$(Configuration)/assimp-vc143-mt.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

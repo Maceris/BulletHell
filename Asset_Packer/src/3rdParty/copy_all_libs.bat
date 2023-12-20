@@ -20,10 +20,7 @@ echo f | xcopy /D /y ziplib\Bin\%platform%\%configuration%\zlib.pdb ..\Lib\%plat
 echo f | xcopy /D /y assimp\lib\%configuration%\assimp-vc143-mtd.lib ..\Lib\%platform%%configuration%\assimp-vc143-mtd.lib
 echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mtd.pdb ..\Lib\%platform%%configuration%\assimp-vc143-mtd.pdb
 echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mtd.dll ..\..\..\dist\%platform%\%configuration%\assimp-vc143-mtd.dll
-echo f | xcopy /D /y assimp\lib\%configuration%\assimp-vc143-mt.lib ..\Lib\%platform%%configuration%\assimp-vc143-mtd.lib
-echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mt.pdb ..\Lib\%platform%%configuration%\assimp-vc143-mtd.pdb
-echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mt.dll ..\..\..\dist\%platform%\%configuration%\assimp-vc143-mtd.dll
-
-echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.lib ..\Lib\%platform%%configuration%\libtmxlite.lib
-echo f | xcopy /D /y tmxlite\tmxlite\build\%platform%\%configuration%Static\libtmxlite-s-d.pdb ..\Lib\%platform%%configuration%\libtmxlite.pdb
+echo f | xcopy /D /y assimp\lib\%configuration%\assimp-vc143-mt.lib ..\Lib\%platform%%configuration%\assimp-vc143-mt.lib
+echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mt.pdb ..\Lib\%platform%%configuration%\assimp-vc143-mt.pdb
+echo f | xcopy /D /y assimp\bin\%configuration%\assimp-vc143-mt.dll ..\..\..\dist\%platform%\%configuration%\assimp-vc143-mt.dll
 
