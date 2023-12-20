@@ -20,6 +20,12 @@ Camera::Camera(const Camera&) = default;
 Camera& Camera::operator=(const Camera&) = default;
 Camera::~Camera() = default;
 
+void Camera::add_position(const glm::vec3& offset)
+{
+	position += offset;
+	recalculate();
+}
+
 void Camera::add_rotation(const float x, const float y)
 {
 	rotation.x += x;

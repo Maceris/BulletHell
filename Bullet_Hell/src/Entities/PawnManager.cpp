@@ -350,7 +350,20 @@ void inline PawnManager::tick_movement()
 		update_direction(*pawn);
 	}
 
-	update_movement(*player, PLAYER_MOVE_SPEED);
+	glm::vec3 movement{
+		player->desired_movement.x,
+		0.0f,
+		player->desired_movement.y
+	};
+	movement *= PLAYER_MOVE_SPEED;
+
+	if (movement.x != 0 || movement.z != 0)
+	{
+		player->scene_entity->position += movement;
+		player->needs_updating = true;
+		g_game_logic->current_scene->camera.add_position(movement);
+	}
+
 	if (player->desired_movement.x != 0 || player->desired_movement.y != 0)
 	{
 		auto& animation_data = player->scene_entity->animation_data;

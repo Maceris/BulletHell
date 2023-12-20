@@ -56,6 +56,13 @@ public:
 	~Camera();
 
 	/// <summary>
+	/// Displace the camera by an amount in world units, not relative to the
+	/// orientation of the camera.
+	/// </summary>
+	/// <param name="offset">The amount to offset the camera by.</param>
+	void add_position(const glm::vec3& offset);
+
+	/// <summary>
 	/// Add rotation on top of the current rotation.
 	/// </summary>
 	/// <param name="x">The change in pitch (up and down), in radians.</param>
