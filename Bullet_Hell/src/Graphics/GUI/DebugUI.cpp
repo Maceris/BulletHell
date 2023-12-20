@@ -1,5 +1,7 @@
 #include "Graphics/GUI/DebugUI.h"
 
+#if DEBUG
+
 #include <format>
 
 #include "glm.hpp"
@@ -236,3 +238,10 @@ void DebugUI::handle_input()
 		render->configuration.debug_lines = DebugUI::debug_lines;
 	}
 }
+#else
+void DebugUI::draw() {}
+void DebugUI::draw_window_debug() {}
+void DebugUI::draw_window_scene() {}
+void DebugUI::draw_window_timing() {}
+void DebugUI::handle_input() {}
+#endif

@@ -274,12 +274,14 @@ void Render::setup_all_data(Scene& scene)
 	}
 	TIME_END("Updating Scene - Updating Data - Animated");
 	
+#if DEBUG
 	TIME_START("Updating Scene - Updating Data - Debug Lines");
 	if (Render::configuration.debug_lines)
 	{
 		debug_render.update_lines(scene);
 	}
 	TIME_END("Updating Scene - Updating Data - Debug Lines");
+#endif
 	scene.dirty = false;
 }
 
