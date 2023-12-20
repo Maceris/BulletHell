@@ -40,6 +40,7 @@ public:
 	static void handle_input();
 
 private:
+	static void draw_controls();
 	static void draw_player_health();
 	static void draw_round_timer();
 };

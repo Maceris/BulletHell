@@ -107,6 +107,8 @@ void UI::draw_main_menu()
 	ImGui::PopFont();
 
 	ImGui::End();
+
+	UI::draw_controls();
 }
 
 void UI::draw_pause_menu()
@@ -143,6 +145,8 @@ void UI::draw_pause_menu()
 	ImGui::PopFont();
 
 	ImGui::End();
+
+	UI::draw_controls();
 }
 
 void UI::first_time_setup()
@@ -166,6 +170,38 @@ void UI::handle_input()
 #if DEBUG
 	DebugUI::handle_input();
 #endif
+}
+
+void UI::draw_controls()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::SetNextWindowPos(
+		ImVec2(10, io.DisplaySize.y - 210), ImGuiCond_FirstUseEver);
+
+	bool is_open = true;
+	ImGui::Begin("Controls", &is_open,
+		ImGuiWindowFlags_NoDecoration
+		| ImGuiWindowFlags_NoInputs
+		| ImGuiWindowFlags_NoBackground
+	);
+
+	ImGui::Text("Controls");
+	ImGui::Text("--------");
+	ImGui::Text("W,A,S,D - Move Player");
+	ImGui::Text("Space - Attack");
+
+#if DEBUG
+	ImGui::NewLine();
+	ImGui::Text("Debug Controls");
+	ImGui::Text("--------------");
+	ImGui::Text("Arrow Keys - Move Camera");
+	ImGui::Text("Right Click (hold, move mouse) - Rotate Camera");
+	ImGui::Text("Left Shift - Move Camera down");
+	ImGui::Text("Z - Move Camera Up");
+#endif
+
+	ImGui::End();
 }
 
 void UI::draw_player_health()
