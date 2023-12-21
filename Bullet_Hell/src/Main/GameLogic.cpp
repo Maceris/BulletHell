@@ -444,6 +444,11 @@ void GameLogic::on_resume()
 
 void GameLogic::reset()
 {
+	for (auto& iterator : action_state)
+	{
+		iterator.second = false;
+	}
+
 	//NOTE(ches) finish processing anything that had been happening
 	g_event_manager->update();
 	current_map->reset();
