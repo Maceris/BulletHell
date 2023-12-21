@@ -19,7 +19,7 @@ constexpr double TIME_BETWEEN_ENEMY_ATTACKS = 2.0;
 /// <summary>
 /// The number of seconds between player attacks.
 /// </summary>
-constexpr double TIME_BETWEEN_PLAYER_ATTACKS = 0.5;
+constexpr double TIME_BETWEEN_PLAYER_ATTACKS = 0.6;
 
 /// <summary>
 /// The duration of an attack in seconds.

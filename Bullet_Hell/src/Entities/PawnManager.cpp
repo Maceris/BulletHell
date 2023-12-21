@@ -58,7 +58,7 @@ constexpr int MAX_ENEMIES = 1000;
 /// <summary>
 /// How many seconds between pawn spawns.
 /// </summary>
-constexpr double SECONDS_PER_SPAWN = 5.0;
+constexpr double SECONDS_PER_SPAWN = 2.0;
 
 /// <summary>
 /// How far away from the player enemies can spawn.
@@ -158,7 +158,7 @@ void PawnManager::fire_player_bullet()
 	g_game_logic->current_scene->add_entity(bullet);
 	bullet->update_model_matrix();
 
-	std::shared_ptr<Bullet> projectile = std::make_shared<Bullet>(100,
+	std::shared_ptr<Bullet> projectile = std::make_shared<Bullet>(50,
 		player->desired_facing, BULLET_MOVE_SPEED, bullet);
 
 	player_bullets.push_back(projectile);
