@@ -250,11 +250,6 @@ void GameLogic::process_input()
 	}
 	g_pawn_manager->player->desired_movement = movement;
 
-	if (!MathUtil::close_enough(movement, 0.0f, 0.0f))
-	{
-		g_pawn_manager->player->desired_facing = movement;
-	}
-
 	if (action_desired(PLAYER_ATTACK))
 	{
 		g_pawn_manager->player->wants_to_attack = true;

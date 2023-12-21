@@ -1,6 +1,7 @@
 #include "Entities/PawnManager.h"
 
 #include <cmath>
+#include <float.h>
 
 #include "AI/Brain.h"
 #include "Debugging/Logger.h"
@@ -344,6 +345,16 @@ void inline PawnManager::tick_bullets()
 
 void inline PawnManager::tick_movement()
 {
+
+	if (player->wants_to_attack)
+	{
+		player->desired_facing = find_enemy_nearest_player();
+	}
+	else if (!MathUtil::close_enough(player->desired_movement, 0.0f, 0.0f))
+	{
+		player->desired_facing = player->desired_movement;
+	}
+
 	update_direction(*player);
 	for (auto& pawn : enemies)
 	{
@@ -395,6 +406,44 @@ void inline PawnManager::tick_movement()
 			pawn->needs_updating = false;
 		}
 	}
+}
+
+[[nodiscard]]
+glm::vec2 PawnManager::find_enemy_nearest_player()
+{
+	if (enemies.empty())
+	{
+		if (!MathUtil::close_enough(player->desired_movement, 0.0f, 0.0f))
+		{
+			return player->desired_movement;
+		}
+		return glm::vec2{ 1.0f, 0.0f };
+	}
+
+	float nearest_distance = FLT_MAX;
+	std::shared_ptr<Pawn> nearest_so_far;
+
+	const glm::vec3 player_position = player->scene_entity->position;
+
+	for (auto& enemy : enemies)
+	{
+		const float current_distance = 
+			glm::distance2(player_position, enemy->scene_entity->position);
+		if (current_distance < nearest_distance)
+		{
+			nearest_distance = current_distance;
+			nearest_so_far = enemy;
+		}
+	}
+
+	const glm::vec3 enemy_direction_3d =
+		nearest_so_far->scene_entity->position 
+		- player->scene_entity->position;
+	const glm::vec2 enemy_direction{
+		enemy_direction_3d.x, enemy_direction_3d.z
+	};
+
+	return glm::normalize(enemy_direction);
 }
 
 void PawnManager::update_direction(Pawn& pawn)

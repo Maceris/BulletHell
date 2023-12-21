@@ -78,6 +78,13 @@ private:
 	std::uniform_real_distribution<double> spawn_offset;
 
 	/// <summary>
+	/// Find the direction that the player would have to face in order to
+	/// be aiming at the nearest enemy.
+	/// </summary>
+	/// <returns>The diretion that would be facing the nearest enemy.</returns>
+	[[nodiscard]] glm::vec2 find_enemy_nearest_player();
+	
+	/// <summary>
 	/// Fires a bullet wherever the enemy is looking.
 	/// </summary>
 	/// <param name="enemy">The enemy that is attacking.</param>
