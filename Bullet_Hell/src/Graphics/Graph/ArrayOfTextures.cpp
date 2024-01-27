@@ -19,9 +19,9 @@ ArrayOfTextures::ArrayOfTextures(unsigned int texture_count, unsigned int width,
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-			GL_CLAMP_TO_EDGE);
+			GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-			GL_CLAMP_TO_EDGE);
+			GL_CLAMP_TO_BORDER);
 	}
 }
 
