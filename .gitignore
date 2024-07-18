@@ -366,12 +366,12 @@ FodyWeavers.xsd
 dist/
 
 # Intermediate build directory
-Bullet_Hell/build
-Asset_Packer/build
+bullet_hell/build
+asset_packer/build
 
-Assets/
-Asset_Temp/
-Raw_Assets/
+assets/
+asset_temp/
+raw_assets/
 
 log.txt
 packer_log.txt
