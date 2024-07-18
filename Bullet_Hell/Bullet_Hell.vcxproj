@@ -164,7 +164,6 @@
     <ClCompile Include="src\Event\EventManager.cpp" />
     <ClCompile Include="src\Event\Map\ChunkLoaded.cpp" />
     <ClCompile Include="src\Event\Map\ChunkUnloaded.cpp" />
-    <ClCompile Include="src\Graphics\Graph\Animation.cpp" />
     <ClCompile Include="src\Graphics\Graph\AnimationResource.cpp" />
     <ClCompile Include="src\Graphics\Graph\ArrayOfTextures.cpp" />
     <ClCompile Include="src\Graphics\Graph\CascadeShadowSlice.cpp" />

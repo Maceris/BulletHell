@@ -165,9 +165,6 @@
     <ClCompile Include="src\Graphics\Graph\MeshData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Graph\Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceCache\DefaultResourceLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
