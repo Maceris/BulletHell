@@ -1,4 +1,4 @@
-#include "Models/MeshConverter.h"
+#include "models/mesh_converter.h"
 
 #include <algorithm>
 #include <fstream>
@@ -10,20 +10,20 @@
 #include "assimp/cimport.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtx/quaternion.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/quaternion.hpp"
 
-#include "Graphics/Graph/Animation.h"
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Graph/MeshData.h"
+#include "graphics/graph/animation.h"
+#include "graphics/graph/material.h"
+#include "graphics/graph/mesh_data.h"
 
-#include "FileUtils.h"
-#include "PackerConstants.h"
-#include "Portability.h"
-#include "Debugging/Logger.h"
-#include "Models/Node.h"
-#include "Models/RawMeshData.h"
+#include "file_utils.h"
+#include "packer_constants.h"
+#include "portability.h"
+#include "debugging/logger.h"
+#include "models/node.h"
+#include "models/raw_mesh_data.h"
 
 #pragma region Constants
 const unsigned int DEFAULT_POST_PROCESS_FLAGS = 

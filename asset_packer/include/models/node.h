@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
 /// <summary>
 /// A node in the hiearchy, used for generating animations.

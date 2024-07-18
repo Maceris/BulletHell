@@ -1,0 +1,151 @@
+# Root Project
+
+# ########################## Project Setup ####################################
+
+CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
+
+PROJECT(BulletHell VERSION 1.0.0)
+
+SET(BULLET_HELL_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+SET(BULLET_HELL_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+SET(BULLET_HELL_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+SET(BULLET_HELL_VERSION ${BULLET_HELL_VERSION_MAJOR}.${BULLET_HELL_VERSION_MINOR}.${BULLET_HELL_VERSION_PATCH})
+
+SET(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_C_STANDARD 99)
+
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
+
+INCLUDE(PrecompiledHeader)
+
+# ############################## Options ######################################
+
+OPTION(ADDRESS_SANITIZER
+  "Enable address sanitizer"
+  OFF
+)
+
+OPTION(UB_SANITIZER
+  "Enable Undefined Behavior sanitizer."
+  OFF
+)
+
+# ############################## Compiler Setup ###############################
+
+ADD_DEFINITIONS(-DWIN32_LEAN_AND_MEAN)
+ADD_DEFINITIONS(-DGLM_FORCE_CTOR_INIT)
+ADD_DEFINITIONS(-DNOMINMAX)
+
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
+ADD_COMPILE_OPTIONS(
+  $<$<CONFIG:>:/MT>
+  $<$<CONFIG:Debug>:/MTd>
+  $<$<CONFIG:Release>:/MT>
+)
+ADD_COMPILE_OPTIONS(/MP /bigobj)
+ADD_COMPILE_OPTIONS(/wd4244) 
+
+IF(MSVC12)
+  ADD_COMPILE_OPTIONS(/wd4351)	
+ENDIF()
+
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /Zi /Od")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+SET(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG:FULL /PDBALTPATH:%_PDB% /OPT:REF /OPT:ICF")
+
+IF (ADDRESS_SANITIZER)
+  MESSAGE(STATUS "Address sanitizer enabled")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+ENDIF()
+
+IF (UB_SANITIZER)
+  MESSAGE(STATUS "Undefined Behavior sanitizer enabled")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
+ENDIF()
+
+# ############################ Directory Setup ################################
+
+IF(NOT DEFINED CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+  SET(BULLET_HELL_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/" CACHE STRING "Path for runtime output files")
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BULLET_HELL_RUNTIME_OUTPUT_DIRECTORY})
+ELSE()
+  SET(BULLET_HELL_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/" CACHE STRING "Path for runtime output files")
+ENDIF()
+
+IF(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  SET(BULLET_HELL_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/" CACHE STRING "Path for library output files")
+  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BULLET_HELL_LIBRARY_OUTPUT_DIRECTORY})
+ELSE()
+  SET(BULLET_HELL_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/" CACHE STRING "Path for library output files")
+ENDIF()
+
+IF(NOT DEFINED CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+  SET(BULLET_HELL_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/" CACHE STRING "Path for archive output files")
+  SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BULLET_HELL_ARCHIVE_OUTPUT_DIRECTORY})
+ELSE()
+  SET(BULLET_HELL_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/" CACHE STRING "Path for archive output files")
+ENDIF()
+
+MACRO(TARGET_USE_COMMON_OUTPUT_DIRECTORY target)
+  SET_TARGET_PROPERTIES(${target} PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY ${BULLET_HELL_RUNTIME_OUTPUT_DIRECTORY}
+	  LIBRARY_OUTPUT_DIRECTORY ${BULLET_HELL_LIBRARY_OUTPUT_DIRECTORY}
+      ARCHIVE_OUTPUT_DIRECTORY ${BULLET_HELL_ARCHIVE_OUTPUT_DIRECTORY}
+  )
+ENDMACRO()
+
+IF (NOT TARGET uninstall)
+  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+  ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+ENDIF()
+
+SET(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
+IF(MSVC_TOOLSET_VERSION)
+  SET(MSVC_PREFIX "vc${MSVC_TOOLSET_VERSION}")
+  SET(BULET_HELL_MSVC_VERSION ${MSVC_PREFIX})
+ELSE()
+  IF(MSVC12)
+    SET(BULET_HELL_MSVC_VERSION "vc120")
+  ELSEIF(MSVC14)
+    SET(BULET_HELL_MSVC_VERSION "vc140")
+  ELSEIF(MSVC15)
+    SET(BULET_HELL_MSVC_VERSION "vc141")
+  ELSEIF(MSV142)
+    SET(BULET_HELL_MSVC_VERSION "vc142")
+  ELSEIF(MSVC143)
+    SET(BULET_HELL_MSVC_VERSION "vc143")
+  ENDIF()
+ENDIF()
+
+SET(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+SET(THIRD_PARTY_DIR ${ROOT_DIR}/third_party)
+SET(ASSET_PACKER_DIR ${ROOT_DIR}/asset_packer)
+SET(BULLET_HELL_DIR ${ROOT_DIR}/bullet_hell)
+SET(COMMON_INCLUDE_DIR ${ROOT_DIR}/common/include)
+SET(COMMON_SOURCE_DIR ${ROOT_DIR}/common/src)
+
+# ############################## Project Setup ################################
+
+SET(COMMON_HEADERS
+  ${COMMON_INCLUDE_DIR}/globals.h
+  ${COMMON_INCLUDE_DIR}/portability.h
+  ${COMMON_INCLUDE_DIR}/debugging/critical_section.h
+  ${COMMON_INCLUDE_DIR}/debugging/logger.h
+  ${COMMON_INCLUDE_DIR}/graphics/graph/animation.h
+  ${COMMON_INCLUDE_DIR}/graphics/graph/material.h
+  ${COMMON_INCLUDE_DIR}/graphics/graph/mesh_data.h
+)
+
+SET(COMMON_SOURCES
+  ${COMMON_SOURCE_DIR}/debugging/logger.cpp
+  ${COMMON_SOURCE_DIR}/portability.cpp
+)
+
+ADD_SUBDIRECTORY(third_party)
+ADD_SUBDIRECTORY(asset_packer)
+

@@ -1,9 +1,9 @@
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 #include <list>
 #include <map>
 
-#include "Debugging/CriticalSection.h"
+#include "debugging/critical_section.h"
 
 static const char* ERROR_LOG_FILENAME = "packer_log.txt";
 

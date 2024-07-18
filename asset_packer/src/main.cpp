@@ -1,7 +1,7 @@
-#include "FileUtils.h"
-#include "Debugging/Logger.h"
+#include "file_utils.h"
+#include "debugging/logger.h"
 
-const std::string version = "0.0.1";
+const std::string version = "0.0.2";
 
 /// <summary>
 /// The entry point to the program, and main loop.

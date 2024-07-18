@@ -1,11 +1,10 @@
-#include "PackerConstants.h"
+#include "packer_constants.h"
 
 #include <format>
 
-const std::string ASSET_FOLDER = "Assets";
-const std::string TEMP_FOLDER = "Asset_Temp";
-const std::string OUTPUT_FILE = std::format("dist/{}/{}/assets.zip", 
-    PLATFORM_NAME, CONFIGURATION_NAME);
+const std::string ASSET_FOLDER = "../../assets";
+const std::string TEMP_FOLDER = "../../asset_temp";
+const std::string OUTPUT_FILE = "./assets.zip";
 
 const std::string IMAGE_FORMATS[8] =
 {

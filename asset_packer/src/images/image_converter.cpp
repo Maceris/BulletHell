@@ -1,12 +1,12 @@
-#include "Images/ImageConverter.h"
+#include "images/image_converter.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "FileUtils.h"
-#include "PackerConstants.h"
-#include "Portability.h"
-#include "Debugging/Logger.h"
+#include "file_utils.h"
+#include "packer_constants.h"
+#include "portability.h"
+#include "debugging/logger.h"
 
 void ImageConverter::convert_image(const fs::directory_entry& source)
 {

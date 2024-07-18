@@ -1,13 +1,13 @@
-#include "FileUtils.h"
+#include "file_utils.h"
 
 #include <string>
 
 #include "ZipFile.h"
 
-#include "PackerConstants.h"
-#include "Debugging/Logger.h"
-#include "Images/ImageConverter.h"
-#include "Models/MeshConverter.h"
+#include "packer_constants.h"
+#include "debugging/logger.h"
+#include "images/image_converter.h"
+#include "models/mesh_converter.h"
 
 int FileUtils::process_all_files()
 {

@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
-#include "Graphics/Graph/Animation.h"
+#include "graphics/graph/animation.h"
 
 /// <summary>
 /// The maximum number of weights that can affect a vertex.
