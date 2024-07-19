@@ -10,7 +10,7 @@
 /// <summary>
 /// The different things that players can do using inputs. Used to bind keys.
 /// </summary>
-enum Action
+enum class Action
 {
 	CAMERA_MOVE_FORWARD,
 	CAMERA_MOVE_BACKWARD,
@@ -26,7 +26,7 @@ enum Action
 	PAUSE_OR_UNPAUSE_GAME
 };
 
-typedef Iterator<Action, CAMERA_MOVE_FORWARD, PAUSE_OR_UNPAUSE_GAME> ActionIterator;
+typedef Iterator<Action, Action::CAMERA_MOVE_FORWARD, Action::PAUSE_OR_UNPAUSE_GAME> ActionIterator;
 
 /// <summary>
 /// Options for the game.

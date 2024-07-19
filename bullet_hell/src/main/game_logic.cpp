@@ -44,7 +44,7 @@ constexpr double MAP_RECENTER_DELAY = 1;
 constexpr double ANIMATION_FRAME_TIME = 1.0 / 24;
 
 GameLogic::GameLogic()
-	: current_state{ STARTING_UP }
+	: current_state{ GameState::STARTING_UP }
 	, resource_cache{ nullptr }
 	, render{ nullptr }
 	, current_scene{ nullptr }
@@ -59,7 +59,7 @@ GameLogic::GameLogic()
 
 void GameLogic::end_game()
 {
-	current_state = GAME_OVER;
+	current_state = GameState::GAME_OVER;
 }
 
 GameState GameLogic::get_current_state() const noexcept
@@ -150,7 +150,7 @@ void GameLogic::notify_about_resize(const int width, const int height)
 
 void GameLogic::on_close()
 {
-	current_state = QUITTING;
+	current_state = GameState::QUITTING;
 
 	window->terminate();
 
@@ -190,27 +190,27 @@ void GameLogic::process_input()
 	const float mouse_sensitivity = 0.02f;
 	const float move_amount = 
 		static_cast<float>(seconds_since_last_frame * move_speed_per_second);
-	if (action_desired(CAMERA_MOVE_FORWARD))
+	if (action_desired(Action::CAMERA_MOVE_FORWARD))
 	{
 		camera.move_forward(move_amount);
 	}
-	if (action_desired(CAMERA_MOVE_BACKWARD))
+	if (action_desired(Action::CAMERA_MOVE_BACKWARD))
 	{
 		camera.move_backward(move_amount);
 	}
-	if (action_desired(CAMERA_MOVE_LEFT))
+	if (action_desired(Action::CAMERA_MOVE_LEFT))
 	{
 		camera.move_left(move_amount);
 	}
-	if (action_desired(CAMERA_MOVE_RIGHT))
+	if (action_desired(Action::CAMERA_MOVE_RIGHT))
 	{
 		camera.move_right(move_amount);
 	}
-	if (action_desired(CAMERA_MOVE_DOWN))
+	if (action_desired(Action::CAMERA_MOVE_DOWN))
 	{
 		camera.move_down(move_amount);
 	}
-	if (action_desired(CAMERA_MOVE_UP))
+	if (action_desired(Action::CAMERA_MOVE_UP))
 	{
 		camera.move_up(move_amount);
 	}
@@ -227,19 +227,19 @@ void GameLogic::process_input()
 #endif
 
 	glm::vec2 movement(0.0f, 0.0f);
-	if (action_desired(PLAYER_MOVE_FORWARD))
+	if (action_desired(Action::PLAYER_MOVE_FORWARD))
 	{
 		movement += glm::vec2(1.0f, 0.0f);
 	}
-	if (action_desired(PLAYER_MOVE_BACKWARD))
+	if (action_desired(Action::PLAYER_MOVE_BACKWARD))
 	{
 		movement += glm::vec2(-1.0f, 0.0f);
 	}
-	if (action_desired(PLAYER_MOVE_LEFT))
+	if (action_desired(Action::PLAYER_MOVE_LEFT))
 	{
 		movement += glm::vec2(0.0f, -1.0f);
 	}
-	if (action_desired(PLAYER_MOVE_RIGHT))
+	if (action_desired(Action::PLAYER_MOVE_RIGHT))
 	{
 		movement += glm::vec2(0.0f, 1.0f);
 	}
@@ -250,7 +250,7 @@ void GameLogic::process_input()
 	}
 	g_pawn_manager->player->desired_movement = movement;
 
-	if (action_desired(PLAYER_ATTACK))
+	if (action_desired(Action::PLAYER_ATTACK))
 	{
 		g_pawn_manager->player->wants_to_attack = true;
 	}
@@ -259,16 +259,16 @@ void GameLogic::process_input()
 		g_pawn_manager->player->wants_to_attack = false;
 	}
 
-	if (action_desired(PAUSE_OR_UNPAUSE_GAME))
+	if (action_desired(Action::PAUSE_OR_UNPAUSE_GAME))
 	{
 		//NOTE(ches) immediately reset it to false to prevent spamming
-		auto current_mapping = action_state.find(PAUSE_OR_UNPAUSE_GAME);
+		auto current_mapping = action_state.find(Action::PAUSE_OR_UNPAUSE_GAME);
 		current_mapping->second = false;
-		if (current_state == RUNNING)
+		if (current_state == GameState::RUNNING)
 		{
 			on_pause();
 		}
-		else if (current_state == PAUSED)
+		else if (current_state == GameState::PAUSED)
 		{
 			on_resume();
 		}
@@ -277,7 +277,7 @@ void GameLogic::process_input()
 
 void GameLogic::request_close()
 {
-	current_state = QUIT_REQUESTED;
+	current_state = GameState::QUIT_REQUESTED;
 }
 
 void GameLogic::calculate_delta_time()
@@ -340,9 +340,9 @@ void GameLogic::attempt_map_recenter()
 
 void GameLogic::run_game()
 {
-	current_state = MENU;
+	current_state = GameState::MENU;
 	TIME_START("Last Frame");//NOTE(ches) so we have this available for FPS
-	while (current_state != QUIT_REQUESTED)
+	while (current_state != GameState::QUIT_REQUESTED)
 	{
 		TIME_START("Processing Input");
 		process_input();
@@ -350,21 +350,21 @@ void GameLogic::run_game()
 
 		switch (current_state)
 		{
-		case GAME_OVER:
-		case MENU:
-		case PAUSED:
+		case GameState::GAME_OVER:
+		case GameState::MENU:
+		case GameState::PAUSED:
 			render->render_just_ui(*window, *current_scene);
 			window->render();
 			break;
-		case RUNNING:
+		case GameState::RUNNING:
 			main_processing();
 			break;
-		case STARTING_UP:
+		case GameState::STARTING_UP:
 			LOG_ERROR("Somehow starting up during main loop");
 			break;
-		case QUIT_REQUESTED:
+		case GameState::QUIT_REQUESTED:
 			break;
-		case QUITTING:
+		case GameState::QUITTING:
 			LOG_ERROR("Somehow quitting during main loop");
 		}
 		
@@ -421,7 +421,7 @@ void GameLogic::main_processing()
 
 void GameLogic::on_pause()
 {
-	current_state = PAUSED;
+	current_state = GameState::PAUSED;
 	//TODO(ches) pause the game
 }
 
@@ -439,7 +439,7 @@ void GameLogic::on_resume()
 	last_animation_tick = now;
 	last_map_recenter = now;
 
-	current_state = RUNNING;
+	current_state = GameState::RUNNING;
 }
 
 void GameLogic::reset()
@@ -474,5 +474,5 @@ void GameLogic::reset()
 
 	//NOTE(ches) Process all the map loading stuff
 	g_event_manager->update();
-	current_state = RUNNING;
+	current_state = GameState::RUNNING;
 }

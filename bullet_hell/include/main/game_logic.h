@@ -19,7 +19,7 @@ class Window;
 /// <summary>
 /// Where we are in the program lifecycle.
 /// </summary>
-enum GameState
+enum class GameState
 {
 	/// <summary>
 	/// The player has lost the game.

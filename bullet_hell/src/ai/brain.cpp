@@ -52,36 +52,36 @@ void Brain::update(Pawn& enemy, const Pawn& player)
 
 	switch (enemy.state)
 	{
-	case ATTACKING:
-	case CHASING:
+	case AIState::ATTACKING:
+	case AIState::CHASING:
 		enemy.desired_facing = glm::normalize(player_direction);
 		break;
-	case IDLE:
+	case AIState::IDLE:
 	default:
 		break;
-	case FLEEING:
+	case AIState::FLEEING:
 		enemy.desired_facing = -glm::normalize(player_direction);
 	}
 
 	switch (enemy.state)
 	{
-	case ATTACKING:
+	case AIState::ATTACKING:
 		enemy.desired_movement = glm::vec2(0, 0);
 		enemy.wants_to_attack = true;
 		break;
-	case CHASING:
+	case AIState::CHASING:
 		enemy.desired_movement = glm::normalize(player_direction);
 		enemy.wants_to_attack = false;
 		enemy.scene_entity->animation_data.
 			set_current_animation(g_pawn_manager->enemy_running_animation);
 		break;
-	case FLEEING:
+	case AIState::FLEEING:
 		enemy.desired_movement = -glm::normalize(player_direction);
 		enemy.wants_to_attack = false;
 		enemy.scene_entity->animation_data.
 			set_current_animation(g_pawn_manager->enemy_running_animation);
 		break;
-	case IDLE:
+	case AIState::IDLE:
 	default:
 		enemy.desired_movement = glm::vec2(0, 0);
 		enemy.wants_to_attack = false;

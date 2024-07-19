@@ -5,7 +5,7 @@
 /// <summary>
 /// Represents the state of an AI character.
 /// </summary>
-enum AIState
+enum class AIState
 {
 	/// <summary>
 	/// Attacking the player.
