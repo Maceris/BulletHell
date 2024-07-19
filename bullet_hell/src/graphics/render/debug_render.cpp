@@ -1,22 +1,22 @@
-#include "Graphics/Render/DebugRender.h"
+#include "graphics/render/debug_render.h"
 
 #include <numbers>
 
-#include "mat4x4.hpp"
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "gtc/matrix_transform.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-#include "Graphics/Graph/TextureResource.h"
-#include "Graphics/Graph/CascadeShadowSlice.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/Model.h"
-#include "Graphics/Scene/Scene.h"
-#include "Main/GameLogic.h"
-#include "Map/Chunk.h"
-#include "Map/Tile.h"
-#include "ResourceCache/ResourceCache.h"
-#include "Utilities/MathUtil.h"
+#include "graphics/graph/texture_resource.h"
+#include "graphics/graph/cascade_shadow_slice.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/model.h"
+#include "graphics/scene/scene.h"
+#include "main/game_logic.h"
+#include "map/chunk.h"
+#include "map/tile.h"
+#include "resource_cache/resource_cache.h"
+#include "utilities/math_util.h"
 
 #include "glad.h"
 

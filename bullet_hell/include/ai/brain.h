@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "vec2.hpp"
+#include "glm/vec2.hpp"
 
 struct Pawn;
 

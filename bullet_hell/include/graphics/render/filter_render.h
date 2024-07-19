@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <string>
 #include <memory>
 
-#include "Graphics/GladTypes.h"
+#include "graphics/glad_types.h"
 
 struct QuadMesh;
 class Scene;

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <random>
 #include <vector>
 
 #include "boost/circular_buffer.hpp"
 
-#include "Entities/Bullet.h"
-#include "Entities/Pawn.h"
-#include "Graphics/Graph/Animation.h"
+#include "entities/bullet.h"
+#include "entities/pawn.h"
+#include "graphics/graph/animation.h"
 
 /// <summary>
 /// How long the fixed timestep is for the pawn manager, in seconds.

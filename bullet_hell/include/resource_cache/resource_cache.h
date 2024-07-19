@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <list>
 #include <map>
 #include <string>
 #include <vector>
 
-#include "ResourceCache/ResourceFile.h"
-#include "ResourceCache/ResourceHandle.h"
-#include "ResourceCache/ResourceLoader.h"
+#include "resource_cache/resource_file.h"
+#include "resource_cache/resource_handle.h"
+#include "resource_cache/resource_loader.h"
 
 using ResourceHandleList = std::list<std::shared_ptr<ResourceHandle>>;
 using ResourceHandleMap = std::map<std::string, std::shared_ptr<ResourceHandle>>;

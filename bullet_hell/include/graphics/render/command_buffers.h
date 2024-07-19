@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Graphics/GladTypes.h"
+#include "graphics/glad_types.h"
 
 /// <summary>
 /// References to buffers for rendering entities, so buffers can be cached.

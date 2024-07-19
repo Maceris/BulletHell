@@ -1,8 +1,8 @@
-#include "Graphics/Render/ShadowRender.h"
+#include "graphics/render/shadow_render.h"
 
-#include "Graphics/Graph/ShadowBuffer.h"
-#include "Graphics/Render/CommandBuffers.h"
-#include "Graphics/Render/RenderBuffers.h"
+#include "graphics/graph/shadow_buffer.h"
+#include "graphics/render/command_buffers.h"
+#include "graphics/render/render_buffers.h"
 
 #include "glad.h"
 

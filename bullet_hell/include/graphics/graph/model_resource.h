@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Graphics/Graph/Model.h"
-#include "ResourceCache/Resource.h"
-#include "ResourceCache/ResourceLoader.h"
+#include "graphics/graph/model.h"
+#include "resource_cache/resource.h"
+#include "resource_cache/resource_loader.h"
 
 class ModelExtraData : public ResourceExtraData
 {

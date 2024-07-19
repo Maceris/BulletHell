@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <string>
 #include <unordered_map>
 
-#include "Utilities/GenericIterator.h"
+#include "utilities/generic_iterator.h"
 
 /// <summary>
 /// The different things that players can do using inputs. Used to bind keys.

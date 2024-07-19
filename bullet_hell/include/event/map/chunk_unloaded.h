@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Event/Event.h"
-#include "Map/ChunkCoordinates.h"
+#include "event/event.h"
+#include "map/chunk_coordinates.h"
 
 struct Chunk;
 

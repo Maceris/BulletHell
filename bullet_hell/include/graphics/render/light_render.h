@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 
-#include "Graphics/GladTypes.h"
-#include "Graphics/Graph/QuadMesh.h"
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/UniformsMap.h"
+#include "graphics/glad_types.h"
+#include "graphics/graph/quad_mesh.h"
+#include "graphics/graph/shader_program.h"
+#include "graphics/graph/uniforms_map.h"
 
 struct GBuffer;
 class Scene;

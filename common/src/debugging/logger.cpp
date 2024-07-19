@@ -3,7 +3,7 @@
 #include <list>
 #include <map>
 
-#include "debugging/critical_section.h"
+#include "memory/critical_section.h"
 
 static const char* ERROR_LOG_FILENAME = "packer_log.txt";
 

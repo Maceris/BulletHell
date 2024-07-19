@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <vector>
 
-#include "Graphics/Scene/Lights/AmbientLight.h"
-#include "Graphics/Scene/Lights/DirectionalLight.h"
-#include "Graphics/Scene/Lights/PointLight.h"
-#include "Graphics/Scene/Lights/SpotLight.h"
+#include "graphics/scene/lights/ambient_light.h"
+#include "graphics/scene/lights/directional_light.h"
+#include "graphics/scene/lights/point_light.h"
+#include "graphics/scene/lights/spot_light.h"
 
 /// <summary>
 /// Lighting information for a scene.

@@ -1,8 +1,9 @@
-#include "Graphics/Graph/IconResource.h"
+#include "graphics/graph/icon_resource.h"
 
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
-#include "Utilities/Portability.h"
+#include "portability.h"
+#include "debugging/logger.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 size_t IconLoader::get_loaded_resource_size(char* raw_buffer,
 	size_t raw_size)

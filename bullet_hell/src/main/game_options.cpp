@@ -1,6 +1,6 @@
-#include "Main/GameOptions.h"
+#include "main/game_options.h"
 
-#include "glfw3.h"
+#include "GLFW/glfw3.h"
 
 GameOptions::GameOptions()
 	: window_title{ "Bullet Hell" }

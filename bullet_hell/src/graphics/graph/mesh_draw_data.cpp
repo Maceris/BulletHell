@@ -1,6 +1,6 @@
-#include "Graphics/Graph/MeshDrawData.h"
+#include "graphics/graph/mesh_draw_data.h"
 
-#include "Graphics/Scene/Entity.h"
+#include "graphics/scene/entity.h"
 
 AnimMeshDrawData::AnimMeshDrawData(std::shared_ptr<Entity> entity,
 	int binding_pose_offset,

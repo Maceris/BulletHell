@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/UniformsMap.h"
+#include "graphics/graph/shader_program.h"
+#include "graphics/graph/uniforms_map.h"
 
 class Scene;
 

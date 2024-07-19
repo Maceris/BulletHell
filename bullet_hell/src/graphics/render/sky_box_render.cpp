@@ -1,12 +1,12 @@
-#include "Graphics/Render/SkyBoxRender.h"
+#include "graphics/render/sky_box_render.h"
 
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/TextureResource.h"
-#include "Graphics/Graph/Texture.h"
-#include "Graphics/Scene/Scene.h"
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
+#include "graphics/graph/material.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/texture_resource.h"
+#include "graphics/graph/texture.h"
+#include "graphics/scene/scene.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
 

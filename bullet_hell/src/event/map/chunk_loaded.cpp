@@ -1,6 +1,6 @@
-#include "Event/Map/ChunkLoaded.h"
+#include "event/map/chunk_loaded.h"
 
-#include "Map/Chunk.h"
+#include "map/chunk.h"
 
 const EventType ChunkLoaded::event_type = 0xf8b52643;
 

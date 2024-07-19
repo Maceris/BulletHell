@@ -1,16 +1,16 @@
-#include "Graphics/Render/RenderBuffers.h"
+#include "graphics/render/render_buffers.h"
 
 #include <cmath>
 #include <memory>
 #include <set>
-#include "gtc/type_ptr.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/AnimationResource.h"
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/MeshDrawData.h"
-#include "Graphics/Scene/Scene.h"
+#include "debugging/logger.h"
+#include "graphics/graph/animation_resource.h"
+#include "graphics/graph/material.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/mesh_draw_data.h"
+#include "graphics/scene/scene.h"
 
 #include "glad.h"
 

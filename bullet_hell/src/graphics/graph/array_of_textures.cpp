@@ -1,6 +1,6 @@
-#include "Graphics/Graph/ArrayOfTextures.h"
+#include "graphics/graph/array_of_textures.h"
 
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 #include "glad.h"
 

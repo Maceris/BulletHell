@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Graphics/GladTypes.h"
-#include "Graphics/Graph/ArrayOfTextures.h"
+#include "graphics/glad_types.h"
+#include "graphics/graph/array_of_textures.h"
 
 /// <summary>
 /// The width of the shadow map in pixels.

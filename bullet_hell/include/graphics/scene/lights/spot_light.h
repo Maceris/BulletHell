@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "vec3.hpp"
+#include "glm/vec3.hpp"
 
-#include "Graphics/Scene/Lights/PointLight.h"
+#include "graphics/scene/lights/point_light.h"
 
 /// <summary>
 /// A light that shines in a cone.

@@ -1,7 +1,7 @@
-#include "Graphics/Graph/UniformsMap.h"
-#include "gtc/type_ptr.hpp"
+#include "graphics/graph/uniforms_map.h"
+#include "glm/gtc/type_ptr.hpp"
 
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 #include "glad.h"
 

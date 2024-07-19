@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Graphics/GladTypes.h"
+#include "graphics/glad_types.h"
 
 /// <summary>
 /// Used to represent ImGui meshes.

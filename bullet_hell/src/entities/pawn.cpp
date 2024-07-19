@@ -1,6 +1,6 @@
-#include "Entities/Pawn.h"
+#include "entities/pawn.h"
 
-#include "Graphics/Scene/Entity.h"
+#include "graphics/scene/entity.h"
 
 Pawn::Pawn()
 	: desired_facing{ 0.0f, 0.0f }

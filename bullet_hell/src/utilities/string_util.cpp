@@ -1,4 +1,4 @@
-#include "Utilities/StringUtil.h"
+#include "utilities/string_util.h"
 
 /// <summary>
 /// The following function was found on

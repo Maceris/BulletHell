@@ -1,4 +1,4 @@
-#include "Graphics/Graph/Model.h"
+#include "graphics/graph/model.h"
 
 Model::Model(const std::string id)
 	: id{ id }

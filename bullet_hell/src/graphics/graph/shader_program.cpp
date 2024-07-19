@@ -1,7 +1,7 @@
-#include "Graphics/Graph/ShaderProgram.h"
+#include "graphics/graph/shader_program.h"
 
-#include "Debugging/Logger.h"
-#include "Utilities/OpenGLUtil.h"
+#include "debugging/logger.h"
+#include "utilities/opengl_util.h"
 
 #include "glad.h"
 

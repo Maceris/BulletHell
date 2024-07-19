@@ -1,12 +1,12 @@
-#include "Graphics/Render/FilterRender.h"
+#include "graphics/render/filter_render.h"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/QuadMesh.h"
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/UniformsMap.h"
-#include "Graphics/Scene/Scene.h"
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
+#include "debugging/logger.h"
+#include "graphics/graph/quad_mesh.h"
+#include "graphics/graph/shader_program.h"
+#include "graphics/graph/uniforms_map.h"
+#include "graphics/scene/scene.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
 

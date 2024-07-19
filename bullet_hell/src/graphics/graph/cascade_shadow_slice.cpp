@@ -1,8 +1,8 @@
-#include "Graphics/Graph/CascadeShadowSlice.h"
+#include "graphics/graph/cascade_shadow_slice.h"
 
-#include "gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-#include "Graphics/Scene/Scene.h"
+#include "graphics/scene/scene.h"
 
 CascadeShadowSlice::CascadeShadowSlice()
 	: projection_view_matrix{ 1 }

@@ -1,6 +1,6 @@
-#include "Event/EventManager.h"
+#include "event/event_manager.h"
 
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 EventManager* g_event_manager = nullptr;
 

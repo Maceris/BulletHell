@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "ResourceCache/Resource.h"
-#include "ResourceCache/ResourceLoader.h"
+#include "resource_cache/resource.h"
+#include "resource_cache/resource_loader.h"
 
 struct Icon
 {

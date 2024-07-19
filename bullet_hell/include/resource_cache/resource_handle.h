@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "ResourceCache/Resource.h"
+#include "resource_cache/resource.h"
 
 class ResourceCache;
 

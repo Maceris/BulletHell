@@ -1,13 +1,13 @@
-#include "Map/GameMap.h"
+#include "map/game_map.h"
 
-#include "Debugging/Logger.h"
-#include "Event/EventManager.h"
-#include "Event/Map/ChunkLoaded.h"
-#include "Event/Map/ChunkUnloaded.h"
-#include "Main/GameLogic.h"
-#include "Map/Chunk.h"
-#include "Map/MapGenerator.h"
-#include "Memory/CriticalSection.h"
+#include "debugging/logger.h"
+#include "event/event_manager.h"
+#include "event/map/chunk_loaded.h"
+#include "event/map/chunk_unloaded.h"
+#include "main/game_logic.h"
+#include "map/chunk.h"
+#include "map/map_generator.h"
+#include "memory/critical_section.h"
 
 /// <summary>
 /// Ensure thread safety when modifying the chunks.

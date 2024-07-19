@@ -1,6 +1,6 @@
-#include "Utilities/MathUtil.h"
+#include "utilities/math_util.h"
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
 /// <summary>
 /// Take an angle in degrees as given by glm in the range (-180, 180],

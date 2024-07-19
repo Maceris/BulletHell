@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "vec3.hpp"
+#include "glm/vec3.hpp"
 
 /// <summary>
 /// A directional light, infinitely far away with no attenuation.

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <vector>
 
-#include "Graphics/GladTypes.h"
-#include "Graphics/Graph/Model.h"
+#include "graphics/glad_types.h"
+#include "graphics/graph/model.h"
 
 class Scene;
 

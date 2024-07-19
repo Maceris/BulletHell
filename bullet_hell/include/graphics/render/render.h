@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Graphics/GladTypes.h"
-#include "Graphics/Graph/GBuffer.h"
-#include "Graphics/Render/AnimationRender.h"
-#include "Graphics/Render/DebugRender.h"
-#include "Graphics/Render/CommandBuffers.h"
-#include "Graphics/Render/FilterRender.h"
-#include "Graphics/Render/GuiRender.h"
-#include "Graphics/Render/LightRender.h"
-#include "Graphics/Render/RenderBuffers.h"
-#include "Graphics/Render/SceneRender.h"
-#include "Graphics/Render/ShadowRender.h"
-#include "Graphics/Render/SkyBoxRender.h"
+#include "graphics/glad_types.h"
+#include "graphics/graph/gbuffer.h"
+#include "graphics/render/animation_render.h"
+#include "graphics/render/debug_render.h"
+#include "graphics/render/command_buffers.h"
+#include "graphics/render/filter_render.h"
+#include "graphics/render/gui_render.h"
+#include "graphics/render/light_render.h"
+#include "graphics/render/render_buffers.h"
+#include "graphics/render/scene_render.h"
+#include "graphics/render/shadow_render.h"
+#include "graphics/render/sky_box_render.h"
 
 class Window;
 

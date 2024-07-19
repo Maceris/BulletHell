@@ -1,19 +1,19 @@
-#include "Graphics/Render/GuiRender.h"
+#include "graphics/render/gui_render.h"
 
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
 
-#include "Debugging/Logger.h"
-#include "Graphics/Window.h"
-#include "Graphics/Scene/Scene.h"
-#include "Graphics/GUI/UI.h"
-#include "Main/GameLogic.h"
+#include "debugging/logger.h"
+#include "graphics/window.h"
+#include "graphics/scene/scene.h"
+#include "graphics/gui/ui.h"
+#include "main/game_logic.h"
 
 #include "glad.h"
 

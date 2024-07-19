@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <vector>
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
-#include "Graphics/Render/RenderConstants.h"
+#include "graphics/render/render_constants.h"
 
 class Scene;
 

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <chrono>
 #include <map>
 #include <memory>
 
-#include "Main/GameOptions.h"
-#include "Map/GameMap.h"
-#include "Graphics/Render/Render.h"
-#include "Graphics/Scene/Scene.h"
+#include "main/game_options.h"
+#include "map/game_map.h"
+#include "graphics/render/render.h"
+#include "graphics/scene/scene.h"
 
 class EventManager;
 class PawnManager;

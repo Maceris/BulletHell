@@ -1,6 +1,6 @@
-#include "Event/Map/ChunkUnloaded.h"
+#include "event/map/chunk_unloaded.h"
 
-#include "Map/Chunk.h"
+#include "map/chunk.h"
 
 const EventType ChunkUnloaded::event_type = 0x16ae5d01;
 

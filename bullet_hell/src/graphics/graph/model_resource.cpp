@@ -1,14 +1,14 @@
-#include "Graphics/Graph/ModelResource.h"
+#include "graphics/graph/model_resource.h"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/Animation.h"
-#include "Graphics/Graph/AnimationResource.h"
-#include "Graphics/Graph/MaterialResource.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/Model.h"
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
-#include "Utilities/Portability.h"
+#include "portability.h"
+#include "debugging/logger.h"
+#include "graphics/graph/animation.h"
+#include "graphics/graph/animation_resource.h"
+#include "graphics/graph/material_resource.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/model.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 /// <summary>
 /// What is the latest model file verison we support loading.

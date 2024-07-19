@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <atomic>
 #include <map>
@@ -9,14 +9,14 @@
 #include <string>
 #include <vector>
 
-#include "Event/Event.h"
-#include "Graphics/Scene/Camera.h"
-#include "Graphics/Scene/Fog.h"
-#include "Graphics/Scene/Projection.h"
-#include "Graphics/Scene/SceneCluster.h"
-#include "Graphics/Scene/SkyBox.h"
-#include "Graphics/Scene/Lights/SceneLights.h"
-#include "Map/ChunkCoordinates.h"
+#include "event/event.h"
+#include "graphics/scene/camera.h"
+#include "graphics/scene/fog.h"
+#include "graphics/scene/projection.h"
+#include "graphics/scene/scene_cluster.h"
+#include "graphics/scene/sky_box.h"
+#include "graphics/scene/lights/scene_lights.h"
+#include "map/chunk_coordinates.h"
 
 struct Entity;
 struct Model;

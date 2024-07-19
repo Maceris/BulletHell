@@ -1,4 +1,4 @@
-#include "Entities/Bullet.h"
+#include "entities/bullet.h"
 
 Bullet::Bullet(const Health damage, const glm::vec2& direction, 
 	const float speed, std::shared_ptr<Entity> scene_entity)

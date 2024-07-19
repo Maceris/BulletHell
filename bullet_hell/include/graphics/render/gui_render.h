@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 
-#include "vec2.hpp"
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/UniformsMap.h"
+#include "glm/vec2.hpp"
+#include "graphics/graph/shader_program.h"
+#include "graphics/graph/uniforms_map.h"
 
 class Scene;
 class Window;

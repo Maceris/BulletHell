@@ -1,7 +1,7 @@
-#include "Graphics/Graph/ShadowBuffer.h"
+#include "graphics/graph/shadow_buffer.h"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/CascadeShadowSlice.h"
+#include "debugging/logger.h"
+#include "graphics/graph/cascade_shadow_slice.h"
 
 #include "glad.h"
 

@@ -129,16 +129,21 @@ SET(BULLET_HELL_DIR ${ROOT_DIR}/bullet_hell)
 SET(COMMON_INCLUDE_DIR ${ROOT_DIR}/common/include)
 SET(COMMON_SOURCE_DIR ${ROOT_DIR}/common/src)
 
+SET(BOOST_DIR ${THIRD_PARTY_DIR}/boost_1_83_0)
+SET(GLFW_DIR ${THIRD_PARTY_DIR}/glfw-3.3.8)
+SET(GLM_DIR ${THIRD_PARTY_DIR}/glm)
+SET(IMGUI_DIR ${THIRD_PARTY_DIR}/imgui-1.89.9)
+
 # ############################## Project Setup ################################
 
 SET(COMMON_HEADERS
   ${COMMON_INCLUDE_DIR}/globals.h
   ${COMMON_INCLUDE_DIR}/portability.h
-  ${COMMON_INCLUDE_DIR}/debugging/critical_section.h
   ${COMMON_INCLUDE_DIR}/debugging/logger.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/animation.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/material.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/mesh_data.h
+  ${COMMON_INCLUDE_DIR}/memory/critical_section.h
 )
 
 SET(COMMON_SOURCES
@@ -148,4 +153,6 @@ SET(COMMON_SOURCES
 
 ADD_SUBDIRECTORY(third_party)
 ADD_SUBDIRECTORY(asset_packer)
+ADD_SUBDIRECTORY(bullet_hell)
 
+SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT BulletHell)

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <unordered_map>
 #include <vector>
 
-#include "Graphics/Graph/Model.h"
-#include "Graphics/Scene/Entity.h"
-#include "Graphics/Scene/Lights/PointLight.h"
-#include "Graphics/Scene/Lights/SpotLight.h"
+#include "graphics/graph/model.h"
+#include "graphics/scene/entity.h"
+#include "graphics/scene/lights/point_light.h"
+#include "graphics/scene/lights/spot_light.h"
 
 /// <summary>
 /// A group of things to render in the scene.

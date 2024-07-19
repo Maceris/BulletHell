@@ -1,7 +1,7 @@
-#include "Graphics/Scene/AnimationData.h"
+#include "graphics/scene/animation_data.h"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/Animation.h"
+#include "debugging/logger.h"
+#include "graphics/graph/animation.h"
 
 AnimationData::AnimationData(std::shared_ptr<Animation> animation)
 	: current_animation{ animation }

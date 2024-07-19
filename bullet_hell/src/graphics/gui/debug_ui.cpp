@@ -1,20 +1,20 @@
-#include "Graphics/GUI/DebugUI.h"
+#include "graphics/gui/debug_ui.h"
 
 #if DEBUG
 
 #include <format>
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 #include "imgui.h"
 
-#include "Entities/Pawn.h"
-#include "Entities/PawnManager.h"
-#include "Debugging/Timer.h"
-#include "Graphics/Graph/Animation.h"
-#include "Graphics/Render/Render.h"
-#include "Graphics/Scene/Entity.h"
-#include "Graphics/Scene/Scene.h"
-#include "Main/GameLogic.h"
+#include "entities/pawn.h"
+#include "entities/pawn_manager.h"
+#include "debugging/timer.h"
+#include "graphics/graph/animation.h"
+#include "graphics/render/render.h"
+#include "graphics/scene/entity.h"
+#include "graphics/scene/scene.h"
+#include "main/game_logic.h"
 
 #pragma region Variables
 bool DebugUI::show_debug_window = true;

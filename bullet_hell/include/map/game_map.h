@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <list>
 #include <memory>
 #include <unordered_map>
 
-#include "Map/ChunkCoordinates.h"
+#include "map/chunk_coordinates.h"
 
 struct Chunk;
 

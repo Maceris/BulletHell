@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Map/ChunkCoordinates.h"
-#include "Map/Tile.h"
+#include "map/chunk_coordinates.h"
+#include "map/tile.h"
 
 /// <summary>
 /// The number of tiles per side of a chunk.

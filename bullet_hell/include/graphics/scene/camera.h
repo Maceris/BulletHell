@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "mat4x4.hpp"
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "gtc/matrix_transform.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 /// <summary>
 /// Represents the camera in a scene.

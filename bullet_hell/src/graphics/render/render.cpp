@@ -1,16 +1,16 @@
-#include "Graphics/Render/Render.h"
+#include "graphics/render/render.h"
 
 #include <unordered_map>
 
-#include "gtc/type_ptr.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
-#include "Debugging/Logger.h"
-#include "Debugging/Timer.h"
-#include "Graphics/Window.h"
-#include "Graphics/Graph/MeshDrawData.h"
-#include "Graphics/Graph/QuadMesh.h"
-#include "Graphics/Scene/Scene.h"
-#include "Utilities/OpenGLUtil.h"
+#include "debugging/logger.h"
+#include "debugging/timer.h"
+#include "graphics/window.h"
+#include "graphics/graph/mesh_draw_data.h"
+#include "graphics/graph/quad_mesh.h"
+#include "graphics/scene/scene.h"
+#include "utilities/opengl_util.h"
 
 #include "glad.h"
 

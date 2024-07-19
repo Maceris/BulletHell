@@ -1,18 +1,18 @@
-#include "Graphics/Render/SceneRender.h"
+#include "graphics/render/scene_render.h"
 
 #include <unordered_set>
 
-#include "Debugging/Logger.h"
-#include "Main/GameLogic.h"
-#include "Graphics/Graph/TextureResource.h"
-#include "Graphics/Graph/GBuffer.h"
-#include "Graphics/Graph/Material.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/Texture.h"
-#include "Graphics/Render/CommandBuffers.h"
-#include "Graphics/Render/RenderBuffers.h"
-#include "Graphics/Render/RenderConstants.h"
-#include "Graphics/Scene/Scene.h"
+#include "debugging/logger.h"
+#include "main/game_logic.h"
+#include "graphics/graph/texture_resource.h"
+#include "graphics/graph/gbuffer.h"
+#include "graphics/graph/material.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/texture.h"
+#include "graphics/render/command_buffers.h"
+#include "graphics/render/render_buffers.h"
+#include "graphics/render/render_constants.h"
+#include "graphics/scene/scene.h"
 
 #include "glad.h"
 

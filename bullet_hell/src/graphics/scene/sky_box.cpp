@@ -1,11 +1,11 @@
-#include "Graphics/Scene/SkyBox.h"
+#include "graphics/scene/sky_box.h"
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/Model.h"
-#include "Graphics/Graph/ModelResource.h"
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
+#include "debugging/logger.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/model.h"
+#include "graphics/graph/model_resource.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
 

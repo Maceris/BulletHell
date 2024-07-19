@@ -1,6 +1,6 @@
-#include "Graphics/Graph/MeshData.h"
+#include "graphics/graph/mesh_data.h"
 
-#include "Graphics/Graph/Animation.h"
+#include "graphics/graph/animation.h"
 
 void MeshData::append_vertices_to_buffer(std::vector<float>& buffer) const
 {

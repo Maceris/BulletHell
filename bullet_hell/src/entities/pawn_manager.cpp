@@ -1,19 +1,19 @@
-#include "Entities/PawnManager.h"
+#include "entities/pawn_manager.h"
 
 #include <cmath>
 #include <float.h>
 
-#include "AI/Brain.h"
-#include "Debugging/Logger.h"
-#include "Debugging/Timer.h"
-#include "Entities/Bullet.h"
-#include "Entities/Pawn.h"
-#include "Graphics/Graph/AnimationResource.h"
-#include "Graphics/Graph/ModelResource.h"
-#include "Graphics/Scene/Entity.h"
-#include "Graphics/Scene/Scene.h"
-#include "Main/GameLogic.h"
-#include "Utilities/MathUtil.h"
+#include "ai/brain.h"
+#include "debugging/logger.h"
+#include "debugging/timer.h"
+#include "entities/bullet.h"
+#include "entities/pawn.h"
+#include "graphics/graph/animation_resource.h"
+#include "graphics/graph/model_resource.h"
+#include "graphics/scene/entity.h"
+#include "graphics/scene/scene.h"
+#include "main/game_logic.h"
+#include "utilities/math_util.h"
 
 PawnManager* g_pawn_manager = nullptr;
 

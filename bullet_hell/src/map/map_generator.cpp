@@ -1,8 +1,8 @@
-#include "Map/MapGenerator.h"
+#include "map/map_generator.h"
 
 #include "PerlinNoise.hpp"
 
-#include "Chunk.h"
+#include "map/chunk.h"
 
 const siv::PerlinNoise::seed_type seed = 1;
 

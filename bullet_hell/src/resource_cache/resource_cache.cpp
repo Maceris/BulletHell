@@ -1,10 +1,10 @@
-#include "ResourceCache/ResourceCache.h"
+#include "resource_cache/resource_cache.h"
 
 #include <algorithm>
 
-#include "Debugging/Logger.h"
-#include "ResourceCache/DefaultResourceLoader.h"
-#include "Utilities/StringUtil.h"
+#include "debugging/logger.h"
+#include "resource_cache/default_resource_loader.h"
+#include "utilities/string_util.h"
 
 bool ResourceCache::make_room(size_t size)
 {

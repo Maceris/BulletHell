@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 /// <summary>
 /// Represents the state of an AI character.

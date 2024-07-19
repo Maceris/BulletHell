@@ -1,4 +1,4 @@
-#include "Graphics/Scene/Lights/SpotLight.h"
+#include "graphics/scene/lights/spot_light.h"
 
 #include <cmath>
 #include <numbers>

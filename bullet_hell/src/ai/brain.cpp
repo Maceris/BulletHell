@@ -1,12 +1,12 @@
-#include "AI/Brain.h"
+#include "ai/brain.h"
 
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
-#include "AI/AIState.h"
-#include "Entities/Pawn.h"
-#include "Entities/PawnManager.h"
-#include "Graphics/Scene/Entity.h"
-#include "Utilities/MathUtil.h"
+#include "ai/ai_state.h"
+#include "entities/pawn.h"
+#include "entities/pawn_manager.h"
+#include "graphics/scene/entity.h"
+#include "utilities/math_util.h"
 
 /// <summary>
 /// The distance to the player that is close enough enemies will flee.

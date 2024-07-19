@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "vec2.hpp"
+#include "glm/vec2.hpp"
 
 namespace MathUtil
 {

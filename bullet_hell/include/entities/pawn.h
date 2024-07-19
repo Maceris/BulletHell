@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 
-#include "vec2.hpp"
+#include "glm/vec2.hpp"
 
-#include "AI/AIState.h"
-#include "Entities/EntityTypes.h"
+#include "ai/ai_state.h"
+#include "entities/entity_types.h"
 
 struct Entity;
 

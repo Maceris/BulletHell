@@ -1,8 +1,8 @@
-#include "Graphics/Scene/Camera.h"
+#include "graphics/scene/camera.h"
 
 #include <numbers>
 
-#include "Utilities/MathUtil.h"
+#include "utilities/math_util.h"
 
 /// <summary>
 /// A constant value used to clamp rotation, precomputed for convenience.

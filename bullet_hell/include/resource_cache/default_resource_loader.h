@@ -5,7 +5,7 @@
 	ResourceCache.h instead.
 */
 
-#include "ResourceCache/ResourceLoader.h"
+#include "resource_cache/resource_loader.h"
 
 class ResourceHandle;
 

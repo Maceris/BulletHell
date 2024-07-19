@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 
-#include "Graphics/MouseInput.h"
+#include "graphics/mouse_input.h"
 
 /*
  * NOTE(ches) so we don't have to include glfw here, since it will interfere

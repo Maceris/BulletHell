@@ -1,13 +1,13 @@
-#include "Graphics/Render/AnimationRender.h"
+#include "graphics/render/animation_render.h"
 
 #include <cmath>
 #include <vector>
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/Animation.h"
-#include "Graphics/Graph/MeshDrawData.h"
-#include "Graphics/Render/RenderBuffers.h"
-#include "Graphics/Scene/Scene.h"
+#include "debugging/logger.h"
+#include "graphics/graph/animation.h"
+#include "graphics/graph/mesh_draw_data.h"
+#include "graphics/render/render_buffers.h"
+#include "graphics/scene/scene.h"
 
 #include "glad.h"
 

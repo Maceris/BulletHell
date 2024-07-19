@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <string>
 #include <memory>
 #include <vector>
 
-#include "mat4x4.hpp"
+#include "glm/mat4x4.hpp"
 
-#include "Graphics/Graph/Animation.h"
-#include "Graphics/Graph/MeshData.h"
-#include "Graphics/Graph/MeshDrawData.h"
-#include "Graphics/Scene/Entity.h"
+#include "graphics/graph/animation.h"
+#include "graphics/graph/mesh_data.h"
+#include "graphics/graph/mesh_draw_data.h"
+#include "graphics/scene/entity.h"
 
 /// <summary>
 /// A list of pointers to entities.

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
-#include "Map/Tile.h"
+#include "map/tile.h"
 
 struct Chunk;
 

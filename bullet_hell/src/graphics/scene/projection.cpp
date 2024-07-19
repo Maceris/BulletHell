@@ -1,7 +1,7 @@
-#include "Graphics/Scene/Projection.h"
+#include "graphics/scene/projection.h"
 
-#include "Debugging/Logger.h"
-#include "gtc/matrix_transform.hpp"
+#include "debugging/logger.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 Projection::Projection(const unsigned int width, const unsigned int height)
 	: projection_matrix{ 1.0f }

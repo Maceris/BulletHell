@@ -1,0 +1,220 @@
+# Bullet Hell
+
+CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
+
+SET(HEADER_PATH ${BULLET_HELL_DIR}/include)
+SET(SOURCE_PATH ${BULLET_HELL_DIR}/src)
+
+ADD_DEFINITIONS(-DGLFW_INCLUDE_NONE)
+
+SET(GLM_HEADERS
+  ${GLM_DIR}/glm/common.hpp
+  ${GLM_DIR}/glm/exponential.hpp
+  ${GLM_DIR}/glm/ext.hpp
+  ${GLM_DIR}/glm/fwd.hpp
+  ${GLM_DIR}/glm/geometric.hpp
+  ${GLM_DIR}/glm/glm.hpp
+  ${GLM_DIR}/glm/integer.hpp
+  ${GLM_DIR}/glm/mat2x2.hpp
+  ${GLM_DIR}/glm/mat2x3.hpp
+  ${GLM_DIR}/glm/mat2x4.hpp
+  ${GLM_DIR}/glm/mat3x2.hpp
+  ${GLM_DIR}/glm/mat3x3.hpp
+  ${GLM_DIR}/glm/mat3x4.hpp
+  ${GLM_DIR}/glm/mat4x2.hpp
+  ${GLM_DIR}/glm/mat4x3.hpp
+  ${GLM_DIR}/glm/mat4x4.hpp
+  ${GLM_DIR}/glm/matrix.hpp
+  ${GLM_DIR}/glm/packing.hpp
+  ${GLM_DIR}/glm/trigonometric.hpp
+  ${GLM_DIR}/glm/vec2.hpp
+  ${GLM_DIR}/glm/vec3.hpp
+  ${GLM_DIR}/glm/vec4.hpp
+  ${GLM_DIR}/glm/vector_relational.hpp
+)
+
+SET(THIRD_PARTY_HEADERS
+  ${GLM_HEADERS}
+)
+
+SET(HEADER_FILES
+  ${HEADER_PATH}/ai/ai_state.h
+  ${HEADER_PATH}/ai/brain.h
+  ${HEADER_PATH}/debugging/timer.h
+  ${HEADER_PATH}/entities/bullet.h
+  ${HEADER_PATH}/entities/entity_types.h
+  ${HEADER_PATH}/entities/pawn.h
+  ${HEADER_PATH}/entities/pawn_manager.h
+  ${HEADER_PATH}/event/event.h
+  ${HEADER_PATH}/event/event_manager.h
+  ${HEADER_PATH}/event/map/chunk_loaded.h
+  ${HEADER_PATH}/event/map/chunk_unloaded.h
+  ${HEADER_PATH}/graphics/glad_types.h
+  ${HEADER_PATH}/graphics/mouse_input.h
+  ${HEADER_PATH}/graphics/window.h
+  ${HEADER_PATH}/graphics/graph/animation_resource.h
+  ${HEADER_PATH}/graphics/graph/array_of_textures.h
+  ${HEADER_PATH}/graphics/graph/cascade_shadow_slice.h
+  ${HEADER_PATH}/graphics/graph/gbuffer.h
+  ${HEADER_PATH}/graphics/graph/gui_mesh.h
+  ${HEADER_PATH}/graphics/graph/icon_resource.h
+  ${HEADER_PATH}/graphics/graph/material_resource.h
+  ${HEADER_PATH}/graphics/graph/mesh_draw_data.h
+  ${HEADER_PATH}/graphics/graph/model.h
+  ${HEADER_PATH}/graphics/graph/model_resource.h
+  ${HEADER_PATH}/graphics/graph/quad_mesh.h
+  ${HEADER_PATH}/graphics/graph/shader_program.h
+  ${HEADER_PATH}/graphics/graph/shadow_buffer.h
+  ${HEADER_PATH}/graphics/graph/texture.h
+  ${HEADER_PATH}/graphics/graph/texture_resource.h
+  ${HEADER_PATH}/graphics/graph/uniforms_map.h
+  ${HEADER_PATH}/graphics/gui/debug_ui.h
+  ${HEADER_PATH}/graphics/gui/ui.h
+  ${HEADER_PATH}/graphics/render/animation_render.h
+  ${HEADER_PATH}/graphics/render/command_buffers.h
+  ${HEADER_PATH}/graphics/render/debug_render.h
+  ${HEADER_PATH}/graphics/render/filter_render.h
+  ${HEADER_PATH}/graphics/render/gui_render.h
+  ${HEADER_PATH}/graphics/render/light_render.h
+  ${HEADER_PATH}/graphics/render/render.h
+  ${HEADER_PATH}/graphics/render/render_buffers.h
+  ${HEADER_PATH}/graphics/render/render_constants.h
+  ${HEADER_PATH}/graphics/render/scene_render.h
+  ${HEADER_PATH}/graphics/render/shadow_render.h
+  ${HEADER_PATH}/graphics/render/sky_box_render.h
+  ${HEADER_PATH}/graphics/scene/animation_data.h
+  ${HEADER_PATH}/graphics/scene/camera.h
+  ${HEADER_PATH}/graphics/scene/entity.h
+  ${HEADER_PATH}/graphics/scene/fog.h
+  ${HEADER_PATH}/graphics/scene/projection.h
+  ${HEADER_PATH}/graphics/scene/scene.h
+  ${HEADER_PATH}/graphics/scene/scene_cluster.h
+  ${HEADER_PATH}/graphics/scene/sky_box.h
+  ${HEADER_PATH}/graphics/scene/lights/ambient_light.h
+  ${HEADER_PATH}/graphics/scene/lights/directional_light.h
+  ${HEADER_PATH}/graphics/scene/lights/point_light.h
+  ${HEADER_PATH}/graphics/scene/lights/scene_lights.h
+  ${HEADER_PATH}/graphics/scene/lights/spot_light.h
+  ${HEADER_PATH}/main/game_logic.h
+  ${HEADER_PATH}/main/game_options.h
+  ${HEADER_PATH}/map/chunk.h
+  ${HEADER_PATH}/map/chunk_coordinates.h
+  ${HEADER_PATH}/map/game_map.h
+  ${HEADER_PATH}/map/map_generator.h
+  ${HEADER_PATH}/map/tile.h
+  ${HEADER_PATH}/memory/concurrent_queue.h
+  ${HEADER_PATH}/resource_cache/default_resource_loader.h
+  ${HEADER_PATH}/resource_cache/resource.h
+  ${HEADER_PATH}/resource_cache/resource_cache.h
+  ${HEADER_PATH}/resource_cache/resource_file.h
+  ${HEADER_PATH}/resource_cache/resource_handle.h
+  ${HEADER_PATH}/resource_cache/resource_loader.h
+  ${HEADER_PATH}/resource_cache/resource_zip_file.h
+  ${HEADER_PATH}/utilities/generic_iterator.h
+  ${HEADER_PATH}/utilities/math_util.h
+  ${HEADER_PATH}/utilities/opengl_util.h
+  ${HEADER_PATH}/utilities/string_util.h
+)
+
+SET(SOURCE_FILES
+  ${SOURCE_PATH}/ai/brain.cpp
+  ${SOURCE_PATH}/debugging/timer.cpp
+  ${SOURCE_PATH}/entities/bullet.cpp
+  ${SOURCE_PATH}/entities/pawn.cpp
+  ${SOURCE_PATH}/entities/pawn_manager.cpp
+  ${SOURCE_PATH}/event/event_manager.cpp
+  ${SOURCE_PATH}/event/map/chunk_loaded.cpp
+  ${SOURCE_PATH}/event/map/chunk_unloaded.cpp
+  ${SOURCE_PATH}/graphics/mouse_input.cpp
+  ${SOURCE_PATH}/graphics/window.cpp
+  ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
+  ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
+  ${SOURCE_PATH}/graphics/graph/cascade_shadow_slice.cpp
+  ${SOURCE_PATH}/graphics/graph/gbuffer.cpp
+  ${SOURCE_PATH}/graphics/graph/gui_mesh.cpp
+  ${SOURCE_PATH}/graphics/graph/icon_resource.cpp
+  ${SOURCE_PATH}/graphics/graph/material.cpp
+  ${SOURCE_PATH}/graphics/graph/material_resource.cpp
+  ${SOURCE_PATH}/graphics/graph/mesh_data.cpp
+  ${SOURCE_PATH}/graphics/graph/mesh_draw_data.cpp
+  ${SOURCE_PATH}/graphics/graph/model.cpp
+  ${SOURCE_PATH}/graphics/graph/model_resource.cpp
+  ${SOURCE_PATH}/graphics/graph/quad_mesh.cpp
+  ${SOURCE_PATH}/graphics/graph/shader_program.cpp
+  ${SOURCE_PATH}/graphics/graph/shadow_buffer.cpp
+  ${SOURCE_PATH}/graphics/graph/texture.cpp
+  ${SOURCE_PATH}/graphics/graph/texture_resource.cpp
+  ${SOURCE_PATH}/graphics/graph/uniforms_map.cpp
+  ${SOURCE_PATH}/graphics/gui/debug_ui.cpp
+  ${SOURCE_PATH}/graphics/gui/ui.cpp
+  ${SOURCE_PATH}/graphics/render/animation_render.cpp
+  ${SOURCE_PATH}/graphics/render/command_buffers.cpp
+  ${SOURCE_PATH}/graphics/render/debug_render.cpp
+  ${SOURCE_PATH}/graphics/render/filter_render.cpp
+  ${SOURCE_PATH}/graphics/render/gui_render.cpp
+  ${SOURCE_PATH}/graphics/render/light_render.cpp
+  ${SOURCE_PATH}/graphics/render/render.cpp
+  ${SOURCE_PATH}/graphics/render/render_buffers.cpp
+  ${SOURCE_PATH}/graphics/render/scene_render.cpp
+  ${SOURCE_PATH}/graphics/render/shadow_render.cpp
+  ${SOURCE_PATH}/graphics/render/sky_box_render.cpp
+  ${SOURCE_PATH}/graphics/scene/animation_data.cpp
+  ${SOURCE_PATH}/graphics/scene/camera.cpp
+  ${SOURCE_PATH}/graphics/scene/entity.cpp
+  ${SOURCE_PATH}/graphics/scene/fog.cpp
+  ${SOURCE_PATH}/graphics/scene/projection.cpp
+  ${SOURCE_PATH}/graphics/scene/scene.cpp
+  ${SOURCE_PATH}/graphics/scene/sky_box.cpp
+  ${SOURCE_PATH}/graphics/scene/lights/ambient_light.cpp
+  ${SOURCE_PATH}/graphics/scene/lights/directional_light.cpp
+  ${SOURCE_PATH}/graphics/scene/lights/point_light.cpp
+  ${SOURCE_PATH}/graphics/scene/lights/scene_lights.cpp
+  ${SOURCE_PATH}/graphics/scene/lights/spot_light.cpp
+  ${SOURCE_PATH}/main/game_logic.cpp
+  ${SOURCE_PATH}/main/game_options.cpp
+  ${SOURCE_PATH}/main/main.cpp
+  ${SOURCE_PATH}/map/chunk.cpp
+  ${SOURCE_PATH}/map/game_map.cpp
+  ${SOURCE_PATH}/map/map_generator.cpp
+  ${SOURCE_PATH}/map/tile.cpp
+  ${SOURCE_PATH}/resource_cache/default_resource_loader.cpp
+  ${SOURCE_PATH}/resource_cache/resource.cpp
+  ${SOURCE_PATH}/resource_cache/resource_cache.cpp
+  ${SOURCE_PATH}/resource_cache/resource_handle.cpp
+  ${SOURCE_PATH}/resource_cache/resource_loader.cpp
+  ${SOURCE_PATH}/resource_cache/resource_zip_file.cpp
+  ${SOURCE_PATH}/utilities/math_util.cpp
+  ${SOURCE_PATH}/utilities/opengl_util.cpp
+  ${SOURCE_PATH}/utilities/string_util.cpp
+)
+
+INCLUDE_DIRECTORIES(BEFORE
+  ${HEADER_PATH}/
+  ${BOOST_DIR}/
+  ${COMMON_INCLUDE_DIR}/
+  ${GLM_DIR}/
+  ${IMGUI_DIR}/
+  ${THIRD_PARTY_DIR}/CppDelegates
+  ${THIRD_PARTY_DIR}/glad/include/glad
+  ${THIRD_PARTY_DIR}/PerlinNoise
+  ${THIRD_PARTY_DIR}/stb
+  ${THIRD_PARTY_DIR}/ziplib/Source/ZipLib
+)
+
+SOURCE_GROUP(TREE ${COMMON_INCLUDE_DIR} PREFIX "common-include" FILES ${COMMON_HEADERS})
+SOURCE_GROUP(TREE ${COMMON_SOURCE_DIR} PREFIX "common-src" FILES ${COMMON_SOURCES})
+SOURCE_GROUP(TREE ${HEADER_PATH} PREFIX "include" FILES ${HEADER_FILES})
+SOURCE_GROUP(TREE ${SOURCE_PATH} PREFIX "src" FILES ${SOURCE_FILES})
+
+ADD_EXECUTABLE(BulletHell
+  ${HEADER_FILES}
+  ${COMMON_HEADERS}
+  ${THIRD_PARTY_HEADERS}
+  
+  ${SOURCE_FILES}
+  ${COMMON_SOURCES}
+)
+
+TARGET_USE_COMMON_OUTPUT_DIRECTORY(BulletHell)
+
+TARGET_LINK_LIBRARIES(BulletHell ThirdParty ws2_32)

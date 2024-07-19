@@ -1,10 +1,10 @@
-#include "Debugging/Timer.h"
+#include "debugging/timer.h"
 
 #include <map>
 
 #include "boost/circular_buffer.hpp"
 
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 /// <summary>
 /// How many samples to keep in history for each timer, for calculating

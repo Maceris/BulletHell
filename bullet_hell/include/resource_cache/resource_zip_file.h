@@ -9,7 +9,7 @@
 
 #include "ZipArchive.h"
 
-#include "ResourceCache/ResourceFile.h"
+#include "resource_cache/resource_file.h"
 
 /// <summary>
 /// A resource file that loads from a .zip file.

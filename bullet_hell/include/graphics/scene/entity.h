@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <string>
 
-#include "mat4x4.hpp"
-#include "vec3.hpp"
-#include "ext/quaternion_float.hpp"
-#include "gtx/quaternion.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/vec3.hpp"
+#include "glm/ext/quaternion_float.hpp"
+#include "glm/gtx/quaternion.hpp"
 
-#include "Graphics/Scene/AnimationData.h"
+#include "graphics/scene/animation_data.h"
 
 /// <summary>
 /// Something that is part of the 3D scene.

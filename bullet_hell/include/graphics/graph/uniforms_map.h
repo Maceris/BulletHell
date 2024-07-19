@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <map>
 #include <string>
 
-#include "mat4x4.hpp"
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "vec4.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 
-#include "Graphics/GladTypes.h"
+#include "graphics/glad_types.h"
 
 /// <summary>
 /// Allows for creation and usage of uniforms for a shader program.

@@ -1,4 +1,4 @@
-#include "Graphics/Scene/Lights/DirectionalLight.h"
+#include "graphics/scene/lights/directional_light.h"
 
 DirectionalLight::DirectionalLight()
 	: color{ 1.0f, 1.0f, 1.0f }

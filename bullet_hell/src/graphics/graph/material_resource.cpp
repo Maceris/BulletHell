@@ -1,10 +1,10 @@
-#include "Graphics/Graph/MaterialResource.h"
+#include "graphics/graph/material_resource.h"
 
-#include "Debugging/Logger.h"
-#include "Main/GameLogic.h"
-#include "Graphics/Graph/Material.h"
-#include "ResourceCache/ResourceCache.h"
-#include "Utilities/Portability.h"
+#include "portability.h"
+#include "debugging/logger.h"
+#include "main/game_logic.h"
+#include "graphics/graph/material.h"
+#include "resource_cache/resource_cache.h"
 
 /// <summary>
 /// What is the latest material file verison we support loading.

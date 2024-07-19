@@ -1,29 +1,29 @@
-#include "Graphics/Window.h"
+#include "graphics/window.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 
-#include "glfw3.h"
-#include "glm.hpp"
-#include "ext/matrix_clip_space.hpp"
-#include "ext/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
+#include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
 
-#include "Debugging/Logger.h"
-#include "Graphics/Graph/IconResource.h"
-#include "Main/GameLogic.h"
-#include "Utilities/OpenGLUtil.h"
+#include "debugging/logger.h"
+#include "graphics/graph/icon_resource.h"
+#include "main/game_logic.h"
+#include "utilities/opengl_util.h"
 
 #include "glad.h"
 

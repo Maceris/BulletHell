@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 /// <summary>
 /// Methods for drawing the game UI.

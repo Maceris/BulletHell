@@ -1,6 +1,6 @@
-#include "Utilities/OpenGLUtil.h"
+#include "utilities/opengl_util.h"
 
-#include "Debugging/Logger.h"
+#include "debugging/logger.h"
 
 #include "glad.h"
 

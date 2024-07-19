@@ -1,19 +1,19 @@
-#include "Graphics/Scene/Scene.h"
+#include "graphics/scene/scene.h"
 
 #include <unordered_set>
 
 #include "Delegate.h"
 
-#include "Debugging/Logger.h"
-#include "Event/EventManager.h"
-#include "Event/Map/ChunkLoaded.h"
-#include "Event/Map/ChunkUnloaded.h"
-#include "Main/GameLogic.h"
-#include "Map/Chunk.h"
-#include "Map/Tile.h"
-#include "Graphics/Graph/ModelResource.h"
-#include "Graphics/Scene/Entity.h"
-#include "Graphics/Graph/Model.h"
+#include "debugging/logger.h"
+#include "event/event_manager.h"
+#include "event/map/chunk_loaded.h"
+#include "event/map/chunk_unloaded.h"
+#include "main/game_logic.h"
+#include "map/chunk.h"
+#include "map/tile.h"
+#include "graphics/graph/model_resource.h"
+#include "graphics/scene/entity.h"
+#include "graphics/graph/model.h"
 
 Scene::Scene(const unsigned int width, const unsigned int height)
 	: camera{}

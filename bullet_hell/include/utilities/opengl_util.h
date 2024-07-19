@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <string>
 #include <vector>
 
-#include "Graphics/GladTypes.h"
+#include "graphics/glad_types.h"
 
 /// <summary>
 /// Utilities relating to OpenGL.

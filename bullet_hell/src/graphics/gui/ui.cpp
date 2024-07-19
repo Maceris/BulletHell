@@ -1,13 +1,13 @@
-#include "Graphics/GUI/UI.h"
+#include "graphics/gui/ui.h"
 
 #include "imgui.h"
 
 #if DEBUG
-#include "Graphics/GUI/DebugUI.h"
+#include "graphics/gui/debug_ui.h"
 #endif
-#include "Entities/PawnManager.h"
-#include "Main/GameLogic.h"
-#include "ResourceCache/ResourceCache.h"
+#include "entities/pawn_manager.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 static ImFont* font_default;
 static ImFont* font_noirden;

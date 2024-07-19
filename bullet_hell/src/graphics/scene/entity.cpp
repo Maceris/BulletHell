@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "graphics/scene/entity.h"
 
 std::atomic<uint64_t> Entity::next_ID{ 0 };
 

@@ -6,8 +6,8 @@
 
 #include "Delegate.h"
 
-#include "Event/Event.h"
-#include "Memory/ConcurrentQueue.h"
+#include "event/event.h"
+#include "memory/concurrent_queue.h"
 
 /// <summary>
 /// A delegate that will process an event when passed one.

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 #include <memory>
 #include <vector>
 
-#include "Graphics/Graph/CascadeShadowSlice.h"
-#include "Graphics/Graph/ShaderProgram.h"
-#include "Graphics/Graph/ShadowBuffer.h"
-#include "Graphics/Graph/UniformsMap.h"
+#include "graphics/graph/cascade_shadow_slice.h"
+#include "graphics/graph/shader_program.h"
+#include "graphics/graph/shadow_buffer.h"
+#include "graphics/graph/uniforms_map.h"
 
 struct CommandBuffers;
 class RenderBuffers;

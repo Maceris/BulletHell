@@ -1,4 +1,4 @@
-#include "Graphics/Graph/Material.h"
+#include "graphics/graph/material.h"
 
 #include <cmath>
 

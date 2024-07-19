@@ -1,9 +1,10 @@
-#include "Graphics/Graph/TextureResource.h"
+#include "graphics/graph/texture_resource.h"
 
-#include "Main/GameLogic.h"
-#include "Graphics/Graph/Texture.h"
-#include "ResourceCache/ResourceCache.h"
-#include "Utilities/Portability.h"
+#include "portability.h"
+#include "debugging/logger.h"
+#include "main/game_logic.h"
+#include "graphics/graph/texture.h"
+#include "resource_cache/resource_cache.h"
 
 size_t TextureLoader::get_loaded_resource_size(char* raw_buffer,
 	size_t raw_size)

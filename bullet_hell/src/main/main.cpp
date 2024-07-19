@@ -1,12 +1,12 @@
-#include "Globals.h"
+#include "globals.h"
 
 #include <windows.h>
 
 #include <iostream>
 
-#include "Debugging/Logger.h"
-#include "Debugging/Timer.h"
-#include "Main/GameLogic.h"
+#include "debugging/logger.h"
+#include "debugging/timer.h"
+#include "main/game_logic.h"
 
 /// <summary>
 /// The entry point to the program, and main loop.
