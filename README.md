@@ -14,8 +14,13 @@ event system, and a resource cache.
 
 ## Building
 
-The games are built using visual studio's compiler. If changes are made to third party libraries, there are scripts for building all of the third party 
-libaries and exporting to the library folders for various targets.
+The game is compiled using visual studio and only supports Windows. To build and run the game, please follow the below steps.
+
+1. Run either `./regenerate-project.bat` or `./regenerate-project.sh` from the command line
+2. Open the generated solution located at `bin/BulletHell.sln`
+3. Build all (Ctrl+Shift+B)
+4. Copy the assets.zip file from the latest release into the appropriate `bin/Debug` or `bin/Release` directory
+5. Run the game
 
 The game requires specific assets, which are excluded from git due to size and frequency of changes, so it should compile but won't run out of the repo.
-Once the game is stable the asset zips may be made available somewhere, but for now only the source code is provided.
+The latest zip file can be found on the latest release in GitHub. It can also be rebuilt using the provided source assets.

@@ -10,7 +10,7 @@
 #include "resource_cache/resource_cache.h"
 
 static ImFont* font_default;
-static ImFont* font_noirden;
+static ImFont* font_jupiteroid;
 
 void draw_centered_text(const char* text)
 {
@@ -45,7 +45,7 @@ void UI::draw_game_over()
 		| ImGuiWindowFlags_NoBackground
 	);
 
-	ImGui::PushFont(font_noirden);
+	ImGui::PushFont(font_jupiteroid);
 
 	draw_centered_text("Game Over!");
 
@@ -90,7 +90,7 @@ void UI::draw_main_menu()
 		| ImGuiWindowFlags_NoBackground
 	);
 
-	ImGui::PushFont(font_noirden);
+	ImGui::PushFont(font_jupiteroid);
 
 	draw_centered_text("Bullet Hell");
 
@@ -128,7 +128,7 @@ void UI::draw_pause_menu()
 		| ImGuiWindowFlags_NoBackground
 	);
 
-	ImGui::PushFont(font_noirden);
+	ImGui::PushFont(font_jupiteroid);
 
 	draw_centered_text("Game Paused");
 
@@ -151,7 +151,7 @@ void UI::draw_pause_menu()
 
 void UI::first_time_setup()
 {
-	Resource resource("fonts/noirden-regular.ttf");
+	Resource resource("fonts/jupiteroid-regular.ttf");
 	auto handle = g_game_logic->resource_cache->get_handle(&resource);
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -160,7 +160,7 @@ void UI::first_time_setup()
 	ImFontConfig font_cfg;
 	font_cfg.FontDataOwnedByAtlas = false;
 	void* raw_data = static_cast<void*>(handle->get_writeable_buffer());
-	font_noirden = io.Fonts->AddFontFromMemoryTTF(raw_data, 
+	font_jupiteroid = io.Fonts->AddFontFromMemoryTTF(raw_data, 
 		static_cast<int>(handle->get_size()),
 		32.0f, &font_cfg);
 }
@@ -253,7 +253,7 @@ void UI::draw_round_timer()
 
 	const std::string timer_text = std::format("{}:{:.1f}", minutes, seconds);
 
-	ImGui::PushFont(font_noirden);
+	ImGui::PushFont(font_jupiteroid);
 
 	draw_centered_text(timer_text.c_str());
 	
