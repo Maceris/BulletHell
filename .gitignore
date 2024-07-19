@@ -363,15 +363,24 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Distribution folder
-dist/
+bin/
 
-# Intermediate build directory
-Bullet_Hell/build
-Asset_Packer/build
-
-Assets/
-Asset_Temp/
-Raw_Assets/
+assets/
+asset_temp/
+raw_assets/
+lib/
 
 log.txt
 packer_log.txt
+
+**/cmake-build-debug
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/install_manifest.txt
+**/CMakeFiles/
+**/CTestTestfile.cmake
+**/Makefile
+**/*.cbp
+**/CMakeScripts
+**/compile_commands.json
+**/generated/
