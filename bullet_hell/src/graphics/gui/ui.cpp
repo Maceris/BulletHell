@@ -156,6 +156,7 @@ void UI::first_time_setup()
 
 	ImGuiIO& io = ImGui::GetIO();
 	font_default = io.Fonts->AddFontDefault();
+	io.IniSavingRate = -1.0f;//NOTE(ches) disables the .ini file saving
 
 	ImFontConfig font_cfg;
 	font_cfg.FontDataOwnedByAtlas = false;
