@@ -1,0 +1,6 @@
+#pragma once
+
+#define BACKEND_OPENGL 1
+#define BACKEND_VULKAN 2
+
+#define BACKEND_CURRENT BACKEND_OPENGL

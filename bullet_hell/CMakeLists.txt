@@ -52,6 +52,20 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/glad_types.h
   ${HEADER_PATH}/graphics/mouse_input.h
   ${HEADER_PATH}/graphics/window.h
+  ${HEADER_PATH}/graphics/frontend/attachment.h
+  ${HEADER_PATH}/graphics/frontend/backend_type.h
+  ${HEADER_PATH}/graphics/frontend/buffer.h
+  ${HEADER_PATH}/graphics/frontend/deletion_queue.h
+  ${HEADER_PATH}/graphics/frontend/framebuffer.h
+  ${HEADER_PATH}/graphics/frontend/image_format.h
+  ${HEADER_PATH}/graphics/frontend/image_layout.h
+  ${HEADER_PATH}/graphics/frontend/instance.h
+  ${HEADER_PATH}/graphics/frontend/pipeline.h
+  ${HEADER_PATH}/graphics/frontend/render_config.h
+  ${HEADER_PATH}/graphics/frontend/render_stage.h
+  ${HEADER_PATH}/graphics/frontend/shader.h
+  ${HEADER_PATH}/graphics/frontend/texture.h
+  ${HEADER_PATH}/graphics/frontend/texture_loader.h
   ${HEADER_PATH}/graphics/graph/animation_resource.h
   ${HEADER_PATH}/graphics/graph/array_of_textures.h
   ${HEADER_PATH}/graphics/graph/cascade_shadow_slice.h
