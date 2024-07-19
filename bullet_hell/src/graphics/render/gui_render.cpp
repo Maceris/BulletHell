@@ -5,56 +5,28 @@
 #include "graphics/scene/scene.h"
 #include "graphics/gui/ui.h"
 #include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
-
-#pragma region Shader code
-
-const char fragment_shader_source[] = R"glsl(
-#version 460
-
-in vec2 texture_coordinates;
-in vec4 fragment_color;
-
-uniform sampler2D texture_sampler;
-
-out vec4 color_out;
-
-void main()
-{
-    color_out = fragment_color  * texture(texture_sampler, texture_coordinates);
-}
-)glsl";
-
-const char vertex_shader_source[] = R"glsl(
-#version 460
-
-layout (location=0) in vec2 position_in;
-layout (location=1) in vec2 texture_coordinates_in;
-layout (location=2) in vec4 color_in;
-
-out vec2 texture_coordinates;
-out vec4 fragment_color;
-
-uniform vec2 scale;
-
-void main()
-{
-    texture_coordinates = texture_coordinates_in;
-    fragment_color = color_in;
-    gl_Position = vec4(position_in * scale + vec2(-1.0, 1.0), 0.0, 1.0);
-}
-)glsl";
-#pragma endregion
 
 GuiRender::GuiRender(const Window& window)
 	: scale{ window.width, window.height }
 {
+	Resource frag("shaders/gui.frag");
+	std::shared_ptr<ResourceHandle> frag_handle =
+		g_game_logic->resource_cache->get_handle(&frag);
+	LOG_ASSERT(frag_handle && "Cannot find GUI fragment shader");
+
+	Resource vert("shaders/gui.vert");
+	std::shared_ptr<ResourceHandle> vert_handle =
+		g_game_logic->resource_cache->get_handle(&vert);
+	LOG_ASSERT(vert_handle && "Cannot find GUI vertex shader");
+
 	std::vector<ShaderModuleData> shader_modules;
-	shader_modules.emplace_back(vertex_shader_source,
-		sizeof(vertex_shader_source), GL_VERTEX_SHADER);
-	shader_modules.emplace_back(fragment_shader_source, 
-		sizeof(fragment_shader_source), GL_FRAGMENT_SHADER);
+	shader_modules.emplace_back(vert_handle->get_buffer(),
+		vert_handle->get_size(), GL_VERTEX_SHADER);
+	shader_modules.emplace_back(frag_handle->get_buffer(),
+		frag_handle->get_size(), GL_FRAGMENT_SHADER);
 	shader_program = std::make_unique<ShaderProgram>(shader_modules);
 
 	create_uniforms();

@@ -1,55 +1,26 @@
 #include "graphics/render/shadow_render.h"
 
+#include "debugging/logger.h"
 #include "graphics/graph/shadow_buffer.h"
 #include "graphics/render/command_buffers.h"
 #include "graphics/render/render_buffers.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
-
-#pragma region Shader code
-const char vertex_shader_source[] = R"glsl(
-#version 460
-
-layout (location=0) in vec3 position;
-layout (location=1) in vec3 normal;
-layout (location=2) in vec3 tangent;
-layout (location=3) in vec3 bitangent;
-layout (location=4) in vec2 texture_coordinates;
-
-struct DrawElement
-{
-    int model_matrix_index;
-    int material_index;
-};
-
-uniform mat4 projection_view_matrix;
-
-layout (std430, binding=0) buffer DrawElements {
-    DrawElement draw_elements[];
-};
-
-layout (std430, binding=1) buffer Matrices {
-	mat4 model_matrices[];
-};
-
-void main()
-{
-    vec4 initial_position = vec4(position, 1.0);
-    uint index = gl_BaseInstance + gl_InstanceID;
-	DrawElement draw_element = draw_elements[index];
-    mat4 model_matrix = model_matrices[draw_element.model_matrix_index];
-    gl_Position = projection_view_matrix * model_matrix * initial_position;
-}
-)glsl";
-#pragma endregion
 
 ShadowRender::ShadowRender()
     : shadow_buffer{}
     , cascade_shadows{}
 {
+    Resource vert("shaders/shadow.vert");
+    std::shared_ptr<ResourceHandle> vert_handle =
+        g_game_logic->resource_cache->get_handle(&vert);
+    LOG_ASSERT(vert_handle && "Cannot find shadow vertex shader");
+
     std::vector<ShaderModuleData> shader_modules;
-    shader_modules.emplace_back(vertex_shader_source,
-        sizeof(vertex_shader_source), GL_VERTEX_SHADER);
+    shader_modules.emplace_back(vert_handle->get_buffer(),
+        vert_handle->get_size(), GL_VERTEX_SHADER);
     shader_program = std::make_unique<ShaderProgram>(shader_modules);
 
     for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)

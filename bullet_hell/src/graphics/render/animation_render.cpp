@@ -8,161 +8,21 @@
 #include "graphics/graph/mesh_draw_data.h"
 #include "graphics/render/render_buffers.h"
 #include "graphics/scene/scene.h"
+#include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
 
-#pragma region Shader code
-const char compute_shader_source[] = R"glsl(
-#version 460
-
-struct DrawParameters
-{
-    int source_offset;
-    int source_size;
-    int weights_offset;
-    int bones_matrices_offset;
-    int destination_offset;
-};
-
-layout (std430, binding=0) readonly buffer source_buffer {
-    float data[];
-} source_vector;
-
-layout (std430, binding=1) readonly buffer weights_buffer {
-    float data[];
-} weights_vector;
-
-layout (std430, binding=2) readonly buffer bones_buffer {
-    mat4 data[];
-} bones_matrices;
-
-layout (std430, binding=3) buffer destination_buffer {
-    float data[];
-} destination_vector;
-
-layout (std430, binding=4) readonly buffer draw_parameters_buffer {
-    DrawParameters data[];
-} draw_parameters;
-
-layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
-
-uniform int base_draw_parameter;
-
-void main()
-{
-    int base_index = int(gl_GlobalInvocationID.x) * 14;
-    int draw_index = base_draw_parameter + int(gl_GlobalInvocationID.y);
-    if (base_index >= draw_parameters.data[draw_index].source_size) {
-        return;
-    }
-    
-    uint destination_buffer_base_index = draw_parameters.data[draw_index].destination_offset + base_index;
-    
-    uint weights_buffer_base_index = draw_parameters.data[draw_index].weights_offset + int(gl_GlobalInvocationID.x) * 8;
-    vec4 weights = vec4(
-        weights_vector.data[weights_buffer_base_index],
-        weights_vector.data[weights_buffer_base_index + 1],
-        weights_vector.data[weights_buffer_base_index + 2],
-        weights_vector.data[weights_buffer_base_index + 3]);
-    ivec4 bones_indices = ivec4(
-        weights_vector.data[weights_buffer_base_index + 4],
-        weights_vector.data[weights_buffer_base_index + 5],
-        weights_vector.data[weights_buffer_base_index + 6],
-        weights_vector.data[weights_buffer_base_index + 7]);
-
-    mat4 bone_weights_x = weights.x * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.x];
-    mat4 bone_weights_y = weights.y * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.y];
-    mat4 bone_weights_z = weights.z * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.z];
-    mat4 bone_weights_w = weights.w * bones_matrices.data[draw_parameters.data[draw_index].bones_matrices_offset + bones_indices.w];
-
-    uint source_buffer_base_index = draw_parameters.data[draw_index].source_offset + base_index;
-    vec4 position = vec4(
-        source_vector.data[source_buffer_base_index],
-        source_vector.data[source_buffer_base_index + 1],
-        source_vector.data[source_buffer_base_index + 2],
-        1);
-    position = 
-          bone_weights_x * position
-        + bone_weights_y * position
-        + bone_weights_z * position
-        + bone_weights_w * position;
-
-    destination_vector.data[destination_buffer_base_index] = position.x / position.w;
-    destination_vector.data[destination_buffer_base_index + 1] = position.y / position.w;
-    destination_vector.data[destination_buffer_base_index + 2] = position.z / position.w;
-
-    source_buffer_base_index += 3;
-    destination_buffer_base_index += 3;
-
-    vec4 normal = vec4(
-        source_vector.data[source_buffer_base_index],
-        source_vector.data[source_buffer_base_index + 1],
-        source_vector.data[source_buffer_base_index + 2],
-        0);
-    normal = 
-          bone_weights_x * normal
-        + bone_weights_y * normal
-        + bone_weights_z * normal
-        + bone_weights_w * normal;
-
-    destination_vector.data[destination_buffer_base_index] = normal.x;
-    destination_vector.data[destination_buffer_base_index + 1] = normal.y;
-    destination_vector.data[destination_buffer_base_index + 2] = normal.z;
-
-    source_buffer_base_index += 3;
-    destination_buffer_base_index += 3;
-
-    vec4 tangent = vec4(
-        source_vector.data[source_buffer_base_index],
-        source_vector.data[source_buffer_base_index + 1],
-        source_vector.data[source_buffer_base_index + 2],
-        0);
-    tangent = 
-          bone_weights_x * tangent
-        + bone_weights_y * tangent
-        + bone_weights_z * tangent
-        + bone_weights_w * tangent;
-
-    destination_vector.data[destination_buffer_base_index] = tangent.x;
-    destination_vector.data[destination_buffer_base_index + 1] = tangent.y;
-    destination_vector.data[destination_buffer_base_index + 2] = tangent.z;
-
-    source_buffer_base_index += 3;
-    destination_buffer_base_index += 3;
-
-    vec4 bitangent = vec4(
-        source_vector.data[source_buffer_base_index],
-        source_vector.data[source_buffer_base_index + 1],
-        source_vector.data[source_buffer_base_index + 2],
-        0);
-    bitangent = 
-          bone_weights_x * bitangent
-        + bone_weights_y * bitangent
-        + bone_weights_z * bitangent
-        + bone_weights_w * bitangent;
-
-    destination_vector.data[destination_buffer_base_index] = bitangent.x;
-    destination_vector.data[destination_buffer_base_index + 1] = bitangent.y;
-    destination_vector.data[destination_buffer_base_index + 2] = bitangent.z;
-
-    source_buffer_base_index += 3;
-    destination_buffer_base_index += 3;
-
-    vec2 texture_coordinates = vec2(
-        source_vector.data[source_buffer_base_index],
-        source_vector.data[source_buffer_base_index + 1]);
-    destination_vector.data[destination_buffer_base_index] = texture_coordinates.x;
-    destination_vector.data[destination_buffer_base_index + 1] = texture_coordinates.y;
-}
-)glsl";
-#pragma endregion
-
 AnimationRender::AnimationRender()
 {
+    Resource compute("shaders/animation.compute");
+    std::shared_ptr<ResourceHandle> compute_handle =
+        g_game_logic->resource_cache->get_handle(&compute);
+    LOG_ASSERT(compute_handle && "Cannot find animation compute shader");
+
     std::vector<ShaderModuleData> shader_modules;
-    LOG_ASSERT(compute_shader_source && "Shader source missing!");
-    shader_modules.emplace_back(compute_shader_source,
-        sizeof(compute_shader_source), GL_COMPUTE_SHADER);
+    shader_modules.emplace_back(compute_handle->get_buffer(),
+        compute_handle->get_size(), GL_COMPUTE_SHADER);
 
     shader_program = std::make_unique<ShaderProgram>(shader_modules);
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
