@@ -2,9 +2,17 @@
 
 #include "globals.h"
 
+#include <source_location>
 #include <string>
+#include <string_view>
 
 using LogFlag = unsigned char;
+
+/// <summary>
+/// A no-op flag that writes nowhere, so we can specify logging more 
+/// consistently. Not intended to be combined with other flags.
+/// </summary>
+const LogFlag FLAG_WRITE_NOWHERE = 0;
 
 /// <summary>
 /// Writes the log to a file.
@@ -38,15 +46,9 @@ namespace Logger
 		/// </summary>
 		/// <param name="error_message">The message to log.</param>
 		/// <param name="fatal">Whether the message is fatal.</param>
-		/// <param name="function_name">The name of the function that
-		/// this is called from.</param>
-		/// <param name="source_file">The source file this is called from.
-		/// </param>
-		/// <param name="line_number">The line number this is called from.
-		/// </param>
-		void log_error(const std::string& error_message, bool fatal,
-			const char* function_name, const char* source_file,
-			unsigned int line_number);
+		/// <param name="location">The location of the log line.</param>
+		void log_error(std::string_view error_message, bool fatal,
+			std::source_location location);
 	};
 
 	/// <summary>
@@ -60,19 +62,20 @@ namespace Logger
 	void destroy();
 
 	/// <summary>
+	/// Record a log without any location.
+	/// </summary>
+	/// <param name="tag">The tag we are logging.</param>
+	/// <param name="message">The message to log.</param>
+	void log(std::string_view tag, std::string_view message);
+
+	/// <summary>
 	/// Record a log.
 	/// </summary>
 	/// <param name="tag">The tag we are logging.</param>
 	/// <param name="error_message">The message to log.</param>
-	/// <param name="function_name">The name of the function that
-	/// this is called from.</param>
-	/// <param name="source_file">The source file this is called from.
-	/// </param>
-	/// <param name="line_number">The line number this is called from.
-	/// </param>
-	void log(const std::string& tag, const std::string& error_message,
-		const char* function_name, const char* source_file,
-		unsigned int line_number);
+	/// <param name="location">The location of the log line.</param>
+	void log(std::string_view tag, std::string_view error_message,
+		std::source_location location);
 
 	/// <summary>
 	/// Set up display flags for any particular flag, so tags can be used
@@ -80,13 +83,13 @@ namespace Logger
 	/// </summary>
 	/// <param name="tag">The tag to configure.</param>
 	/// <param name="flags">Flags for this tag.</param>
-	void set_display_flags(const std::string& tag, unsigned char flags);
+	void set_display_flags(std::string_view tag, unsigned char flags);
 }
 
 /*
 These are wrapped in do {} while (0) so they can be used like function calls
 in all contexts, like after conditionals.
-*/ 
+*/
 
 /// <summary>
 /// Log a fatal error, these are always shown to the user.
@@ -96,83 +99,83 @@ in all contexts, like after conditionals.
 	{ \
 		static Logger::ErrorLogger* error_logger = ALLOC Logger::ErrorLogger; \
 		std::string s((str)); \
-		error_logger->log_error(s, true, __func__, __FILE__, __LINE__); \
+		error_logger->log_error(s, true, std::source_location::current()); \
 	} \
 	while (0)\
 
-#if DEBUG // DEBUG is defined
+#if _DEBUG
 
-/// <summary>
-/// Log an error that is potentially fatal, ask the user what to do about it.
-/// Ignored in release mode.
-/// </summary>
+	/// <summary>
+	/// Log an error that is potentially fatal, ask the user what to do about it.
+	/// Ignored in release mode.
+	/// </summary>
 #define LOG_ERROR(str) \
-	do \
-	{ \
-		static Logger::ErrorLogger* error_logger = ALLOC Logger::ErrorLogger; \
-		std::string s((str)); \
-		error_logger->log_error(s, false, __func__, __FILE__, __LINE__); \
-	} \
-	while (0)\
-
-/// <summary>
-/// Log a warning, which is recoverable.
-/// </summary>
-#define LOG_WARNING(str) \
-	do \
-	{ \
-		std::string s((str)); \
-		Logger::log("WARNING", s, __func__, __FILE__, __LINE__); \
-	}\
-	while (0)\
-
-/// <summary>
-/// Log some information without any kind of tags (technically has a tag 
-/// of "INFO").
-/// </summary>
-#define LOG_INFO(str) \
-	do \
-	{ \
-		std::string s((str)); \
-		Logger::log("INFO", s, NULL, NULL, 0); \
-	} \
-	while (0) \
-
-/// <summary>
-/// Used for logging any desired tag string, but tags should be enabled during
-/// initialization or their logs won't go anywhere.
-/// </summary>
-#define LOG_TAGGED(tag, str) \
-	do \
-	{ \
-		std::string s((str)); \
-		Logger::log(tag, s, NULL, NULL, 0); \
-	} \
-	while (0) \
-
-/// <summary>
-/// Asserts that an expression is true, and if it is not then we log the
-/// issue.
-/// </summary>
-#define LOG_ASSERT(expr) \
-	do \
-	{ \
-		if (!(expr)) \
+		do \
 		{ \
 			static Logger::ErrorLogger* error_logger = ALLOC Logger::ErrorLogger; \
-			error_logger->log_error(#expr, false, __func__, __FILE__, __LINE__); \
+			std::string s((str)); \
+			error_logger->log_error(s, false, std::source_location::current()); \
 		} \
-	} \
-	while (0) \
+		while (0)\
 
-#else // DEBUG is not defined
+	/// <summary>
+	/// Log a warning, which is recoverable.
+	/// </summary>
+#define LOG_WARNING(str) \
+		do \
+		{ \
+			std::string s((str)); \
+			Logger::log("WARNING", s, std::source_location::current()); \
+		}\
+		while (0)\
 
-// Release mode definitions for the macros above that are completely ignored
-// by the complier.
+	/// <summary>
+	/// Log some information without any kind of tags (technically has a tag 
+	/// of "INFO").
+	/// </summary>
+#define LOG_INFO(str) \
+		do \
+		{ \
+			std::string s((str)); \
+			Logger::log("INFO", s); \
+		} \
+		while (0) \
 
-/// <summary>
-/// Does nothing in release mode.
-/// </summary>
+	/// <summary>
+	/// Used for logging any desired tag string, but tags should be enabled during
+	/// initialization or their logs won't go anywhere.
+	/// </summary>
+#define LOG_TAGGED(tag, str) \
+		do \
+		{ \
+			std::string s((str)); \
+			Logger::log(tag, s); \
+		} \
+		while (0) \
+
+	/// <summary>
+	/// Asserts that an expression is true, and if it is not then we log the
+	/// issue.
+	/// </summary>
+#define LOG_ASSERT(expr) \
+		do \
+		{ \
+			if (!(expr)) \
+			{ \
+				static Logger::ErrorLogger* error_logger = ALLOC Logger::ErrorLogger; \
+				error_logger->log_error(#expr, false, std::source_location::current()); \
+			} \
+		} \
+		while (0) \
+
+#else
+
+	// Release mode definitions for the macros above that are completely ignored
+	// by the complier.
+
+	/// <summary>
+	/// Does nothing in release mode.
+	/// </summary>
 #define LOG_ERROR(str) do { (void)sizeof(str); } while(0) 
 
 /// <summary>
@@ -195,4 +198,4 @@ in all contexts, like after conditionals.
 /// </summary>
 #define LOG_ASSERT(expr) do { (void)sizeof(expr); } while(0) 
 
-#endif // DEBUG is not defined
+#endif
