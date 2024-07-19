@@ -1,9 +1,7 @@
 #include "graphics/graph/gui_mesh.h"
 
 #include "glad.h"
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+#include "graphics/gui/ui.h"
 
 GuiMesh::GuiMesh()
 	: indices_VBO{ 0 }

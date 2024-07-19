@@ -1,14 +1,5 @@
 #include "graphics/render/gui_render.h"
 
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-
-#define GL_SILENCE_DEPRECATION
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
-
 #include "debugging/logger.h"
 #include "graphics/window.h"
 #include "graphics/scene/scene.h"

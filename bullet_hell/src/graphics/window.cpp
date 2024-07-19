@@ -7,21 +7,14 @@
 #include <iostream>
 #include <vector>
 
-#include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#define GL_SILENCE_DEPRECATION
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
 
 #include "debugging/logger.h"
 #include "graphics/graph/icon_resource.h"
+#include "graphics/gui/ui.h"
 #include "main/game_logic.h"
 #include "utilities/opengl_util.h"
 

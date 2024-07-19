@@ -2,6 +2,17 @@
 
 #include "globals.h"
 
+#include "GLFW/glfw3.h"
+
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
+#define GL_SILENCE_DEPRECATION
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <GLES2/gl2.h>
+#endif
+
 /// <summary>
 /// Methods for drawing the game UI.
 /// </summary>

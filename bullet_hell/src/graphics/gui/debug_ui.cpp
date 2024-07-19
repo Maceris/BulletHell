@@ -69,8 +69,8 @@ void DebugUI::draw()
 
 void DebugUI::draw_window_debug()
 {
-	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(10, 20), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_Once);
 
 	ImGui::Begin("Debug");
 	std::shared_ptr<Scene> scene = g_game_logic->current_scene;
@@ -144,8 +144,8 @@ void DebugUI::draw_window_debug()
 
 void DebugUI::draw_window_scene()
 {
-	ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(200, 200), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_Once);
 
 	ImGui::Begin("Scene Controls");
 
@@ -210,8 +210,8 @@ void DebugUI::draw_window_scene()
 
 void DebugUI::draw_window_timing()
 {
-	ImGui::SetNextWindowPos(ImVec2(460, 30), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(460, 30), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(450, 400), ImGuiCond_Once);
 
 	ImGui::Begin("Timers (Average)");
 	
