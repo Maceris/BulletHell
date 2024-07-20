@@ -1,10 +1,11 @@
 #include "graphics/render/sky_box_render.h"
 
 #include "debugging/logger.h"
+#include "graphics/frontend/texture.h"
+#include "graphics/frontend/texture_loader.h"
 #include "graphics/graph/material.h"
 #include "graphics/graph/mesh_data.h"
 #include "graphics/graph/texture_resource.h"
-#include "graphics/graph/texture.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
@@ -57,8 +58,8 @@ void SkyBoxRender::render(const Scene& scene)
     if (material->texture_name != "")
     {
         glActiveTexture(GL_TEXTURE0);
-        auto texture = load_texture(material->texture_name);
-        texture->bind();
+        auto texture = TextureLoader::load(material->texture_name);
+        glBindTexture(GL_TEXTURE_2D, texture.handle);
         has_texture = true;
     }
 

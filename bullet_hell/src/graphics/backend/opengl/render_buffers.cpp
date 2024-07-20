@@ -1,8 +1,11 @@
-#include "graphics/render/render_buffers.h"
+#if BACKEND_CURRENT == BACKEND_OPENGL
+
+#include "graphics/backend/opengl/render_buffers.h"
 
 #include <cmath>
 #include <memory>
 #include <set>
+
 #include "glm/gtc/type_ptr.hpp"
 
 #include "debugging/logger.h"
@@ -340,4 +343,4 @@ void RenderBuffers::load_static_models(const Scene& scene)
 	glBindVertexArray(0);
 }
 
-
+#endif

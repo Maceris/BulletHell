@@ -1,4 +1,6 @@
-#include "graphics/render/command_buffers.h"
+#if BACKEND_CURRENT == BACKEND_OPENGL
+
+#include "graphics/backend/opengl/command_buffers.h"
 
 #include "glad.h"
 
@@ -62,3 +64,5 @@ CommandBuffers::~CommandBuffers()
 {
 	cleanup();
 }
+
+#endif

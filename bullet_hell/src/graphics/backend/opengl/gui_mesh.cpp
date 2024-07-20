@@ -1,4 +1,6 @@
-#include "graphics/graph/gui_mesh.h"
+#if BACKEND_CURRENT == BACKEND_OPENGL
+
+#include "graphics/backend/opengl/gui_mesh.h"
 
 #include "glad.h"
 #include "graphics/gui/ui.h"
@@ -34,3 +36,5 @@ GuiMesh::~GuiMesh()
 	glDeleteBuffers(1, &vertices_VBO);
 	glDeleteVertexArrays(1, &VAO);
 }
+
+#endif

@@ -2,7 +2,7 @@
 
 #include "globals.h"
 
-#include "graphics/graph/texture.h"
+#include "graphics/frontend/texture.h"
 #include "resource_cache/resource.h"
 #include "resource_cache/resource_loader.h"
 
@@ -13,10 +13,10 @@ public:
 	{
 		return "TextureExtraData";
 	}
-	std::shared_ptr<Texture> texture;
+	std::unique_ptr<Texture> texture;
 };
 
-class TextureLoader : public ResourceLoader
+class TextureResourceLoader : public ResourceLoader
 {
 public:
 	virtual bool discard_raw_buffer_after_load()
@@ -38,10 +38,3 @@ private:
 	bool parse_texture(std::shared_ptr<TextureExtraData> extra_data,
 		char* raw_buffer, size_t raw_size);
 };
-
-/// <summary>
-/// Load a texture from the resource cache.
-/// </summary>
-/// <param name="name">The name of the texture to load.</param>
-/// <returns>A pointer to the loaded texture.</returns>
-std::shared_ptr<Texture> load_texture(const std::string& name);

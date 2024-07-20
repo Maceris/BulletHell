@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "debugging/logger.h"
+#include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/graph/animation.h"
 #include "graphics/graph/mesh_draw_data.h"
-#include "graphics/render/render_buffers.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
@@ -52,11 +52,11 @@ void AnimationRender::render(const Scene& scene,
         }
 
         int model_vertex_count = 0;
-        const int entity_count = model->entity_list.size();
+        const int entity_count = static_cast<int>(model->entity_list.size());
 
         for (const auto& mesh_data : model->mesh_data_list)
         {
-            model_vertex_count += mesh_data.vertices.size();
+            model_vertex_count += static_cast<int>(mesh_data.vertices.size());
         }
 
         for (const auto& mesh_draw_data : model->mesh_draw_data_list)
@@ -109,7 +109,7 @@ void AnimationRender::render(const Scene& scene,
         }
         const RenderInfo& info = render_info.find(model->id)->second;
         
-        mesh_count = model->mesh_data_list.size();
+        mesh_count = static_cast<int>(model->mesh_data_list.size());
         uniforms_map->set_uniform("base_draw_parameter", base_draw_parameter);
         glDispatchCompute(info.model_vertex_count, info.entity_count * mesh_count, 1);
         base_draw_parameter += info.entity_count * mesh_count;

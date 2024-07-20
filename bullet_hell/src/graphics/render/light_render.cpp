@@ -1,9 +1,9 @@
 #include "graphics/render/light_render.h"
 
 #include "debugging/logger.h"
+#include "graphics/render_constants.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 #include "graphics/graph/gbuffer.h"
-#include "graphics/render/render_constants.h"
 #include "graphics/render/shadow_render.h"
 #include "graphics/scene/scene.h"
 #include "graphics/scene/lights/ambient_light.h"

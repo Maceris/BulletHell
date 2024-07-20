@@ -8,7 +8,7 @@
 #include "debugging/timer.h"
 #include "graphics/window.h"
 #include "graphics/graph/mesh_draw_data.h"
-#include "graphics/graph/quad_mesh.h"
+#include "graphics/backend/opengl/quad_mesh.h"
 #include "graphics/scene/scene.h"
 #include "utilities/opengl_util.h"
 

@@ -11,11 +11,13 @@
 #include "debugging/logger.h"
 #include "debugging/timer.h"
 #include "graphics/window.h"
+#include "graphics/backend/base/pipeline_manager.h"
+#include "graphics/frontend/texture.h"
+#include "graphics/frontend/texture_loader.h"
 #include "graphics/graph/animation_resource.h"
 #include "graphics/graph/icon_resource.h"
 #include "graphics/graph/material_resource.h"
 #include "graphics/graph/model_resource.h"
-#include "graphics/graph/texture.h"
 #include "graphics/graph/texture_resource.h"
 #include "graphics/gui/ui.h"
 #include "graphics/render/render.h"
@@ -82,7 +84,7 @@ bool GameLogic::initialize()
 		return false;
 	}
 
-	resource_cache->register_loader(std::make_shared<TextureLoader>());
+	resource_cache->register_loader(std::make_shared<TextureResourceLoader>());
 	resource_cache->register_loader(std::make_shared<ModelLoader>());
 	resource_cache->register_loader(std::make_shared<MaterialLoader>());
 	resource_cache->register_loader(std::make_shared<AnimationLoader>());
@@ -99,8 +101,8 @@ bool GameLogic::initialize()
 	{
 		action_state.emplace(std::make_pair(action, false));
 	}
-
-	Texture::default_texture = load_texture("textures/default_texture.image");
+	PipelineManager::default_texture = std::make_unique<Texture>(
+		TextureLoader::load("textures/default_texture.image"));
 
 	render = std::make_unique<Render>(*window);
 

@@ -1,9 +1,9 @@
 #include "graphics/render/shadow_render.h"
 
 #include "debugging/logger.h"
+#include "graphics/backend/opengl/command_buffers.h"
+#include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/graph/shadow_buffer.h"
-#include "graphics/render/command_buffers.h"
-#include "graphics/render/render_buffers.h"
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 /// <summary>
 /// Extra data associated with a resource. For example, length and format of
@@ -32,5 +33,5 @@ public:
 	/// </summary>
 	/// <param name="resource_name">The name of the resource, typically
 	/// including the path to the resource.</param>
-	Resource(const std::string& resource_name);
+	Resource(const std::string_view resource_name);
 };

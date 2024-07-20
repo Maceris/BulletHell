@@ -1,4 +1,6 @@
-#include "graphics/graph/quad_mesh.h"
+#if BACKEND_CURRENT == BACKEND_OPENGL
+
+#include "graphics/backend/opengl/quad_mesh.h"
 
 #include "glad.h"
 
@@ -53,3 +55,4 @@ QuadMesh::~QuadMesh()
 	glDeleteBuffers(3, vbo_list);
 	glDeleteVertexArrays(1, &vao);
 }
+#endif

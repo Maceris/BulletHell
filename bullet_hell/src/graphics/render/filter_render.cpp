@@ -1,7 +1,7 @@
 #include "graphics/render/filter_render.h"
 
 #include "debugging/logger.h"
-#include "graphics/graph/quad_mesh.h"
+#include "graphics/backend/opengl/quad_mesh.h"
 #include "graphics/graph/shader_program.h"
 #include "graphics/graph/uniforms_map.h"
 #include "graphics/scene/scene.h"

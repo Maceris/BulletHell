@@ -51,7 +51,26 @@ SET(HEADER_FILES
   ${HEADER_PATH}/event/map/chunk_unloaded.h
   ${HEADER_PATH}/graphics/glad_types.h
   ${HEADER_PATH}/graphics/mouse_input.h
+  ${HEADER_PATH}/graphics/render_constants.h
   ${HEADER_PATH}/graphics/window.h
+  ${HEADER_PATH}/graphics/backend/base/format_mapper.h
+  ${HEADER_PATH}/graphics/backend/base/pipeline_manager.h
+  ${HEADER_PATH}/graphics/backend/base/render_stage.h
+  ${HEADER_PATH}/graphics/backend/base/shader_map.h
+  ${HEADER_PATH}/graphics/backend/base/uniforms_map.h
+  ${HEADER_PATH}/graphics/backend/opengl/command_buffers.h
+  ${HEADER_PATH}/graphics/backend/opengl/gui_mesh.h
+  ${HEADER_PATH}/graphics/backend/opengl/quad_mesh.h
+  ${HEADER_PATH}/graphics/backend/opengl/render_buffers.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/animation_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/filter_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/framebuffer_transition.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/gui_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/light_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/model_matrix_update.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/scene_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/shadow_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/skybox_render.h
   ${HEADER_PATH}/graphics/frontend/attachment.h
   ${HEADER_PATH}/graphics/frontend/backend_type.h
   ${HEADER_PATH}/graphics/frontend/buffer.h
@@ -62,7 +81,6 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/frontend/instance.h
   ${HEADER_PATH}/graphics/frontend/pipeline.h
   ${HEADER_PATH}/graphics/frontend/render_config.h
-  ${HEADER_PATH}/graphics/frontend/render_stage.h
   ${HEADER_PATH}/graphics/frontend/shader.h
   ${HEADER_PATH}/graphics/frontend/texture.h
   ${HEADER_PATH}/graphics/frontend/texture_loader.h
@@ -70,29 +88,23 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/graph/array_of_textures.h
   ${HEADER_PATH}/graphics/graph/cascade_shadow_slice.h
   ${HEADER_PATH}/graphics/graph/gbuffer.h
-  ${HEADER_PATH}/graphics/graph/gui_mesh.h
   ${HEADER_PATH}/graphics/graph/icon_resource.h
   ${HEADER_PATH}/graphics/graph/material_resource.h
   ${HEADER_PATH}/graphics/graph/mesh_draw_data.h
   ${HEADER_PATH}/graphics/graph/model.h
   ${HEADER_PATH}/graphics/graph/model_resource.h
-  ${HEADER_PATH}/graphics/graph/quad_mesh.h
   ${HEADER_PATH}/graphics/graph/shader_program.h
   ${HEADER_PATH}/graphics/graph/shadow_buffer.h
-  ${HEADER_PATH}/graphics/graph/texture.h
   ${HEADER_PATH}/graphics/graph/texture_resource.h
   ${HEADER_PATH}/graphics/graph/uniforms_map.h
   ${HEADER_PATH}/graphics/gui/debug_ui.h
   ${HEADER_PATH}/graphics/gui/ui.h
   ${HEADER_PATH}/graphics/render/animation_render.h
-  ${HEADER_PATH}/graphics/render/command_buffers.h
   ${HEADER_PATH}/graphics/render/debug_render.h
   ${HEADER_PATH}/graphics/render/filter_render.h
   ${HEADER_PATH}/graphics/render/gui_render.h
   ${HEADER_PATH}/graphics/render/light_render.h
   ${HEADER_PATH}/graphics/render/render.h
-  ${HEADER_PATH}/graphics/render/render_buffers.h
-  ${HEADER_PATH}/graphics/render/render_constants.h
   ${HEADER_PATH}/graphics/render/scene_render.h
   ${HEADER_PATH}/graphics/render/shadow_render.h
   ${HEADER_PATH}/graphics/render/sky_box_render.h
@@ -141,11 +153,17 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/event/map/chunk_unloaded.cpp
   ${SOURCE_PATH}/graphics/mouse_input.cpp
   ${SOURCE_PATH}/graphics/window.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/command_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/gui_mesh.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/pipeline_manager.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/texture_loader.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
   ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
   ${SOURCE_PATH}/graphics/graph/cascade_shadow_slice.cpp
   ${SOURCE_PATH}/graphics/graph/gbuffer.cpp
-  ${SOURCE_PATH}/graphics/graph/gui_mesh.cpp
   ${SOURCE_PATH}/graphics/graph/icon_resource.cpp
   ${SOURCE_PATH}/graphics/graph/material.cpp
   ${SOURCE_PATH}/graphics/graph/material_resource.cpp
@@ -153,22 +171,18 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/graph/mesh_draw_data.cpp
   ${SOURCE_PATH}/graphics/graph/model.cpp
   ${SOURCE_PATH}/graphics/graph/model_resource.cpp
-  ${SOURCE_PATH}/graphics/graph/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/graph/shader_program.cpp
   ${SOURCE_PATH}/graphics/graph/shadow_buffer.cpp
-  ${SOURCE_PATH}/graphics/graph/texture.cpp
   ${SOURCE_PATH}/graphics/graph/texture_resource.cpp
   ${SOURCE_PATH}/graphics/graph/uniforms_map.cpp
   ${SOURCE_PATH}/graphics/gui/debug_ui.cpp
   ${SOURCE_PATH}/graphics/gui/ui.cpp
   ${SOURCE_PATH}/graphics/render/animation_render.cpp
-  ${SOURCE_PATH}/graphics/render/command_buffers.cpp
   ${SOURCE_PATH}/graphics/render/debug_render.cpp
   ${SOURCE_PATH}/graphics/render/filter_render.cpp
   ${SOURCE_PATH}/graphics/render/gui_render.cpp
   ${SOURCE_PATH}/graphics/render/light_render.cpp
   ${SOURCE_PATH}/graphics/render/render.cpp
-  ${SOURCE_PATH}/graphics/render/render_buffers.cpp
   ${SOURCE_PATH}/graphics/render/scene_render.cpp
   ${SOURCE_PATH}/graphics/render/shadow_render.cpp
   ${SOURCE_PATH}/graphics/render/sky_box_render.cpp

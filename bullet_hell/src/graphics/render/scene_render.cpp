@@ -1,17 +1,20 @@
 #include "graphics/render/scene_render.h"
 
+#include <format>
 #include <unordered_set>
 
 #include "debugging/logger.h"
 #include "main/game_logic.h"
+#include "graphics/render_constants.h"
+#include "graphics/backend/base/pipeline_manager.h"
+#include "graphics/backend/opengl/command_buffers.h"
+#include "graphics/backend/opengl/render_buffers.h"
+#include "graphics/frontend/texture.h"
+#include "graphics/frontend/texture_loader.h"
 #include "graphics/graph/texture_resource.h"
 #include "graphics/graph/gbuffer.h"
 #include "graphics/graph/material.h"
 #include "graphics/graph/mesh_data.h"
-#include "graphics/graph/texture.h"
-#include "graphics/render/command_buffers.h"
-#include "graphics/render/render_buffers.h"
-#include "graphics/render/render_constants.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
@@ -94,13 +97,12 @@ void SceneRender::create_uniforms()
 
     for (int i = 0; i < MAX_TEXTURES; ++i)
     {
-        uniforms_map->create_uniform("texture_sampler[" + std::to_string(i) 
-            + "]");
+        uniforms_map->create_uniform(std::format("texture_sampler[{}]", i));
     }
 
     for (int i = 0; i < MAX_MATERIALS; ++i)
     {
-        const std::string prefix = "materials[" + std::to_string(i) + "].";
+        const std::string prefix = std::format("materials[{}].", i);
         uniforms_map->create_uniform(prefix + "diffuse");
         uniforms_map->create_uniform(prefix + "specular");
         uniforms_map->create_uniform(prefix + "reflectance");
@@ -181,15 +183,17 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
         && "We have more textures than we can bind in one draw call");
 
     glActiveTexture(GL_TEXTURE0);
-    Texture::default_texture->bind();
+    glBindTexture(GL_TEXTURE_2D, PipelineManager::default_texture->handle);
 
     int start_texture = 1;
     for (int i = 0; i < texture_bindings.size(); ++i)
     {
         const std::string& texture_name = texture_bindings[i];
-        auto texture = load_texture(texture_name);
+        auto texture = TextureLoader::load(texture_name);
+
         glActiveTexture(GL_TEXTURE0 + start_texture + i);
-        texture->bind();
+        glBindTexture(GL_TEXTURE_2D, texture.handle);
+
         uniforms_map->set_uniform("texture_sampler["
             + std::to_string(start_texture + i) + "]", start_texture + i);
     }

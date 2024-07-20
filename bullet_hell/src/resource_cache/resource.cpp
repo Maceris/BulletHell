@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-Resource::Resource(const std::string& resource_name)
+Resource::Resource(const std::string_view resource_name)
 	: name{ resource_name }
 {
 	std::transform(name.begin(), name.end(), name.begin(), std::tolower);

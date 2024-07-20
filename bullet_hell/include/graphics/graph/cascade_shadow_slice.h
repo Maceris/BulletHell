@@ -2,11 +2,12 @@
 
 #include "globals.h"
 
+#include <array>
 #include <vector>
 
 #include "glm/glm.hpp"
 
-#include "graphics/render/render_constants.h"
+#include "graphics/render_constants.h"
 
 class Scene;
 
@@ -48,3 +49,9 @@ private:
 	/// </summary>
 	static float* cached_splits;
 };
+
+/// <summary>
+/// An appropriately sized (see SHADOW_MAP_CASCADE_COUNT) array of
+/// Cascade Shadow Slices.
+/// </summary>
+using CascadeShadows = std::array<CascadeShadowSlice, SHADOW_MAP_CASCADE_COUNT>;
