@@ -53,6 +53,7 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/mouse_input.h
   ${HEADER_PATH}/graphics/render_constants.h
   ${HEADER_PATH}/graphics/window.h
+  ${HEADER_PATH}/graphics/backend/base/debug_info.h
   ${HEADER_PATH}/graphics/backend/base/format_mapper.h
   ${HEADER_PATH}/graphics/backend/base/pipeline_manager.h
   ${HEADER_PATH}/graphics/backend/base/render_stage.h
@@ -63,6 +64,7 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/backend/opengl/quad_mesh.h
   ${HEADER_PATH}/graphics/backend/opengl/render_buffers.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/animation_render.h
+  ${HEADER_PATH}/graphics/backend/opengl/stages/debug_render.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/filter_render.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/framebuffer_transition.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/gui_render.h
@@ -154,12 +156,23 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/mouse_input.cpp
   ${SOURCE_PATH}/graphics/window.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/command_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/debug_info.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/gui_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/pipeline_manager.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/texture_loader.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/animation_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/debug_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/filter_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/framebuffer_transition.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/gui_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/light_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/model_matrix_update.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/scene_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/shadow_render.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/stages/skybox_render.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
   ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
   ${SOURCE_PATH}/graphics/graph/cascade_shadow_slice.cpp

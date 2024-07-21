@@ -5,35 +5,11 @@
 #include <memory>
 
 #include "graphics/glad_types.h"
+#include "graphics/backend/base/debug_info.h"
 #include "graphics/graph/shader_program.h"
 #include "graphics/graph/uniforms_map.h"
 
 class Scene;
-
-/// <summary>
-/// A set of lines to draw.
-/// </summary>
-struct LineGroup
-{
-	/// <summary>
-	/// The VAO for this group.
-	/// </summary>
-	GLuint vao;
-	/// <summary>
-	/// The buffer handle for the line data.
-	/// </summary>
-	GLuint data;
-	/// <summary>
-	/// The number of lines. Notably, not the number of points like 
-	/// glDrawArrays expects.
-	/// </summary>
-	int count;
-
-	LineGroup();
-	LineGroup(const LineGroup&) = delete;
-	LineGroup& operator=(const LineGroup&) = delete;
-	~LineGroup();
-};
 
 /// <summary>
 /// Handles rendering for debug lines.
@@ -72,9 +48,5 @@ private:
 	/// </summary>
 	void update_AABBs(const Scene& scene);
 
-	LineGroup map_lines{};
-	LineGroup hot_chunk_lines{};
-	LineGroup cold_chunk_lines{};
-	LineGroup frustum_lines{};
-	LineGroup AABB_lines{};
+	DebugInfo* debug_info;
 };

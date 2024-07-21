@@ -26,105 +26,40 @@ constexpr glm::vec4 YELLOW = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 GREEN = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 constexpr glm::vec4 BLUE = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
-#pragma region Structs
 
-#pragma pack(push,1)
-struct Line
+struct LineGroup::Data
 {
-    glm::vec4 start;
-    glm::vec4 end;
-
-    Line(const glm::vec3& start, const glm::vec3& end)
-        : start{ start, 1.0f }
-        , end{ end, 1.0f }
+    Data()
+        : vao{ 0 }
+        , data{ 0 }
+        , count{ 0 }
     {}
-    Line(const Line&) = default;
-    Line& operator=(const Line&) = default;
-    ~Line() = default;
+    Data(const Data& data) = delete;
+    Data& operator=(const Data& data) = delete;
+    ~Data() = default;
 
-    Line operator+(const glm::vec3& displacement) const
-    {
-        const glm::vec4 displace_vec4(displacement, 0.0f);
-        return Line(start + displace_vec4, end + displace_vec4);
-    }
+    /// <summary>
+    /// The VAO for this group.
+    /// </summary>
+    GLuint vao;
+    /// <summary>
+    /// The buffer handle for the line data.
+    /// </summary>
+    GLuint data;
+    /// <summary>
+    /// The number of lines. Notably, not the number of points like 
+    /// glDrawArrays expects.
+    /// </summary>
+    int count;
 };
-#pragma pack(pop)
-
-struct AABBLines
-{
-    std::vector<Line> lines;
-
-    AABBLines(const glm::vec3& aabb_min, const glm::vec3& aabb_max)
-    {
-        //NOTE(ches) min corner
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z), 
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z)
-        );
-
-        //NOTE(ches) max corner
-        lines.emplace_back(
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
-        );
-        
-        //NOTE(ches) The rest of the lines
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
-            glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
-        );
-        lines.emplace_back(
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
-            glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
-        );
-    }
-    AABBLines(const AABBLines&) = default;
-    AABBLines& operator=(const AABBLines&) = default;
-    ~AABBLines() = default;
-};
-#pragma endregion
 
 LineGroup::LineGroup()
-    : vao{ 0 }
-    , data{ 0 }
-    , count{ 0 }
+    : data{ std::make_unique<Data>() }
 {
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &data);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, data);
+    glGenVertexArrays(1, &data->vao);
+    glGenBuffers(1, &data->data);
+    glBindVertexArray(data->vao);
+    glBindBuffer(GL_ARRAY_BUFFER, data->data);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
         (const void*)0);
@@ -133,8 +68,71 @@ LineGroup::LineGroup()
 
 LineGroup::~LineGroup()
 {
-    glDeleteBuffers(1, &data);
-    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &data->data);
+    glDeleteVertexArrays(1, &data->vao);
+}
+
+Line Line::operator+(const glm::vec3& displacement) const
+{
+    const glm::vec4 displace_vec4(displacement, 0.0f);
+    return Line(start + displace_vec4, end + displace_vec4);
+}
+
+AABBLines::AABBLines(const glm::vec3& aabb_min, const glm::vec3& aabb_max)
+{
+    //NOTE(ches) min corner
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_min.z),
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z)
+    );
+
+    //NOTE(ches) max corner
+    lines.emplace_back(
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_max.z),
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+    );
+
+    //NOTE(ches) The rest of the lines
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_max.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_min.y, aabb_max.z),
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_min.x, aabb_max.y, aabb_min.z),
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
+        glm::vec3(aabb_max.x, aabb_max.y, aabb_min.z)
+    );
+    lines.emplace_back(
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_min.z),
+        glm::vec3(aabb_max.x, aabb_min.y, aabb_max.z)
+    );
 }
 
 DebugRender::DebugRender()
@@ -158,6 +156,8 @@ DebugRender::DebugRender()
 
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     create_uniforms();
+
+    debug_info = ALLOC DebugInfo();
 }
 
 glm::mat4 default_camera_view()
@@ -190,21 +190,21 @@ void DebugRender::render(const Scene& scene)
         scene.projection.projection_matrix);
     uniforms_map->set_uniform("view_matrix", scene.camera.view_matrix);
     uniforms_map->set_uniform("line_color", RED);
-    glBindVertexArray(map_lines.vao);
-    glDrawArrays(GL_LINES, 0, map_lines.count * 2);
+    glBindVertexArray(debug_info->map_lines.data->vao);
+    glDrawArrays(GL_LINES, 0, debug_info->map_lines.data->count * 2);
 
     update_AABBs(scene);
     uniforms_map->set_uniform("line_color", GREEN);
-    glBindVertexArray(AABB_lines.vao);
-    glDrawArrays(GL_LINES, 0, AABB_lines.count * 2);
+    glBindVertexArray(debug_info->AABB_lines.data->vao);
+    glDrawArrays(GL_LINES, 0, debug_info->AABB_lines.data->count * 2);
 
     uniforms_map->set_uniform("line_color", BLUE);
-    glBindVertexArray(hot_chunk_lines.vao);
-    glDrawArrays(GL_LINES, 0, hot_chunk_lines.count * 2);
+    glBindVertexArray(debug_info->hot_chunk_lines.data->vao);
+    glDrawArrays(GL_LINES, 0, debug_info->hot_chunk_lines.data->count * 2);
     
     uniforms_map->set_uniform("line_color", YELLOW);
-    glBindVertexArray(cold_chunk_lines.vao);
-    glDrawArrays(GL_LINES, 0, cold_chunk_lines.count * 2);
+    glBindVertexArray(debug_info->cold_chunk_lines.data->vao);
+    glDrawArrays(GL_LINES, 0, debug_info->cold_chunk_lines.data->count * 2);
 
     glBindVertexArray(0);
 
@@ -214,7 +214,7 @@ void DebugRender::render(const Scene& scene)
 
 void DebugRender::update_AABBs(const Scene& scene)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, AABB_lines.data);
+    glBindBuffer(GL_ARRAY_BUFFER, debug_info->AABB_lines.data->data);
 
     std::vector<Line> lines;
     for (auto& model : scene.get_model_list())
@@ -239,9 +239,9 @@ void DebugRender::update_AABBs(const Scene& scene)
         }
     }
 
-    AABB_lines.count = static_cast<int>(lines.size());
+    debug_info->AABB_lines.data->count = static_cast<int>(lines.size());
 
-    glBufferData(GL_ARRAY_BUFFER, AABB_lines.count * sizeof(Line),
+    glBufferData(GL_ARRAY_BUFFER, debug_info->AABB_lines.data->count * sizeof(Line),
         lines.data(), GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -286,7 +286,7 @@ void add_chunks(const std::unordered_map<uint32_t, Chunk*>& cache,
 }
 void DebugRender::update_lines(const Scene& scene)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, map_lines.data);
+    glBindBuffer(GL_ARRAY_BUFFER, debug_info->map_lines.data->data);
 
     std::vector<Line> lines;
     for (auto& chunk_pair : scene.chunk_contents)
@@ -316,25 +316,27 @@ void DebugRender::update_lines(const Scene& scene)
         }
     }
 
-    map_lines.count = static_cast<int>(lines.size());
+    debug_info->map_lines.data->count = static_cast<int>(lines.size());
 
-    glBufferData(GL_ARRAY_BUFFER, map_lines.count * sizeof(Line),
+    glBufferData(GL_ARRAY_BUFFER, debug_info->map_lines.data->count * sizeof(Line),
         lines.data(), GL_STATIC_DRAW);
     lines.clear();
 
     std::vector<Line> hot_lines;
     add_chunks(g_game_logic->current_map->hot_cache, hot_lines);
-    hot_chunk_lines.count = static_cast<int>(hot_lines.size());
-    glBindBuffer(GL_ARRAY_BUFFER, hot_chunk_lines.data);
-    glBufferData(GL_ARRAY_BUFFER, hot_chunk_lines.count * sizeof(Line),
+    debug_info->hot_chunk_lines.data->count = static_cast<int>(hot_lines.size());
+    glBindBuffer(GL_ARRAY_BUFFER, debug_info->hot_chunk_lines.data->data);
+    glBufferData(GL_ARRAY_BUFFER,
+        debug_info->hot_chunk_lines.data->count * sizeof(Line),
         hot_lines.data(), GL_STATIC_DRAW);
     hot_lines.clear();
 
     std::vector<Line> cold_lines;
     add_chunks(g_game_logic->current_map->cold_cache, cold_lines);
-    cold_chunk_lines.count = static_cast<int>(cold_lines.size());
-    glBindBuffer(GL_ARRAY_BUFFER, cold_chunk_lines.data);
-    glBufferData(GL_ARRAY_BUFFER, cold_chunk_lines.count * sizeof(Line),
+    debug_info->cold_chunk_lines.data->count = static_cast<int>(cold_lines.size());
+    glBindBuffer(GL_ARRAY_BUFFER, debug_info->cold_chunk_lines.data->data);
+    glBufferData(GL_ARRAY_BUFFER,
+        debug_info->cold_chunk_lines.data->count * sizeof(Line),
         cold_lines.data(), GL_STATIC_DRAW);
     cold_lines.clear();
 
