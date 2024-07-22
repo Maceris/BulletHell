@@ -19,6 +19,6 @@ public:
 
 private:
 	glm::mat4 view_matrix;
-	const Shader* shader;
-	const SkyBox* skybox;
+	Shader* const shader;
+	SkyBox* const skybox;
 };

@@ -25,9 +25,9 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const RenderBuffers* render_buffers;
-	const Framebuffer* gbuffer;
-	const CommandBuffers* command_buffers;
-	const Texture* default_texture;
+	Shader* const shader;
+	RenderBuffers* const render_buffers;
+	Framebuffer* const gbuffer;
+	CommandBuffers* const command_buffers;
+	Texture* const default_texture;
 };

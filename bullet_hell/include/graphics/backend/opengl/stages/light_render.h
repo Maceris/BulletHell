@@ -16,7 +16,7 @@ public:
 		Buffer spot_lights,
 		Framebuffer* shadow_buffers,
 		Framebuffer* gbuffer,
-		const QuadMesh* quad_mesh)
+		QuadMesh* quad_mesh)
 		: shader{ shader }
 		, cascade_shadows{ cascade_shadows }
 		, point_lights{ point_lights }
@@ -29,11 +29,11 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const CascadeShadows* cascade_shadows;
-	const Buffer point_lights;
-	const Buffer spot_lights;
-	const Framebuffer* shadow_buffers;
-	const Framebuffer* gbuffer;
-	const QuadMesh* quad_mesh;
+	Shader* const shader;
+	CascadeShadows* const cascade_shadows;
+	Buffer const point_lights;
+	Buffer const spot_lights;
+	Framebuffer* const shadow_buffers;
+	Framebuffer* const gbuffer;
+	QuadMesh* const quad_mesh;
 };

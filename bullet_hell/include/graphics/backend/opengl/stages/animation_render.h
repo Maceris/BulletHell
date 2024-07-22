@@ -8,7 +8,7 @@ class AnimationRender : RenderStage
 {
 public:
 	AnimationRender(Shader* shader,
-		const RenderBuffers* render_buffers)
+		RenderBuffers* render_buffers)
 		: shader{ shader }
 		, render_buffers{ render_buffers }
 	{}
@@ -16,6 +16,6 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const RenderBuffers* render_buffers;
+	Shader* const shader;
+	RenderBuffers* const render_buffers;
 };

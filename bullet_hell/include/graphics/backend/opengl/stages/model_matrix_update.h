@@ -13,5 +13,5 @@ public:
 	void render(Scene& scene);
 
 private:
-	const CommandBuffers* command_buffers;
+	CommandBuffers* const command_buffers;
 };

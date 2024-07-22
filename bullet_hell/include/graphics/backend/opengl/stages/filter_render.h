@@ -10,7 +10,7 @@ class FilterRender : RenderStage
 public:
 	FilterRender(Shader* shader,
 		Framebuffer* scene_texture,
-		const QuadMesh* quad_mesh)
+		QuadMesh* quad_mesh)
 		: shader{ shader }
 		, scene_texture{ scene_texture }
 		, quad_mesh{ quad_mesh }
@@ -19,7 +19,7 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const Framebuffer* scene_texture;
-	const QuadMesh* quad_mesh;
+	Shader* const shader;
+	Framebuffer* const scene_texture;
+	QuadMesh* const quad_mesh;
 };

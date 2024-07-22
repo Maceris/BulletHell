@@ -25,9 +25,9 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const RenderBuffers* render_buffers;
-	const CascadeShadows* cascade_shadows;
-	const Framebuffer* depth_map;
-	const CommandBuffers* command_buffers;
+	Shader* const shader;
+	RenderBuffers* const render_buffers;
+	CascadeShadows* const cascade_shadows;
+	Framebuffer* const depth_map;
+	CommandBuffers* const command_buffers;
 };

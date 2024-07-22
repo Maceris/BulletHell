@@ -23,7 +23,7 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
-	const Framebuffer* scene_texture;
+	Shader* const shader;
+	Framebuffer* const scene_texture;
 	glm::vec2 scale;
 };

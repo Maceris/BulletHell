@@ -13,5 +13,5 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Shader* shader;
+	Shader* const shader;
 };

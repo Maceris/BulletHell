@@ -16,7 +16,7 @@ public:
 	void render(Scene& scene);
 
 private:
-	const Framebuffer* framebuffer;
-	const uint32_t blend_s_factor;
-	const uint32_t blend_d_factor;
+	Framebuffer* const framebuffer;
+	uint32_t const blend_s_factor;
+	uint32_t const blend_d_factor;
 };
