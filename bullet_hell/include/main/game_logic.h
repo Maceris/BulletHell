@@ -8,7 +8,13 @@
 
 #include "main/game_options.h"
 #include "map/game_map.h"
+#include "graphics/frontend/backend_type.h"
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 #include "graphics/render/render.h"
+#else
+#include "graphics/frontend/instance.h"
+#endif
+
 #include "graphics/scene/scene.h"
 
 class EventManager;
@@ -135,10 +141,14 @@ public:
 	/// </summary>
 	void run_game();
 
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 	/// <summary>
 	/// Handles all the rendering, other than literally swapping buffers.
 	/// </summary>
 	std::unique_ptr<Render> render;
+#else
+	std::unique_ptr<Instance> render_instance;
+#endif
 
 	std::shared_ptr<Scene> current_scene;
 	std::shared_ptr<GameMap> current_map;

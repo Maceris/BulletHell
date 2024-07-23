@@ -7,7 +7,7 @@ class Scene;
 class RenderStage
 {
 public:
-	enum class Type;
+	enum class Type : uint8_t;
 
 	void render(Scene& scene);
 };
@@ -15,7 +15,7 @@ public:
 enum class RenderStage::Type : uint8_t
 {
     ANIMATION,
-    DEBUG,
+    DEBUG_INFO,
     FILTER,
     GUI,
     LIGHT,

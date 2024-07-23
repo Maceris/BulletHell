@@ -1,3 +1,5 @@
+#include "graphics/frontend/backend_type.h"
+
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "graphics/backend/base/debug_info.h"

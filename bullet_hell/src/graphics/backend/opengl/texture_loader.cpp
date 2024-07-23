@@ -1,4 +1,6 @@
-#if BACKEND_CURRENT == BACKEND_OPENGL
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL || BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 
 #include "glad.h"
 
@@ -24,9 +26,7 @@ Texture TextureLoader::load(const char* buffer, ImageFormat format,
 	glTexImage2D(GL_TEXTURE_2D, 0, FormatMapper::map(format), width, height, 0,
 		FormatMapper::map(format), FormatMapper::map_type(format), buffer);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	//1401, 0x5121
-	GL_RGBA;
-	GL_UNSIGNED_BYTE;
+
 	OpenGLUtil::check_gl_errors();
 
 	return Texture{ texture_id, width, height };

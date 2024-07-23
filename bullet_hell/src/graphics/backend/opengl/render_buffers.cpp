@@ -1,8 +1,11 @@
-#if BACKEND_CURRENT == BACKEND_OPENGL
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL || BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 
 #include "graphics/backend/opengl/render_buffers.h"
 
 #include <cmath>
+#include <cstdint>
 #include <memory>
 #include <set>
 
@@ -64,7 +67,7 @@ void RenderBuffers::cleanup()
 void RenderBuffers::define_vertex_attributes()
 {
 	const int stride = (3 * 4 + 2) * (int) sizeof(float);
-	int pointer = 0;
+	uintptr_t pointer = 0;
 
 	// Positions
 	glEnableVertexAttribArray(0);

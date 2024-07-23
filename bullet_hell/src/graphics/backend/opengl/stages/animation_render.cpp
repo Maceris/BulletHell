@@ -1,6 +1,6 @@
-#if BACKEND_CURRENT == BACKEND_OPENGL
+#include "graphics/frontend/backend_type.h"
 
-#if NEW_FRONTEND //TODO(ches) remove this
+#if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include <cmath>
 #include <vector>
@@ -104,6 +104,4 @@ void AnimationRender::render(Scene& scene)
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     shader->unbind();
 }
-#endif
-
 #endif

@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/graph/shader_program.h"
 
 #include "debugging/logger.h"
@@ -118,3 +122,5 @@ void ShaderProgram::unbind()
 {
 	glUseProgram(0);
 }
+
+#endif

@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/animation_render.h"
 
 #include <cmath>
@@ -118,3 +122,4 @@ void AnimationRender::render(const Scene& scene,
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     shader_program->unbind();
 }
+#endif

@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/render.h"
 
 #include <unordered_map>
@@ -563,3 +567,5 @@ void Render::update_model_matrices(const Scene& scene)
 	update_model_buffer(animated_models, animated_buffer);
 	update_model_buffer(static_models, static_buffer);
 }
+
+#endif

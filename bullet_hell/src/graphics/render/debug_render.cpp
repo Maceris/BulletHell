@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/debug_render.h"
 
 #include <numbers>
@@ -349,3 +353,4 @@ void DebugRender::create_uniforms()
     uniforms_map->create_uniform("view_matrix");
     uniforms_map->create_uniform("line_color");
 }
+#endif

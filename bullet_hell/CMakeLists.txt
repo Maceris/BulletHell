@@ -159,10 +159,13 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/debug_info.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/gui_mesh.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/opengl_instance.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/pipeline_manager.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/shader.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/texture_loader.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/uniforms_map.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/animation_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/debug_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/filter_render.cpp

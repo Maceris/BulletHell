@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/sky_box_render.h"
 
 #include "debugging/logger.h"
@@ -84,3 +88,4 @@ void SkyBoxRender::create_uniforms()
     uniforms_map->create_uniform("texture_sampler");
     uniforms_map->create_uniform("has_texture");
 }
+#endif

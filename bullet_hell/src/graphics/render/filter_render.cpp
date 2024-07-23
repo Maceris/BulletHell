@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/filter_render.h"
 
 #include "debugging/logger.h"
@@ -76,3 +80,4 @@ bool FilterRender::set_filter(const std::string name)
 
 	return true;
 }
+#endif

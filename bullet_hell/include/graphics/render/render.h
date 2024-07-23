@@ -6,21 +6,6 @@
 #include "graphics/graph/gbuffer.h"
 #include "graphics/backend/opengl/command_buffers.h"
 #include "graphics/backend/opengl/render_buffers.h"
-
-//TODO(ches) remove this, replace with the generic solution
-#define NEW_FRONTEND 0
-#if NEW_FRONTEND
-#include "graphics/backend/opengl/stages/animation_render.h"
-#include "graphics/backend/opengl/stages/debug_render.h"
-#include "graphics/backend/opengl/stages/filter_render.h"
-#include "graphics/backend/opengl/stages/framebuffer_transition.h"
-#include "graphics/backend/opengl/stages/gui_render.h"
-#include "graphics/backend/opengl/stages/light_render.h"
-#include "graphics/backend/opengl/stages/model_matrix_update.h"
-#include "graphics/backend/opengl/stages/scene_render.h"
-#include "graphics/backend/opengl/stages/shadow_render.h"
-#include "graphics/backend/opengl/stages/skybox_render.h"
-#else
 #include "graphics/render/animation_render.h"
 #include "graphics/render/debug_render.h"
 #include "graphics/render/filter_render.h"
@@ -29,7 +14,6 @@
 #include "graphics/render/scene_render.h"
 #include "graphics/render/shadow_render.h"
 #include "graphics/render/sky_box_render.h"
-#endif
 
 class Window;
 

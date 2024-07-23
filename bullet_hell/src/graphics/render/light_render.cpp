@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/light_render.h"
 
 #include "debugging/logger.h"
@@ -279,3 +283,4 @@ void LightRender::setup_spot_light_buffer(const Scene& scene)
 
     uniforms_map->set_uniform("spot_light_count", static_cast<int>(lights_to_render));
 }
+#endif

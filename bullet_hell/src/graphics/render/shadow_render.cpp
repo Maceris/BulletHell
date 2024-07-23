@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/shadow_render.h"
 
 #include "debugging/logger.h"
@@ -91,3 +95,4 @@ void ShadowRender::render(const Scene& scene,
     glBindVertexArray(0);
     shader_program->unbind();
 }
+#endif

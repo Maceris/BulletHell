@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/graph/uniforms_map.h"
 #include "glm/gtc/type_ptr.hpp"
 
@@ -68,3 +72,4 @@ void UniformsMap::set_uniform(const std::string& name, const glm::vec4& value)
 	glUniform4f(get_uniform_location(name), value.x, value.y, value.z,
 		value.w);
 }
+#endif

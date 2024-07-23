@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/gui_render.h"
 
 #include "debugging/logger.h"
@@ -99,3 +103,4 @@ GuiRender::~GuiRender()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
+#endif

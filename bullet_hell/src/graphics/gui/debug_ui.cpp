@@ -10,6 +10,7 @@
 #include "entities/pawn.h"
 #include "entities/pawn_manager.h"
 #include "debugging/timer.h"
+#include "graphics/frontend/backend_type.h"
 #include "graphics/graph/animation.h"
 #include "graphics/render/render.h"
 #include "graphics/scene/entity.h"
@@ -231,12 +232,14 @@ void DebugUI::draw_window_timing()
 
 void DebugUI::handle_input()
 {
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 	const Render* render = g_game_logic->render.get();
 	if (render)
 	{
 		render->configuration.wireframe = DebugUI::wireframe;
 		render->configuration.debug_lines = DebugUI::debug_lines;
 	}
+#endif
 }
 #else
 void DebugUI::draw() {}

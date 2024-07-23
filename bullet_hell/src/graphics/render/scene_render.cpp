@@ -1,3 +1,7 @@
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/render/scene_render.h"
 
 #include <format>
@@ -198,3 +202,4 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
             + std::to_string(start_texture + i) + "]", start_texture + i);
     }
 }
+#endif
