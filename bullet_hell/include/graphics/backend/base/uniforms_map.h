@@ -58,15 +58,6 @@ struct UniformsMap
 	void set_uniform(const std::string_view name, const glm::mat4& value);
 
 	/// <summary>
-	/// Set an array of 4x4 matrices uniform.
-	/// </summary>
-	/// <param name="name">The name of the uniform.</param>
-	/// <param name="value">The value to set.</param>
-	/// <param name="count">The number of matrices.</param>
-	void set_uniform(const std::string_view name, const glm::mat4* value,
-		const unsigned int count);
-
-	/// <summary>
 	/// Set a 2d vector uniform.
 	/// </summary>
 	/// <param name="name">The name of the uniform.</param>

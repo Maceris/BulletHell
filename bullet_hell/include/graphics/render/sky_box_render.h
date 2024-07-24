@@ -4,8 +4,8 @@
 
 #include <memory>
 
+#include "graphics/backend/base/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
-#include "graphics/graph/uniforms_map.h"
 
 class Scene;
 

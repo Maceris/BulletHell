@@ -6,7 +6,7 @@ using BufferHandle = uint64_t;
 
 struct Buffer
 {
-	enum class Type;
+	enum class Type : uint8_t;
 
 	BufferHandle handle;
 	Type type;

@@ -98,7 +98,6 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/graph/shader_program.h
   ${HEADER_PATH}/graphics/graph/shadow_buffer.h
   ${HEADER_PATH}/graphics/graph/texture_resource.h
-  ${HEADER_PATH}/graphics/graph/uniforms_map.h
   ${HEADER_PATH}/graphics/gui/debug_ui.h
   ${HEADER_PATH}/graphics/gui/ui.h
   ${HEADER_PATH}/graphics/render/animation_render.h
@@ -190,7 +189,6 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/graph/shader_program.cpp
   ${SOURCE_PATH}/graphics/graph/shadow_buffer.cpp
   ${SOURCE_PATH}/graphics/graph/texture_resource.cpp
-  ${SOURCE_PATH}/graphics/graph/uniforms_map.cpp
   ${SOURCE_PATH}/graphics/gui/debug_ui.cpp
   ${SOURCE_PATH}/graphics/gui/ui.cpp
   ${SOURCE_PATH}/graphics/render/animation_render.cpp

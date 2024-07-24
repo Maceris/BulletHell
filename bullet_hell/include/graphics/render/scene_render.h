@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "graphics/backend/base/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
-#include "graphics/graph/uniforms_map.h"
 
 struct CommandBuffers;
 struct GBuffer;
