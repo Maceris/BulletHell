@@ -5,13 +5,19 @@
 #define DEBUG 1
 #endif
 
-#if !defined(SAFE_DELETE)
-#define SAFE_DELETE(ptr) if(ptr) delete ptr; ptr=nullptr;
-#endif
+template <typename T>
+void safe_delete(T* &ptr)
+{
+	delete ptr;
+	ptr = nullptr;
+}
 
-#if !defined(SAFE_DELETE_ARRAY)
-#define SAFE_DELETE_ARRAY(arr) if (arr) delete [] arr; arr=nullptr; 
-#endif
+template <typename T>
+void safe_delete_array(T* &arr)
+{
+	delete[] arr;
+	arr = nullptr;
+}
 
 #ifdef DEBUG
 #define ALLOC new(_NORMAL_BLOCK,__FILE__, __LINE__)

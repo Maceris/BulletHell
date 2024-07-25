@@ -117,7 +117,7 @@ std::shared_ptr<ResourceHandle> ResourceCache::load(Resource* resource)
 
 		if (loader->discard_raw_buffer_after_load())
 		{
-			SAFE_DELETE_ARRAY(raw_buffer);
+			safe_delete_array(raw_buffer);
 		}
 
 		if (!success)
@@ -180,7 +180,7 @@ ResourceCache::~ResourceCache()
 	{
 		free_one_resource();
 	}
-	SAFE_DELETE(file);
+	safe_delete(file);
 }
 
 bool ResourceCache::init()

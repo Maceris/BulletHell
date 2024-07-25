@@ -43,6 +43,6 @@ ResourceHandle::ResourceHandle(Resource& resource, char* buffer,
 
 ResourceHandle::~ResourceHandle()
 {
-	SAFE_DELETE_ARRAY(buffer);
+	safe_delete_array(buffer);
 	resource_cache->memory_has_been_freed(size);
 }

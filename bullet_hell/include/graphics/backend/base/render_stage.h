@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "utilities/generic_iterator.h"
+
 class Scene;
 
 class RenderStage
@@ -23,3 +25,5 @@ enum class RenderStage::Type : uint8_t
     SHADOW,
     SKYBOX
 };
+
+using RenderStageTypeIterator = Iterator<RenderStage::Type, RenderStage::Type::ANIMATION, RenderStage::Type::SKYBOX>;

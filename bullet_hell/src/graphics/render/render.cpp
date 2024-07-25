@@ -332,7 +332,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		command_buffers.animated_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
 		GL_DYNAMIC_DRAW);
-	SAFE_DELETE_ARRAY(model_matrices);
+	safe_delete_array(model_matrices);
 
 	int first_index = 0;
 	int base_instance = 0;
@@ -391,7 +391,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		command_buffers.animated_command_buffer);
 	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
 		GL_STATIC_DRAW);
-	SAFE_DELETE_ARRAY(command_buffer);
+	safe_delete_array(command_buffer);
 
 	data_size_in_bytes = mesh_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
@@ -399,7 +399,7 @@ void Render::setup_animated_command_buffer(const Scene& scene)
 		command_buffers.animated_draw_element_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
 		GL_STATIC_DRAW);
-	SAFE_DELETE_ARRAY(draw_elements);
+	safe_delete_array(draw_elements);
 }
 
 void Render::setup_static_command_buffer(const Scene& scene)
@@ -446,7 +446,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		command_buffers.static_model_matrices_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
 		GL_DYNAMIC_DRAW);
-	SAFE_DELETE_ARRAY(model_matrices);
+	safe_delete_array(model_matrices);
 
 	int first_index = 0;
 	int base_instance = 0;
@@ -510,7 +510,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		command_buffers.static_command_buffer);
 	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
 		GL_STATIC_DRAW);
-	SAFE_DELETE_ARRAY(command_buffer);
+	safe_delete_array(command_buffer);
 
 	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
 
@@ -518,7 +518,7 @@ void Render::setup_static_command_buffer(const Scene& scene)
 		command_buffers.static_draw_element_buffer);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
 		GL_STATIC_DRAW);
-	SAFE_DELETE_ARRAY(draw_elements);
+	safe_delete_array(draw_elements);
 }
 
 void Render::update_model_buffer(
@@ -553,7 +553,7 @@ void Render::update_model_buffer(
 	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes,
 		model_matrices, GL_DYNAMIC_DRAW);
 
-	SAFE_DELETE_ARRAY(model_matrices);
+	safe_delete_array(model_matrices);
 }
 
 void Render::update_model_matrices(const Scene& scene)

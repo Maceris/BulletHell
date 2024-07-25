@@ -56,6 +56,6 @@ bool TextureResourceLoader::parse_texture(
 		TextureLoader::load(reinterpret_cast<const char*>(image_data), 
 			ImageFormat::R8G8B8A8_UINT, width, height));
 
-	SAFE_DELETE_ARRAY(image_data);
+	safe_delete_array(image_data);
 	return true;
 }

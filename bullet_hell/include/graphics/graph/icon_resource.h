@@ -20,7 +20,7 @@ struct Icon
 	Icon& operator=(const Icon&) = delete;
 	~Icon()
 	{
-		SAFE_DELETE(data);
+		safe_delete(data);
 	}
 };
 

@@ -165,7 +165,7 @@ LogManager::~LogManager()
 	for (auto it = error_loggers.begin(); it != error_loggers.end(); ++it)
 	{
 		Logger::ErrorLogger* logger = *it;
-		SAFE_DELETE(logger);
+		safe_delete(logger);
 	}
 	error_loggers.clear();
 }
@@ -383,7 +383,7 @@ namespace Logger
 	{
 		if (log_manager)
 		{
-			SAFE_DELETE(log_manager);
+			safe_delete(log_manager);
 			log_manager = nullptr;
 		}
 	}

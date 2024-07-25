@@ -10,7 +10,7 @@
 struct QuadMesh;
 class Scene;
 class ShaderProgram;
-class UniformsMap;
+struct UniformsMap;
 
 /// <summary>
 /// Handles post-processing filters

@@ -66,8 +66,8 @@ void SkyBox::populate_buffers(const MeshData& mesh_data)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_data.indices.size() 
 		* sizeof(uint32_t), mesh_data.indices.data(), GL_STATIC_DRAW);
 
-	SAFE_DELETE_ARRAY(positions);
-	SAFE_DELETE_ARRAY(texture_coordinates);
+	safe_delete_array(positions);
+	safe_delete_array(texture_coordinates);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

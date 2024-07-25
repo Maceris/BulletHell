@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 
 #include "graphics/window.h"
 #include "graphics/backend/base/shader_map.h"
@@ -21,6 +22,7 @@ public:
 	void cleanup();
 	Pipeline* get_pipeline(RenderConfig config);
 	void resize(int width, int height);
+	void set_filter(const std::string_view name);
 	void setup_data(const Scene& scene);
 
 private:

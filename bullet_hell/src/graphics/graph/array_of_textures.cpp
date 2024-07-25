@@ -35,5 +35,5 @@ GLuint ArrayOfTextures::operator[](const unsigned int index)
 ArrayOfTextures::~ArrayOfTextures()
 {
 	glDeleteTextures(texture_count, textures);
-	SAFE_DELETE_ARRAY(textures);
+	safe_delete_array(textures);
 }

@@ -1,9 +1,19 @@
 #include "graphics/frontend/backend_type.h"
 
-#if BACKEND_CURRENT == BACKEND_OPENGL || BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
+#include "graphics/backend/base/pipeline_manager.h"
+std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
+
+#endif
+
+#if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "graphics/backend/base/pipeline_manager.h"
 
+#include <format>
+
+#include "debugging/logger.h"
 #include "graphics/backend/opengl/stages/animation_render.h"
 #include "graphics/backend/opengl/stages/debug_render.h"
 #include "graphics/backend/opengl/stages/filter_render.h"
@@ -14,6 +24,7 @@
 #include "graphics/backend/opengl/stages/scene_render.h"
 #include "graphics/backend/opengl/stages/shadow_render.h"
 #include "graphics/backend/opengl/stages/skybox_render.h"
+#include "main/game_logic.h"
 
 std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
 
@@ -31,6 +42,8 @@ struct PipelineManager::Data
 	SceneRender<true> scene_render_wireframe;
 	ShadowRender shadow_render;
 	SkyboxRender skybox_render;
+
+	ShaderMap shaders;
 };
 
 PipelineManager::PipelineManager(Window& window, ShaderMap& shaders)
@@ -68,4 +81,19 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 	return nullptr;
 }
 
+
+void PipelineManager::set_filter(const std::string_view name)
+{
+	std::vector<Shader::Module> module_data;
+
+	module_data.emplace_back(std::format("{}.frag", name),
+		Shader::Type::FRAGMENT);
+	module_data.emplace_back(std::format("{}.vert", name),
+		Shader::Type::VERTEX);
+
+	Shader* shader = ALLOC Shader(module_data);
+	shader->uniforms.create_uniform("screen_texture");
+	
+	data->shaders.add_shader(RenderStage::Type::FILTER, shader);
+}
 #endif

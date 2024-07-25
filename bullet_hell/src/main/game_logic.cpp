@@ -165,9 +165,9 @@ void GameLogic::on_close()
 
 	window->terminate();
 
-	SAFE_DELETE(g_pawn_manager);
-	SAFE_DELETE(g_event_manager);
-	SAFE_DELETE(window);
+	safe_delete(g_pawn_manager);
+	safe_delete(g_event_manager);
+	safe_delete(window);
 }
 
 void GameLogic::on_key_pressed(int key, int scancode, int action, int mods)

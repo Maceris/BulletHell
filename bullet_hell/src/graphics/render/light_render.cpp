@@ -61,7 +61,7 @@ void LightRender::initialize_SSBOs()
         MAX_LIGHTS_SUPPORTED * POINT_LIGHT_SIZE * sizeof(float),
         point_light_float_buffer, GL_STATIC_DRAW);
 
-    SAFE_DELETE_ARRAY(point_light_float_buffer);
+    safe_delete_array(point_light_float_buffer);
 
     float* spot_light_float_buffer =
         ALLOC float[MAX_LIGHTS_SUPPORTED * SPOT_LIGHT_SIZE];
@@ -71,7 +71,7 @@ void LightRender::initialize_SSBOs()
         MAX_LIGHTS_SUPPORTED * SPOT_LIGHT_SIZE * sizeof(float),
         spot_light_float_buffer, GL_STATIC_DRAW);
 
-    SAFE_DELETE_ARRAY(spot_light_float_buffer);
+    safe_delete_array(spot_light_float_buffer);
 
 }
 
@@ -228,7 +228,7 @@ void LightRender::setup_point_light_buffer(const Scene& scene)
         (size_t) lights_to_render * POINT_LIGHT_SIZE * sizeof(float),
         light_buffer);
 
-    SAFE_DELETE_ARRAY(light_buffer);
+    safe_delete_array(light_buffer);
 
     uniforms_map->set_uniform("point_light_count", static_cast<int>(lights_to_render));
 }
@@ -279,7 +279,7 @@ void LightRender::setup_spot_light_buffer(const Scene& scene)
         (size_t)lights_to_render * SPOT_LIGHT_SIZE * sizeof(float),
         light_buffer);
 
-    SAFE_DELETE_ARRAY(light_buffer);
+    safe_delete_array(light_buffer);
 
     uniforms_map->set_uniform("spot_light_count", static_cast<int>(lights_to_render));
 }

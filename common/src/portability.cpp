@@ -143,7 +143,7 @@ std::string read_string(RawStream& source)
 
 	std::string result(reinterpret_cast<char*>(result_chars));
 
-	SAFE_DELETE_ARRAY(result_chars);
+	safe_delete_array(result_chars);
 
 	return result;
 }

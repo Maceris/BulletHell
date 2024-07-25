@@ -163,6 +163,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/shader.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/shader_map.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/texture_loader.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/uniforms_map.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/animation_render.cpp

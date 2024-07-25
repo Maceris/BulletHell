@@ -40,13 +40,13 @@ GameMap::~GameMap()
 	ScopedCriticalSection lock(chunk_critical_section);
 	for (auto it = hot_cache.begin(); it != hot_cache.end(); ++it)
 	{
-		SAFE_DELETE(it->second);
+		safe_delete(it->second);
 	}
 	hot_cache.clear();
 
 	for (auto it = cold_cache.begin(); it != cold_cache.end(); ++it)
 	{
-		SAFE_DELETE(it->second);
+		safe_delete(it->second);
 	}
 	cold_cache.clear();
 }
@@ -329,5 +329,5 @@ void GameMap::full_unload(const ChunkCoordinates& coordinates)
 
 	Chunk* loaded = cold_chunk->second;
 	cold_cache.erase(coordinates.combined);
-	SAFE_DELETE(loaded);
+	safe_delete(loaded);
 }
