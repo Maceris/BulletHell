@@ -57,7 +57,7 @@ struct LineGroup::Data
 };
 
 LineGroup::LineGroup()
-    : data{ std::make_unique<Data>() }
+    : data{}
 {
     glGenVertexArrays(1, &data->vao);
     glGenBuffers(1, &data->data);

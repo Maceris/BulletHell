@@ -156,7 +156,6 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/window.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/buffer.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/command_buffers.cpp
-  ${SOURCE_PATH}/graphics/backend/opengl/debug_info.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/gui_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/opengl_instance.cpp

@@ -114,7 +114,6 @@ bool GameLogic::initialize()
 
 	UI::first_time_setup();
 
-	//TODO(ches) handle all the scene stuff elsewhere, and after a menu
 	current_scene = std::make_shared<Scene>(window->width, window->height);
 
 	current_scene->scene_lights.ambient_light.intensity = 0.3f;
@@ -443,7 +442,7 @@ void GameLogic::main_processing()
 void GameLogic::on_pause()
 {
 	current_state = GameState::PAUSED;
-	//TODO(ches) swap rendering pipelines
+	//TODO(ches) BH-53 - swap rendering pipelines
 }
 
 void GameLogic::on_resume()
@@ -461,7 +460,7 @@ void GameLogic::on_resume()
 	last_map_recenter = now;
 
 	current_state = GameState::RUNNING;
-	//TODO(ches) swap rendering pipelines
+	//TODO(ches) BH-53 - swap rendering pipelines
 }
 
 void GameLogic::reset()

@@ -31,6 +31,8 @@ Texture* PipelineManager::default_texture = nullptr;
 
 Texture* PipelineManager::default_texture = nullptr;
 
+//TODO(ches) BH-51 - fill this out
+
 struct PipelineManager::Data
 {
 	Data(ShaderMap& shaders);

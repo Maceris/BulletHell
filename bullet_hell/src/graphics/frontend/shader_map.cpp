@@ -3,7 +3,7 @@
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "globals.h"
-#include "graphics/backend/base/shader_map.h"
+#include "graphics/frontend/shader_map.h"
 
 ShaderMap::ShaderMap()
 	: shaders{}

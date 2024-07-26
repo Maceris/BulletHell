@@ -488,7 +488,7 @@ void PawnManager::update_movement(Pawn& pawn, const float move_speed)
 		pawn.desired_movement.y
 	};
 	movement *= move_speed;
-	//TODO(ches) Check for collision
+	//TODO(ches) BH-49 - Check for collision
 	if (movement.x != 0 || movement.z != 0)
 	{
 		pawn.scene_entity->position += movement;

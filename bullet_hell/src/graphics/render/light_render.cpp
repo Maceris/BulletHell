@@ -165,7 +165,7 @@ void LightRender::update_lights(const Scene& scene)
 {
     const glm::mat4& view_matrix = scene.camera.view_matrix;
 
-    //TODO(ches) include the SceneCluster lights as well
+    //TODO(ches) BH-52 - include the SceneCluster lights as well
 
     const SceneLights& scene_lights = scene.scene_lights;
     const AmbientLight& ambient_light = scene_lights.ambient_light;

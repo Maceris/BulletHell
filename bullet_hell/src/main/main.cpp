@@ -30,7 +30,6 @@ int main()
 
     game_logic.run_game();
 
-    //TODO(ches) do we need to call this here or in a callback?
     game_logic.on_close();
 
     Logger::destroy();

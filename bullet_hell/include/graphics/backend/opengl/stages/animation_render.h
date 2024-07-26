@@ -8,14 +8,11 @@ class AnimationRender : RenderStage
 {
 public:
 	AnimationRender(Shader* shader,
-		StageResource<RenderBuffers>* render_buffers)
-		: shader{ shader }
-		, render_buffers{ render_buffers }
-	{}
+		StageResource<RenderBuffers>* render_buffers);
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	StageResource<RenderBuffers>* const render_buffers;
 };

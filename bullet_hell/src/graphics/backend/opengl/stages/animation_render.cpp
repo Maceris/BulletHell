@@ -12,6 +12,7 @@
 #include "graphics/graph/mesh_draw_data.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
+#include "resource_cache/resource_cache.h"
 
 #include "glad.h"
 
@@ -20,6 +21,20 @@ struct RenderInfo
     int model_vertex_count;
     int entity_count;
 };
+
+AnimationRender::AnimationRender(Shader* shader,
+    StageResource<RenderBuffers>* render_buffers)
+    : shader{ shader }
+    , render_buffers{ render_buffers }
+{
+    std::vector<Shader::Module> shader_modules;
+    shader_modules.emplace_back("shaders/animation.compute",
+        Shader::Type::COMPUTE);
+
+    shader = ALLOC Shader(shader_modules);
+    shader->uniforms.create_uniform("base_draw_parameter");
+}
+
 
 void AnimationRender::render(Scene& scene)
 {
