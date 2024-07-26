@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "graphics/glad_types.h"
 #include "graphics/graph/gbuffer.h"
 #include "graphics/backend/opengl/command_buffers.h"

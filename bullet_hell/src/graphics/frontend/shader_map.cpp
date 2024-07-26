@@ -2,8 +2,8 @@
 
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
-#include "globals.h"
 #include "graphics/frontend/shader_map.h"
+#include "memory/memory_util.h"
 
 ShaderMap::ShaderMap()
 	: shaders{}

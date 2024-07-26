@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <string>
 
 #include "glm/mat4x4.hpp"

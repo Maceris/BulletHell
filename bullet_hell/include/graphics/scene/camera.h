@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "glm/mat4x4.hpp"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
@@ -126,6 +124,4 @@ private:
 	/// then calculate the view and inverse view matrices.
 	/// </summary>
 	void recalculate();
-
-	
 };

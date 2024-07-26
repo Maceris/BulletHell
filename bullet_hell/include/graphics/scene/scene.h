@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <atomic>
 #include <map>
 #include <memory>

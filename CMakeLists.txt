@@ -138,13 +138,13 @@ SET(IMGUI_DIR ${THIRD_PARTY_DIR}/imgui-1.89.9)
 # ############################## Project Setup ################################
 
 SET(COMMON_HEADERS
-  ${COMMON_INCLUDE_DIR}/globals.h
   ${COMMON_INCLUDE_DIR}/portability.h
   ${COMMON_INCLUDE_DIR}/debugging/logger.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/animation.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/material.h
   ${COMMON_INCLUDE_DIR}/graphics/graph/mesh_data.h
   ${COMMON_INCLUDE_DIR}/memory/critical_section.h
+  ${COMMON_INCLUDE_DIR}/memory/memory_util.h
 )
 
 SET(COMMON_SOURCES

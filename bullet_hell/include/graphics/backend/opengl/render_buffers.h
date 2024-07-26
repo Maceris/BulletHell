@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <vector>
 
 #include "graphics/glad_types.h"

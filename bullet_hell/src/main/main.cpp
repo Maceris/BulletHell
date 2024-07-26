@@ -1,5 +1,3 @@
-#include "globals.h"
-
 #include <windows.h>
 
 #include <iostream>
@@ -35,7 +33,6 @@ int main()
     Logger::destroy();
 
     exit(EXIT_SUCCESS);
-    return 0;
 }
 
 /// <summary>

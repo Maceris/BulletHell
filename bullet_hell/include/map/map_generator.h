@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "map/tile.h"
 
 struct Chunk;

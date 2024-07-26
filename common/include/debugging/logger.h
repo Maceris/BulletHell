@@ -1,10 +1,10 @@
 #pragma once
 
-#include "globals.h"
-
 #include <source_location>
 #include <string>
 #include <string_view>
+
+#include "memory/memory_util.h"
 
 using LogFlag = unsigned char;
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "glm/vec2.hpp"
 
 class MouseInput

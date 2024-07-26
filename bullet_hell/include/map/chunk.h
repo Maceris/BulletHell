@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "map/chunk_coordinates.h"
 #include "map/tile.h"
 

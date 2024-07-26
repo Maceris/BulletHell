@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 /// <summary>
 /// Debugging related UI.
 /// </summary>

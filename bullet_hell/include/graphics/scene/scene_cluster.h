@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <unordered_map>
 #include <vector>
 

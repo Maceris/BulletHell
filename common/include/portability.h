@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <bit>
 #include <fstream>
 #include <winsock2.h>

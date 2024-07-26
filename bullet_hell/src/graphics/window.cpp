@@ -1,7 +1,5 @@
 #include "graphics/window.h"
 
-#include "globals.h"
-
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>

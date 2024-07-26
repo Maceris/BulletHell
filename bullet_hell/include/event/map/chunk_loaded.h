@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "event/event.h"
 
 struct Chunk;

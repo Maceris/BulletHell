@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "graphics/graph/model.h"
 #include "resource_cache/resource.h"
 #include "resource_cache/resource_loader.h"

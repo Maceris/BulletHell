@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <memory>
 
 #include "graphics/backend/opengl/quad_mesh.h"

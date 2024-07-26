@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include "graphics/glad_types.h"
 
 constexpr auto QUAD_MESH_VERTEX_COUNT = 6;

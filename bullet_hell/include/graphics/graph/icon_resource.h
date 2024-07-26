@@ -1,7 +1,6 @@
 #pragma once
 
-#include "globals.h"
-
+#include "memory/memory_util.h"
 #include "resource_cache/resource.h"
 #include "resource_cache/resource_loader.h"
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <vector>
 
 #include "graphics/scene/lights/ambient_light.h"

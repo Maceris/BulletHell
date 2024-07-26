@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 /// <summary>
 /// Represents the state of an AI character.
 /// </summary>
