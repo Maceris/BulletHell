@@ -3,7 +3,8 @@
 #if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 
 #include "graphics/backend/base/pipeline_manager.h"
-std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
+
+Texture* PipelineManager::default_texture = nullptr;
 
 #endif
 
@@ -11,7 +12,7 @@ std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
 
 #include "graphics/backend/base/pipeline_manager.h"
 
-#include <format>
+#include <map>
 
 #include "debugging/logger.h"
 #include "graphics/backend/opengl/stages/animation_render.h"
@@ -26,10 +27,34 @@ std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
 #include "graphics/backend/opengl/stages/skybox_render.h"
 #include "main/game_logic.h"
 
-std::unique_ptr<Texture> PipelineManager::default_texture = nullptr;
+#include "glad.h"
+
+Texture* PipelineManager::default_texture = nullptr;
 
 struct PipelineManager::Data
 {
+	Data(ShaderMap& shaders);
+	Data(const Data&) = delete;
+	Data& operator=(const Data&) = delete;
+	~Data();
+
+	StageResource<Buffer> point_lights;
+	StageResource<Buffer> spot_lights;
+	StageResource<CascadeShadows> cascade_shadows;
+	StageResource<CommandBuffers> command_buffers;
+	StageResource<Framebuffer> back_buffer;
+	StageResource<Framebuffer> gbuffer;
+	StageResource<Framebuffer> screen_texture;
+	StageResource<Framebuffer> shadow_buffer;
+	StageResource<GuiMesh> gui_mesh;
+	StageResource<QuadMesh> quad_mesh;
+	StageResource<RenderBuffers> render_buffers;
+	StageResource<SkyBox> skybox;
+	StageResource<Texture> font;
+
+	int cached_height;
+	int cached_width;
+
 	AnimationRender animation_render;
 	FramebufferTransition back_buffer_binding;
 	FramebufferTransition screen_texture_binding;
@@ -43,20 +68,58 @@ struct PipelineManager::Data
 	ShadowRender shadow_render;
 	SkyboxRender skybox_render;
 
-	ShaderMap shaders;
+	std::map<RenderConfig, Pipeline*> pipelines;
 };
 
-PipelineManager::PipelineManager(Window& window, ShaderMap& shaders)
+PipelineManager::Data::Data(ShaderMap& shaders)
+	: point_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
+	, spot_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
+	, cascade_shadows{}
+	, command_buffers{ ALLOC CommandBuffers() }
+	, gbuffer{ nullptr }
+	, back_buffer{ nullptr }
+	, screen_texture{ nullptr }
+	, shadow_buffer{ nullptr }
+	, gui_mesh{ ALLOC GuiMesh() }
+	, quad_mesh{ ALLOC QuadMesh() }
+	, render_buffers{ ALLOC RenderBuffers() }
+	, skybox{ ALLOC SkyBox() }
+	, font{ nullptr }
+	, animation_render{ shaders.get_shader(RenderStage::Type::ANIMATION),
+		&render_buffers }
+	, back_buffer_binding{ &back_buffer, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA }
+	, screen_texture_binding{ &screen_texture, GL_ONE, GL_ONE }
+	, filter_render{ shaders.get_shader(RenderStage::Type::FILTER),
+		&screen_texture, &quad_mesh }
+	, gui_render{ shaders.get_shader(RenderStage::Type::GUI), &gui_mesh }
+	, gui_render_standalone{ shaders.get_shader(RenderStage::Type::GUI),
+		&gui_mesh }
+	, light_render{ shaders.get_shader(RenderStage::Type::LIGHT),
+		&cascade_shadows, &point_lights, &spot_lights, &shadow_buffer,
+		&gbuffer, &quad_mesh }
+	, model_matrix_update{ &command_buffers }
+	, scene_render{ shaders.get_shader(RenderStage::Type::SCENE),
+		&render_buffers, &gbuffer, &command_buffers, &default_texture }
+	, scene_render_wireframe{ shaders.get_shader(RenderStage::Type::SCENE),
+		&render_buffers, &gbuffer, &command_buffers, &default_texture }
+	, shadow_render{ shaders.get_shader(RenderStage::Type::SHADOW),
+		&render_buffers, &cascade_shadows, &shadow_buffer, &command_buffers }
+	, skybox_render{ shaders.get_shader(RenderStage::Type::SKYBOX),
+		&skybox }
 {
 
 }
+
+PipelineManager::Data::~Data()
+{
+
+}
+
+PipelineManager::PipelineManager(Window& window, ShaderMap& shaders)
+	: data{}
+{}
 
 PipelineManager::~PipelineManager()
-{
-
-}
-
-void PipelineManager::cleanup()
 {
 
 }
@@ -78,22 +141,8 @@ void PipelineManager::setup_data(const Scene& scene)
 
 Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 {
+
 	return nullptr;
 }
 
-
-void PipelineManager::set_filter(const std::string_view name)
-{
-	std::vector<Shader::Module> module_data;
-
-	module_data.emplace_back(std::format("{}.frag", name),
-		Shader::Type::FRAGMENT);
-	module_data.emplace_back(std::format("{}.vert", name),
-		Shader::Type::VERTEX);
-
-	Shader* shader = ALLOC Shader(module_data);
-	shader->uniforms.create_uniform("screen_texture");
-	
-	data->shaders.add_shader(RenderStage::Type::FILTER, shader);
-}
 #endif

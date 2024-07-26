@@ -6,7 +6,7 @@
 
 #include "graphics/glad_types.h"
 #include "graphics/backend/base/debug_info.h"
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
 
 class Scene;

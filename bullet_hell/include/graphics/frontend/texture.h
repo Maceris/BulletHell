@@ -27,6 +27,10 @@ struct Texture
 	Texture& operator=(const Texture&) = default;
 	Texture(Texture&&) = default;
 	Texture& operator=(Texture&&) = default;
+	/// <summary>
+	/// Does nothing important, the expectation is the backing resources are 
+	/// cleaned up via the deletion queue.
+	/// </summary>
 	~Texture() = default;
 
 	/// <summary>

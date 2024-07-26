@@ -4,7 +4,7 @@
 #include <string_view>
 #include <vector>
 
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 
 using ShaderHandle = uint64_t;
 using ShaderModuleHandle = uint64_t;

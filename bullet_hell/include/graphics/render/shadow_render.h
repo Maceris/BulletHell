@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 #include "graphics/graph/shader_program.h"
 #include "graphics/graph/shadow_buffer.h"

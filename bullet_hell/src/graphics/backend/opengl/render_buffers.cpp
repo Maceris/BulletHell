@@ -269,7 +269,7 @@ void RenderBuffers::load_bones_matrices_buffer(const ModelList& models)
 						}
 					}
 				}
-				current_offset += frame.bone_matrices.size();
+				current_offset += static_cast<int>(frame.bone_matrices.size());
 			}
 		}
 	}

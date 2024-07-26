@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "graphics/glad_types.h"
-#include "graphics/backend/base/uniforms_map.h"
 #include "graphics/backend/opengl/quad_mesh.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
 
 struct GBuffer;

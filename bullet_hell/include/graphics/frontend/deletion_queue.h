@@ -6,7 +6,6 @@
 
 struct Buffer;
 struct Framebuffer;
-struct Shader;
 struct Texture;
 
 class DeletionQueue
@@ -16,9 +15,8 @@ public:
 	struct Entry;
 
 	void add(Buffer buffer);
-	void add(Framebuffer buffer);
-	void add(Shader buffer);
-	void add(Texture buffer);
+	void add(Framebuffer framebuffer);
+	void add(Texture texture);
 
 	std::optional<Entry> pop();
 
@@ -30,7 +28,6 @@ enum class DeletionQueue::ResourceType : uint8_t
 {
 	BUFFER,
 	FRAMEBUFFER,
-	SHADER,
 	TEXTURE
 };
 

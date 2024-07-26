@@ -67,23 +67,22 @@ void AnimationRender::render(Scene& scene)
         );
     }
     glBindBuffer(GL_SHADER_STORAGE_BUFFER,
-        render_buffers->animation_draw_parameters_ssbo);
+        (*render_buffers)->animation_draw_parameters_ssbo);
     glBufferData(GL_SHADER_STORAGE_BUFFER,
         parameter_list.size() * sizeof(int), parameter_list.data(),
         GL_STATIC_DRAW);
-
     
     shader->bind();
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0,
-        render_buffers->binding_poses_ssbo);
+        (*render_buffers)->binding_poses_ssbo);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1,
-        render_buffers->bones_indices_weights_ssbo);
+        (*render_buffers)->bones_indices_weights_ssbo);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2,
-        render_buffers->bones_matrices_ssbo);
+        (*render_buffers)->bones_matrices_ssbo);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3,
-        render_buffers->dest_animation_vbo);
+        (*render_buffers)->dest_animation_vbo);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4,
-        render_buffers->animation_draw_parameters_ssbo);
+        (*render_buffers)->animation_draw_parameters_ssbo);
 
     int mesh_count = 0;
     int base_draw_parameter = 0;

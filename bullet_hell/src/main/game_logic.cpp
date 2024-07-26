@@ -102,13 +102,14 @@ bool GameLogic::initialize()
 	{
 		action_state.emplace(std::make_pair(action, false));
 	}
-	PipelineManager::default_texture = std::make_unique<Texture>(
+
+	PipelineManager::default_texture = ALLOC Texture(
 		TextureLoader::load("textures/default_texture.image"));
 
 #if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 	render = std::make_unique<Render>(*window);
 #else
-	render_instance = std::make_unique<Instance>();
+	render_instance = std::make_unique<Instance>(*window);
 #endif
 
 	UI::first_time_setup();

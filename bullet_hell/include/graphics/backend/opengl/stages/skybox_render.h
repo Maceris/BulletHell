@@ -2,7 +2,7 @@
 
 #include "glm/mat4x4.hpp"
 
-#include "graphics/backend/base/render_stage.h"
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 #include "graphics/scene/sky_box.h"
 
@@ -10,7 +10,7 @@ class SkyboxRender : RenderStage
 {
 public:
 	SkyboxRender(Shader* shader,
-		SkyBox* skybox)
+		StageResource<SkyBox>* skybox)
 		: shader{ shader }
 		, skybox{ skybox }
 	{}
@@ -20,5 +20,5 @@ public:
 private:
 	glm::mat4 view_matrix;
 	Shader* const shader;
-	SkyBox* const skybox;
+	StageResource<SkyBox>* const skybox;
 };

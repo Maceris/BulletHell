@@ -56,9 +56,6 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/backend/base/debug_info.h
   ${HEADER_PATH}/graphics/backend/base/format_mapper.h
   ${HEADER_PATH}/graphics/backend/base/pipeline_manager.h
-  ${HEADER_PATH}/graphics/backend/base/render_stage.h
-  ${HEADER_PATH}/graphics/backend/base/shader_map.h
-  ${HEADER_PATH}/graphics/backend/base/uniforms_map.h
   ${HEADER_PATH}/graphics/backend/opengl/command_buffers.h
   ${HEADER_PATH}/graphics/backend/opengl/gui_mesh.h
   ${HEADER_PATH}/graphics/backend/opengl/quad_mesh.h
@@ -83,9 +80,12 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/frontend/instance.h
   ${HEADER_PATH}/graphics/frontend/pipeline.h
   ${HEADER_PATH}/graphics/frontend/render_config.h
+  ${HEADER_PATH}/graphics/frontend/render_stage.h
   ${HEADER_PATH}/graphics/frontend/shader.h
+  ${HEADER_PATH}/graphics/frontend/shader_map.h
   ${HEADER_PATH}/graphics/frontend/texture.h
   ${HEADER_PATH}/graphics/frontend/texture_loader.h
+  ${HEADER_PATH}/graphics/frontend/uniforms_map.h
   ${HEADER_PATH}/graphics/graph/animation_resource.h
   ${HEADER_PATH}/graphics/graph/array_of_textures.h
   ${HEADER_PATH}/graphics/graph/cascade_shadow_slice.h
@@ -154,6 +154,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/event/map/chunk_unloaded.cpp
   ${SOURCE_PATH}/graphics/mouse_input.cpp
   ${SOURCE_PATH}/graphics/window.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/buffer.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/command_buffers.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/debug_info.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
@@ -163,7 +164,6 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/shader.cpp
-  ${SOURCE_PATH}/graphics/backend/opengl/shader_map.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/texture_loader.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/uniforms_map.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/animation_render.cpp
@@ -176,6 +176,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/stages/scene_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/shadow_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/skybox_render.cpp
+  ${SOURCE_PATH}/graphics/frontend/shader_map.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
   ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
   ${SOURCE_PATH}/graphics/graph/cascade_shadow_slice.cpp

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "graphics/backend/base/render_stage.h"
 #include "graphics/backend/opengl/quad_mesh.h"
 #include "graphics/frontend/buffer.h"
 #include "graphics/frontend/framebuffer.h"
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 
@@ -11,12 +11,12 @@ class LightRender : RenderStage
 {
 public:
 	LightRender(Shader* shader,
-		CascadeShadows* cascade_shadows,
-		Buffer point_lights,
-		Buffer spot_lights,
-		Framebuffer* shadow_buffers,
-		Framebuffer* gbuffer,
-		QuadMesh* quad_mesh)
+		StageResource<CascadeShadows>* cascade_shadows,
+		StageResource<Buffer>* point_lights,
+		StageResource<Buffer>* spot_lights,
+		StageResource<Framebuffer>* shadow_buffers,
+		StageResource<Framebuffer>* gbuffer,
+		StageResource<QuadMesh>* quad_mesh)
 		: shader{ shader }
 		, cascade_shadows{ cascade_shadows }
 		, point_lights{ point_lights }
@@ -30,10 +30,10 @@ public:
 
 private:
 	Shader* const shader;
-	CascadeShadows* const cascade_shadows;
-	Buffer const point_lights;
-	Buffer const spot_lights;
-	Framebuffer* const shadow_buffers;
-	Framebuffer* const gbuffer;
-	QuadMesh* const quad_mesh;
+	StageResource<CascadeShadows>* const cascade_shadows;
+	StageResource<Buffer>* const point_lights;
+	StageResource<Buffer>* const spot_lights;
+	StageResource<Framebuffer>* const shadow_buffers;
+	StageResource<Framebuffer>* const gbuffer;
+	StageResource<QuadMesh>* const quad_mesh;
 };

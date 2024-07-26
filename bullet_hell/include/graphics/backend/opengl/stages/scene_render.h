@@ -1,9 +1,9 @@
 #pragma once
 
-#include "graphics/backend/base/render_stage.h"
 #include "graphics/backend/opengl/command_buffers.h"
 #include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/frontend/framebuffer.h"
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
 template <bool wireframe>
@@ -11,10 +11,10 @@ class SceneRender : RenderStage
 {
 public:
 	SceneRender(Shader* shader,
-		RenderBuffers* render_buffers,
-		Framebuffer* gbuffer,
-		CommandBuffers* command_buffers,
-		Texture* default_texture)
+		StageResource<RenderBuffers>* render_buffers,
+		StageResource<Framebuffer>* gbuffer,
+		StageResource<CommandBuffers>* command_buffers,
+		StageResource<Texture>* default_texture)
 		: shader{ shader }
 		, render_buffers{ render_buffers }
 		, gbuffer{ gbuffer }
@@ -26,8 +26,8 @@ public:
 
 private:
 	Shader* const shader;
-	RenderBuffers* const render_buffers;
-	Framebuffer* const gbuffer;
-	CommandBuffers* const command_buffers;
-	Texture* const default_texture;
+	StageResource<RenderBuffers>* const render_buffers;
+	StageResource<Framebuffer>* const gbuffer;
+	StageResource<CommandBuffers>* const command_buffers;
+	StageResource<Texture>* const default_texture;
 };

@@ -7,7 +7,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "debugging/logger.h"
 
 #include "glad.h"

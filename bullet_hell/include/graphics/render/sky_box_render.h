@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
 
 class Scene;

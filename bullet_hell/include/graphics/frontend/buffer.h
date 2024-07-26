@@ -8,6 +8,15 @@ struct Buffer
 {
 	enum class Type : uint8_t;
 
+	Buffer(Type type);
+	Buffer(const Buffer&) = default;
+	Buffer& operator=(const Buffer&) = default;
+	/// <summary>
+	/// Does nothing important, the expectation is the backing resources are 
+	/// cleaned up via the deletion queue.
+	/// </summary>
+	~Buffer() = default;
+
 	BufferHandle handle;
 	Type type;
 };

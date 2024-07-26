@@ -2,10 +2,9 @@
 
 #include "glm/vec2.hpp"
 
-#include "graphics/backend/base/render_stage.h"
 #include "graphics/backend/opengl/gui_mesh.h"
 #include "graphics/backend/opengl/quad_mesh.h"
-#include "graphics/frontend/framebuffer.h"
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
 template <bool standalone>
@@ -13,17 +12,16 @@ class GuiRender : RenderStage
 {
 public:
 	GuiRender(Shader* shader,
-		GuiMesh* gui_mesh,
-		const glm::vec2 scale)
+		StageResource<GuiMesh>* gui_mesh)
 		: shader{ shader }
-		, scene_texture{ scene_texture }
-		, scale{ std::move(scale) }
+		, gui_mesh{ gui_mesh }
+		, scale{ 0, 0 }
 	{}
 
 	void render(Scene& scene);
 
 private:
 	Shader* const shader;
-	Framebuffer* const scene_texture;
+	StageResource<GuiMesh>* gui_mesh;
 	glm::vec2 scale;
 };

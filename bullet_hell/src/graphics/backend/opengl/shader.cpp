@@ -7,7 +7,7 @@
 #include "graphics/frontend/shader.h"
 
 #include "debugging/logger.h"
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
 #include "utilities/opengl_util.h"

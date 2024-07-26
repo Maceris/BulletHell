@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "graphics/backend/base/uniforms_map.h"
+#include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
 
 struct CommandBuffers;
@@ -35,7 +35,6 @@ public:
 	/// <param name="command_buffers">The render command buffers.</param>
 	void render(const Scene& scene, const RenderBuffers& render_buffers,
 		const GBuffer& gBuffer, const CommandBuffers& command_buffers);
-
 	
 private:
 	std::unique_ptr<ShaderProgram> shader_program;

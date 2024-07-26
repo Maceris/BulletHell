@@ -3,8 +3,8 @@
 #include <map>
 #include <memory>
 
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
-#include "graphics/backend/base/render_stage.h"
 
 struct ShaderMap
 {

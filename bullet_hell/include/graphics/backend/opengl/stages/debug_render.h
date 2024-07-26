@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graphics/backend/base/debug_info.h"
-#include "graphics/backend/base/render_stage.h"
+#include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
 class DebugRender : RenderStage

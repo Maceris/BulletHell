@@ -1,17 +1,17 @@
 #pragma once
 
-#include "graphics/backend/base/render_stage.h"
 #include "graphics/backend/opengl/command_buffers.h"
+#include "graphics/frontend/render_stage.h"
 
 class ModelMatrixUpdate : RenderStage
 {
 public:
-	ModelMatrixUpdate(CommandBuffers* command_buffers)
+	ModelMatrixUpdate(StageResource<CommandBuffers>* command_buffers)
 		: command_buffers{ command_buffers }
 	{}
 
 	void render(Scene& scene);
 
 private:
-	CommandBuffers* const command_buffers;
+	StageResource<CommandBuffers>* const command_buffers;
 };
