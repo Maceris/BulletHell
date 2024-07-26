@@ -195,7 +195,7 @@ void GameLogic::process_input()
 {
 	window->mouse_input.handle_input();
 
-#if DEBUG
+#if _DEBUG
 	Camera& camera = current_scene->camera;
 	const float move_speed_per_second = 5.0f;
 	const float mouse_sensitivity = 0.02f;

@@ -27,7 +27,7 @@ struct Tile;
 /// </summary>
 class Scene
 {
-#if DEBUG
+#if _DEBUG
 	friend class DebugUI;
 #endif
 public:

@@ -55,7 +55,7 @@ namespace Timer
 	const std::vector<std::string>& time_stages_list();
 }
 
-#if DEBUG
+#if _DEBUG
 
 /// <summary>
 /// Marks down the instant we start timing a named section of code, like a
@@ -103,7 +103,7 @@ namespace Timer
 /// </summary>
 #define CLEAR_TIMER_HISTORY() Timer::clear_timer_history()
 
-#else // DEBUG
+#else // _DEBUG
 
 #define TIME_START(str) do { (void)sizeof(str); } while (0)
 #define TIME_END(str) do { (void)sizeof(str); } while (0)
@@ -112,4 +112,4 @@ namespace Timer
 #define TIME_STAGES_LIST Timer::time_stages_list()
 #define CLEAR_TIMER_HISTORY() do { (void)sizeof(str); } while (0)
 
-#endif // DEBUG else
+#endif // _DEBUG else

@@ -62,7 +62,7 @@ GLuint ShaderProgram::create_shader(const ShaderModuleData& shader_data)
 
 	OpenGLUtil::check_shader_compiled(shader_id);
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	GLint max_length = 0;
 	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -77,7 +77,7 @@ GLuint ShaderProgram::create_shader(const ShaderModuleData& shader_data)
 			+ ": " + log);
 	}
 	
-#endif //DEBUG
+#endif //_DEBUG
 	OpenGLUtil::check_gl_errors();
 
 	glAttachShader(program_id, shader_id);

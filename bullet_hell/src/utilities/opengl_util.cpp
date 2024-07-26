@@ -93,7 +93,7 @@ bool OpenGLUtil::check_shader_compiled(const GLuint& shader_ID) {
     glGetShaderiv(shader_ID, GL_COMPILE_STATUS, &is_compiled);
     if (is_compiled == GL_FALSE)
     {
-#ifdef DEBUG
+#ifdef _DEBUG
         GLint max_length = 0;
         glGetShaderiv(shader_ID, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -104,7 +104,7 @@ bool OpenGLUtil::check_shader_compiled(const GLuint& shader_ID) {
 
         LOG_ERROR("Shader " + std::to_string(shader_ID) 
             + " failed to compile:\n" + log.c_str());
-#endif //DEBUG
+#endif //_DEBUG
         glDeleteShader(shader_ID);// Don't leak the shader.
         return false;
     }
@@ -116,7 +116,7 @@ bool OpenGLUtil::check_shader_program_linked(const GLuint& program_ID) {
     glGetProgramiv(program_ID, GL_LINK_STATUS, &is_compiled);
     if (is_compiled == GL_FALSE)
     {
-#ifdef DEBUG
+#ifdef _DEBUG
         GLint max_length = 0;
         glGetProgramiv(program_ID, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -127,7 +127,7 @@ bool OpenGLUtil::check_shader_program_linked(const GLuint& program_ID) {
 
         LOG_ERROR("Program " + std::to_string(program_ID)
             + " failed to link. Error: '" + log.c_str() + "'");
-#endif //DEBUG
+#endif //_DEBUG
         glDeleteProgram(program_ID);// Don't leak the program.
         return false;
     }

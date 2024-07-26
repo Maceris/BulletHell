@@ -1,6 +1,6 @@
 #include "graphics/gui/debug_ui.h"
 
-#if DEBUG
+#if _DEBUG
 
 #include <format>
 

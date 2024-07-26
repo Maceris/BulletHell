@@ -1,10 +1,5 @@
 #pragma once
 
-//NOTE(ches) Make sure the debug flag gets carried over to the format we want
-#ifdef _DEBUG
-#define DEBUG 1
-#endif
-
 template <typename T>
 void safe_delete(T* &ptr)
 {
@@ -19,7 +14,7 @@ void safe_delete_array(T* &arr)
 	arr = nullptr;
 }
 
-#ifdef DEBUG
+#ifdef _DEBUG
 #define ALLOC new(_NORMAL_BLOCK,__FILE__, __LINE__)
 #else
 #define ALLOC new

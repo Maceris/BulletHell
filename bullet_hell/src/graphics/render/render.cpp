@@ -187,7 +187,7 @@ void Render::render(const Window& window, const Scene& scene)
 	TIME_END("Shadow Render");
 
 	TIME_START("Scene Render");
-#if DEBUG
+#if _DEBUG
 	if (Render::configuration.wireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -197,7 +197,7 @@ void Render::render(const Window& window, const Scene& scene)
 
 	scene_render.render(scene, render_buffers, gBuffer, command_buffers);
 
-#if DEBUG
+#if _DEBUG
 	if (Render::configuration.wireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -220,14 +220,14 @@ void Render::render(const Window& window, const Scene& scene)
 	filter_render.render(scene, screen_texture);
 	TIME_END("Filter Render");
 
-#if DEBUG
+#if _DEBUG
 	if (Render::configuration.debug_lines)
 	{
 		TIME_START("Debug Render");
 		debug_render.render(scene);
 		TIME_END("Debug Render");
 	}
-#endif // DEBUG
+#endif // _DEBUG
 
 	TIME_START("Gui Render");
 	gui_render.render(scene);
@@ -278,7 +278,7 @@ void Render::setup_all_data(Scene& scene)
 	}
 	TIME_END("Updating Scene - Updating Data - Animated");
 	
-#if DEBUG
+#if _DEBUG
 	TIME_START("Updating Scene - Updating Data - Debug Lines");
 	if (Render::configuration.debug_lines)
 	{

@@ -6,7 +6,7 @@ GameOptions::GameOptions()
 	: window_title{ "Bullet Hell" }
 	, key_bindings{}
 {
-#if DEBUG
+#if _DEBUG
 	key_bindings.insert(std::make_pair(GLFW_KEY_UP, Action::CAMERA_MOVE_FORWARD));
 	key_bindings.insert(std::make_pair(GLFW_KEY_DOWN, Action::CAMERA_MOVE_BACKWARD));
 	key_bindings.insert(std::make_pair(GLFW_KEY_LEFT, Action::CAMERA_MOVE_LEFT));

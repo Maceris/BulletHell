@@ -64,7 +64,7 @@ using Instant = std::chrono::steady_clock::time_point;
 /// </summary>
 class GameLogic
 {
-#if DEBUG
+#if _DEBUG
 	friend class DebugUI;
 #endif
 	friend class UI;

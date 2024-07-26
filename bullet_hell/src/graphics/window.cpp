@@ -191,9 +191,9 @@ void Window::initialize()
     LOG_INFO("Initialized window with opengl v" 
         + std::string((char*)glGetString(GL_VERSION)));
 #if 0
-#if DEBUG
+#if _DEBUG
     OpenGLUtil::log_extensions();
-#endif // DEBUG
+#endif // _DEBUG
 #endif
 
 #if 0

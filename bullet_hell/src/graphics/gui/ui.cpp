@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 
-#if DEBUG
+#if _DEBUG
 #include "graphics/gui/debug_ui.h"
 #endif
 #include "entities/pawn_manager.h"
@@ -66,7 +66,7 @@ void UI::draw_game_over()
 
 void UI::draw_in_game()
 {
-#if DEBUG
+#if _DEBUG
 	DebugUI::draw();
 #endif
 	UI::draw_player_health();
@@ -168,7 +168,7 @@ void UI::first_time_setup()
 
 void UI::handle_input()
 {
-#if DEBUG
+#if _DEBUG
 	DebugUI::handle_input();
 #endif
 }
@@ -192,7 +192,7 @@ void UI::draw_controls()
 	ImGui::Text("W,A,S,D - Move Player");
 	ImGui::Text("Space - Attack");
 
-#if DEBUG
+#if _DEBUG
 	ImGui::NewLine();
 	ImGui::Text("Debug Controls");
 	ImGui::Text("--------------");

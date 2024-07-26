@@ -23,7 +23,7 @@ class Window;
 struct Configuration
 {
 	bool wireframe;
-#if DEBUG
+#if _DEBUG
 	bool debug_lines;
 #endif
 };
