@@ -22,10 +22,8 @@ struct RenderInfo
     int entity_count;
 };
 
-AnimationRender::AnimationRender(Shader* shader,
-    StageResource<RenderBuffers>* render_buffers)
-    : shader{ shader }
-    , render_buffers{ render_buffers }
+AnimationRender::AnimationRender(StageResource<RenderBuffers>* render_buffers)
+    : render_buffers{ render_buffers }
 {
     std::vector<Shader::Module> shader_modules;
     shader_modules.emplace_back("shaders/animation.compute",

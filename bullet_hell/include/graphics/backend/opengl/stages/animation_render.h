@@ -7,8 +7,7 @@
 class AnimationRender : RenderStage
 {
 public:
-	AnimationRender(Shader* shader,
-		StageResource<RenderBuffers>* render_buffers);
+	AnimationRender(StageResource<RenderBuffers>* render_buffers);
 
 	void render(Scene& scene);
 
