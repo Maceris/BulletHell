@@ -10,22 +10,22 @@
 class ShadowRender : RenderStage
 {
 public:
-	ShadowRender(Shader* shader,
-		StageResource<RenderBuffers>* render_buffers,
+	ShadowRender(StageResource<RenderBuffers>* render_buffers,
 		StageResource<CascadeShadows>* cascade_shadows,
 		StageResource<Framebuffer>* depth_map,
 		StageResource<CommandBuffers>* command_buffers)
-		: shader{ shader }
-		, render_buffers{ render_buffers }
+		: render_buffers{ render_buffers }
 		, cascade_shadows{ cascade_shadows }
 		, depth_map{ depth_map }
 		, command_buffers{ command_buffers }
-	{}
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	StageResource<RenderBuffers>* const render_buffers;
 	StageResource<CascadeShadows>* const cascade_shadows;
 	StageResource<Framebuffer>* const depth_map;

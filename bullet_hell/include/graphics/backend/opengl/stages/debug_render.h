@@ -7,15 +7,16 @@
 class DebugRender : RenderStage
 {
 public:
-	DebugRender(Shader* shader, DebugInfo* debug_info)
-		: shader{ shader }
-		, debug_info{ debug_info }
-	{}
+	DebugRender(DebugInfo* debug_info)
+		: debug_info{ debug_info }
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	DebugInfo* const debug_info;
 
 	/// <summary>

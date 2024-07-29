@@ -8,18 +8,18 @@
 class FilterRender : RenderStage
 {
 public:
-	FilterRender(Shader* shader,
-		StageResource<Framebuffer>* scene_texture,
+	FilterRender(StageResource<Framebuffer>* scene_texture,
 		StageResource<QuadMesh>* quad_mesh)
-		: shader{ shader }
-		, scene_texture{ scene_texture }
+		: scene_texture{ scene_texture }
 		, quad_mesh{ quad_mesh }
-	{}
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	StageResource<Framebuffer>* const scene_texture;
 	StageResource<QuadMesh>* const quad_mesh;
 };

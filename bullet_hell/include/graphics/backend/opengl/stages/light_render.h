@@ -10,26 +10,26 @@
 class LightRender : RenderStage
 {
 public:
-	LightRender(Shader* shader,
-		StageResource<CascadeShadows>* cascade_shadows,
+	LightRender(StageResource<CascadeShadows>* cascade_shadows,
 		StageResource<Buffer>* point_lights,
 		StageResource<Buffer>* spot_lights,
 		StageResource<Framebuffer>* shadow_buffers,
 		StageResource<Framebuffer>* gbuffer,
 		StageResource<QuadMesh>* quad_mesh)
-		: shader{ shader }
-		, cascade_shadows{ cascade_shadows }
+		: cascade_shadows{ cascade_shadows }
 		, point_lights{ point_lights }
 		, spot_lights{ spot_lights }
 		, shadow_buffers{ shadow_buffers }
 		, gbuffer{ gbuffer }
 		, quad_mesh{ quad_mesh }
-	{}
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	StageResource<CascadeShadows>* const cascade_shadows;
 	StageResource<Buffer>* const point_lights;
 	StageResource<Buffer>* const spot_lights;

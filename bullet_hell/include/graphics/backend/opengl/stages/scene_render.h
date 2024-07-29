@@ -10,22 +10,22 @@ template <bool wireframe>
 class SceneRender : RenderStage
 {
 public:
-	SceneRender(Shader* shader,
-		StageResource<RenderBuffers>* render_buffers,
+	SceneRender(StageResource<RenderBuffers>* render_buffers,
 		StageResource<Framebuffer>* gbuffer,
 		StageResource<CommandBuffers>* command_buffers,
 		StageResource<Texture>* default_texture)
-		: shader{ shader }
-		, render_buffers{ render_buffers }
+		: render_buffers{ render_buffers }
 		, gbuffer{ gbuffer }
 		, command_buffers{ command_buffers }
 		, default_texture{ default_texture }
-	{}
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
-	Shader* const shader;
+	Shader* shader;
 	StageResource<RenderBuffers>* const render_buffers;
 	StageResource<Framebuffer>* const gbuffer;
 	StageResource<CommandBuffers>* const command_buffers;

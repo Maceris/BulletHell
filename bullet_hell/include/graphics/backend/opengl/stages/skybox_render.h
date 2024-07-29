@@ -9,16 +9,16 @@
 class SkyboxRender : RenderStage
 {
 public:
-	SkyboxRender(Shader* shader,
-		StageResource<SkyBox>* skybox)
-		: shader{ shader }
-		, skybox{ skybox }
-	{}
+	SkyboxRender(StageResource<SkyBox>* skybox)
+		: skybox{ skybox }
+	{
+		//TODO(ches) set up shader
+	}
 
 	void render(Scene& scene);
 
 private:
 	glm::mat4 view_matrix;
-	Shader* const shader;
+	Shader* shader;
 	StageResource<SkyBox>* const skybox;
 };
