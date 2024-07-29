@@ -7,21 +7,37 @@
 #include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
-template <bool standalone>
+class Window;
+
 class GuiRender : RenderStage
 {
 public:
-	GuiRender(Shader* shader,
-		StageResource<GuiMesh>* gui_mesh)
-		: shader{ shader }
-		, gui_mesh{ gui_mesh }
-		, scale{ 0, 0 }
-	{}
+	GuiRender(StageResource<GuiMesh>* gui_mesh);
 
 	void render(Scene& scene);
 
-private:
-	Shader* const shader;
+protected:
+
+	Shader* shader;
 	StageResource<GuiMesh>* gui_mesh;
 	glm::vec2 scale;
+
+
+	/// <summary>
+	/// Set up ImGui and create fonts, textures, meshes, etc.
+	/// </summary>
+	/// <param name="window">The window we are setting up for.</param>
+	void create_ui_resources(const Window& window);
+
+	/// <summary>
+	/// Set up the uniform map.
+	/// </summary>
+	void create_uniforms();
+	
+	void inline render_gui(Scene& scene);
+};
+
+class GuiRenderStandalone : GuiRender
+{
+	
 };

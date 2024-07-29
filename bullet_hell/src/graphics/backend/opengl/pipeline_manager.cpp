@@ -61,8 +61,8 @@ struct PipelineManager::Data
 	FramebufferTransition back_buffer_binding;
 	FramebufferTransition screen_texture_binding;
 	FilterRender filter_render;
-	GuiRender<false> gui_render;
-	GuiRender<true> gui_render_standalone;
+	GuiRender gui_render;
+	GuiRender gui_render_standalone;
 	LightRender light_render;
 	ModelMatrixUpdate model_matrix_update;
 	SceneRender<false> scene_render;
@@ -87,15 +87,13 @@ PipelineManager::Data::Data(ShaderMap& shaders)
 	, render_buffers{ ALLOC RenderBuffers() }
 	, skybox{ ALLOC SkyBox() }
 	, font{ nullptr }
-	, animation_render{ shaders.get_shader(RenderStage::Type::ANIMATION),
-		&render_buffers }
+	, animation_render{ &render_buffers }
 	, back_buffer_binding{ &back_buffer, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA }
 	, screen_texture_binding{ &screen_texture, GL_ONE, GL_ONE }
 	, filter_render{ shaders.get_shader(RenderStage::Type::FILTER),
 		&screen_texture, &quad_mesh }
-	, gui_render{ shaders.get_shader(RenderStage::Type::GUI), &gui_mesh }
-	, gui_render_standalone{ shaders.get_shader(RenderStage::Type::GUI),
-		&gui_mesh }
+	, gui_render{ &gui_mesh }
+	, gui_render_standalone{ &gui_mesh }
 	, light_render{ shaders.get_shader(RenderStage::Type::LIGHT),
 		&cascade_shadows, &point_lights, &spot_lights, &shadow_buffer,
 		&gbuffer, &quad_mesh }

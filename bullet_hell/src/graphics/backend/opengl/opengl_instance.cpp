@@ -3,6 +3,7 @@
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "graphics/frontend/instance.h"
+#include "memory/memory_util.h"
 
 #include <format>
 
