@@ -35,7 +35,7 @@ Texture* PipelineManager::default_texture = nullptr;
 
 struct PipelineManager::Data
 {
-	Data();
+	Data(Window& window);
 	Data(const Data&) = delete;
 	Data& operator=(const Data&) = delete;
 	~Data();
@@ -73,7 +73,7 @@ struct PipelineManager::Data
 	std::map<RenderConfig, Pipeline*> pipelines;
 };
 
-PipelineManager::Data::Data()
+PipelineManager::Data::Data(Window& window)
 	: point_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
 	, spot_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
 	, cascade_shadows{}
@@ -93,8 +93,8 @@ PipelineManager::Data::Data()
 	, back_buffer_binding{ &back_buffer, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA }
 	, screen_texture_binding{ &screen_texture, GL_ONE, GL_ONE }
 	, filter_render{ &screen_texture, &quad_mesh }
-	, gui_render{ &gui_mesh }
-	, gui_render_standalone{ &gui_mesh }
+	, gui_render{ window, &gui_mesh }
+	, gui_render_standalone{ window, &gui_mesh }
 	, light_render{ &cascade_shadows, &point_lights, &spot_lights,
 		&shadow_buffer, &gbuffer, &quad_mesh }
 	, model_matrix_update{ &command_buffers }

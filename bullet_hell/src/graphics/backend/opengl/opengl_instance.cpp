@@ -3,6 +3,7 @@
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "graphics/frontend/instance.h"
+#include "graphics/gui/ui.h"
 #include "memory/memory_util.h"
 
 #include <format>
@@ -13,11 +14,23 @@ Instance::Instance(Window& window)
 	: shader_map{}
 	, pipeline_manager{ window, shader_map }
 	, pipeline{ pipeline_manager.get_pipeline(RenderConfigPrefab::JUST_GUI) }
-{}
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplGlfw_InitForOpenGL(window.handle, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+}
 
 Instance::~Instance()
 {
-
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 }
 void Instance::initialize(const Window& window)
 {
