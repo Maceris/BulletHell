@@ -15,16 +15,7 @@ public:
 		StageResource<Buffer>* spot_lights,
 		StageResource<Framebuffer>* shadow_buffers,
 		StageResource<Framebuffer>* gbuffer,
-		StageResource<QuadMesh>* quad_mesh)
-		: cascade_shadows{ cascade_shadows }
-		, point_lights{ point_lights }
-		, spot_lights{ spot_lights }
-		, shadow_buffers{ shadow_buffers }
-		, gbuffer{ gbuffer }
-		, quad_mesh{ quad_mesh }
-	{
-		//TODO(ches) set up shader
-	}
+		StageResource<QuadMesh>* quad_mesh);
 
 	void render(Scene& scene);
 
@@ -36,4 +27,6 @@ private:
 	StageResource<Framebuffer>* const shadow_buffers;
 	StageResource<Framebuffer>* const gbuffer;
 	StageResource<QuadMesh>* const quad_mesh;
+
+	void create_uniforms();
 };

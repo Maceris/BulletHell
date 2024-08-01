@@ -14,6 +14,8 @@
 #include "glad.h"
 
 GuiRender::GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh)
+	: gui_mesh{ gui_mesh }
+	, scale {0, 0}
 {
 	std::vector<Shader::Module> shader_modules;
 	shader_modules.emplace_back("shaders/gui.frag",
