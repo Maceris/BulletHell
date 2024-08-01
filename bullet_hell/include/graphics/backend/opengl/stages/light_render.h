@@ -29,4 +29,7 @@ private:
 	StageResource<QuadMesh>* const quad_mesh;
 
 	void create_uniforms();
+	void update_lights(const Scene& scene);
+	void setup_point_light_buffer(const Scene& scene);
+	void setup_spot_light_buffer(const Scene& scene);
 };
