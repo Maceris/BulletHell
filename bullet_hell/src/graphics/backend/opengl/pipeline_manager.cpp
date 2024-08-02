@@ -62,11 +62,11 @@ struct PipelineManager::Data
 	FramebufferTransition screen_texture_binding;
 	FilterRender filter_render;
 	GuiRender gui_render;
-	GuiRender gui_render_standalone;
+	GuiRenderStandalone gui_render_standalone;
 	LightRender light_render;
 	ModelMatrixUpdate model_matrix_update;
-	SceneRender<false> scene_render;
-	SceneRender<true> scene_render_wireframe;
+	SceneRender scene_render;
+	SceneRenderWireframe scene_render_wireframe;
 	ShadowRender shadow_render;
 	SkyboxRender skybox_render;
 

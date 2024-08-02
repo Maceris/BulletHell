@@ -133,8 +133,6 @@ void LightRender::render(Scene& scene)
     shader->unbind();
 }
 
-
-
 void LightRender::update_lights(const Scene& scene)
 {
     const glm::mat4& view_matrix = scene.camera.view_matrix;

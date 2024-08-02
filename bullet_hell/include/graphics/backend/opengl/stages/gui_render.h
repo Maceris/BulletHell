@@ -30,5 +30,12 @@ protected:
 
 class GuiRenderStandalone : GuiRender
 {
-	
+public:
+	GuiRenderStandalone(const Window& window, StageResource<GuiMesh>* gui_mesh)
+		: GuiRender{ window, gui_mesh }
+	{}
+
+	GuiRenderStandalone(const GuiRenderStandalone&) = delete;
+	GuiRenderStandalone& operator=(const GuiRenderStandalone&) = delete;
+	~GuiRenderStandalone() = default;
 };
