@@ -4,6 +4,8 @@
 
 #include "graphics/backend/opengl/stages/scene_render.h"
 
+#include <algorithm>
+
 #include "debugging/logger.h"
 #include "main/game_logic.h"
 #include "graphics/render_constants.h"
@@ -18,6 +20,8 @@
 #include "graphics/graph/mesh_data.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
+
+#include "glad.h"
 
 SceneRender::SceneRender(StageResource<RenderBuffers>* render_buffers,
 	StageResource<Framebuffer>* gbuffer,
@@ -56,6 +60,137 @@ void SceneRender::create_uniforms()
         shader->uniforms.create_uniform(std::format("materials[{}].reflectance", i));
         shader->uniforms.create_uniform(std::format("materials[{}].normal_map_index", i));
         shader->uniforms.create_uniform(std::format("materials[{}].texture_index", i));
+    }
+}
+
+template<typename T>
+int constexpr find(const std::vector<T>& list, const T& value)
+{
+    auto result = std::find(list.cbegin(), list.cend(), value);
+
+    if (result != list.cend())
+    {
+        return result - list.cbegin();
+    }
+    return 0;
+}
+
+void SceneRender::render(const Scene& scene)
+{
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (*gbuffer)->handle);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, (*gbuffer)->width, (*gbuffer)->height);
+    glDisable(GL_BLEND);
+    shader->bind();
+
+    shader->uniforms.set_uniform("projection_matrix",
+        scene.projection.projection_matrix);
+    shader->uniforms.set_uniform("view_matrix",
+        scene.camera.view_matrix);
+
+    const bool for_animated_models = true;
+    const bool for_static_models = false;
+
+    setup_materials_uniform(scene, for_static_models);
+
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
+        (*command_buffers)->static_draw_element_buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, MODEL_MATRICES_BINDING,
+        (*command_buffers)->static_model_matrices_buffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
+        (*command_buffers)->static_command_buffer);
+    glBindVertexArray((*render_buffers)->static_vao);
+    glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr,
+        (*command_buffers)->static_draw_count, 0);
+
+    setup_materials_uniform(scene, for_animated_models);
+
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, DRAW_ELEMENT_BINDING,
+        (*command_buffers)->animated_draw_element_buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, MODEL_MATRICES_BINDING,
+        (*command_buffers)->animated_model_matrices_buffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
+        (*command_buffers)->animated_command_buffer);
+    glBindVertexArray((*render_buffers)->animated_vao);
+    glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr,
+        (*command_buffers)->animated_draw_count, 0);
+
+    glBindVertexArray(0);
+    glEnable(GL_BLEND);
+    shader->unbind();
+}
+
+void SceneRender::setup_materials_uniform(const Scene& scene,
+    const bool animated)
+{
+    const int first_index = 1;
+
+    std::vector<std::string> texture_bindings;
+
+    const auto& model_list = animated
+        ? scene.get_animated_model_list()
+        : scene.get_static_model_list();
+
+    for (const auto& model : model_list)
+    {
+        for (const auto& mesh_data : model->mesh_data_list)
+        {
+            const auto& material = mesh_data.material;
+
+            const std::string prefix = "materials["
+                + std::to_string(material->material_id) + "].";
+
+            shader->uniforms.set_uniform(prefix + "diffuse",
+                material->diffuse_color);
+            shader->uniforms.set_uniform(prefix + "specular",
+                material->specular_color);
+            shader->uniforms.set_uniform(prefix + "reflectance",
+                material->reflectance);
+
+            // Default texture is 0
+            int index = 0;
+            if (material->texture_name != "")
+            {
+                int position_in_vector =
+                    find(texture_bindings, material->texture_name);
+                if (position_in_vector == texture_bindings.size()) {
+                    texture_bindings.push_back(material->texture_name);
+                }
+                index = position_in_vector + first_index;
+            }
+            shader->uniforms.set_uniform(prefix + "texture_index", index);
+
+            index = 0;
+            if (material->normal_map_name != "")
+            {
+                int position_in_vector =
+                    find(texture_bindings, material->normal_map_name);
+                if (position_in_vector == texture_bindings.size()) {
+                    texture_bindings.push_back(material->normal_map_name);
+                }
+                index = position_in_vector + first_index;
+            }
+            shader->uniforms.set_uniform(prefix + "normal_map_index", index);
+        }
+    }
+
+    LOG_ASSERT(texture_bindings.size() + 1 <= MAX_TEXTURES
+        && "We have more textures than we can bind in one draw call");
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, PipelineManager::default_texture->handle);
+
+    int start_texture = 1;
+    for (int i = 0; i < texture_bindings.size(); ++i)
+    {
+        const std::string& texture_name = texture_bindings[i];
+        auto texture = TextureLoader::load(texture_name);
+
+        glActiveTexture(GL_TEXTURE0 + start_texture + i);
+        glBindTexture(GL_TEXTURE_2D, texture.handle);
+
+        shader->uniforms.set_uniform("texture_sampler["
+            + std::to_string(start_texture + i) + "]", start_texture + i);
     }
 }
 

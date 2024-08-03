@@ -17,15 +17,21 @@ public:
 	SceneRender& operator=(const SceneRender&) = delete;
 	~SceneRender() = default;
 
-	void render(Scene& scene);
+	void render(const Scene& scene);
 	void create_uniforms();
 
-private:
+protected:
 	Shader* shader;
 	StageResource<RenderBuffers>* const render_buffers;
 	StageResource<Framebuffer>* const gbuffer;
 	StageResource<CommandBuffers>* const command_buffers;
 	StageResource<Texture>* const default_texture;
+
+	/// <summary>
+	/// Set up the uniforms for models in the scene.
+	/// </summary>
+	/// <param name="scene">The model we are going to render.</param>
+	void setup_materials_uniform(const Scene& scene, const bool animated);
 };
 
 class SceneRenderWireframe : SceneRender
