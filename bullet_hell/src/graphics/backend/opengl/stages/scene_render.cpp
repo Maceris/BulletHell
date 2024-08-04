@@ -136,15 +136,15 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
         for (const auto& mesh_data : model->mesh_data_list)
         {
             const auto& material = mesh_data.material;
-
-            const std::string prefix = "materials["
-                + std::to_string(material->material_id) + "].";
-
-            shader->uniforms.set_uniform(prefix + "diffuse",
+  
+            shader->uniforms.set_uniform(
+                std::format("materials[{}].diffuse", material->material_id),
                 material->diffuse_color);
-            shader->uniforms.set_uniform(prefix + "specular",
+            shader->uniforms.set_uniform(
+                std::format("materials[{}].specular", material->material_id), 
                 material->specular_color);
-            shader->uniforms.set_uniform(prefix + "reflectance",
+            shader->uniforms.set_uniform(
+                std::format("materials[{}].reflectance", material->material_id), 
                 material->reflectance);
 
             // Default texture is 0
@@ -158,7 +158,9 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
                 }
                 index = position_in_vector + first_index;
             }
-            shader->uniforms.set_uniform(prefix + "texture_index", index);
+            shader->uniforms.set_uniform(
+                std::format("materials[{}].texture_index", material->material_id), 
+                index);
 
             index = 0;
             if (material->normal_map_name != "")
@@ -170,7 +172,9 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
                 }
                 index = position_in_vector + first_index;
             }
-            shader->uniforms.set_uniform(prefix + "normal_map_index", index);
+            shader->uniforms.set_uniform(
+                std::format("materials[{}].normal_map_index", material->material_id), 
+                index);
         }
     }
 
@@ -185,12 +189,14 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
     {
         const std::string& texture_name = texture_bindings[i];
         auto texture = TextureLoader::load(texture_name);
+        const int current_texture = start_texture + i;
 
-        glActiveTexture(GL_TEXTURE0 + start_texture + i);
+        glActiveTexture(GL_TEXTURE0 + current_texture);
         glBindTexture(GL_TEXTURE_2D, texture.handle);
-
-        shader->uniforms.set_uniform("texture_sampler["
-            + std::to_string(start_texture + i) + "]", start_texture + i);
+        
+        shader->uniforms.set_uniform(
+            std::format("texture_sampler[{}]", current_texture),
+            current_texture);
     }
 }
 
