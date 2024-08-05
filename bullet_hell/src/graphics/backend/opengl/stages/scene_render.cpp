@@ -19,7 +19,6 @@
 #include "graphics/graph/material.h"
 #include "graphics/graph/mesh_data.h"
 #include "graphics/scene/scene.h"
-#include "main/game_logic.h"
 
 #include "glad.h"
 
@@ -41,7 +40,6 @@ SceneRender::SceneRender(StageResource<RenderBuffers>* render_buffers,
 	shader = ALLOC Shader(shader_modules);
 	create_uniforms();
 }
-
 
 void SceneRender::create_uniforms()
 {

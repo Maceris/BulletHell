@@ -25,7 +25,6 @@ Texture* PipelineManager::default_texture = nullptr;
 #include "graphics/backend/opengl/stages/scene_render.h"
 #include "graphics/backend/opengl/stages/shadow_render.h"
 #include "graphics/backend/opengl/stages/skybox_render.h"
-#include "main/game_logic.h"
 
 #include "glad.h"
 

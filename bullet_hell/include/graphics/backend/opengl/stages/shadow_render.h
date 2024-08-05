@@ -13,14 +13,7 @@ public:
 	ShadowRender(StageResource<RenderBuffers>* render_buffers,
 		StageResource<CascadeShadows>* cascade_shadows,
 		StageResource<Framebuffer>* depth_map,
-		StageResource<CommandBuffers>* command_buffers)
-		: render_buffers{ render_buffers }
-		, cascade_shadows{ cascade_shadows }
-		, depth_map{ depth_map }
-		, command_buffers{ command_buffers }
-	{
-		//TODO(ches) set up shader
-	}
+		StageResource<CommandBuffers>* command_buffers);
 
 	void render(Scene& scene);
 

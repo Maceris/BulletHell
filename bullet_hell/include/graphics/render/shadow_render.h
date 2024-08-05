@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// The details for each slice like the view matrix and split distances.
 	/// </summary>
-	std::vector<CascadeShadowSlice> cascade_shadows;
+	CascadeShadows cascade_shadows;
 	/// <summary>
 	/// The depth buffers for the shadow mapping.
 	/// </summary>

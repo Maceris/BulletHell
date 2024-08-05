@@ -32,7 +32,7 @@ struct CascadeShadowSlice
 	/// <param name="shadows">The cascade shadows to update.</param>
 	/// <param name="scene">The scene we are updating shadows for.</param>
 	static void updateCascadeShadows(
-		std::vector<CascadeShadowSlice>& shadows,
+		std::array<CascadeShadowSlice, SHADOW_MAP_CASCADE_COUNT>& shadows,
 		const Scene& scene);
 
 	CascadeShadowSlice();

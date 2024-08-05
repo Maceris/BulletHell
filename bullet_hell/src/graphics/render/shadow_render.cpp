@@ -27,11 +27,6 @@ ShadowRender::ShadowRender()
         vert_handle->get_size(), GL_VERTEX_SHADER);
     shader_program = std::make_unique<ShaderProgram>(shader_modules);
 
-    for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
-    {
-        cascade_shadows.emplace_back();
-    }
-
     uniforms_map = std::make_unique<UniformsMap>(shader_program->program_id);
     uniforms_map->create_uniform("projection_view_matrix");
 }
