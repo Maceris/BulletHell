@@ -12,8 +12,12 @@ constexpr auto SKYBOX_VBO_COUNT = 3;
 
 class SkyBox
 {
-private:
-	friend class SkyBoxRender;
+public:
+	SkyBox();
+	SkyBox(const SkyBox&) = delete;
+	SkyBox& operator=(const SkyBox&) = delete;
+	~SkyBox();
+
 	/// <summary>
 	/// Load the mesh data into buffers for rendering.
 	/// </summary>
@@ -40,9 +44,4 @@ private:
 
 	std::shared_ptr<Entity> entity;
 	std::shared_ptr<Model> model;
-public:
-	SkyBox();
-	SkyBox(const SkyBox&) = delete;
-	SkyBox& operator=(const SkyBox&) = delete;
-	~SkyBox();
 };

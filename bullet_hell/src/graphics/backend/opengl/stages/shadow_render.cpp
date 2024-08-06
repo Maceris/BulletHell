@@ -89,6 +89,4 @@ void ShadowRender::render(Scene& scene)
     shader->unbind();
 }
 
-
-
 #endif

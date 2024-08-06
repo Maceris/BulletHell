@@ -9,11 +9,7 @@
 class SkyboxRender : RenderStage
 {
 public:
-	SkyboxRender(StageResource<SkyBox>* skybox)
-		: skybox{ skybox }
-	{
-		//TODO(ches) set up shader
-	}
+	SkyboxRender(StageResource<SkyBox>* skybox);
 
 	void render(Scene& scene);
 
