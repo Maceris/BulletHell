@@ -73,11 +73,8 @@ int constexpr find(const std::vector<T>& list, const T& value)
     return 0;
 }
 
-void SceneRender::render(const Scene& scene)
+void SceneRender::common_scene_render(const Scene& scene)
 {
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (*gbuffer)->handle);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, (*gbuffer)->width, (*gbuffer)->height);
     glDisable(GL_BLEND);
     shader->bind();
 
@@ -116,6 +113,11 @@ void SceneRender::render(const Scene& scene)
     glBindVertexArray(0);
     glEnable(GL_BLEND);
     shader->unbind();
+}
+
+void SceneRender::render(const Scene& scene)
+{
+    common_scene_render(scene);
 }
 
 void SceneRender::setup_materials_uniform(const Scene& scene,
@@ -196,6 +198,17 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
             std::format("texture_sampler[{}]", current_texture),
             current_texture);
     }
+}
+
+void SceneRenderWireframe::render(const Scene& scene)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glDisable(GL_TEXTURE_2D);
+
+    common_scene_render(scene);
+
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 #endif

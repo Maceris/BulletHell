@@ -32,6 +32,8 @@ protected:
 	/// </summary>
 	/// <param name="scene">The model we are going to render.</param>
 	void setup_materials_uniform(const Scene& scene, const bool animated);
+
+	void inline common_scene_render(const Scene& scene);
 };
 
 class SceneRenderWireframe : SceneRender
@@ -44,6 +46,8 @@ public:
 		: SceneRender{ render_buffers, gbuffer, command_buffers, 
 			default_texture }
 	{}
+
+	void render(const Scene& scene);
 
 	SceneRenderWireframe(const SceneRenderWireframe&) = delete;
 	SceneRenderWireframe& operator=(const SceneRenderWireframe&) = delete;
