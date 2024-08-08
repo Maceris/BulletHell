@@ -30,6 +30,11 @@ GuiRender::GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh)
 
 void GuiRender::render(const Scene& scene)
 {
+	render_gui(scene);
+}
+
+void GuiRender::render_gui(const Scene& scene)
+{
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -62,9 +67,11 @@ void GuiRender::render(const Scene& scene)
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GuiRender::render_gui(const Scene& scene)
+void GuiRenderStandalone::render(const Scene& scene)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	render_gui(scene);
 }
 
 #endif

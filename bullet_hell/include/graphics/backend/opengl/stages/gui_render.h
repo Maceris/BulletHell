@@ -38,4 +38,6 @@ public:
 	GuiRenderStandalone(const GuiRenderStandalone&) = delete;
 	GuiRenderStandalone& operator=(const GuiRenderStandalone&) = delete;
 	~GuiRenderStandalone() = default;
+
+	void render(const Scene& scene);
 };
