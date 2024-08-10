@@ -159,6 +159,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/format_mapper.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/gui_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/opengl_instance.cpp
+  ${SOURCE_PATH}/graphics/backend/opengl/pipeline.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/pipeline_manager.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/render_buffers.cpp

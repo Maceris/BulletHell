@@ -25,6 +25,7 @@ Texture* PipelineManager::default_texture = nullptr;
 #include "graphics/backend/opengl/stages/scene_render.h"
 #include "graphics/backend/opengl/stages/shadow_render.h"
 #include "graphics/backend/opengl/stages/skybox_render.h"
+#include "memory/memory_util.h"
 
 #include "glad.h"
 
@@ -139,8 +140,17 @@ void PipelineManager::setup_data(const Scene& scene)
 
 Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 {
+	if (data->pipelines.contains(config))
+	{
+		return data->pipelines.find(config)->second;
+	}
+	Pipeline* result = ALLOC Pipeline();
 
-	return nullptr;
+	//TODO(ches) populate pipeline
+
+	data->pipelines.insert(std::pair(config, result));
+
+	return result;
 }
 
 #endif
