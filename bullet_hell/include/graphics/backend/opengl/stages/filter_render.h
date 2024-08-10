@@ -5,7 +5,7 @@
 #include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
-class FilterRender : RenderStage
+class FilterRender : public RenderStage
 {
 public:
 	FilterRender(StageResource<Framebuffer>* scene_texture,

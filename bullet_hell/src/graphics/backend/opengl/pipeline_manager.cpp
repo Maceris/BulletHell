@@ -125,7 +125,16 @@ PipelineManager::~PipelineManager()
 
 Pipeline* PipelineManager::get_pipeline(RenderConfig config)
 {
-	return nullptr;
+	if (data->pipelines.contains(config))
+	{
+		return data->pipelines.find(config)->second;
+	}
+
+	Pipeline* result = build_pipeline(config);
+
+	data->pipelines.insert(std::pair(config, result));
+
+	return result;
 }
 
 void PipelineManager::resize(int width, int height)
@@ -140,15 +149,80 @@ void PipelineManager::setup_data(const Scene& scene)
 
 Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 {
-	if (data->pipelines.contains(config))
-	{
-		return data->pipelines.find(config)->second;
-	}
 	Pipeline* result = ALLOC Pipeline();
 
-	//TODO(ches) populate pipeline
+	bool rendering_scene = false;
 
-	data->pipelines.insert(std::pair(config, result));
+	if (config & RenderConfigValues::ANIMATION_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->animation_render));
+		rendering_scene = true;
+	}
+
+	if (config & RenderConfigValues::SHADOW_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->shadow_render));
+		rendering_scene = true;
+	}
+
+	if (config & RenderConfigValues::SCENE_PASS_MASK)
+	{
+		if (config & RenderConfigValues::SCENE_WIREFRAME_MASK)
+		{
+			result->render_stages.push_back(&(data->scene_render));
+		}
+		else
+		{
+			result->render_stages.push_back(&(data->scene_render_wireframe));
+		}
+		rendering_scene = true;
+	}
+
+	if (config & RenderConfigValues::FILTER_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->screen_texture_binding));
+	}
+	else
+	{
+		result->render_stages.push_back(&(data->back_buffer_binding));
+	}
+
+	if (config & RenderConfigValues::LIGHTING_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->light_render));
+		rendering_scene = true;
+	}
+
+	if (config & RenderConfigValues::SKYBOX_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->skybox_render));
+		rendering_scene = true;
+	}
+
+	if (config & RenderConfigValues::FILTER_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->back_buffer_binding));
+		result->render_stages.push_back(&(data->filter_render));
+		rendering_scene = true;
+	}
+
+	if (rendering_scene)
+	{
+		result->render_stages.push_back(&(data->model_matrix_update));
+	}
+
+	if (config & RenderConfigValues::GUI_PASS_MASK)
+	{
+		if (rendering_scene)
+		{
+			result->render_stages.push_back(&(data->gui_render));
+		}
+		else
+		{
+			result->render_stages.push_back(&(data->gui_render_standalone));
+		}
+		rendering_scene = true;
+	}
 
 	return result;
 }

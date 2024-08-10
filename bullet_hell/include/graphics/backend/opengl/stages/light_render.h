@@ -7,7 +7,7 @@
 #include "graphics/frontend/shader.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 
-class LightRender : RenderStage
+class LightRender : public RenderStage
 {
 public:
 	LightRender(StageResource<CascadeShadows>* cascade_shadows,

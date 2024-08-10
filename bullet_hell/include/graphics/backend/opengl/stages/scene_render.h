@@ -6,7 +6,7 @@
 #include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
-class SceneRender : RenderStage
+class SceneRender : public RenderStage
 {
 public:
 	SceneRender(StageResource<RenderBuffers>* render_buffers,
@@ -36,7 +36,7 @@ protected:
 	void inline common_scene_render(const Scene& scene);
 };
 
-class SceneRenderWireframe : SceneRender
+class SceneRenderWireframe : public SceneRender
 {
 public:
 	SceneRenderWireframe(StageResource<RenderBuffers>* render_buffers,

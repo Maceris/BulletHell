@@ -3,7 +3,7 @@
 #include "graphics/backend/opengl/command_buffers.h"
 #include "graphics/frontend/render_stage.h"
 
-class ModelMatrixUpdate : RenderStage
+class ModelMatrixUpdate : public RenderStage
 {
 public:
 	ModelMatrixUpdate(StageResource<CommandBuffers>* command_buffers)

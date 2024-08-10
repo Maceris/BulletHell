@@ -4,7 +4,7 @@
 #include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
-class DebugRender : RenderStage
+class DebugRender : public RenderStage
 {
 public:
 	DebugRender(DebugInfo* debug_info)

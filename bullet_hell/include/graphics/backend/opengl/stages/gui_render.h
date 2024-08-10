@@ -9,7 +9,7 @@
 
 class Window;
 
-class GuiRender : RenderStage
+class GuiRender : public RenderStage
 {
 public:
 	GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh);
@@ -28,7 +28,7 @@ protected:
 	void inline render_gui(const Scene& scene);
 };
 
-class GuiRenderStandalone : GuiRender
+class GuiRenderStandalone : public GuiRender
 {
 public:
 	GuiRenderStandalone(const Window& window, StageResource<GuiMesh>* gui_mesh)

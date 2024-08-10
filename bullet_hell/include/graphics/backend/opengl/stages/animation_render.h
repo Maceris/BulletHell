@@ -4,7 +4,7 @@
 #include "graphics/frontend/render_stage.h"
 #include "graphics/frontend/shader.h"
 
-class AnimationRender : RenderStage
+class AnimationRender : public RenderStage
 {
 public:
 	AnimationRender(StageResource<RenderBuffers>* render_buffers);

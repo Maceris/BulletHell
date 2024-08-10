@@ -7,7 +7,7 @@
 #include "graphics/frontend/shader.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 
-class ShadowRender : RenderStage
+class ShadowRender : public RenderStage
 {
 public:
 	ShadowRender(StageResource<RenderBuffers>* render_buffers,

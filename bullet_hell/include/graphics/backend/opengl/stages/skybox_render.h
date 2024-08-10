@@ -6,7 +6,7 @@
 #include "graphics/frontend/shader.h"
 #include "graphics/scene/sky_box.h"
 
-class SkyboxRender : RenderStage
+class SkyboxRender : public RenderStage
 {
 public:
 	SkyboxRender(StageResource<SkyBox>* skybox);

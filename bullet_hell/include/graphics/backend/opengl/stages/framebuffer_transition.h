@@ -3,7 +3,7 @@
 #include "graphics/frontend/framebuffer.h"
 #include "graphics/frontend/render_stage.h"
 
-class FramebufferTransition : RenderStage
+class FramebufferTransition : public RenderStage
 {
 public:
 	FramebufferTransition(StageResource<Framebuffer>* framebuffer,
