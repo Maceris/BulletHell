@@ -159,6 +159,22 @@ glm::mat4 default_camera_view()
     return view_matrix;
 }
 
+DebugRender::DebugRender(DebugInfo* debug_info)
+    : debug_info{ debug_info }
+{
+    std::vector<Shader::Module> shader_modules;
+    shader_modules.emplace_back("shaders/debug.frag",
+        Shader::Type::FRAGMENT);
+    shader_modules.emplace_back("shaders/debug.vert",
+        Shader::Type::VERTEX);
+
+    shader = ALLOC Shader(shader_modules);
+
+    shader->uniforms.create_uniform("projection_matrix");
+    shader->uniforms.create_uniform("view_matrix");
+    shader->uniforms.create_uniform("line_color");
+}
+
 void DebugRender::render(Scene& scene)
 {
     shader->bind();

@@ -7,11 +7,7 @@
 class DebugRender : public RenderStage
 {
 public:
-	DebugRender(DebugInfo* debug_info)
-		: debug_info{ debug_info }
-	{
-		//TODO(ches) set up shader
-	}
+	DebugRender(DebugInfo* debug_info);
 
 	void render(Scene& scene);
 
