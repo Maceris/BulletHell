@@ -114,9 +114,66 @@ PipelineManager::Data::~Data()
 
 }
 
+void delete_render_buffers(PipelineManager::Data& data)
+{
+	
+}
+
+/// <summary>
+/// Generates new render buffers. They should be deleted first if already
+/// present.
+/// </summary>
+/// <param name="data">The pipeline manager data to update.</param>
+void generate_render_buffers(PipelineManager::Data& data)
+{
+	GLuint screen_texture = 0;
+	GLuint screen_RBO_depth = 0;
+	GLuint screen_FBO = 0;
+
+	glActiveTexture(GL_TEXTURE0);
+	glGenTextures(1, &screen_texture);
+	glBindTexture(GL_TEXTURE_2D, screen_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, data.cached_width,
+		data.cached_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenRenderbuffers(1, &screen_RBO_depth);
+	glBindRenderbuffer(GL_RENDERBUFFER, screen_RBO_depth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16,
+		data.cached_width, data.cached_height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glGenFramebuffers(1, &screen_FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, screen_FBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+		screen_texture, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_RENDERBUFFER, screen_RBO_depth);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	std::vector<TextureHandle> textures = { screen_texture, screen_RBO_depth };
+
+	data.screen_texture = ALLOC Framebuffer(screen_FBO, data.cached_width,
+		data.cached_height, textures);
+}
+
 PipelineManager::PipelineManager(Window& window, ShaderMap& shaders)
 	: data{}
-{}
+{
+	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	//NOTE(ches) Support for transparencies
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	generate_render_buffers(*data);
+}
 
 PipelineManager::~PipelineManager()
 {

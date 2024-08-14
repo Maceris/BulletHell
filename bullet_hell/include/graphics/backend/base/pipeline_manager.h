@@ -11,6 +11,7 @@
 class PipelineManager
 {
 public:
+	struct Data;
 	static Texture* default_texture;
 
 	PipelineManager(Window& window, ShaderMap& shaders);
@@ -23,7 +24,6 @@ public:
 	void setup_data(const Scene& scene);
 
 private:
-	struct Data;
 	const std::unique_ptr<Data> data;
 
 	Pipeline* build_pipeline(RenderConfig config);
