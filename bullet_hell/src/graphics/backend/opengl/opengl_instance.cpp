@@ -11,8 +11,9 @@
 //TODO(ches) BH-50 - fill this out
 
 Instance::Instance(Window& window)
-	: shader_map{}
-	, pipeline_manager{ window, shader_map }
+	: deletion_queue{}
+	, shader_map{}
+	, pipeline_manager{ window, &deletion_queue, shader_map }
 	, pipeline{ pipeline_manager.get_pipeline(RenderConfigPrefab::JUST_GUI) }
 {
 	IMGUI_CHECKVERSION();

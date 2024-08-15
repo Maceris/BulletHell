@@ -1,6 +1,7 @@
 #pragma once
 
 #include "graphics/backend/base/pipeline_manager.h"
+#include "graphics/frontend/deletion_queue.h"
 #include "graphics/frontend/pipeline.h"
 #include "graphics/frontend/render_config.h"
 #include "graphics/frontend/shader_map.h"
@@ -12,6 +13,8 @@ class Window;
 
 class Instance
 {
+	friend class PipelineManager;
+
 public:
 	Instance(Window& window);
 	Instance(const Instance&) = delete;
@@ -31,6 +34,7 @@ public:
 
 private:
 	//NOTE(ches) in initialization order
+	DeletionQueue deletion_queue;
 	ShaderMap shader_map;
 	PipelineManager pipeline_manager;
 	Pipeline* pipeline;

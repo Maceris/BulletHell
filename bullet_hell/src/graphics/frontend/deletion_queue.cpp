@@ -4,15 +4,8 @@
 #include "graphics/frontend/framebuffer.h"
 #include "graphics/frontend/texture.h"
 
-DeletionQueue::DeletionQueue()
-{
-
-}
-
-DeletionQueue::~DeletionQueue()
-{
-	//TODO(ches) handle this
-}
+DeletionQueue::DeletionQueue() = default;
+DeletionQueue::~DeletionQueue() = default;
 
 void DeletionQueue::add(Buffer* buffer)
 {

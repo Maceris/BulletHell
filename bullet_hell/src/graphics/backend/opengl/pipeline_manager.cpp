@@ -161,8 +161,10 @@ void generate_render_buffers(PipelineManager::Data& data)
 		data.cached_height, textures);
 }
 
-PipelineManager::PipelineManager(Window& window, ShaderMap& shaders)
-	: data{}
+PipelineManager::PipelineManager(Window& window, 
+	DeletionQueue const* deletion_queue, ShaderMap& shaders)
+	: data{ std::make_unique<Data>(window) }
+	, deletion_queue{ deletion_queue }
 {
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
