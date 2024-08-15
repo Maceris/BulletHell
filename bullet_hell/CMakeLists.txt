@@ -176,6 +176,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/stages/scene_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/shadow_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/skybox_render.cpp
+  ${SOURCE_PATH}/graphics/frontend/deletion_queue.cpp
   ${SOURCE_PATH}/graphics/frontend/shader_map.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
   ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
