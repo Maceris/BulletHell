@@ -15,7 +15,7 @@ public:
 	struct Data;
 	static Texture* default_texture;
 
-	PipelineManager(Window& window, DeletionQueue const* deletion_queue,
+	PipelineManager(Window& window, DeletionQueue* const deletion_queue,
 		ShaderMap& shaders);
 	PipelineManager(const PipelineManager&) = delete;
 	PipelineManager& operator=(const PipelineManager&) = delete;
@@ -27,7 +27,7 @@ public:
 
 private:
 	const std::unique_ptr<Data> data;
-	DeletionQueue const* deletion_queue;
+	DeletionQueue* const deletion_queue;
 
 	Pipeline* build_pipeline(RenderConfig config);
 };

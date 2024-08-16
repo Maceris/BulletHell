@@ -114,9 +114,14 @@ PipelineManager::Data::~Data()
 
 }
 
-void delete_render_buffers(PipelineManager::Data& data)
+void delete_render_buffers(PipelineManager::Data& data, 
+	DeletionQueue* const deletion_queue)
 {
-	
+	if (data.screen_texture != nullptr)
+	{
+		deletion_queue->add(data.screen_texture);
+		data.screen_texture = nullptr;
+	}
 }
 
 /// <summary>
@@ -162,7 +167,7 @@ void generate_render_buffers(PipelineManager::Data& data)
 }
 
 PipelineManager::PipelineManager(Window& window, 
-	DeletionQueue const* deletion_queue, ShaderMap& shaders)
+	DeletionQueue* const deletion_queue, ShaderMap& shaders)
 	: data{ std::make_unique<Data>(window) }
 	, deletion_queue{ deletion_queue }
 {
