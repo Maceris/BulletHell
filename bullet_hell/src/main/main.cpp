@@ -6,6 +6,8 @@
 #include "debugging/timer.h"
 #include "main/game_logic.h"
 
+GameLogic* g_game_logic = nullptr;
+
 /// <summary>
 /// The entry point to the program, and main loop.
 /// </summary>
@@ -18,17 +20,18 @@ int main()
 
     TIME_START("Game Init");
 
-    GameLogic game_logic;
-    if (!game_logic.initialize())
+    g_game_logic = ALLOC GameLogic();
+
+    if (!g_game_logic->initialize())
     {
         LOG_FATAL("Failed to initialize the game logic.");
         exit(EXIT_FAILURE);
     }
     TIME_END("Game Init");
 
-    game_logic.run_game();
+    g_game_logic->run_game();
 
-    game_logic.on_close();
+    g_game_logic->on_close();
 
     Logger::destroy();
 

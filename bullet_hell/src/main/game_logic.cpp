@@ -30,8 +30,6 @@
 #include "glad.h"
 #include "GLFW/glfw3.h"
 
-GameLogic* g_game_logic = nullptr;
-
 /// <summary>
 /// The delay in seconds between recentering the map.
 /// </summary>
@@ -57,7 +55,6 @@ GameLogic::GameLogic()
 	, window{ nullptr }
 	, action_state{}
 {
-	g_game_logic = this;
 }
 
 void GameLogic::end_game()
