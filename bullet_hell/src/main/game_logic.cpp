@@ -363,6 +363,8 @@ void GameLogic::run_game()
 		case GameState::PAUSED:
 #if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
 			render->render_just_ui(*window, *current_scene);
+#elif BACKEND_CURRENT == BACKEND_OPENGL
+			render_instance->render(*current_scene);
 #endif
 			window->render();
 			break;
