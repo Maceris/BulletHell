@@ -8,6 +8,7 @@ class AnimationRender : public RenderStage
 {
 public:
 	AnimationRender(StageResource<RenderBuffers>* render_buffers);
+	virtual ~AnimationRender() = default;
 
 	void render(Scene& scene);
 

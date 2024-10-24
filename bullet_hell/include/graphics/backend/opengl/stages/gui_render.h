@@ -15,9 +15,9 @@ public:
 	GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh);
 	GuiRender(const GuiRender&) = delete;
 	GuiRender& operator=(const GuiRender&) = delete;
-	~GuiRender() = default;
+	virtual ~GuiRender() = default;
 
-	void render(const Scene& scene);
+	virtual void render(Scene& scene);
 
 protected:
 
@@ -37,7 +37,7 @@ public:
 
 	GuiRenderStandalone(const GuiRenderStandalone&) = delete;
 	GuiRenderStandalone& operator=(const GuiRenderStandalone&) = delete;
-	~GuiRenderStandalone() = default;
+	virtual ~GuiRenderStandalone() = default;
 
-	void render(const Scene& scene);
+	virtual void render(Scene& scene);
 };

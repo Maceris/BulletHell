@@ -16,8 +16,9 @@ public:
 		StageResource<Framebuffer>* shadow_buffers,
 		StageResource<Framebuffer>* gbuffer,
 		StageResource<QuadMesh>* quad_mesh);
+	virtual ~LightRender() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	Shader* shader;

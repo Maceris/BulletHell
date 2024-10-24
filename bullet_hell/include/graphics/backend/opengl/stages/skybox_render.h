@@ -10,8 +10,9 @@ class SkyboxRender : public RenderStage
 {
 public:
 	SkyboxRender(StageResource<SkyBox>* skybox);
+	virtual ~SkyboxRender() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	glm::mat4 view_matrix;

@@ -12,8 +12,9 @@ class FilterRender : public RenderStage
 public:
 	FilterRender(StageResource<Framebuffer>* scene_texture,
 		StageResource<QuadMesh>* quad_mesh);
+	virtual ~FilterRender() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	Shader* shader;

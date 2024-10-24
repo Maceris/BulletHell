@@ -10,8 +10,10 @@ class RenderStage
 {
 public:
 	enum class Type : uint8_t;
+    
+    virtual ~RenderStage() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene) = 0;
 };
 
 enum class RenderStage::Type : uint8_t

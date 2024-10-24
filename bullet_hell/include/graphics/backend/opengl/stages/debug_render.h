@@ -8,6 +8,7 @@ class DebugRender : public RenderStage
 {
 public:
 	DebugRender(DebugInfo* debug_info);
+	virtual ~DebugRender() = default;
 
 	void render(Scene& scene);
 

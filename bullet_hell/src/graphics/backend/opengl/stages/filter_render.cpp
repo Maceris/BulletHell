@@ -54,10 +54,11 @@ void FilterRender::set_filter(const std::string_view name)
 	}
 
 	std::vector<Shader::Module> shader_modules;
-	shader_modules.emplace_back(std::format("{}.frag", name),
-		Shader::Type::FRAGMENT);
-	shader_modules.emplace_back(std::format("{}.vert", name),
-		Shader::Type::VERTEX);
+	std::string fragment = std::format("{}.frag", name);
+	std::string vertex = std::format("{}.vert", name);
+
+	shader_modules.emplace_back(fragment, Shader::Type::FRAGMENT);
+	shader_modules.emplace_back(vertex, Shader::Type::VERTEX);
 
 	shader = ALLOC Shader(shader_modules);
 

@@ -129,7 +129,7 @@ int constexpr find(const std::vector<T>& list, const T& value)
     return i;
 }
 
-void SceneRender::setup_materials_uniform(const Scene& scene, 
+void SceneRender::setup_materials_uniform(Scene& scene, 
     const bool animated)
 {
     const int first_index = 1;

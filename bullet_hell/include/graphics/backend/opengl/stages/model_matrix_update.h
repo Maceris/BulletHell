@@ -9,8 +9,9 @@ public:
 	ModelMatrixUpdate(StageResource<CommandBuffers>* command_buffers)
 		: command_buffers{ command_buffers }
 	{}
+	virtual ~ModelMatrixUpdate() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	StageResource<CommandBuffers>* const command_buffers;

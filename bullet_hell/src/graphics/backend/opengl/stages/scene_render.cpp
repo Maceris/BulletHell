@@ -73,7 +73,7 @@ int constexpr find(const std::vector<T>& list, const T& value)
     return 0;
 }
 
-void SceneRender::common_scene_render(const Scene& scene)
+void SceneRender::common_scene_render(Scene& scene)
 {
     glDisable(GL_BLEND);
     shader->bind();
@@ -115,12 +115,12 @@ void SceneRender::common_scene_render(const Scene& scene)
     shader->unbind();
 }
 
-void SceneRender::render(const Scene& scene)
+void SceneRender::render(Scene& scene)
 {
     common_scene_render(scene);
 }
 
-void SceneRender::setup_materials_uniform(const Scene& scene,
+void SceneRender::setup_materials_uniform(Scene& scene,
     const bool animated)
 {
     const int first_index = 1;
@@ -200,7 +200,7 @@ void SceneRender::setup_materials_uniform(const Scene& scene,
     }
 }
 
-void SceneRenderWireframe::render(const Scene& scene)
+void SceneRenderWireframe::render(Scene& scene)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDisable(GL_TEXTURE_2D);

@@ -15,9 +15,9 @@ public:
 		StageResource<Texture>* default_texture);
 	SceneRender(const SceneRender&) = delete;
 	SceneRender& operator=(const SceneRender&) = delete;
-	~SceneRender() = default;
+	virtual ~SceneRender() = default;
 
-	void render(const Scene& scene);
+	virtual void render(Scene& scene);
 	void create_uniforms();
 
 protected:
@@ -31,9 +31,9 @@ protected:
 	/// Set up the uniforms for models in the scene.
 	/// </summary>
 	/// <param name="scene">The model we are going to render.</param>
-	void setup_materials_uniform(const Scene& scene, const bool animated);
+	void setup_materials_uniform(Scene& scene, const bool animated);
 
-	void inline common_scene_render(const Scene& scene);
+	void inline common_scene_render(Scene& scene);
 };
 
 class SceneRenderWireframe : public SceneRender
@@ -47,9 +47,9 @@ public:
 			default_texture }
 	{}
 
-	void render(const Scene& scene);
+	virtual void render(Scene& scene);
 
 	SceneRenderWireframe(const SceneRenderWireframe&) = delete;
 	SceneRenderWireframe& operator=(const SceneRenderWireframe&) = delete;
-	~SceneRenderWireframe() = default;
+	virtual ~SceneRenderWireframe() = default;
 };

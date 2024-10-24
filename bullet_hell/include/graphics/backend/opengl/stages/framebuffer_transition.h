@@ -12,8 +12,9 @@ public:
 		, blend_s_factor{ blend_s_factor }
 		, blend_d_factor{ blend_d_factor }
 	{}
+	virtual ~FramebufferTransition() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	StageResource<Framebuffer>* const framebuffer;

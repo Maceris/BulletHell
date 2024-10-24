@@ -21,8 +21,6 @@ ShadowRender::ShadowRender(StageResource<RenderBuffers>* render_buffers,
 	, command_buffers{ command_buffers }
 {
 	std::vector<Shader::Module> shader_modules;
-	shader_modules.emplace_back("shaders/shadow.frag",
-		Shader::Type::FRAGMENT);
 	shader_modules.emplace_back("shaders/shadow.vert",
 		Shader::Type::VERTEX);
 

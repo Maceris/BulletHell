@@ -14,8 +14,9 @@ public:
 		StageResource<CascadeShadows>* cascade_shadows,
 		StageResource<Framebuffer>* depth_map,
 		StageResource<CommandBuffers>* command_buffers);
+	virtual ~ShadowRender() = default;
 
-	void render(Scene& scene);
+	virtual void render(Scene& scene);
 
 private:
 	Shader* shader;

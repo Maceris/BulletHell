@@ -28,7 +28,7 @@ GuiRender::GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh)
 	shader->uniforms.create_uniform("scale");
 }
 
-void GuiRender::render(const Scene& scene)
+void GuiRender::render(Scene& scene)
 {
 	render_gui(scene);
 }
@@ -67,7 +67,7 @@ void GuiRender::render_gui(const Scene& scene)
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GuiRenderStandalone::render(const Scene& scene)
+void GuiRenderStandalone::render(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
