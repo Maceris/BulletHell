@@ -25,7 +25,7 @@ void Pipeline::initialize(const Window& window, ShaderMap& shaders)
 
 }
 
-void Pipeline::render(const Window& window, ShaderMap& shaders)
+void Pipeline::render(const Scene& window, ShaderMap& shaders)
 {
 
 }

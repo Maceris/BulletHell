@@ -24,7 +24,6 @@ public:
 	~Instance();
 
 	void initialize(const Window& window);
-	void cleanup();
 	void process_resources();
 	void render(const Scene& scene);
 	void resize(int width, int height);

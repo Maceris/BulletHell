@@ -22,7 +22,7 @@ public:
 	~Pipeline();
 
 	void initialize(const Window& window, ShaderMap& shaders);
-	void render(const Window& window, ShaderMap& shaders);
+	void render(const Scene& window, ShaderMap& shaders);
 
 	std::vector<RenderStage*> render_stages;
 };
