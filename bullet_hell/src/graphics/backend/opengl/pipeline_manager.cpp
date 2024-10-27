@@ -111,7 +111,12 @@ PipelineManager::Data::Data(Window& window)
 
 PipelineManager::Data::~Data()
 {
-
+	//TODO(ches) delete all data
+	for (auto& [key, pipeline] : pipelines)
+	{
+		safe_delete(pipeline);
+	}
+	pipelines.clear();
 }
 
 void delete_render_buffers(PipelineManager::Data& data, 
