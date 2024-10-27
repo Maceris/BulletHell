@@ -49,6 +49,7 @@ void delete_resource(DeletionQueue::Entry entry) {
 		Buffer* resource = static_cast<Buffer*>(entry.resource);
 		GLuint handle = static_cast<GLuint>(resource->handle);
 		glDeleteBuffers(1, &handle);
+		safe_delete(resource);
 	}
 		break;
 	case DeletionQueue::ResourceType::FRAMEBUFFER:
@@ -61,6 +62,7 @@ void delete_resource(DeletionQueue::Entry entry) {
 			GLuint gl_texture = static_cast<GLuint>(texture);
 			glDeleteTextures(1, &gl_texture);
 		}
+		safe_delete(resource);
 	}
 		break;
 	case DeletionQueue::ResourceType::TEXTURE:
@@ -68,6 +70,7 @@ void delete_resource(DeletionQueue::Entry entry) {
 		Texture* resource = static_cast<Texture*>(entry.resource);
 		GLuint handle = static_cast<GLuint>(resource->handle);
 		glDeleteTextures(1, &handle);
+		safe_delete(resource);
 	}
 		break;
 	default:

@@ -52,10 +52,9 @@ struct PipelineManager::Data
 	StageResource<QuadMesh> quad_mesh;
 	StageResource<RenderBuffers> render_buffers;
 	StageResource<SkyBox> skybox;
-	StageResource<Texture> font;
 
-	int cached_height;
-	int cached_width;
+	unsigned int cached_height;
+	unsigned int cached_width;
 
 	AnimationRender animation_render;
 	FramebufferTransition back_buffer_binding;
@@ -79,16 +78,16 @@ PipelineManager::Data::Data(Window& window)
 	, cascade_shadows{}
 	, command_buffers{ ALLOC CommandBuffers() }
 	, gbuffer{ nullptr }
-	, back_buffer{ nullptr }
+	, back_buffer{ ALLOC Framebuffer(0, window.width, window.height,
+		std::vector<TextureHandle>())}
 	, screen_texture{ nullptr }
 	, shadow_buffer{ nullptr }
 	, gui_mesh{ ALLOC GuiMesh() }
 	, quad_mesh{ ALLOC QuadMesh() }
 	, render_buffers{ ALLOC RenderBuffers() }
 	, skybox{ ALLOC SkyBox() }
-	, font{ nullptr }
-	, cached_width{0}
-	, cached_height{0}
+	, cached_width{ window.width }
+	, cached_height{ window.height }
 	, animation_render{ &render_buffers }
 	, back_buffer_binding{ &back_buffer, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA }
 	, screen_texture_binding{ &screen_texture, GL_ONE, GL_ONE }
@@ -185,6 +184,9 @@ PipelineManager::PipelineManager(Window& window,
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	generate_render_buffers(*data);
+
+	//TODO(ches) gbuffer
+	//TODO(ches) shadow_buffer
 }
 
 PipelineManager::~PipelineManager()
@@ -208,7 +210,10 @@ Pipeline* PipelineManager::get_pipeline(RenderConfig config)
 
 void PipelineManager::resize(int width, int height)
 {
-
+	data->cached_width = width;
+	data->cached_height = height;
+	delete_render_buffers(*data, deletion_queue);
+	generate_render_buffers(*data);
 }
 
 void PipelineManager::setup_data(const Scene& scene)
