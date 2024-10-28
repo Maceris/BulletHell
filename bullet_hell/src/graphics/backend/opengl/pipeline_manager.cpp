@@ -129,6 +129,76 @@ void delete_render_buffers(PipelineManager::Data& data,
 }
 
 /// <summary>
+/// Generates new gbuffer. It should be deleted first if already present.
+/// </summary>
+/// <param name="data">The pipeline manager data to update.</param>
+void generate_gbuffer(PipelineManager::Data& data)
+{
+	const int TEXTURE_COUNT = 4;
+
+	GLuint buffer_id;
+	glGenFramebuffers(1, &buffer_id);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, buffer_id);
+
+	GLuint texture_ids[TEXTURE_COUNT];
+	glGenTextures(TEXTURE_COUNT, texture_ids);
+
+	GLenum buffers[TEXTURE_COUNT - 1];
+	for (int i = 0; i < TEXTURE_COUNT; ++i)
+	{
+		glBindTexture(GL_TEXTURE_2D, texture_ids[i]);
+		GLenum attachment_type;
+		if (i == TEXTURE_COUNT - 1)
+		{
+			glTexImage2D(GL_TEXTURE_2D,
+				0,
+				GL_DEPTH_COMPONENT32F,
+				data.cached_width,
+				data.cached_height,
+				0,
+				GL_DEPTH_COMPONENT,
+				GL_FLOAT,
+				nullptr
+			);
+			attachment_type = GL_DEPTH_ATTACHMENT;
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D,
+				0,
+				GL_RGBA32F,
+				data.cached_width,
+				data.cached_height,
+				0,
+				GL_RGBA,
+				GL_FLOAT,
+				nullptr
+			);
+			attachment_type = GL_COLOR_ATTACHMENT0 + i;
+			buffers[i] = attachment_type;
+		}
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment_type, GL_TEXTURE_2D,
+			texture_ids[i], 0);
+	}
+
+	glDrawBuffers(TEXTURE_COUNT - 1, buffers);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	std::vector<TextureHandle> texture_handles;
+	for (int i = 0; i < TEXTURE_COUNT; ++i)
+	{
+		texture_handles.push_back(static_cast<TextureHandle>(texture_ids[i]));
+	}
+
+	data.gbuffer = ALLOC Framebuffer(buffer_id, data.cached_width,
+		data.cached_height, texture_handles);
+}
+
+/// <summary>
 /// Generates new render buffers. They should be deleted first if already
 /// present.
 /// </summary>
@@ -184,8 +254,8 @@ PipelineManager::PipelineManager(Window& window,
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	generate_render_buffers(*data);
+	generate_gbuffer(*data);
 
-	//TODO(ches) gbuffer
 	//TODO(ches) shadow_buffer
 }
 
