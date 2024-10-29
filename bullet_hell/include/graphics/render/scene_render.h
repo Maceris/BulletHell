@@ -31,7 +31,7 @@ public:
 	/// </param>
 	/// <param name="gBuffer">The buffer for geometry data.</param>
 	/// <param name="command_buffers">The render command buffers.</param>
-	void render(const Scene& scene, const RenderBuffers& render_buffers,
+	void render(Scene& scene, const RenderBuffers& render_buffers,
 		const GBuffer& gBuffer, const CommandBuffers& command_buffers);
 	
 private:
@@ -47,5 +47,5 @@ private:
 	/// Set up the uniforms for models in the scene.
 	/// </summary>
 	/// <param name="scene">The model we are going to render.</param>
-	void setup_materials_uniform(const Scene& scene, const bool animated);
+	void setup_materials_uniform(Scene& scene, const bool animated);
 };

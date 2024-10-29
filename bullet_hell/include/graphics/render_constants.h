@@ -66,4 +66,14 @@ constexpr auto SPOT_LIGHT_SIZE = 4 + 3 + 1 + 4 + 3 + 1;
 /// The number of sections to split the frustum into.
 /// </summary>
 constexpr auto SHADOW_MAP_CASCADE_COUNT = 3;
+
+/// <summary>
+/// The width of the shadow map in pixels.
+/// </summary>
+constexpr auto SHADOW_MAP_WIDTH = 4096;
+
+/// <summary>
+/// The height of the shadow map in pixels.
+/// </summary>
+constexpr auto SHADOW_MAP_HEIGHT = 4096;
 #pragma endregion

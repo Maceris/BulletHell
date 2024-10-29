@@ -5,6 +5,7 @@
 #include "graphics/render/shadow_render.h"
 
 #include "debugging/logger.h"
+#include "graphics/render_constants.h"
 #include "graphics/backend/opengl/command_buffers.h"
 #include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/graph/shadow_buffer.h"

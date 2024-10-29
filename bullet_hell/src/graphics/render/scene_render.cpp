@@ -48,7 +48,7 @@ SceneRender::SceneRender()
     create_uniforms();
 }
 
-void SceneRender::render(const Scene& scene, const RenderBuffers& render_buffers,
+void SceneRender::render(Scene& scene, const RenderBuffers& render_buffers,
     const GBuffer& gBuffer, const CommandBuffers& command_buffers)
 {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gBuffer.gBuffer_ID);

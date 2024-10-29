@@ -59,7 +59,7 @@ public:
 	/// </summary>
 	/// <param name="window">The window we are drawing in.</param>
 	/// <param name="scene">The scene to render.</param>
-	void render(const Window& window, const Scene& scene);
+	void render(const Window& window, Scene& scene);
 
 	/// <summary>
 	/// Render the UI

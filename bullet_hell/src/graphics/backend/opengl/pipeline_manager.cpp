@@ -15,6 +15,7 @@ Texture* PipelineManager::default_texture = nullptr;
 #include <map>
 
 #include "debugging/logger.h"
+#include "graphics/render_constants.h"
 #include "graphics/backend/opengl/stages/animation_render.h"
 #include "graphics/backend/opengl/stages/debug_render.h"
 #include "graphics/backend/opengl/stages/filter_render.h"
@@ -240,6 +241,65 @@ void generate_render_buffers(PipelineManager::Data& data)
 		data.cached_height, textures);
 }
 
+/// <summary>
+/// Generates new shadow buffers. They should be deleted first if already
+/// present.
+/// </summary>
+/// <param name="data">The pipeline manager data to update.</param>
+void generate_shadow_buffers(PipelineManager::Data& data)
+{
+	GLuint buffer_id;
+	glGenFramebuffers(1, &buffer_id);
+
+	GLuint texture_ids[SHADOW_MAP_CASCADE_COUNT];
+
+	glGenTextures(SHADOW_MAP_CASCADE_COUNT, texture_ids);
+
+	for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+	{
+		glBindTexture(GL_TEXTURE_2D, texture_ids[i]);
+		glTexImage2D(GL_TEXTURE_2D,
+			0,
+			GL_DEPTH_COMPONENT,
+			SHADOW_MAP_WIDTH,
+			SHADOW_MAP_HEIGHT,
+			0,
+			GL_DEPTH_COMPONENT,
+			GL_FLOAT,
+			nullptr
+		);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, buffer_id);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+		texture_ids[0], 0);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG_ERROR("Failed to create cascade shadow map framebuffer");
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+	std::vector<TextureHandle> texture_handles;
+	for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
+	{
+		texture_handles.push_back(static_cast<TextureHandle>(texture_ids[i]));
+	}
+
+	data.shadow_buffer = ALLOC Framebuffer(buffer_id, SHADOW_MAP_WIDTH,
+		SHADOW_MAP_HEIGHT, texture_handles);
+}
+
 PipelineManager::PipelineManager(Window& window, 
 	DeletionQueue* const deletion_queue, ShaderMap& shaders)
 	: data{ std::make_unique<Data>(window) }
@@ -255,8 +315,7 @@ PipelineManager::PipelineManager(Window& window,
 
 	generate_render_buffers(*data);
 	generate_gbuffer(*data);
-
-	//TODO(ches) shadow_buffer
+	generate_shadow_buffers(*data);
 }
 
 PipelineManager::~PipelineManager()

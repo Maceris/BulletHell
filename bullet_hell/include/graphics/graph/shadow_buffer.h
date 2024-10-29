@@ -4,16 +4,6 @@
 #include "graphics/graph/array_of_textures.h"
 
 /// <summary>
-/// The width of the shadow map in pixels.
-/// </summary>
-constexpr auto SHADOW_MAP_WIDTH = 4096;
-
-/// <summary>
-/// The height of the shadow map in pixels.
-/// </summary>
-constexpr auto SHADOW_MAP_HEIGHT = 4096;
-
-/// <summary>
 /// Depth buffers for a cascaded shadow map.
 /// </summary>
 class ShadowBuffer

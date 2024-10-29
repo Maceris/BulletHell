@@ -172,7 +172,7 @@ void Render::refresh_static_data(Scene& scene)
 	scene.static_models_dirty = false;
 }
 
-void Render::render(const Window& window, const Scene& scene)
+void Render::render(const Window& window, Scene& scene)
 {
 	TIME_END("Last Frame");
 	TIME_START("Last Frame");
