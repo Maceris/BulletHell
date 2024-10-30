@@ -105,9 +105,7 @@ PipelineManager::Data::Data(Window& window)
 	, shadow_render{ &render_buffers, &cascade_shadows, &shadow_buffer,
 		&command_buffers }
 	, skybox_render{ &skybox }
-{
-	//TODO(ches) generate buffers, font
-}
+{}
 
 PipelineManager::Data::~Data()
 {
@@ -119,13 +117,14 @@ PipelineManager::Data::~Data()
 	pipelines.clear();
 }
 
-void delete_render_buffers(PipelineManager::Data& data, 
-	DeletionQueue* const deletion_queue)
+template <typename T>
+	requires QueueDeletable<T>
+void delete_resource(T* resource, DeletionQueue* const deletion_queue)
 {
-	if (data.screen_texture != nullptr)
+	if (resource != nullptr)
 	{
-		deletion_queue->add(data.screen_texture);
-		data.screen_texture = nullptr;
+		deletion_queue->add(resource);
+		resource = nullptr;
 	}
 }
 
@@ -320,7 +319,12 @@ PipelineManager::PipelineManager(Window& window,
 
 PipelineManager::~PipelineManager()
 {
-
+	delete_resource(data->back_buffer, deletion_queue);
+	delete_resource(data->gbuffer, deletion_queue);
+	delete_resource(data->screen_texture, deletion_queue);
+	delete_resource(data->shadow_buffer, deletion_queue);
+	delete_resource(data->point_lights, deletion_queue);
+	delete_resource(data->spot_lights, deletion_queue);
 }
 
 Pipeline* PipelineManager::get_pipeline(RenderConfig config)
@@ -341,7 +345,7 @@ void PipelineManager::resize(int width, int height)
 {
 	data->cached_width = width;
 	data->cached_height = height;
-	delete_render_buffers(*data, deletion_queue);
+	delete_resource(data->screen_texture, deletion_queue);
 	generate_render_buffers(*data);
 }
 

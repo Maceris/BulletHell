@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <optional>
 
 #include "memory/concurrent_queue.h"
@@ -56,4 +57,10 @@ public:
 
 private:
 	ConcurrentQueue<Entry> queue;
+};
+
+template<typename T>
+concept QueueDeletable = requires(T* entry, DeletionQueue queue)
+{
+	queue.add(entry);
 };
