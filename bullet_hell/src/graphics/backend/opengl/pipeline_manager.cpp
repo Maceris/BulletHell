@@ -14,8 +14,12 @@ Texture* PipelineManager::default_texture = nullptr;
 
 #include <map>
 
+#include "glm/gtc/type_ptr.hpp"
+
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/render_constants.h"
+#include "graphics/scene/scene.h"
 #include "graphics/backend/opengl/stages/animation_render.h"
 #include "graphics/backend/opengl/stages/debug_render.h"
 #include "graphics/backend/opengl/stages/filter_render.h"
@@ -349,9 +353,339 @@ void PipelineManager::resize(int width, int height)
 	generate_render_buffers(*data);
 }
 
-void PipelineManager::setup_data(const Scene& scene)
+void calculate_materials(const Scene& scene, bool animated)
 {
+	int next_ID = 0;
+	std::unordered_map<Material, int, MaterialHash> materials;
 
+	const auto& model_list = animated
+		? scene.get_animated_model_list()
+		: scene.get_static_model_list();
+
+	for (const auto& model : model_list)
+	{
+		for (const auto& mesh_data : model->mesh_data_list)
+		{
+			const std::shared_ptr<Material>& material = mesh_data.material;
+
+			int material_index = 0;
+			if (materials.contains(*material))
+			{
+				material_index = materials.find(*material)->second;
+			}
+			else
+			{
+				materials.insert(std::make_pair(*material, next_ID));
+				material_index = next_ID;
+				++next_ID;
+				LOG_ASSERT(next_ID <= MAX_MATERIALS
+					&& "We have more materials than we can bind in one draw call");
+			}
+			material->material_id = material_index;
+		}
+	}
+}
+
+/// <summary>
+/// Set up material IDs.
+/// </summary>
+/// <param name="scene">The scene we will be rendering.</param>
+void recalculate_materials(const Scene& scene)
+{
+	const bool for_animated_models = true;
+	const bool for_static_models = false;
+
+	calculate_materials(scene, for_animated_models);
+	calculate_materials(scene, for_static_models);
+}
+
+void setup_animated_command_buffer(RenderBuffers* render_buffers,
+	CommandBuffers* command_buffers, Scene& scene)
+{
+	const std::vector<std::shared_ptr<Model>>& model_list =
+		scene.get_animated_model_list();
+
+	render_buffers->load_animated_entity_buffers(scene);
+
+	size_t mesh_count = 0;
+	size_t entity_count = 0;
+	for (const auto& model : model_list)
+	{
+		mesh_count += model->mesh_draw_data_list.size();
+		entity_count += model->entity_list.size();
+	}
+
+	std::map<const uint64_t, int> entity_index_map;
+
+	float* model_matrices = ALLOC float[entity_count * 16];
+
+	int entity_index = 0;
+	for (const auto& model : model_list)
+	{
+		EntityList& entities = model->entity_list;
+		for (const auto& entity : entities)
+		{
+			const float* matrix = static_cast<const float*>(
+				glm::value_ptr(entity->model_matrix));
+			for (size_t i = 0; i < 16; ++i)
+			{
+				model_matrices[static_cast<size_t>(entity_index) * 16 + i]
+					= matrix[i];
+			}
+			entity_index_map.emplace(
+				std::make_pair(entity->entity_ID, entity_index));
+			++entity_index;
+		}
+	}
+	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers->animated_model_matrices_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
+		GL_DYNAMIC_DRAW);
+	safe_delete_array(model_matrices);
+
+	int first_index = 0;
+	int base_instance = 0;
+
+	int command_buffer_index = 0;
+	int draw_element_index = 0;
+	const int COMMAND_SIZE = 5;
+	const int DRAW_ELEMENT_SIZE = 2;
+
+	const int padding = 0;
+
+	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
+	int* draw_elements = ALLOC int[mesh_count * DRAW_ELEMENT_SIZE];
+	for (const auto& model : model_list)
+	{
+		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
+		{
+			// count
+			command_buffer[command_buffer_index * COMMAND_SIZE + 0] =
+				mesh_draw_data.indices;
+			// instance count
+			command_buffer[command_buffer_index * COMMAND_SIZE + 1] = 1;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 2] =
+				first_index;
+			// base vertex
+			command_buffer[command_buffer_index * COMMAND_SIZE + 3] =
+				mesh_draw_data.offset;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 4] =
+				base_instance;
+
+			first_index += mesh_draw_data.indices;
+			++base_instance;
+			++command_buffer_index;
+
+			const auto& entity = mesh_draw_data.animated_mesh_draw_data.entity;
+
+			const auto result = entity_index_map.find(entity->entity_ID);
+			LOG_ASSERT(result != entity_index_map.end()
+				&& "Entity ID not found in the index map");
+			draw_elements[draw_element_index * DRAW_ELEMENT_SIZE] =
+				result->second;
+			draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
+				mesh_draw_data.material;
+			++draw_element_index;
+		}
+	}
+
+	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
+
+	LOG_ASSERT(mesh_count <= UINT_MAX
+		&& "We have more animated models than fit in an unsigned int");
+
+	command_buffers->animated_draw_count = static_cast<unsigned int>(mesh_count);
+
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
+		command_buffers->animated_command_buffer);
+	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
+		GL_STATIC_DRAW);
+	safe_delete_array(command_buffer);
+
+	data_size_in_bytes = mesh_count * DRAW_ELEMENT_SIZE * sizeof(int);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers->animated_draw_element_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
+		GL_STATIC_DRAW);
+	safe_delete_array(draw_elements);
+}
+
+void setup_static_command_buffer(CommandBuffers* command_buffers,
+	const Scene& scene)
+{
+	const std::vector<std::shared_ptr<Model>>& model_list =
+		scene.get_static_model_list();
+
+	size_t mesh_count = 0;
+	size_t draw_element_count = 0;
+	size_t entity_count = 0;
+	for (const auto& model : model_list)
+	{
+		mesh_count += model->mesh_draw_data_list.size();
+		draw_element_count += model->entity_list.size()
+			* model->mesh_draw_data_list.size();
+		entity_count += model->entity_list.size();
+	}
+
+	std::map<const uint64_t, int> entity_index_map;
+
+	float* model_matrices = ALLOC float[entity_count * 16];
+
+	int entity_index = 0;
+	for (const auto& model : model_list)
+	{
+		EntityList& entities = model->entity_list;
+		for (const auto& entity : entities)
+		{
+			const float* matrix = static_cast<const float*>(
+				glm::value_ptr(entity->model_matrix));
+			for (size_t i = 0; i < 16; ++i)
+			{
+				model_matrices[static_cast<size_t>(entity_index) * 16 + i]
+					= matrix[i];
+			}
+			entity_index_map.emplace(
+				std::make_pair(entity->entity_ID, entity_index));
+			++entity_index;
+		}
+	}
+	size_t data_size_in_bytes = entity_count * 16 * sizeof(float);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers->static_model_matrices_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, model_matrices,
+		GL_DYNAMIC_DRAW);
+	safe_delete_array(model_matrices);
+
+	int first_index = 0;
+	int base_instance = 0;
+
+	int command_buffer_index = 0;
+	int draw_element_index = 0;
+	const int COMMAND_SIZE = 5;
+	const int DRAW_ELEMENT_SIZE = 2;
+
+	const int padding = 0;
+
+	int* command_buffer = ALLOC int[mesh_count * COMMAND_SIZE];
+	int* draw_elements = ALLOC int[draw_element_count * DRAW_ELEMENT_SIZE];
+	for (const auto& model : model_list)
+	{
+		const EntityList& entities = model->entity_list;
+		const int entity_count = static_cast<int>(entities.size());
+		for (const auto& mesh_draw_data : model->mesh_draw_data_list)
+		{
+			// count
+			command_buffer[command_buffer_index * COMMAND_SIZE + 0] =
+				mesh_draw_data.indices;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 1] =
+				entity_count;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 2] =
+				first_index;
+			// base vertex
+			command_buffer[command_buffer_index * COMMAND_SIZE + 3] =
+				mesh_draw_data.offset;
+			command_buffer[command_buffer_index * COMMAND_SIZE + 4] =
+				base_instance;
+
+			first_index += mesh_draw_data.indices;
+			base_instance += entity_count;
+			++command_buffer_index;
+
+			const int material_index = mesh_draw_data.material;
+			for (const auto& entity : entities)
+			{
+				auto index = entity_index_map.find(entity->entity_ID);
+				LOG_ASSERT(index != entity_index_map.end()
+					&& "Our entity ID is missing");
+				const auto id = index->second;
+				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE] =
+					id;
+				draw_elements[draw_element_index * DRAW_ELEMENT_SIZE + 1] =
+					material_index;
+
+				++draw_element_index;
+			}
+		}
+	}
+	LOG_ASSERT(mesh_count <= UINT_MAX
+		&& "We have too more static models than fit in an unsigned int");
+
+	data_size_in_bytes = mesh_count * COMMAND_SIZE * sizeof(int);
+
+	command_buffers->static_draw_count = static_cast<unsigned int>(mesh_count);
+
+	glBindBuffer(GL_DRAW_INDIRECT_BUFFER,
+		command_buffers->static_command_buffer);
+	glBufferData(GL_DRAW_INDIRECT_BUFFER, data_size_in_bytes, command_buffer,
+		GL_STATIC_DRAW);
+	safe_delete_array(command_buffer);
+
+	data_size_in_bytes = draw_element_count * DRAW_ELEMENT_SIZE * sizeof(int);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER,
+		command_buffers->static_draw_element_buffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, data_size_in_bytes, draw_elements,
+		GL_STATIC_DRAW);
+	safe_delete_array(draw_elements);
+}
+
+
+void refresh_animated_data(RenderBuffers* render_buffers,
+	CommandBuffers* command_buffers, Scene& scene)
+{
+	if (scene.animated_models_dirty)
+	{
+		render_buffers->load_animated_models(scene);
+	}
+	if (scene.animated_models_dirty || scene.animated_entities_dirty)
+	{
+		setup_animated_command_buffer(render_buffers, command_buffers, scene);
+	}
+	scene.animated_entities_dirty = false;
+	scene.animated_models_dirty = false;
+}
+
+void refresh_static_data(RenderBuffers* render_buffers,
+	CommandBuffers* command_buffers, Scene& scene)
+{
+	if (scene.static_models_dirty)
+	{
+		render_buffers->load_static_models(scene);
+	}
+	if (scene.static_models_dirty || scene.static_entities_dirty)
+	{
+		setup_static_command_buffer(command_buffers, scene);
+	}
+	scene.static_entities_dirty = false;
+	scene.static_models_dirty = false;
+}
+
+void PipelineManager::setup_data(Scene& scene)
+{
+	TIME_START("Updating Scene - Updating Data - Materials");
+	recalculate_materials(scene);
+	TIME_END("Updating Scene - Updating Data - Materials");
+
+	TIME_START("Updating Scene - Updating Data - Static");
+	if (scene.static_models_dirty || scene.static_entities_dirty)
+	{
+		refresh_static_data(data->render_buffers, data->command_buffers, scene);
+	}
+	TIME_END("Updating Scene - Updating Data - Static");
+
+	TIME_START("Updating Scene - Updating Data - Animated");
+	if (scene.animated_models_dirty || scene.animated_entities_dirty)
+	{
+		refresh_animated_data(data->render_buffers, data->command_buffers, 
+			scene);
+	}
+	TIME_END("Updating Scene - Updating Data - Animated");
+
+	scene.dirty = false;
 }
 
 Pipeline* PipelineManager::build_pipeline(RenderConfig config)

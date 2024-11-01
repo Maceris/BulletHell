@@ -23,7 +23,7 @@ public:
 
 	Pipeline* get_pipeline(RenderConfig config);
 	void resize(int width, int height);
-	void setup_data(const Scene& scene);
+	void setup_data(Scene& scene);
 
 private:
 	const std::unique_ptr<Data> data;

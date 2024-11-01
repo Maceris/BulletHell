@@ -109,7 +109,7 @@ void Instance::resize(int width, int height)
 	display_size.y = height;
 }
 
-void Instance::setup_data(const Scene& scene)
+void Instance::setup_data(Scene& scene)
 {
 	pipeline_manager.setup_data(scene);
 }
