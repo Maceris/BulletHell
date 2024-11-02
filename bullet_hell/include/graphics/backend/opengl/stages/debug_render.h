@@ -12,6 +12,12 @@ public:
 
 	void render(Scene& scene);
 
+	/// <summary>
+	/// Update the debug lines based on the scene.
+	/// </summary>
+	/// <param name="scene">The scene we are rendering.</param>
+	void update_lines(Scene& scene);
+
 private:
 	Shader* shader;
 	DebugInfo* const debug_info;
@@ -19,11 +25,5 @@ private:
 	/// <summary>
 	/// Update the lines for AABB's of entities.
 	/// </summary>
-	void update_AABBs(const Scene& scene);
-
-	/// <summary>
-	/// Update the debug lines based on the scene.
-	/// </summary>
-	/// <param name="scene">The scene we are rendering.</param>
-	void update_lines(const Scene& scene);
+	void update_AABBs(Scene& scene);
 };

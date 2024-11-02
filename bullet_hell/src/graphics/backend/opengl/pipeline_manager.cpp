@@ -30,6 +30,7 @@ Texture* PipelineManager::default_texture = nullptr;
 #include "graphics/backend/opengl/stages/scene_render.h"
 #include "graphics/backend/opengl/stages/shadow_render.h"
 #include "graphics/backend/opengl/stages/skybox_render.h"
+#include "graphics/frontend/instance.h"
 #include "memory/memory_util.h"
 
 #include "glad.h"
@@ -37,6 +38,27 @@ Texture* PipelineManager::default_texture = nullptr;
 Texture* PipelineManager::default_texture = nullptr;
 
 //TODO(ches) BH-51 - fill this out
+
+/// <summary>
+/// Generates new gbuffer and return the pointer to it.
+/// </summary>
+/// <param name="width">The width of the buffer in pixels.</param>
+/// <param name="height">The height of the buffer in pixels.</param>
+/// <returns>The newly allocated pointer.</returns>
+Framebuffer* generate_gbuffer(unsigned int width, unsigned int height);
+
+/// <summary>
+/// Generates new render buffers and return the pointer to it.
+/// </summary>
+/// <param name="width">The width of the buffer in pixels.</param>
+/// <param name="height">The height of the buffer in pixels.</param>
+/// <returns>The newly allocated pointer.</returns>
+Framebuffer* generate_screen_texture(unsigned int width, unsigned int height);
+
+/// <summary>
+/// Generates new shadow buffers and return the pointer to them.
+/// </summary>
+Framebuffer* generate_shadow_buffers();
 
 struct PipelineManager::Data
 {
@@ -57,11 +79,13 @@ struct PipelineManager::Data
 	StageResource<QuadMesh> quad_mesh;
 	StageResource<RenderBuffers> render_buffers;
 	StageResource<SkyBox> skybox;
+	DebugInfo* const debug_info;
 
 	unsigned int cached_height;
 	unsigned int cached_width;
 
 	AnimationRender animation_render;
+	DebugRender debug_render;
 	FramebufferTransition back_buffer_binding;
 	FramebufferTransition screen_texture_binding;
 	FilterRender filter_render;
@@ -80,21 +104,23 @@ struct PipelineManager::Data
 PipelineManager::Data::Data(Window& window)
 	: point_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
 	, spot_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
-	, cascade_shadows{}
+	, cascade_shadows{ ALLOC CascadeShadows() }
 	, command_buffers{ ALLOC CommandBuffers() }
-	, gbuffer{ nullptr }
+	, gbuffer{ generate_gbuffer(window.width, window.height) }
 	, back_buffer{ ALLOC Framebuffer(0, window.width, window.height,
 		std::vector<TextureHandle>())}
-	, screen_texture{ nullptr }
-	, shadow_buffer{ nullptr }
+	, screen_texture{ generate_screen_texture(window.width, window.height) }
+	, shadow_buffer{ generate_shadow_buffers() }
 	, gui_mesh{ ALLOC GuiMesh() }
 	, quad_mesh{ ALLOC QuadMesh() }
 	, render_buffers{ ALLOC RenderBuffers() }
 	, skybox{ ALLOC SkyBox() }
+	, debug_info { }
 	, cached_width{ window.width }
 	, cached_height{ window.height }
 	, animation_render{ &render_buffers }
 	, back_buffer_binding{ &back_buffer, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA }
+	, debug_render { debug_info }
 	, screen_texture_binding{ &screen_texture, GL_ONE, GL_ONE }
 	, filter_render{ &screen_texture, &quad_mesh }
 	, gui_render{ window, &gui_mesh }
@@ -132,11 +158,7 @@ void delete_resource(T* resource, DeletionQueue* const deletion_queue)
 	}
 }
 
-/// <summary>
-/// Generates new gbuffer. It should be deleted first if already present.
-/// </summary>
-/// <param name="data">The pipeline manager data to update.</param>
-void generate_gbuffer(PipelineManager::Data& data)
+Framebuffer* generate_gbuffer(unsigned int width, unsigned int height)
 {
 	const int TEXTURE_COUNT = 4;
 
@@ -157,8 +179,8 @@ void generate_gbuffer(PipelineManager::Data& data)
 			glTexImage2D(GL_TEXTURE_2D,
 				0,
 				GL_DEPTH_COMPONENT32F,
-				data.cached_width,
-				data.cached_height,
+				width,
+				height,
 				0,
 				GL_DEPTH_COMPONENT,
 				GL_FLOAT,
@@ -171,8 +193,8 @@ void generate_gbuffer(PipelineManager::Data& data)
 			glTexImage2D(GL_TEXTURE_2D,
 				0,
 				GL_RGBA32F,
-				data.cached_width,
-				data.cached_height,
+				width,
+				height,
 				0,
 				GL_RGBA,
 				GL_FLOAT,
@@ -198,16 +220,10 @@ void generate_gbuffer(PipelineManager::Data& data)
 		texture_handles.push_back(static_cast<TextureHandle>(texture_ids[i]));
 	}
 
-	data.gbuffer = ALLOC Framebuffer(buffer_id, data.cached_width,
-		data.cached_height, texture_handles);
+	return ALLOC Framebuffer(buffer_id, width, height, texture_handles);
 }
 
-/// <summary>
-/// Generates new render buffers. They should be deleted first if already
-/// present.
-/// </summary>
-/// <param name="data">The pipeline manager data to update.</param>
-void generate_render_buffers(PipelineManager::Data& data)
+Framebuffer* generate_screen_texture(unsigned int width, unsigned int height)
 {
 	GLuint screen_texture = 0;
 	GLuint screen_RBO_depth = 0;
@@ -220,14 +236,14 @@ void generate_render_buffers(PipelineManager::Data& data)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, data.cached_width,
-		data.cached_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, 
+		GL_UNSIGNED_BYTE, nullptr);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glGenRenderbuffers(1, &screen_RBO_depth);
 	glBindRenderbuffer(GL_RENDERBUFFER, screen_RBO_depth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16,
-		data.cached_width, data.cached_height);
+		width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glGenFramebuffers(1, &screen_FBO);
@@ -240,16 +256,10 @@ void generate_render_buffers(PipelineManager::Data& data)
 
 	std::vector<TextureHandle> textures = { screen_texture, screen_RBO_depth };
 
-	data.screen_texture = ALLOC Framebuffer(screen_FBO, data.cached_width,
-		data.cached_height, textures);
+	return ALLOC Framebuffer(screen_FBO, width, height, textures);
 }
 
-/// <summary>
-/// Generates new shadow buffers. They should be deleted first if already
-/// present.
-/// </summary>
-/// <param name="data">The pipeline manager data to update.</param>
-void generate_shadow_buffers(PipelineManager::Data& data)
+Framebuffer* generate_shadow_buffers()
 {
 	GLuint buffer_id;
 	glGenFramebuffers(1, &buffer_id);
@@ -299,7 +309,7 @@ void generate_shadow_buffers(PipelineManager::Data& data)
 		texture_handles.push_back(static_cast<TextureHandle>(texture_ids[i]));
 	}
 
-	data.shadow_buffer = ALLOC Framebuffer(buffer_id, SHADOW_MAP_WIDTH,
+	return ALLOC Framebuffer(buffer_id, SHADOW_MAP_WIDTH,
 		SHADOW_MAP_HEIGHT, texture_handles);
 }
 
@@ -315,10 +325,6 @@ PipelineManager::PipelineManager(Window& window,
 	//NOTE(ches) Support for transparencies
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	generate_render_buffers(*data);
-	generate_gbuffer(*data);
-	generate_shadow_buffers(*data);
 }
 
 PipelineManager::~PipelineManager()
@@ -350,7 +356,7 @@ void PipelineManager::resize(int width, int height)
 	data->cached_width = width;
 	data->cached_height = height;
 	delete_resource(data->screen_texture, deletion_queue);
-	generate_render_buffers(*data);
+	data->screen_texture = generate_screen_texture(width, height);
 }
 
 void calculate_materials(const Scene& scene, bool animated)
@@ -684,6 +690,15 @@ void PipelineManager::setup_data(Scene& scene)
 	}
 	TIME_END("Updating Scene - Updating Data - Animated");
 
+#if _DEBUG
+	TIME_START("Updating Scene - Updating Data - Debug Lines");
+	if (Instance::configuration.debug_lines)
+	{
+		data->debug_render.update_lines(scene);
+	}
+	TIME_END("Updating Scene - Updating Data - Debug Lines");
+#endif
+
 	scene.dirty = false;
 }
 
@@ -693,16 +708,30 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 
 	bool rendering_scene = false;
 
+	if (config & RenderConfigValues::ANIMATION_PASS_MASK
+		|| config & RenderConfigValues::SHADOW_PASS_MASK
+		|| config & RenderConfigValues::SCENE_PASS_MASK
+		|| config & RenderConfigValues::LIGHTING_PASS_MASK
+		|| config & RenderConfigValues::SKYBOX_PASS_MASK
+		|| config & RenderConfigValues::FILTER_PASS_MASK
+		)
+	{
+		rendering_scene = true;
+	}
+
+	if (rendering_scene)
+	{
+		result->render_stages.push_back(&(data->model_matrix_update));
+	}
+
 	if (config & RenderConfigValues::ANIMATION_PASS_MASK)
 	{
 		result->render_stages.push_back(&(data->animation_render));
-		rendering_scene = true;
 	}
 
 	if (config & RenderConfigValues::SHADOW_PASS_MASK)
 	{
 		result->render_stages.push_back(&(data->shadow_render));
-		rendering_scene = true;
 	}
 
 	if (config & RenderConfigValues::SCENE_PASS_MASK)
@@ -715,7 +744,10 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 		{
 			result->render_stages.push_back(&(data->scene_render_wireframe));
 		}
-		rendering_scene = true;
+		if (config & RenderConfigValues::DEBUG_PASS_MASK)
+		{
+			result->render_stages.push_back(&(data->debug_render));
+		}
 	}
 
 	if (config & RenderConfigValues::FILTER_PASS_MASK)
@@ -730,25 +762,17 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 	if (config & RenderConfigValues::LIGHTING_PASS_MASK)
 	{
 		result->render_stages.push_back(&(data->light_render));
-		rendering_scene = true;
 	}
 
 	if (config & RenderConfigValues::SKYBOX_PASS_MASK)
 	{
 		result->render_stages.push_back(&(data->skybox_render));
-		rendering_scene = true;
 	}
 
 	if (config & RenderConfigValues::FILTER_PASS_MASK)
 	{
 		result->render_stages.push_back(&(data->back_buffer_binding));
 		result->render_stages.push_back(&(data->filter_render));
-		rendering_scene = true;
-	}
-
-	if (rendering_scene)
-	{
-		result->render_stages.push_back(&(data->model_matrix_update));
 	}
 
 	if (config & RenderConfigValues::GUI_PASS_MASK)
@@ -761,7 +785,6 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 		{
 			result->render_stages.push_back(&(data->gui_render_standalone));
 		}
-		rendering_scene = true;
 	}
 
 	return result;

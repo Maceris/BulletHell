@@ -11,6 +11,21 @@
 class Scene;
 class Window;
 
+#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
+
+/// <summary>
+/// Configuration for tweaking the rendering pipeline.
+/// </summary>
+struct Configuration
+{
+	bool wireframe;
+#if _DEBUG
+	bool debug_lines;
+#endif
+};
+
+#endif
+
 class Instance
 {
 	friend class PipelineManager;
@@ -30,6 +45,11 @@ public:
 	void setup_data(Scene& scene);
 	void set_filter(const std::string_view shader_path);
 	void swap_pipeline(RenderConfig config);
+
+	/// <summary>
+	/// Configuration for tweaking the rendering pipeline.
+	/// </summary>
+	static Configuration configuration;
 
 private:
 	//NOTE(ches) in initialization order

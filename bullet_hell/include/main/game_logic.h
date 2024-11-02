@@ -225,6 +225,11 @@ private:
 	/// </summary>
 	void reset();
 
+	/// <summary>
+	/// Update to the appropriate render pipeline based on render
+	/// configuration values.
+	/// </summary>
+	void update_ingame_pipeline();
 };
 
 /// <summary>

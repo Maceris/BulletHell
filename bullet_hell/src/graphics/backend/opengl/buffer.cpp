@@ -24,6 +24,7 @@ Buffer::Buffer(Type type)
 	default:
 		LOG_FATAL("Unknown buffer type");
 	}
+	handle = static_cast<BufferHandle>(buffer_id);
 }
 
 #endif

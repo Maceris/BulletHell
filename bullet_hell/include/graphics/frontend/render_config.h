@@ -31,5 +31,6 @@ namespace RenderConfigPrefab
     constexpr RenderConfig SCENE_DEFAULT =
         RenderConfigValues::ANIMATION_PASS_MASK
         | RenderConfigValues::SCENE_ENABLED_MASK
-        | RenderConfigValues::SKYBOX_PASS_MASK;
+        | RenderConfigValues::SKYBOX_PASS_MASK
+        | RenderConfigValues::GUI_PASS_MASK;
 }

@@ -209,8 +209,7 @@ void DebugRender::render(Scene& scene)
     TIME_END("Debug Render");
 }
 
-
-void DebugRender::update_AABBs(const Scene& scene)
+void DebugRender::update_AABBs(Scene& scene)
 {
     glBindBuffer(GL_ARRAY_BUFFER, debug_info->AABB_lines.data->data);
 
@@ -282,7 +281,7 @@ void add_chunks(const std::unordered_map<uint32_t, Chunk*>& cache,
         lines.emplace_back(middle, end);
     }
 }
-void DebugRender::update_lines(const Scene& scene)
+void DebugRender::update_lines(Scene& scene)
 {
     glBindBuffer(GL_ARRAY_BUFFER, debug_info->map_lines.data->data);
 

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+
 #include "graphics/glad_types.h"
 #include "graphics/graph/gbuffer.h"
 #include "graphics/backend/opengl/command_buffers.h"
@@ -173,3 +177,5 @@ private:
 
 	void update_model_matrices(const Scene& scene);
 };
+
+#endif

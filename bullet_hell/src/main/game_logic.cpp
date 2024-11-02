@@ -441,7 +441,7 @@ void GameLogic::main_processing()
 void GameLogic::on_pause()
 {
 	current_state = GameState::PAUSED;
-	//TODO(ches) BH-53 - swap rendering pipelines
+	render_instance->swap_pipeline(RenderConfigPrefab::JUST_GUI);
 }
 
 void GameLogic::on_resume()
@@ -459,7 +459,8 @@ void GameLogic::on_resume()
 	last_map_recenter = now;
 
 	current_state = GameState::RUNNING;
-	//TODO(ches) BH-53 - swap rendering pipelines
+
+	update_ingame_pipeline();
 }
 
 void GameLogic::reset()
@@ -495,4 +496,18 @@ void GameLogic::reset()
 	//NOTE(ches) Process all the map loading stuff
 	g_event_manager->update();
 	current_state = GameState::RUNNING;
+	update_ingame_pipeline();
+}
+
+void GameLogic::update_ingame_pipeline()
+{
+	RenderConfig config = RenderConfigPrefab::SCENE_DEFAULT;
+	if (Instance::configuration.debug_lines) {
+		config |= RenderConfigValues::DEBUG_PASS_MASK;
+	}
+	if (Instance::configuration.wireframe) {
+		config |= RenderConfigValues::SCENE_WIREFRAME_MASK;
+	}
+
+	render_instance->swap_pipeline(config);
 }
