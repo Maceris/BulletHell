@@ -7,6 +7,7 @@
 #include <format>
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/backend/opengl/quad_mesh.h"
 #include "graphics/frontend/uniforms_map.h"
 #include "graphics/graph/shader_program.h"
@@ -28,6 +29,7 @@ FilterRender::FilterRender(StageResource<Framebuffer>* scene_texture,
 
 void FilterRender::render(Scene& scene)
 {
+	TIME_START("Filter Render");
 	//NOTE(ches) We don't want to overwrite the depth buffer
 	glDepthMask(GL_FALSE);
 
@@ -44,6 +46,7 @@ void FilterRender::render(Scene& scene)
 	shader->unbind();
 
 	glDepthMask(GL_TRUE);
+	TIME_END("Filter Render");
 }
 
 void FilterRender::set_filter(const std::string_view name)

@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "main/game_logic.h"
 #include "graphics/render_constants.h"
 #include "graphics/backend/base/pipeline_manager.h"
@@ -117,7 +118,9 @@ void SceneRender::common_scene_render(Scene& scene)
 
 void SceneRender::render(Scene& scene)
 {
+    TIME_START("Scene Render");
     common_scene_render(scene);
+    TIME_END("Scene Render");
 }
 
 void SceneRender::setup_materials_uniform(Scene& scene,
@@ -202,6 +205,7 @@ void SceneRender::setup_materials_uniform(Scene& scene,
 
 void SceneRenderWireframe::render(Scene& scene)
 {
+    TIME_START("Scene Render");
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDisable(GL_TEXTURE_2D);
 
@@ -209,6 +213,7 @@ void SceneRenderWireframe::render(Scene& scene)
 
     glEnable(GL_TEXTURE_2D);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    TIME_END("Scene Render");
 }
 
 #endif

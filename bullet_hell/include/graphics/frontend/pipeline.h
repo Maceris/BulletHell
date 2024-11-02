@@ -21,8 +21,7 @@ public:
 	Pipeline& operator=(const Pipeline&) = delete;
 	~Pipeline();
 
-	void initialize(const Window& window, ShaderMap& shaders);
-	void render(const Scene& window, ShaderMap& shaders);
+	void render(Scene& scene, ShaderMap& shaders);
 
 	std::vector<RenderStage*> render_stages;
 };

@@ -2,32 +2,27 @@
 
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
-#include "graphics/frontend/pipeline.h"
 
 #include <vector>
 
+#include "debugging/timer.h"
+#include "graphics/frontend/pipeline.h"
 #include "graphics/frontend/render_stage.h"
 
 //TODO(ches) fill this out
 
-Pipeline::Pipeline()
+Pipeline::Pipeline() = default;
+
+Pipeline::~Pipeline() = default;
+
+void Pipeline::render(Scene& scene, ShaderMap& shaders)
 {
-
-}
-
-Pipeline::~Pipeline()
-{
-
-}
-
-void Pipeline::initialize(const Window& window, ShaderMap& shaders)
-{
-
-}
-
-void Pipeline::render(const Scene& window, ShaderMap& shaders)
-{
-
+	TIME_END("Last Frame");
+	TIME_START("Last Frame");
+	for (auto& stage : render_stages)
+	{
+		stage->render(scene);
+	}
 }
 
 #endif

@@ -7,6 +7,7 @@
 #include <format>
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/render_constants.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 #include "graphics/graph/gbuffer.h"
@@ -81,6 +82,7 @@ void LightRender::create_uniforms()
 
 void LightRender::render(Scene& scene)
 {
+    TIME_START("Light Render");
     shader->bind();
     update_lights(scene);
 
@@ -131,6 +133,7 @@ void LightRender::render(Scene& scene)
         nullptr);
 
     shader->unbind();
+    TIME_END("Light Render");
 }
 
 void LightRender::update_lights(const Scene& scene)

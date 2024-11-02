@@ -12,6 +12,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/graph/texture_resource.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 #include "graphics/graph/mesh_data.h"
@@ -177,6 +178,7 @@ DebugRender::DebugRender(DebugInfo* debug_info)
 
 void DebugRender::render(Scene& scene)
 {
+    TIME_START("Debug Render");
     shader->bind();
     glDepthMask(GL_FALSE);
 
@@ -204,6 +206,7 @@ void DebugRender::render(Scene& scene)
 
     glDepthMask(GL_TRUE);
     shader->unbind();
+    TIME_END("Debug Render");
 }
 
 

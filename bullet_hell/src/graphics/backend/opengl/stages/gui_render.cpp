@@ -5,6 +5,7 @@
 #include "graphics/backend/opengl/stages/gui_render.h"
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/window.h"
 #include "graphics/scene/scene.h"
 #include "graphics/gui/ui.h"
@@ -30,7 +31,9 @@ GuiRender::GuiRender(const Window& window, StageResource<GuiMesh>* gui_mesh)
 
 void GuiRender::render(Scene& scene)
 {
+	TIME_START("Gui Render");
 	render_gui(scene);
+	TIME_END("Gui Render");
 }
 
 void GuiRender::render_gui(const Scene& scene)

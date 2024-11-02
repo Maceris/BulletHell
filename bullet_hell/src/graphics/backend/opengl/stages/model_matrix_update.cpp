@@ -4,6 +4,7 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
+#include "debugging/timer.h"
 #include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/backend/opengl/stages/model_matrix_update.h"
 #include "graphics/scene/scene.h"
@@ -13,6 +14,7 @@
 
 void ModelMatrixUpdate::render(Scene& scene)
 {
+	TIME_START("Model Matrix Update");
 	ModelList animated_models = scene.get_animated_model_list();
 	ModelList static_models = scene.get_static_model_list();
 
@@ -21,6 +23,7 @@ void ModelMatrixUpdate::render(Scene& scene)
 
 	update_model_buffer(animated_models, animated_buffer);
 	update_model_buffer(static_models, static_buffer);
+	TIME_END("Model Matrix Update");
 }
 
 void ModelMatrixUpdate::update_model_buffer(

@@ -633,7 +633,6 @@ void setup_static_command_buffer(CommandBuffers* command_buffers,
 	safe_delete_array(draw_elements);
 }
 
-
 void refresh_animated_data(RenderBuffers* render_buffers,
 	CommandBuffers* command_buffers, Scene& scene)
 {

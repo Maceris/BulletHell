@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/backend/opengl/render_buffers.h"
 #include "graphics/backend/opengl/stages/animation_render.h"
 #include "graphics/graph/animation.h"
@@ -36,6 +37,7 @@ AnimationRender::AnimationRender(StageResource<RenderBuffers>* render_buffers)
 
 void AnimationRender::render(Scene& scene)
 {
+    TIME_START("Animation Render");
     const auto& model_list = scene.get_animated_model_list();
 
     int destination_offset = 0;
@@ -115,5 +117,6 @@ void AnimationRender::render(Scene& scene)
 
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     shader->unbind();
+    TIME_END("Animation Render");
 }
 #endif

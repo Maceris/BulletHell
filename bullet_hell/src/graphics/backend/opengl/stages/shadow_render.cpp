@@ -5,6 +5,7 @@
 #include "graphics/backend/opengl/stages/shadow_render.h"
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/render_constants.h"
 #include "graphics/backend/opengl/command_buffers.h"
 #include "graphics/backend/opengl/render_buffers.h"
@@ -32,6 +33,7 @@ ShadowRender::ShadowRender(StageResource<RenderBuffers>* render_buffers,
 
 void ShadowRender::render(Scene& scene)
 {
+    TIME_START("Shadow Render");
     CascadeShadowSlice::updateCascadeShadows(**cascade_shadows, scene);
 
     glBindFramebuffer(GL_FRAMEBUFFER, (*depth_map)->handle);
@@ -86,6 +88,7 @@ void ShadowRender::render(Scene& scene)
 
     glBindVertexArray(0);
     shader->unbind();
+    TIME_END("Shadow Render");
 }
 
 #endif

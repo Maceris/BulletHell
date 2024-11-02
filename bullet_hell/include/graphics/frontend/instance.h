@@ -25,7 +25,7 @@ public:
 
 	void initialize(const Window& window);
 	void process_resources();
-	void render(const Scene& scene);
+	void render(Scene& scene);
 	void resize(int width, int height);
 	void setup_data(Scene& scene);
 	void set_filter(const std::string_view shader_path);

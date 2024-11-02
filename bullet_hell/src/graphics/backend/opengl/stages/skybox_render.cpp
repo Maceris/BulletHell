@@ -5,6 +5,7 @@
 #include "graphics/backend/opengl/stages/skybox_render.h"
 
 #include "debugging/logger.h"
+#include "debugging/timer.h"
 #include "graphics/frontend/texture.h"
 #include "graphics/frontend/texture_loader.h"
 #include "graphics/graph/material.h"
@@ -35,6 +36,7 @@ SkyboxRender::SkyboxRender(StageResource<SkyBox>* skybox)
 
 void SkyboxRender::render(Scene& scene)
 {
+    TIME_START("Skybox Render");
     const SkyBox& sky_box = scene.sky_box;
 
     shader->bind();
@@ -71,6 +73,7 @@ void SkyboxRender::render(Scene& scene)
 
     glBindVertexArray(0);
     shader->unbind();
+    TIME_END("Skybox Render");
 }
 
 #endif

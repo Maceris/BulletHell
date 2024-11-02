@@ -96,7 +96,7 @@ void Instance::process_resources()
 	}
 }
 
-void Instance::render(const Scene& scene)
+void Instance::render(Scene& scene)
 {
 	pipeline->render(scene, shader_map);
 }
