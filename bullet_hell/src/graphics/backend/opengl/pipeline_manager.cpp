@@ -108,7 +108,7 @@ PipelineManager::Data::Data(Window& window)
 	, command_buffers{ ALLOC CommandBuffers() }
 	, gbuffer{ generate_gbuffer(window.width, window.height) }
 	, back_buffer{ ALLOC Framebuffer(0, window.width, window.height,
-		std::vector<TextureHandle>())}
+		std::vector<TextureHandle>()) }
 	, screen_texture{ generate_screen_texture(window.width, window.height) }
 	, shadow_buffer{ generate_shadow_buffers() }
 	, gui_mesh{ ALLOC GuiMesh() }
@@ -169,7 +169,7 @@ Framebuffer* generate_gbuffer(unsigned int width, unsigned int height)
 	GLuint texture_ids[TEXTURE_COUNT];
 	glGenTextures(TEXTURE_COUNT, texture_ids);
 
-	GLenum buffers[TEXTURE_COUNT - 1];
+	GLenum buffers[TEXTURE_COUNT - 1]{};
 	for (int i = 0; i < TEXTURE_COUNT; ++i)
 	{
 		glBindTexture(GL_TEXTURE_2D, texture_ids[i]);
@@ -301,7 +301,6 @@ Framebuffer* generate_shadow_buffers()
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 
 	std::vector<TextureHandle> texture_handles;
 	for (int i = 0; i < SHADOW_MAP_CASCADE_COUNT; ++i)
@@ -738,12 +737,13 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 	{
 		if (config & RenderConfigValues::SCENE_WIREFRAME_MASK)
 		{
-			result->render_stages.push_back(&(data->scene_render));
+			result->render_stages.push_back(&(data->scene_render_wireframe));
 		}
 		else
 		{
-			result->render_stages.push_back(&(data->scene_render_wireframe));
+			result->render_stages.push_back(&(data->scene_render));
 		}
+
 		if (config & RenderConfigValues::DEBUG_PASS_MASK)
 		{
 			result->render_stages.push_back(&(data->debug_render));

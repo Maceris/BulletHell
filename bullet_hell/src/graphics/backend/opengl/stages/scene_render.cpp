@@ -76,7 +76,11 @@ int constexpr find(const std::vector<T>& list, const T& value)
 
 void SceneRender::common_scene_render(Scene& scene)
 {
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (*gbuffer)->handle);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, (*gbuffer)->width, (*gbuffer)->height);
     glDisable(GL_BLEND);
+
     shader->bind();
 
     shader->uniforms.set_uniform("projection_matrix",
