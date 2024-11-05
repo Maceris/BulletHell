@@ -62,16 +62,19 @@ void SceneRender::create_uniforms()
     }
 }
 
+
 template<typename T>
 int constexpr find(const std::vector<T>& list, const T& value)
 {
-    auto result = std::find(list.cbegin(), list.cend(), value);
-
-    if (result != list.cend())
+    int i = 0;
+    for (i = 0; i < list.size(); ++i)
     {
-        return result - list.cbegin();
+        if (list[i] == value)
+        {
+            return i;
+        }
     }
-    return 0;
+    return i;
 }
 
 void SceneRender::common_scene_render(Scene& scene)
