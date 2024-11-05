@@ -185,7 +185,7 @@ void SceneRender::setup_materials_uniform(Scene& scene,
         }
     }
 
-    LOG_ASSERT(texture_bindings.size() + 1 <= MAX_TEXTURES
+    LOG_ASSERT(texture_bindings.size() < MAX_TEXTURES
         && "We have more textures than we can bind in one draw call");
 
     glActiveTexture(GL_TEXTURE0);
