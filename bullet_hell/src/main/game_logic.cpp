@@ -441,7 +441,9 @@ void GameLogic::main_processing()
 void GameLogic::on_pause()
 {
 	current_state = GameState::PAUSED;
+#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
 	render_instance->swap_pipeline(RenderConfigPrefab::JUST_GUI);
+#endif
 }
 
 void GameLogic::on_resume()
@@ -501,6 +503,7 @@ void GameLogic::reset()
 
 void GameLogic::update_ingame_pipeline()
 {
+#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
 	RenderConfig config = RenderConfigPrefab::SCENE_DEFAULT;
 	if (Instance::configuration.debug_lines) {
 		config |= RenderConfigValues::DEBUG_PASS_MASK;
@@ -510,4 +513,5 @@ void GameLogic::update_ingame_pipeline()
 	}
 
 	render_instance->swap_pipeline(config);
+#endif
 }
