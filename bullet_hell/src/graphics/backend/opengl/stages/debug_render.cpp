@@ -139,27 +139,6 @@ AABBLines::AABBLines(const glm::vec3& aabb_min, const glm::vec3& aabb_max)
     );
 }
 
-glm::mat4 default_camera_view()
-{
-    const float TWO_PI = (float)(2 * std::numbers::pi);
-
-    glm::vec3 position(-11.0f, 11.0f, 0.0f);
-    glm::vec2 rotation(0.42f, 1.92f);
-    rotation.x = MathUtil::clamp_float(rotation.x, glm::radians(-90.0f),
-        glm::radians(90.0f));
-    rotation.y = fmodf(rotation.y, TWO_PI);
-    rotation.y = fmodf(rotation.y + TWO_PI, TWO_PI);
-
-    glm::mat4 view_matrix(1.0f);
-    view_matrix = glm::rotate(view_matrix, rotation.x,
-        glm::vec3(1.0f, 0.0f, 0.0f));
-    view_matrix = glm::rotate(view_matrix, rotation.y,
-        glm::vec3(0.0f, 1.0f, 0.0f));
-    view_matrix = glm::translate(view_matrix, -position);
-
-    return view_matrix;
-}
-
 DebugRender::DebugRender(DebugInfo* debug_info)
     : debug_info{ debug_info }
 {
@@ -180,7 +159,8 @@ void DebugRender::render(Scene& scene)
 {
     TIME_START("Debug Render");
     shader->bind();
-    glDepthMask(GL_FALSE);
+    GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
 
     shader->uniforms.set_uniform("projection_matrix",
         scene.projection.projection_matrix);
@@ -204,7 +184,14 @@ void DebugRender::render(Scene& scene)
 
     glBindVertexArray(0);
 
-    glDepthMask(GL_TRUE);
+    if (last_enable_depth_test)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
     shader->unbind();
     TIME_END("Debug Render");
 }

@@ -48,6 +48,11 @@ void DebugUI::draw()
 			if (ImGui::Checkbox("Debug lines", &DebugUI::debug_lines))
 			{
 				DebugUI::changed_render_settings = true;
+
+				if (g_game_logic->current_scene)
+				{
+					g_game_logic->current_scene->dirty = true;
+				}
 			}
 			ImGui::EndMenu();
 		}

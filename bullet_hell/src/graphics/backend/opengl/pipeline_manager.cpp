@@ -743,11 +743,6 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 		{
 			result->render_stages.push_back(&(data->scene_render));
 		}
-
-		if (config & RenderConfigValues::DEBUG_PASS_MASK)
-		{
-			result->render_stages.push_back(&(data->debug_render));
-		}
 	}
 
 	if (config & RenderConfigValues::FILTER_PASS_MASK)
@@ -774,6 +769,13 @@ Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 		result->render_stages.push_back(&(data->back_buffer_binding));
 		result->render_stages.push_back(&(data->filter_render));
 	}
+
+#if _DEBUG
+	if (config & RenderConfigValues::DEBUG_PASS_MASK)
+	{
+		result->render_stages.push_back(&(data->debug_render));
+	}
+#endif
 
 	if (config & RenderConfigValues::GUI_PASS_MASK)
 	{
