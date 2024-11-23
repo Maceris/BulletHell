@@ -23,6 +23,7 @@ bool DebugUI::show_scene_window = false;
 bool DebugUI::show_timing_window = false;
 bool DebugUI::wireframe = false;
 bool DebugUI::debug_lines = false;
+bool DebugUI::changed_render_settings = false;
 #pragma endregion
 
 constexpr ImVec4 RED = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
@@ -40,8 +41,14 @@ void DebugUI::draw()
 		}
 		if (ImGui::BeginMenu("Render Controls"))
 		{
-			ImGui::Checkbox("Wireframe", &DebugUI::wireframe);
-			ImGui::Checkbox("Debug lines", &DebugUI::debug_lines);
+			if (ImGui::Checkbox("Wireframe", &DebugUI::wireframe))
+			{
+				DebugUI::changed_render_settings = true;
+			}
+			if (ImGui::Checkbox("Debug lines", &DebugUI::debug_lines))
+			{
+				DebugUI::changed_render_settings = true;
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::PushStyleColor(ImGuiCol_Text, RED);
@@ -238,6 +245,19 @@ void DebugUI::handle_input()
 	{
 		render->configuration.wireframe = DebugUI::wireframe;
 		render->configuration.debug_lines = DebugUI::debug_lines;
+	}
+#else
+	const Instance* instance = g_game_logic->render_instance.get();
+	if (instance)
+	{
+		instance->configuration.wireframe = DebugUI::wireframe;
+		instance->configuration.debug_lines = DebugUI::debug_lines;
+	}
+
+	if (DebugUI::changed_render_settings)
+	{
+		DebugUI::changed_render_settings = false;
+		g_game_logic->update_ingame_pipeline();
 	}
 #endif
 }

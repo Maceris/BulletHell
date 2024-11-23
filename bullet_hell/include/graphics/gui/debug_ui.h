@@ -55,4 +55,10 @@ private:
 	/// Whether we should show debug lines.
 	/// </summary>
 	static bool debug_lines;
+
+	/// <summary>
+	/// If we have changed some settings relating to the rendering, and need
+	/// to apply those changes.
+	/// </summary>
+	static bool changed_render_settings;
 };

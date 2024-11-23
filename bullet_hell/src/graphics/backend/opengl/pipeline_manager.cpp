@@ -115,7 +115,7 @@ PipelineManager::Data::Data(Window& window)
 	, quad_mesh{ ALLOC QuadMesh() }
 	, render_buffers{ ALLOC RenderBuffers() }
 	, skybox{ ALLOC SkyBox() }
-	, debug_info { }
+	, debug_info{ ALLOC DebugInfo() }
 	, cached_width{ window.width }
 	, cached_height{ window.height }
 	, animation_render{ &render_buffers }

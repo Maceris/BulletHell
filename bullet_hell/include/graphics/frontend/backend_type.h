@@ -4,4 +4,4 @@
 #define BACKEND_VULKAN 2
 #define BACKEND_OPENGL_DEPRECATED 3 //TODO(ches) BH-48 - remove this once the refactor is completed
 
-#define BACKEND_CURRENT BACKEND_OPENGL_DEPRECATED
+#define BACKEND_CURRENT BACKEND_OPENGL
