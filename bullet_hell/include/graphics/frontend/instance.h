@@ -11,8 +11,6 @@
 class Scene;
 class Window;
 
-#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
-
 /// <summary>
 /// Configuration for tweaking the rendering pipeline.
 /// </summary>
@@ -24,7 +22,6 @@ struct Configuration
 #endif
 };
 
-#endif
 
 class Instance
 {

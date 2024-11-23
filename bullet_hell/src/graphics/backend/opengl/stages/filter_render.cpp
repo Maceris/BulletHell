@@ -10,7 +10,6 @@
 #include "debugging/timer.h"
 #include "graphics/backend/opengl/quad_mesh.h"
 #include "graphics/frontend/uniforms_map.h"
-#include "graphics/graph/shader_program.h"
 #include "graphics/scene/scene.h"
 #include "main/game_logic.h"
 #include "memory/memory_util.h"

@@ -27,7 +27,6 @@
 #include "resource_cache/resource_zip_file.h"
 #include "utilities/math_util.h"
 
-#include "glad.h"
 #include "GLFW/glfw3.h"
 
 /// <summary>
@@ -43,11 +42,7 @@ constexpr double ANIMATION_FRAME_TIME = 1.0 / 24;
 GameLogic::GameLogic()
 	: current_state{ GameState::STARTING_UP }
 	, resource_cache{ nullptr }
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-	, render{ nullptr }
-#else
 	, render_instance{ nullptr }
-#endif
 	, current_scene{ nullptr }
 	, last_animation_tick{ std::chrono::steady_clock::now() }
 	, last_frame{ std::chrono::steady_clock::now() }
@@ -60,9 +55,7 @@ GameLogic::GameLogic()
 void GameLogic::end_game()
 {
 	current_state = GameState::GAME_OVER;
-#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
 	render_instance->swap_pipeline(RenderConfigPrefab::JUST_GUI);
-#endif
 }
 
 GameState GameLogic::get_current_state() const noexcept
@@ -106,11 +99,7 @@ bool GameLogic::initialize()
 	PipelineManager::default_texture = ALLOC Texture(
 		TextureLoader::load("textures/default_texture.image"));
 
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-	render = std::make_unique<Render>(*window);
-#else
 	render_instance = std::make_unique<Instance>(*window);
-#endif
 
 	UI::first_time_setup();
 
@@ -152,11 +141,7 @@ void GameLogic::notify_about_resize(const int width, const int height)
 	{
 		current_scene->resize(width, height);
 	}
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-	render->resize(width, height);
-#else
 	render_instance->resize(width, height);
-#endif
 }
 
 void GameLogic::on_close()
@@ -364,11 +349,7 @@ void GameLogic::run_game()
 		case GameState::GAME_OVER:
 		case GameState::MENU:
 		case GameState::PAUSED:
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-			render->render_just_ui(*window, *current_scene);
-#elif BACKEND_CURRENT == BACKEND_OPENGL
 			render_instance->render(*current_scene);
-#endif
 			window->render();
 			break;
 		case GameState::RUNNING:
@@ -416,12 +397,9 @@ void GameLogic::main_processing()
 		TIME_START("Updating Scene - Updating Model Lists");
 		current_scene->rebuild_model_lists();
 		TIME_END("Updating Scene - Updating Model Lists");
+
 		TIME_START("Updating Scene - Updating Data");
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-		render->setup_all_data(*current_scene);
-#else
 		render_instance->setup_data(*current_scene);
-#endif
 		TIME_END("Updating Scene - Updating Data");
 	}
 	TIME_END("Updating Scene");
@@ -432,11 +410,7 @@ void GameLogic::main_processing()
 		seconds_since_last_animation_tick = 0;
 		g_pawn_manager->tick_animations();
 	}
-#if BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
-	render->render(*window, *current_scene);
-#else
 	render_instance->render(*current_scene);
-#endif
 	window->render();
 	++frame_count;
 }
@@ -444,9 +418,7 @@ void GameLogic::main_processing()
 void GameLogic::on_pause()
 {
 	current_state = GameState::PAUSED;
-#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
 	render_instance->swap_pipeline(RenderConfigPrefab::JUST_GUI);
-#endif
 }
 
 void GameLogic::on_resume()
@@ -506,7 +478,6 @@ void GameLogic::reset()
 
 void GameLogic::update_ingame_pipeline()
 {
-#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
 	RenderConfig config = RenderConfigPrefab::SCENE_DEFAULT;
 	if (Instance::configuration.debug_lines) {
 		config |= RenderConfigValues::DEBUG_PASS_MASK;
@@ -516,5 +487,4 @@ void GameLogic::update_ingame_pipeline()
 	}
 
 	render_instance->swap_pipeline(config);
-#endif
 }

@@ -18,6 +18,8 @@
 
 #include "glad.h"
 
+//TODO(ches) BH-54 remove OpenGl dependency
+
 /// <summary>
 /// The callback to register for handling errors.
 /// </summary>

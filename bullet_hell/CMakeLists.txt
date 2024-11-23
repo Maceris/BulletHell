@@ -87,28 +87,15 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/frontend/texture_loader.h
   ${HEADER_PATH}/graphics/frontend/uniforms_map.h
   ${HEADER_PATH}/graphics/graph/animation_resource.h
-  ${HEADER_PATH}/graphics/graph/array_of_textures.h
   ${HEADER_PATH}/graphics/graph/cascade_shadow_slice.h
-  ${HEADER_PATH}/graphics/graph/gbuffer.h
   ${HEADER_PATH}/graphics/graph/icon_resource.h
   ${HEADER_PATH}/graphics/graph/material_resource.h
   ${HEADER_PATH}/graphics/graph/mesh_draw_data.h
   ${HEADER_PATH}/graphics/graph/model.h
   ${HEADER_PATH}/graphics/graph/model_resource.h
-  ${HEADER_PATH}/graphics/graph/shader_program.h
-  ${HEADER_PATH}/graphics/graph/shadow_buffer.h
   ${HEADER_PATH}/graphics/graph/texture_resource.h
   ${HEADER_PATH}/graphics/gui/debug_ui.h
   ${HEADER_PATH}/graphics/gui/ui.h
-  ${HEADER_PATH}/graphics/render/animation_render.h
-  ${HEADER_PATH}/graphics/render/debug_render.h
-  ${HEADER_PATH}/graphics/render/filter_render.h
-  ${HEADER_PATH}/graphics/render/gui_render.h
-  ${HEADER_PATH}/graphics/render/light_render.h
-  ${HEADER_PATH}/graphics/render/render.h
-  ${HEADER_PATH}/graphics/render/scene_render.h
-  ${HEADER_PATH}/graphics/render/shadow_render.h
-  ${HEADER_PATH}/graphics/render/sky_box_render.h
   ${HEADER_PATH}/graphics/scene/animation_data.h
   ${HEADER_PATH}/graphics/scene/camera.h
   ${HEADER_PATH}/graphics/scene/entity.h
@@ -179,9 +166,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/frontend/deletion_queue.cpp
   ${SOURCE_PATH}/graphics/frontend/shader_map.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
-  ${SOURCE_PATH}/graphics/graph/array_of_textures.cpp
   ${SOURCE_PATH}/graphics/graph/cascade_shadow_slice.cpp
-  ${SOURCE_PATH}/graphics/graph/gbuffer.cpp
   ${SOURCE_PATH}/graphics/graph/icon_resource.cpp
   ${SOURCE_PATH}/graphics/graph/material.cpp
   ${SOURCE_PATH}/graphics/graph/material_resource.cpp
@@ -189,20 +174,9 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/graph/mesh_draw_data.cpp
   ${SOURCE_PATH}/graphics/graph/model.cpp
   ${SOURCE_PATH}/graphics/graph/model_resource.cpp
-  ${SOURCE_PATH}/graphics/graph/shader_program.cpp
-  ${SOURCE_PATH}/graphics/graph/shadow_buffer.cpp
   ${SOURCE_PATH}/graphics/graph/texture_resource.cpp
   ${SOURCE_PATH}/graphics/gui/debug_ui.cpp
   ${SOURCE_PATH}/graphics/gui/ui.cpp
-  ${SOURCE_PATH}/graphics/render/animation_render.cpp
-  ${SOURCE_PATH}/graphics/render/debug_render.cpp
-  ${SOURCE_PATH}/graphics/render/filter_render.cpp
-  ${SOURCE_PATH}/graphics/render/gui_render.cpp
-  ${SOURCE_PATH}/graphics/render/light_render.cpp
-  ${SOURCE_PATH}/graphics/render/render.cpp
-  ${SOURCE_PATH}/graphics/render/scene_render.cpp
-  ${SOURCE_PATH}/graphics/render/shadow_render.cpp
-  ${SOURCE_PATH}/graphics/render/sky_box_render.cpp
   ${SOURCE_PATH}/graphics/scene/animation_data.cpp
   ${SOURCE_PATH}/graphics/scene/camera.cpp
   ${SOURCE_PATH}/graphics/scene/entity.cpp

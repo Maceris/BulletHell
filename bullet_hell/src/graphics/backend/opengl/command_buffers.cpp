@@ -1,6 +1,6 @@
 #include "graphics/frontend/backend_type.h"
 
-#if BACKEND_CURRENT == BACKEND_OPENGL || BACKEND_CURRENT == BACKEND_OPENGL_DEPRECATED
+#if BACKEND_CURRENT == BACKEND_OPENGL
 
 #include "graphics/backend/opengl/command_buffers.h"
 

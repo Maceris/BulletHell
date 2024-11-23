@@ -11,7 +11,6 @@
 #include "graphics/render_constants.h"
 #include "graphics/graph/cascade_shadow_slice.h"
 #include "graphics/graph/gbuffer.h"
-#include "graphics/render/shadow_render.h"
 #include "graphics/scene/scene.h"
 #include "graphics/scene/lights/ambient_light.h"
 #include "graphics/scene/lights/directional_light.h"

@@ -9,6 +9,8 @@
 
 #include "glad.h"
 
+//TODO(ches) BH-54 remove OpenGl dependency
+
 SkyBox::SkyBox()
 {
 	const std::string model_name = "models/skybox/skybox.model";
