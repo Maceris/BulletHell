@@ -60,6 +60,9 @@ GameLogic::GameLogic()
 void GameLogic::end_game()
 {
 	current_state = GameState::GAME_OVER;
+#if BACKEND_CURRENT != BACKEND_OPENGL_DEPRECATED
+	render_instance->swap_pipeline(RenderConfigPrefab::JUST_GUI);
+#endif
 }
 
 GameState GameLogic::get_current_state() const noexcept
