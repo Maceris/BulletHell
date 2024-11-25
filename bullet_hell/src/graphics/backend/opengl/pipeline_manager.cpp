@@ -29,8 +29,6 @@
 
 Texture* PipelineManager::default_texture = nullptr;
 
-//TODO(ches) BH-51 - fill this out
-
 /// <summary>
 /// Generates new gbuffer and return the pointer to it.
 /// </summary>

@@ -14,8 +14,6 @@
 
 #include "glad.h"
 
-//TODO(ches) BH-50 - fill this out
-
 Configuration Instance::configuration;
 
 Instance::Instance(Window& window)
