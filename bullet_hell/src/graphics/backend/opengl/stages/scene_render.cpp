@@ -16,7 +16,6 @@
 #include "graphics/frontend/texture.h"
 #include "graphics/frontend/texture_loader.h"
 #include "graphics/graph/texture_resource.h"
-#include "graphics/graph/gbuffer.h"
 #include "graphics/graph/material.h"
 #include "graphics/graph/mesh_data.h"
 #include "graphics/scene/scene.h"
