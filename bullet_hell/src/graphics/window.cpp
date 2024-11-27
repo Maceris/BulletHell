@@ -11,14 +11,13 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "debugging/logger.h"
+#include "graphics/frontend/backend_type.h"
 #include "graphics/graph/icon_resource.h"
 #include "graphics/gui/ui.h"
 #include "main/game_logic.h"
 #include "utilities/opengl_util.h"
 
 #include "glad.h"
-
-//TODO(ches) BH-54 remove OpenGl dependency
 
 /// <summary>
 /// The callback to register for handling errors.
@@ -82,6 +81,7 @@ void Window::initialize()
         glfwWindowHint(GLFW_SAMPLES, 4);
     }
 
+#if BACKEND_CURRENT == BACKEND_OPENGL
 #if defined(IMGUI_IMPL_OPENGL_ES2)
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 #elif defined(__APPLE__)
@@ -101,6 +101,12 @@ void Window::initialize()
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     }
+#elif BACKEND_CURRENT == BACKEND_VULKAN
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+#else
+    static_assert(false);
+#endif
 
     if (options.width > 0 || options.height > 0)
     {

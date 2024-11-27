@@ -4,10 +4,10 @@
 
 #include "graphics/mouse_input.h"
 
-/*
- * NOTE(ches) so we don't have to include glfw here, since it will interfere
- * with the windows definitions for things like APIENTRY.
- */
+/// <summary>
+/// Defined here so we don't have to include glfw here, since it will interfere
+/// with the windows definitions for things like APIENTRY.
+/// </summary>
 struct GLFWwindow;
 
 /// <summary>
