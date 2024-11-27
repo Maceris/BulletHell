@@ -10,7 +10,6 @@
 #include "debugging/timer.h"
 #include "graphics/render_constants.h"
 #include "graphics/graph/cascade_shadow_slice.h"
-#include "graphics/graph/gbuffer.h"
 #include "graphics/scene/scene.h"
 #include "graphics/scene/lights/ambient_light.h"
 #include "graphics/scene/lights/directional_light.h"
@@ -87,7 +86,7 @@ void LightRender::render(Scene& scene)
 
     int next_texture = 0;
     
-    for (int i = 0; i < G_BUFFER_TOTAL_TEXTURES; ++i)
+    for (int i = 0; i < (*gbuffer)->textures.size(); ++i)
     {
         glActiveTexture(GL_TEXTURE0 + next_texture);
         glBindTexture(GL_TEXTURE_2D, (*gbuffer)->textures[next_texture]);
