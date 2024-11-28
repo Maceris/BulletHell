@@ -18,6 +18,7 @@
 #include "utilities/opengl_util.h"
 
 #include "glad.h"
+#include "GLFW/glfw3.h"
 
 /// <summary>
 /// The callback to register for handling errors.
