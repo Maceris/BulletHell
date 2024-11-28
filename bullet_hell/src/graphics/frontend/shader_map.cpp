@@ -1,7 +1,3 @@
-#include "graphics/frontend/backend_type.h"
-
-#if BACKEND_CURRENT == BACKEND_OPENGL
-
 #include "graphics/frontend/shader_map.h"
 #include "memory/memory_util.h"
 
@@ -17,7 +13,6 @@ ShaderMap::~ShaderMap()
 void ShaderMap::add_shader(RenderStage::Type type, Shader* shader)
 {
 	remove_shader(type);
-	
 }
 
 void ShaderMap::clear_all()
@@ -48,5 +43,3 @@ Shader* ShaderMap::get_shader(RenderStage::Type type)
 	}
 	return nullptr;
 }
-
-#endif

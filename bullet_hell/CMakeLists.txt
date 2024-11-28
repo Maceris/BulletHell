@@ -163,6 +163,16 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/stages/scene_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/shadow_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/skybox_render.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/buffer.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/format_mapper.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/pipeline.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/pipeline_manager.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/quad_mesh.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/render_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/shader.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/texture_loader.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/uniforms_map.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/vulkan_instance.cpp
   ${SOURCE_PATH}/graphics/frontend/deletion_queue.cpp
   ${SOURCE_PATH}/graphics/frontend/shader_map.cpp
   ${SOURCE_PATH}/graphics/graph/animation_resource.cpp
