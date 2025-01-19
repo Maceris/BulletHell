@@ -1,6 +1,6 @@
 #include "graphics/frontend/backend_type.h"
 
-#if BACKEND_CURRENT == BACKEND_OPENGL
+#if BACKEND_CURRENT == BACKEND_VULKAN
 
 #include "graphics/frontend/buffer.h"
 
