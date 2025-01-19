@@ -52,6 +52,14 @@ enum class GameState
 
 using Instant = std::chrono::steady_clock::time_point;
 
+
+#if _DEBUG
+struct Cheats
+{
+	bool player_infinite_health = false;
+};
+#endif
+
 /// <summary>
 /// Handles the lifecycle for the game.
 /// </summary>
@@ -144,6 +152,10 @@ public:
 	/// up from 0.
 	/// </summary>
 	double round_timer = 0;
+
+#if _DEBUG
+	Cheats cheats;
+#endif
 
 private:
 	/// <summary>

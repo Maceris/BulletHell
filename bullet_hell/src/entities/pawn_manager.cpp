@@ -297,13 +297,19 @@ void inline PawnManager::tick_bullets()
 			player->scene_entity->position)
 			&& !bullet->scene_entity->dead)
 		{
-			player->health -= bullet->damage;
-			if (player->health <= 0)
+#if _DEBUG
+			bool skip_damage = g_game_logic->cheats.player_infinite_health;
+			if (!skip_damage)
+#endif
 			{
-				player->health = 0;
-				g_game_logic->end_game();
+				player->health -= bullet->damage;
+				if (player->health <= 0)
+				{
+					player->health = 0;
+					g_game_logic->end_game();
+				}
+				bullet->scene_entity->dead = true;
 			}
-			bullet->scene_entity->dead = true;
 		}
 		else
 		{

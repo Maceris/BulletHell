@@ -49,6 +49,7 @@ GameLogic::GameLogic()
 	, last_map_recenter{ std::chrono::steady_clock::now() }
 	, window{ nullptr }
 	, action_state{}
+	, cheats{}
 {
 }
 

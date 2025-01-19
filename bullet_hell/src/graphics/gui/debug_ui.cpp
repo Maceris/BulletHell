@@ -23,6 +23,7 @@ bool DebugUI::show_timing_window = false;
 bool DebugUI::wireframe = false;
 bool DebugUI::debug_lines = false;
 bool DebugUI::changed_render_settings = false;
+bool DebugUI::player_infinite_health = false;
 #pragma endregion
 
 constexpr ImVec4 RED = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
@@ -52,6 +53,16 @@ void DebugUI::draw()
 				{
 					g_game_logic->current_scene->dirty = true;
 				}
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Cheats"))
+		{
+			if (ImGui::Checkbox("Infinite Player Health",
+				&DebugUI::player_infinite_health))
+			{
+				g_game_logic->cheats.player_infinite_health = 
+					DebugUI::player_infinite_health;
 			}
 			ImGui::EndMenu();
 		}

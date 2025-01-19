@@ -57,6 +57,11 @@ private:
 	static bool debug_lines;
 
 	/// <summary>
+	/// Cheat - Whether we want to give the player infinite health.
+	/// </summary>
+	static bool player_infinite_health;
+
+	/// <summary>
 	/// If we have changed some settings relating to the rendering, and need
 	/// to apply those changes.
 	/// </summary>
