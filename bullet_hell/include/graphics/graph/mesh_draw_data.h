@@ -45,7 +45,7 @@ struct MeshDrawData
 	/// <summary>
 	/// The size of the mesh in bytes.
 	/// </summary>
-	const int size_in_bytes;
+	const size_t size_in_bytes;
 
 	/// <summary>
 	/// The material ID that the mesh is associated with.
@@ -81,7 +81,7 @@ struct MeshDrawData
 	/// with.</param>
 	/// <param name="offset">The offset to the base vertex.</param>
 	/// <param name="indices">The number of indices.</param>
-	MeshDrawData(const int size_in_bytes, const int material,
+	MeshDrawData(const size_t size_in_bytes, const int material,
 		const int offset, const int indices);
 
 	/// <summary>
@@ -94,7 +94,7 @@ struct MeshDrawData
 	/// <param name="indices">The number of indices.</param>
 	/// <param name="animated_mesh_draw_data">The animation mesh draw data.
 	/// </param>
-	MeshDrawData(const int size_in_bytes, const int material,
+	MeshDrawData(const size_t size_in_bytes, const int material,
 		const int offset, const int indices, 
 		const AnimMeshDrawData& animated_mesh_draw_data);
 

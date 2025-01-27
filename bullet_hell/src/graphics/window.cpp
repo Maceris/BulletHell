@@ -17,7 +17,9 @@
 #include "main/game_logic.h"
 #include "utilities/opengl_util.h"
 
+#if BACKEND_CURRENT == BACKEND_OPENGL
 #include "glad.h"
+#endif
 #include "GLFW/glfw3.h"
 
 /// <summary>
@@ -75,8 +77,8 @@ void Window::initialize()
     }
 
     glfwDefaultWindowHints();
-    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     if (options.anti_aliasing)
     {
         glfwWindowHint(GLFW_SAMPLES, 4);
@@ -87,7 +89,7 @@ void Window::initialize()
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 #elif defined(__APPLE__)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -100,11 +102,11 @@ void Window::initialize()
     else
     {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     }
 #elif BACKEND_CURRENT == BACKEND_VULKAN
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 #else
     static_assert(false);
 #endif
@@ -116,7 +118,7 @@ void Window::initialize()
     }
     else
     {
-        glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
         const GLFWvidmode* video_mode 
             = glfwGetVideoMode(glfwGetPrimaryMonitor());
         width = video_mode->width;
@@ -189,18 +191,31 @@ void Window::initialize()
         }
     );
 
+#if BACKEND_CURRENT == BACKEND_OPENGL
     glfwMakeContextCurrent(handle);
     gladLoadGL();
     glfwSwapInterval(1);
+#elif BACKEND_CURRENT == BACKEND_VULKAN
+
+#else
+    static_assert(false);
+#endif
 
     set_window_icon();
 
+#if BACKEND_CURRENT == BACKEND_OPENGL
     LOG_INFO("Initialized window with opengl v" 
         + std::string((char*)glGetString(GL_VERSION)));
+#elif BACKEND_CURRENT == BACKEND_VULKAN
+    LOG_INFO("Initialized window with vulkan");
+#else
+    static_assert(false);
+#endif
+
 #if 0
-#if _DEBUG
+#if _DEBUG && BACKEND_CURRENT == BACKEND_OPENGL
     OpenGLUtil::log_extensions();
-#endif // _DEBUG
+#endif
 #endif
 
 #if 0
@@ -227,7 +242,9 @@ bool Window::should_close()
 
 void Window::render()
 {
+#if BACKEND_CURRENT == BACKEND_OPENGL
     glfwSwapBuffers(handle);
+#endif
     glfwPollEvents();
 }
 

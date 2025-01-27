@@ -68,12 +68,12 @@ void AnimationRender::render(Scene& scene)
                 entity->animation_data.get_current_frame();
 
             parameter_list.push_back(anim_mesh_draw_data.binding_pose_offset);
-            parameter_list.push_back(mesh_draw_data.size_in_bytes / 4);
+            parameter_list.push_back(static_cast<int>(mesh_draw_data.size_in_bytes / 4));
             parameter_list.push_back(anim_mesh_draw_data.weights_offset);
             parameter_list.push_back(static_cast<int>(frame.offset));
             parameter_list.push_back(destination_offset);
             ++parameter_count;
-            destination_offset += mesh_draw_data.size_in_bytes / 4;
+            destination_offset += static_cast<int>(mesh_draw_data.size_in_bytes / 4);
         }
 
         render_info.emplace(

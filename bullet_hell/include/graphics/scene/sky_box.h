@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include "graphics/glad_types.h"
-
 struct Entity;
 struct MeshData;
 struct Model;

@@ -10,7 +10,7 @@ AnimMeshDrawData::AnimMeshDrawData(std::shared_ptr<Entity> entity,
 	, weights_offset{ weights_offset }
 {}
 
-MeshDrawData::MeshDrawData(const int size_in_bytes, const int material,
+MeshDrawData::MeshDrawData(const size_t size_in_bytes, const int material,
 	const int offset, const int indices,
 	const AnimMeshDrawData& animated_mesh_draw_data)
 	: size_in_bytes{ size_in_bytes }
@@ -21,9 +21,9 @@ MeshDrawData::MeshDrawData(const int size_in_bytes, const int material,
 	, is_animated{ true }
 {}
 
-MeshDrawData::MeshDrawData(const int size_in_bytes, const int material,
+MeshDrawData::MeshDrawData(const size_t size_in_bytes, const int material,
 	const int offset, const int indices)
-	: size_in_bytes(size_in_bytes)
+	: size_in_bytes{ size_in_bytes }
 	, material{ material }
 	, offset{ offset }
 	, indices{ indices }

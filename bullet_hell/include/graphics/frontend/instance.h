@@ -22,7 +22,6 @@ struct Configuration
 #endif
 };
 
-
 class Instance
 {
 	friend class PipelineManager;
