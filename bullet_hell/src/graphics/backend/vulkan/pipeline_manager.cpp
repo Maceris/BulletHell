@@ -28,7 +28,7 @@ Texture* PipelineManager::default_texture = nullptr;
 
 struct PipelineManager::Data
 {
-	Data(Window& window);
+	Data(const Window& window);
 	Data(const Data&) = delete;
 	Data& operator=(const Data&) = delete;
 	~Data();
@@ -37,7 +37,7 @@ struct PipelineManager::Data
 	std::map<RenderConfig, Pipeline*> pipelines;
 };
 
-PipelineManager::Data::Data(Window& window)
+PipelineManager::Data::Data(const Window& window)
 {}
 
 PipelineManager::Data::~Data()
@@ -45,7 +45,7 @@ PipelineManager::Data::~Data()
 
 }
 
-PipelineManager::PipelineManager(Window& window, 
+PipelineManager::PipelineManager(const Window& window, 
 	DeletionQueue* const deletion_queue, ShaderMap& shaders)
 	: data{ std::make_unique<Data>(window) }
 	, deletion_queue{ deletion_queue }

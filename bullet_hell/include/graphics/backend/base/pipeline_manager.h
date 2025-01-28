@@ -15,7 +15,7 @@ public:
 	struct Data;
 	static Texture* default_texture;
 
-	PipelineManager(Window& window, DeletionQueue* const deletion_queue,
+	PipelineManager(const Window& window, DeletionQueue* const deletion_queue,
 		ShaderMap& shaders);
 	PipelineManager(const PipelineManager&) = delete;
 	PipelineManager& operator=(const PipelineManager&) = delete;

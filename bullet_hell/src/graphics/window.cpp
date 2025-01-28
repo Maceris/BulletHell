@@ -71,11 +71,6 @@ void Window::initialize()
 {
     glfwSetErrorCallback(error_callback);
     
-    if (!glfwInit())
-    {
-        exit(EXIT_FAILURE);
-    }
-
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);

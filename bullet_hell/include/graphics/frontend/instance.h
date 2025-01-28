@@ -27,14 +27,16 @@ class Instance
 	friend class PipelineManager;
 
 public:
-	Instance(Window& window);
+	Instance();
 	Instance(const Instance&) = delete;
 	Instance& operator=(const Instance&) = delete;
 	Instance(Instance&&) = delete;
 	Instance& operator=(Instance&&) = delete;
 	~Instance();
 
-	void initialize(const Window& window);
+	void initialize();
+	void create_swap_chain(const Window& window);
+	void initialize_pipeline_manager(const Window& window);
 	void process_resources();
 	void render(Scene& scene);
 	void resize(int width, int height);
@@ -51,7 +53,7 @@ private:
 	//NOTE(ches) in initialization order
 	DeletionQueue deletion_queue;
 	ShaderMap shader_map;
-	PipelineManager pipeline_manager;
+	PipelineManager* pipeline_manager;
 	Pipeline* pipeline;
 
 	struct Data;

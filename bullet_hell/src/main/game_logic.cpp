@@ -87,10 +87,16 @@ bool GameLogic::initialize()
 
 	g_event_manager = ALLOC EventManager();
 
+	render_instance = std::make_unique<Instance>();
+	render_instance->initialize();
+
 	window = ALLOC Window();
 	TIME_START("Window Init");
 	window->initialize();
 	TIME_END("Window Init");
+
+	render_instance->create_swap_chain(*window);
+	render_instance->initialize_pipeline_manager(*window);
 
 	for (Action action : ActionIterator())
 	{
@@ -99,8 +105,6 @@ bool GameLogic::initialize()
 
 	PipelineManager::default_texture = ALLOC Texture(
 		TextureLoader::load("textures/default_texture.image"));
-
-	render_instance = std::make_unique<Instance>(*window);
 
 	UI::first_time_setup();
 

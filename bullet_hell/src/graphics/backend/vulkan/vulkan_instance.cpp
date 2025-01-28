@@ -213,12 +213,26 @@ void popualate_debug_info(VkDebugUtilsMessengerCreateInfoEXT& create_info)
     create_info.pUserData = nullptr;
 }
 
-Instance::Instance(Window& window)
+Instance::Instance()
 	: deletion_queue{}
 	, shader_map{}
-	, pipeline_manager{ window, &deletion_queue, shader_map }
+	, pipeline_manager{ nullptr }
+    , pipeline{ nullptr }
     , data{ std::make_unique<Data>() }
 {
+    //NOTE(ches) for the Vulkan diagnostic messages in our debug callback
+    Logger::set_display_flags("Debug", FLAG_WRITE_TO_DEBUGGER);
+
+    if (!glfwInit())
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    if (!glfwVulkanSupported())
+    {
+        LOG_FATAL("Vulkan is not supported on this system!");
+    }
+
     if (ENABLE_VALIDATION_LAYERS && !check_validation_layer_support())
     {
         LOG_FATAL("We expect validation layers but don't have them");
@@ -284,15 +298,7 @@ Instance::Instance(Window& window)
         LOG_ERROR("Failed attaching a debug callback for validation logs");
     }
 
-    pipeline = pipeline_manager.get_pipeline(RenderConfigPrefab::JUST_GUI);
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForVulkan(window.handle, true);
+    
 }
 
 Instance::~Instance()
@@ -308,9 +314,24 @@ void delete_resource(DeletionQueue::Entry entry)
 	
 }
 
-void Instance::initialize(const Window& window)
+void Instance::initialize()
+{}
+
+void Instance::create_swap_chain(const Window& window)
 {
-	
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForVulkan(window.handle, true);
+}
+
+void Instance::initialize_pipeline_manager(const Window& window)
+{
+    pipeline_manager = ALLOC PipelineManager(window, &deletion_queue, shader_map);
+    pipeline = pipeline_manager->get_pipeline(RenderConfigPrefab::JUST_GUI);
 }
 
 void Instance::process_resources()
@@ -325,7 +346,7 @@ void Instance::render(Scene& scene)
 
 void Instance::resize(int width, int height)
 {
-	pipeline_manager.resize(width, height);
+	pipeline_manager->resize(width, height);
 	ImVec2& display_size = ImGui::GetMainViewport()->Size;
 	display_size.x = width;
 	display_size.y = height;
@@ -333,12 +354,12 @@ void Instance::resize(int width, int height)
 
 void Instance::setup_data(Scene& scene)
 {
-	pipeline_manager.setup_data(scene);
+	pipeline_manager->setup_data(scene);
 }
 
 void Instance::swap_pipeline(RenderConfig config)
 {
-	pipeline = pipeline_manager.get_pipeline(config);
+	pipeline = pipeline_manager->get_pipeline(config);
 }
 
 void Instance::set_filter(const std::string_view shader_path)

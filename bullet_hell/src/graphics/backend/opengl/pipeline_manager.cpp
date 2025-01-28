@@ -52,7 +52,7 @@ Framebuffer* generate_shadow_buffers();
 
 struct PipelineManager::Data
 {
-	Data(Window& window);
+	Data(const Window& window);
 	Data(const Data&) = delete;
 	Data& operator=(const Data&) = delete;
 	~Data();
@@ -91,7 +91,7 @@ struct PipelineManager::Data
 	std::map<RenderConfig, Pipeline*> pipelines;
 };
 
-PipelineManager::Data::Data(Window& window)
+PipelineManager::Data::Data(const Window& window)
 	: point_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
 	, spot_lights{ ALLOC Buffer(Buffer::Type::SHADER_STORAGE) }
 	, cascade_shadows{ ALLOC CascadeShadows() }
@@ -302,7 +302,7 @@ Framebuffer* generate_shadow_buffers()
 		SHADOW_MAP_HEIGHT, texture_handles);
 }
 
-PipelineManager::PipelineManager(Window& window, 
+PipelineManager::PipelineManager(const Window& window,
 	DeletionQueue* const deletion_queue, ShaderMap& shaders)
 	: data{ std::make_unique<Data>(window) }
 	, deletion_queue{ deletion_queue }

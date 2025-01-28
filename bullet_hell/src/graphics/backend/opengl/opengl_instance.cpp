@@ -26,22 +26,17 @@ Configuration Instance::configuration;
 
 struct Instance::Data {};
 
-Instance::Instance(Window& window)
+Instance::Instance()
 	: deletion_queue{}
 	, shader_map{}
-	, pipeline_manager{ window, &deletion_queue, shader_map }
-	, pipeline{ pipeline_manager.get_pipeline(RenderConfigPrefab::JUST_GUI) }
+	, pipeline_manager{ nullptr }
+	, pipeline{ nullptr }
 	, data{std::make_unique<Data>() }
 {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-	ImGui::StyleColorsDark();
-
-	ImGui_ImplGlfw_InitForOpenGL(window.handle, true);
-	ImGui_ImplOpenGL3_Init("#version 460");
+	if (!glfwInit())
+	{
+		exit(EXIT_FAILURE);
+	}
 }
 
 Instance::~Instance()
@@ -89,14 +84,34 @@ void delete_resource(DeletionQueue::Entry entry) {
 	}
 }
 
-void Instance::initialize(const Window& window)
+void Instance::initialize()
 {
+}
+
+void Instance::create_swap_chain(const Window& window)
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplGlfw_InitForOpenGL(window.handle, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Instance::initialize_pipeline_manager(const Window& window)
+{
+	pipeline_manager = ALLOC PipelineManager(window, &deletion_queue, shader_map);
+	pipeline = pipeline_manager->get_pipeline(RenderConfigPrefab::JUST_GUI);
 }
 
 void Instance::process_resources()
@@ -114,7 +129,7 @@ void Instance::render(Scene& scene)
 
 void Instance::resize(int width, int height)
 {
-	pipeline_manager.resize(width, height);
+	pipeline_manager->resize(width, height);
 	ImVec2& display_size = ImGui::GetMainViewport()->Size;
 	display_size.x = width;
 	display_size.y = height;
@@ -122,12 +137,12 @@ void Instance::resize(int width, int height)
 
 void Instance::setup_data(Scene& scene)
 {
-	pipeline_manager.setup_data(scene);
+	pipeline_manager->setup_data(scene);
 }
 
 void Instance::swap_pipeline(RenderConfig config)
 {
-	pipeline = pipeline_manager.get_pipeline(config);
+	pipeline = pipeline_manager->get_pipeline(config);
 }
 
 void Instance::set_filter(const std::string_view shader_path)
