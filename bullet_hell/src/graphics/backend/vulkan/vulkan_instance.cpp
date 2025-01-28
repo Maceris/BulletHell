@@ -11,6 +11,7 @@
 #include "graphics/frontend/instance.h"
 #include "graphics/frontend/texture.h"
 #include "graphics/gui/ui.h"
+#include "main/game_logic.h"
 #include "memory/memory_util.h"
 
 #include <vulkan/vulkan.h>
@@ -317,7 +318,12 @@ void delete_resource(DeletionQueue::Entry entry)
 void Instance::initialize()
 {}
 
-void Instance::create_swap_chain(const Window& window)
+void Instance::create_swap_chain()
+{
+    //TODO(ches) create swap chains
+}
+
+void Instance::initialize_pipeline_manager()
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -325,18 +331,21 @@ void Instance::create_swap_chain(const Window& window)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForVulkan(window.handle, true);
-}
+    ImGui_ImplGlfw_InitForVulkan(g_game_logic->window->handle, true);
 
-void Instance::initialize_pipeline_manager(const Window& window)
-{
-    pipeline_manager = ALLOC PipelineManager(window, &deletion_queue, shader_map);
+    pipeline_manager = ALLOC PipelineManager(*g_game_logic->window,
+        &deletion_queue, shader_map);
     pipeline = pipeline_manager->get_pipeline(RenderConfigPrefab::JUST_GUI);
 }
 
 void Instance::process_resources()
 {
 	
+}
+
+void Instance::recreate_swap_chain()
+{
+    //TODO(ches) recreate swap chains
 }
 
 void Instance::render(Scene& scene)

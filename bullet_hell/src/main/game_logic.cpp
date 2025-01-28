@@ -95,8 +95,8 @@ bool GameLogic::initialize()
 	window->initialize();
 	TIME_END("Window Init");
 
-	render_instance->create_swap_chain(*window);
-	render_instance->initialize_pipeline_manager(*window);
+	render_instance->create_swap_chain();
+	render_instance->initialize_pipeline_manager();
 
 	for (Action action : ActionIterator())
 	{

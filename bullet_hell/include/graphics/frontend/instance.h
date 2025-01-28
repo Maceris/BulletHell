@@ -34,10 +34,20 @@ public:
 	Instance& operator=(Instance&&) = delete;
 	~Instance();
 
+	/// <summary>
+	/// Create a swap chain. Should only be called directly near
+	/// initialization, once one is created recreate_swap_chain should be used.
+	/// </summary>
+	/// <param name="window"></param>
+	void create_swap_chain();
+
+	/// <summary>
+	/// Early initialization of the instance.
+	/// </summary>
 	void initialize();
-	void create_swap_chain(const Window& window);
-	void initialize_pipeline_manager(const Window& window);
+	void initialize_pipeline_manager();
 	void process_resources();
+	void recreate_swap_chain();
 	void render(Scene& scene);
 	void resize(int width, int height);
 	void setup_data(Scene& scene);

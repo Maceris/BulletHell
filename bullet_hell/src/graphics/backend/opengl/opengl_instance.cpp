@@ -10,6 +10,7 @@
 #include "graphics/frontend/instance.h"
 #include "graphics/frontend/texture.h"
 #include "graphics/gui/ui.h"
+#include "main/game_logic.h"
 #include "memory/memory_util.h"
 
 #include "glad.h"
@@ -84,11 +85,10 @@ void delete_resource(DeletionQueue::Entry entry) {
 	}
 }
 
-void Instance::initialize()
-{
-}
+void Instance::create_swap_chain() {}
+void Instance::initialize() {}
 
-void Instance::create_swap_chain(const Window& window)
+void Instance::initialize_pipeline_manager()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -97,7 +97,7 @@ void Instance::create_swap_chain(const Window& window)
 
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplGlfw_InitForOpenGL(window.handle, true);
+	ImGui_ImplGlfw_InitForOpenGL(g_game_logic->window->handle, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 
 	glEnable(GL_MULTISAMPLE);
@@ -106,11 +106,9 @@ void Instance::create_swap_chain(const Window& window)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
 
-void Instance::initialize_pipeline_manager(const Window& window)
-{
-	pipeline_manager = ALLOC PipelineManager(window, &deletion_queue, shader_map);
+	pipeline_manager = ALLOC PipelineManager(*g_game_logic->window,
+		&deletion_queue, shader_map);
 	pipeline = pipeline_manager->get_pipeline(RenderConfigPrefab::JUST_GUI);
 }
 
@@ -121,6 +119,8 @@ void Instance::process_resources()
 		delete_resource(*to_delete);
 	}
 }
+
+void Instance::recreate_swap_chain() {}
 
 void Instance::render(Scene& scene)
 {
