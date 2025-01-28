@@ -24,11 +24,14 @@
 
 Configuration Instance::configuration;
 
+struct Instance::Data {};
+
 Instance::Instance(Window& window)
 	: deletion_queue{}
 	, shader_map{}
 	, pipeline_manager{ window, &deletion_queue, shader_map }
 	, pipeline{ pipeline_manager.get_pipeline(RenderConfigPrefab::JUST_GUI) }
+	, data{std::make_unique<Data>() }
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

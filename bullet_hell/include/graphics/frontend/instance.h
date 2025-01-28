@@ -53,4 +53,7 @@ private:
 	ShaderMap shader_map;
 	PipelineManager pipeline_manager;
 	Pipeline* pipeline;
+
+	struct Data;
+	const std::unique_ptr<Data> data;
 };
