@@ -1,0 +1,24 @@
+#pragma once
+
+#include "graphics/frontend/backend_type.h"
+
+#if BACKEND_CURRENT == BACKEND_VULKAN
+
+#include <atomic>
+#include <vector>
+
+#include <vulkan/vulkan.h>
+
+/// <summary>
+/// Handles the lifecycle of a swap chain.
+/// </summary>
+struct SwapChain
+{
+	VkSwapchainKHR vulkan_swap_chain;
+	std::vector<VkImage> images{};
+	std::vector<VkImageView> image_views{};
+	VkExtent2D extent;
+	VkFormat image_format;
+};
+
+#endif

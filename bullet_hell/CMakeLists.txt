@@ -70,6 +70,8 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/backend/opengl/stages/scene_render.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/shadow_render.h
   ${HEADER_PATH}/graphics/backend/opengl/stages/skybox_render.h
+  ${HEADER_PATH}/graphics/backend/vulkan/device.h
+  ${HEADER_PATH}/graphics/backend/vulkan/swap_chain.h
   ${HEADER_PATH}/graphics/frontend/attachment.h
   ${HEADER_PATH}/graphics/frontend/backend_type.h
   ${HEADER_PATH}/graphics/frontend/buffer.h
@@ -164,6 +166,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/opengl/stages/shadow_render.cpp
   ${SOURCE_PATH}/graphics/backend/opengl/stages/skybox_render.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/buffer.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/device.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/format_mapper.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/pipeline.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/pipeline_manager.cpp

@@ -6,6 +6,8 @@
 
 #include "revision.h"
 #include "debugging/logger.h"
+#include "graphics/backend/vulkan/device.h"
+#include "graphics/backend/vulkan/swap_chain.h"
 #include "graphics/frontend/buffer.h"
 #include "graphics/frontend/framebuffer.h"
 #include "graphics/frontend/instance.h"
@@ -21,6 +23,7 @@
 
 Configuration Instance::configuration;
 
+#pragma region Constants
 /// <summary>
 /// The validation layers that we want to enable.
 /// </summary>
@@ -34,12 +37,37 @@ constexpr bool ENABLE_VALIDATION_LAYERS = true;
 constexpr bool ENABLE_VALIDATION_LAYERS = false;
 #endif
 
+#pragma endregion
+
+#pragma region Structs
+
+struct WindowState
+{
+    std::atomic<int> height;
+    std::atomic<int> width;
+    std::atomic_bool resized = false;
+
+    VkSurfaceKHR surface = nullptr;
+    VkSurfaceFormatKHR* surface_format = nullptr;
+    VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
+};
+
 struct Instance::Data
 {
     VkInstance instance{};
     VkDebugUtilsMessengerEXT debug_messenger{};
+    
+    SwapChainSupport swap_chain_support;
+
+    Device device;
+    SwapChain swap_chain;
+    WindowState window_state;
+
 };
 
+#pragma endregion
+
+#pragma region Callbacks
 static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
     VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
     VkDebugUtilsMessageTypeFlagsEXT message_type,
@@ -92,7 +120,9 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
 
     return VK_FALSE;
 }
+#pragma endregion
 
+#pragma region Utility functions
 /// <summary>
 /// Attemt to load and call an extension function.
 /// </summary>
@@ -214,6 +244,36 @@ void popualate_debug_info(VkDebugUtilsMessengerCreateInfoEXT& create_info)
     create_info.pUserData = nullptr;
 }
 
+[[nodiscard]]
+VkExtent2D select_extent(const VkSurfaceCapabilitiesKHR& capabilities,
+    int window_width, int window_height)
+{
+    if (capabilities.currentExtent.width
+        != std::numeric_limits<uint32_t>::max())
+    {
+        return capabilities.currentExtent;
+    }
+    else
+    {
+        VkExtent2D actualExtent = {
+            static_cast<uint32_t>(window_width),
+            static_cast<uint32_t>(window_height)
+        };
+
+        actualExtent.width = std::clamp(actualExtent.width,
+            capabilities.minImageExtent.width,
+            capabilities.maxImageExtent.width);
+        actualExtent.height = std::clamp(actualExtent.height,
+            capabilities.minImageExtent.height,
+            capabilities.maxImageExtent.height);
+
+        return actualExtent;
+    }
+}
+
+#pragma endregion
+
+#pragma region Instance
 Instance::Instance()
 	: deletion_queue{}
 	, shader_map{}
@@ -299,7 +359,6 @@ Instance::Instance()
         LOG_ERROR("Failed attaching a debug callback for validation logs");
     }
 
-    
 }
 
 Instance::~Instance()
@@ -316,11 +375,109 @@ void delete_resource(DeletionQueue::Entry entry)
 }
 
 void Instance::initialize()
-{}
+{
+    //TODO(ches) create device
+
+    data->swap_chain_support = check_swap_chain_support(
+        data->device.physical_device,
+        data->window_state.surface);
+}
 
 void Instance::create_swap_chain()
 {
     //TODO(ches) create swap chains
+
+    const Device& device = data->device;
+    const SwapChainSupport& support = data->swap_chain_support;
+
+    VkExtent2D extent = select_extent(support.capabilities,
+        data->window_state.width, data->window_state.height);
+    uint32_t image_count = support.capabilities.minImageCount + 1;
+    if (support.capabilities.maxImageCount > 0
+        && image_count > support.capabilities.maxImageCount)
+    {
+        image_count = support.capabilities.maxImageCount;
+    }
+
+    VkSwapchainCreateInfoKHR create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    create_info.surface = data->window_state.surface;
+    create_info.minImageCount = image_count;
+    create_info.imageFormat = data->window_state.surface_format->format;
+    create_info.imageColorSpace = data->window_state.surface_format->colorSpace;
+    create_info.imageExtent = extent;
+    create_info.imageArrayLayers = 1;
+    create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    create_info.preTransform = support.capabilities.currentTransform;
+    create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    create_info.presentMode = data->window_state.present_mode;
+    create_info.clipped = VK_TRUE;
+    //TODO(ches) This will eventually need handling
+    create_info.oldSwapchain = VK_NULL_HANDLE;
+
+    QueueFamilyIndices indices = find_queue_families(device.physical_device,
+        data->window_state.surface);
+
+    uint32_t queue_family_indices[] = {
+        indices.graphics_family.value(),
+        indices.present_family.value()
+    };
+
+    if (indices.graphics_family != indices.present_family)
+    {
+        create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        create_info.queueFamilyIndexCount = 2;
+        create_info.pQueueFamilyIndices = queue_family_indices;
+    }
+    else
+    {
+        create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        create_info.queueFamilyIndexCount = 0;
+        create_info.pQueueFamilyIndices = nullptr;
+    }
+
+    if (vkCreateSwapchainKHR(device.logical_device, &create_info, nullptr,
+        &data->swap_chain.vulkan_swap_chain) != VK_SUCCESS)
+    {
+        LOG_FATAL("Failed to create swap chain");
+    }
+
+    vkGetSwapchainImagesKHR(device.logical_device,
+        data->swap_chain.vulkan_swap_chain, &image_count, nullptr);
+    data->swap_chain.images.resize(image_count);
+    vkGetSwapchainImagesKHR(device.logical_device,
+        data->swap_chain.vulkan_swap_chain, &image_count,
+        data->swap_chain.images.data());
+
+    data->swap_chain.image_format = data->window_state.surface_format->format;
+    data->swap_chain.extent = extent;
+
+    data->swap_chain.image_views.resize(data->swap_chain.images.size());
+
+
+    for (size_t i = 0; i < data->swap_chain.images.size(); i++)
+    {
+        VkImageViewCreateInfo create_info{};
+        create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        create_info.image = data->swap_chain.images[i];
+        create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        create_info.format = data->swap_chain.image_format;
+        create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        create_info.subresourceRange.baseMipLevel = 0;
+        create_info.subresourceRange.levelCount = 1;
+        create_info.subresourceRange.baseArrayLayer = 0;
+        create_info.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(device.logical_device, &create_info, nullptr,
+            &data->swap_chain.image_views[i]) != VK_SUCCESS)
+        {
+            LOG_FATAL("Failed to create image views for the swap chain");
+        }
+    }
 }
 
 void Instance::initialize_pipeline_manager()
@@ -346,6 +503,25 @@ void Instance::process_resources()
 void Instance::recreate_swap_chain()
 {
     //TODO(ches) recreate swap chains
+
+    vkDeviceWaitIdle(data->device.logical_device);
+    //TODO(ches) destroy_frame_buffers();
+
+    const VkDevice& device = data->device.logical_device;
+
+    for (auto view : data->swap_chain.image_views)
+    {
+        vkDestroyImageView(device, view, nullptr);
+    }
+    data->swap_chain.image_views.clear();
+
+    vkDestroySwapchainKHR(device, data->swap_chain.vulkan_swap_chain, nullptr);
+
+    //TODO(ches) render_state->recreate_synchronization_objects();
+
+    create_swap_chain();
+    //TODO(ches) create_frame_buffers();
+
 }
 
 void Instance::render(Scene& scene)
@@ -386,5 +562,6 @@ void Instance::set_filter(const std::string_view shader_path)
 	shader_map.add_shader(RenderStage::Type::FILTER, shader);
 }
 
+#pragma endregion
 
 #endif
