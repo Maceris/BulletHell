@@ -412,8 +412,7 @@ void Instance::create_swap_chain()
     create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     create_info.presentMode = data->window_state.present_mode;
     create_info.clipped = VK_TRUE;
-    //TODO(ches) This will eventually need handling
-    create_info.oldSwapchain = VK_NULL_HANDLE;
+    create_info.oldSwapchain = data->swap_chain.last_swap_chain;
 
     QueueFamilyIndices indices = find_queue_families(device.physical_device,
         data->window_state.surface);
@@ -453,7 +452,6 @@ void Instance::create_swap_chain()
     data->swap_chain.extent = extent;
 
     data->swap_chain.image_views.resize(data->swap_chain.images.size());
-
 
     for (size_t i = 0; i < data->swap_chain.images.size(); i++)
     {
@@ -502,6 +500,8 @@ void Instance::process_resources()
 
 void Instance::recreate_swap_chain()
 {
+    data->swap_chain.last_swap_chain = data->swap_chain.vulkan_swap_chain;
+
     //TODO(ches) recreate swap chains
 
     vkDeviceWaitIdle(data->device.logical_device);
