@@ -6,8 +6,7 @@
 
 #include "revision.h"
 #include "debugging/logger.h"
-#include "graphics/backend/vulkan/device.h"
-#include "graphics/backend/vulkan/swap_chain.h"
+#include "graphics/backend/vulkan/global_state.h"
 #include "graphics/frontend/buffer.h"
 #include "graphics/frontend/framebuffer.h"
 #include "graphics/frontend/instance.h"
@@ -36,34 +35,6 @@ constexpr bool ENABLE_VALIDATION_LAYERS = true;
 #else
 constexpr bool ENABLE_VALIDATION_LAYERS = false;
 #endif
-
-#pragma endregion
-
-#pragma region Structs
-
-struct WindowState
-{
-    std::atomic<int> height;
-    std::atomic<int> width;
-    std::atomic_bool resized = false;
-
-    VkSurfaceKHR surface = nullptr;
-    VkSurfaceFormatKHR* surface_format = nullptr;
-    VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
-};
-
-struct Instance::Data
-{
-    VkInstance instance{};
-    VkDebugUtilsMessengerEXT debug_messenger{};
-    
-    SwapChainSupport swap_chain_support;
-
-    Device device;
-    SwapChain swap_chain;
-    WindowState window_state;
-
-};
 
 #pragma endregion
 
@@ -231,6 +202,8 @@ void popualate_debug_info(VkDebugUtilsMessengerCreateInfoEXT& create_info)
 {
     create_info.sType =
         VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+    create_info.pNext = nullptr;
+    create_info.flags = 0;
     create_info.messageSeverity =
         VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
         | VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT
@@ -279,7 +252,6 @@ Instance::Instance()
 	, shader_map{}
 	, pipeline_manager{ nullptr }
     , pipeline{ nullptr }
-    , data{ std::make_unique<Data>() }
 {
     //NOTE(ches) for the Vulkan diagnostic messages in our debug callback
     Logger::set_display_flags("Debug", FLAG_WRITE_TO_DEBUGGER);
@@ -336,7 +308,7 @@ Instance::Instance()
         static_cast<uint32_t>(extensions.size());
     create_info.ppEnabledExtensionNames = extensions.data();
 
-    if (vkCreateInstance(&create_info, nullptr, &data->instance)
+    if (vkCreateInstance(&create_info, nullptr, &g_vk_state.instance)
         != VK_SUCCESS)
     {
         LOG_FATAL("Failed to create Vulkan instance");
@@ -349,10 +321,10 @@ Instance::Instance()
 
     VkAllocationCallbacks* allocator = nullptr;
 
-    call_extension_function(data->instance, "vkCreateDebugUtilsMessengerEXT",
+    call_extension_function(g_vk_state.instance, "vkCreateDebugUtilsMessengerEXT",
         &debug_creation_result,
-        data->instance, &debug_create_info, allocator,
-        &data->debug_messenger);
+        g_vk_state.instance, &debug_create_info, allocator,
+        &g_vk_state.debug_messenger);
 
     if (debug_creation_result != VK_SUCCESS)
     {
@@ -378,20 +350,20 @@ void Instance::initialize()
 {
     //TODO(ches) create device
 
-    data->swap_chain_support = check_swap_chain_support(
-        data->device.physical_device,
-        data->window_state.surface);
+   /* g_vk_state.swap_chain_support = check_swap_chain_support(
+        g_vk_state.device.physical_device,
+        g_vk_state.window_state.surface);*/
 }
 
 void Instance::create_swap_chain()
 {
-    //TODO(ches) create swap chains
+    //TODO(ches) create surface first
 
-    const Device& device = data->device;
-    const SwapChainSupport& support = data->swap_chain_support;
+    const Device& device = g_vk_state.device;
+    const SwapChainSupport& support = g_vk_state.swap_chain_support;
 
     VkExtent2D extent = select_extent(support.capabilities,
-        data->window_state.width, data->window_state.height);
+        g_vk_state.window_state.width, g_vk_state.window_state.height);
     uint32_t image_count = support.capabilities.minImageCount + 1;
     if (support.capabilities.maxImageCount > 0
         && image_count > support.capabilities.maxImageCount)
@@ -401,21 +373,21 @@ void Instance::create_swap_chain()
 
     VkSwapchainCreateInfoKHR create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    create_info.surface = data->window_state.surface;
+    create_info.surface = g_vk_state.window_state.surface;
     create_info.minImageCount = image_count;
-    create_info.imageFormat = data->window_state.surface_format->format;
-    create_info.imageColorSpace = data->window_state.surface_format->colorSpace;
+    create_info.imageFormat = g_vk_state.window_state.surface_format->format;
+    create_info.imageColorSpace = g_vk_state.window_state.surface_format->colorSpace;
     create_info.imageExtent = extent;
     create_info.imageArrayLayers = 1;
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     create_info.preTransform = support.capabilities.currentTransform;
     create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    create_info.presentMode = data->window_state.present_mode;
+    create_info.presentMode = g_vk_state.window_state.present_mode;
     create_info.clipped = VK_TRUE;
-    create_info.oldSwapchain = data->swap_chain.last_swap_chain;
+    create_info.oldSwapchain = g_vk_state.swap_chain.last_swap_chain;
 
     QueueFamilyIndices indices = find_queue_families(device.physical_device,
-        data->window_state.surface);
+        g_vk_state.window_state.surface);
 
     uint32_t queue_family_indices[] = {
         indices.graphics_family.value(),
@@ -436,30 +408,30 @@ void Instance::create_swap_chain()
     }
 
     if (vkCreateSwapchainKHR(device.logical_device, &create_info, nullptr,
-        &data->swap_chain.vulkan_swap_chain) != VK_SUCCESS)
+        &g_vk_state.swap_chain.vulkan_swap_chain) != VK_SUCCESS)
     {
         LOG_FATAL("Failed to create swap chain");
     }
 
     vkGetSwapchainImagesKHR(device.logical_device,
-        data->swap_chain.vulkan_swap_chain, &image_count, nullptr);
-    data->swap_chain.images.resize(image_count);
+        g_vk_state.swap_chain.vulkan_swap_chain, &image_count, nullptr);
+    g_vk_state.swap_chain.images.resize(image_count);
     vkGetSwapchainImagesKHR(device.logical_device,
-        data->swap_chain.vulkan_swap_chain, &image_count,
-        data->swap_chain.images.data());
+        g_vk_state.swap_chain.vulkan_swap_chain, &image_count,
+        g_vk_state.swap_chain.images.data());
 
-    data->swap_chain.image_format = data->window_state.surface_format->format;
-    data->swap_chain.extent = extent;
+    g_vk_state.swap_chain.image_format = g_vk_state.window_state.surface_format->format;
+    g_vk_state.swap_chain.extent = extent;
 
-    data->swap_chain.image_views.resize(data->swap_chain.images.size());
+    g_vk_state.swap_chain.image_views.resize(g_vk_state.swap_chain.images.size());
 
-    for (size_t i = 0; i < data->swap_chain.images.size(); i++)
+    for (size_t i = 0; i < g_vk_state.swap_chain.images.size(); i++)
     {
         VkImageViewCreateInfo create_info{};
         create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        create_info.image = data->swap_chain.images[i];
+        create_info.image = g_vk_state.swap_chain.images[i];
         create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        create_info.format = data->swap_chain.image_format;
+        create_info.format = g_vk_state.swap_chain.image_format;
         create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
         create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -471,7 +443,7 @@ void Instance::create_swap_chain()
         create_info.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(device.logical_device, &create_info, nullptr,
-            &data->swap_chain.image_views[i]) != VK_SUCCESS)
+            &g_vk_state.swap_chain.image_views[i]) != VK_SUCCESS)
         {
             LOG_FATAL("Failed to create image views for the swap chain");
         }
@@ -500,22 +472,22 @@ void Instance::process_resources()
 
 void Instance::recreate_swap_chain()
 {
-    data->swap_chain.last_swap_chain = data->swap_chain.vulkan_swap_chain;
+    g_vk_state.swap_chain.last_swap_chain = g_vk_state.swap_chain.vulkan_swap_chain;
 
     //TODO(ches) recreate swap chains
 
-    vkDeviceWaitIdle(data->device.logical_device);
+    vkDeviceWaitIdle(g_vk_state.device.logical_device);
     //TODO(ches) destroy_frame_buffers();
 
-    const VkDevice& device = data->device.logical_device;
+    const VkDevice& device = g_vk_state.device.logical_device;
 
-    for (auto view : data->swap_chain.image_views)
+    for (auto view : g_vk_state.swap_chain.image_views)
     {
         vkDestroyImageView(device, view, nullptr);
     }
-    data->swap_chain.image_views.clear();
+    g_vk_state.swap_chain.image_views.clear();
 
-    vkDestroySwapchainKHR(device, data->swap_chain.vulkan_swap_chain, nullptr);
+    vkDestroySwapchainKHR(device, g_vk_state.swap_chain.vulkan_swap_chain, nullptr);
 
     //TODO(ches) render_state->recreate_synchronization_objects();
 

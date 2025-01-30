@@ -25,14 +25,11 @@
 
 Configuration Instance::configuration;
 
-struct Instance::Data {};
-
 Instance::Instance()
 	: deletion_queue{}
 	, shader_map{}
 	, pipeline_manager{ nullptr }
 	, pipeline{ nullptr }
-	, data{std::make_unique<Data>() }
 {
 	if (!glfwInit())
 	{

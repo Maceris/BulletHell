@@ -24,8 +24,8 @@ SwapChainSupport check_swap_chain_support(const VkPhysicalDevice device,
         &details.capabilities);
 
     uint32_t format_count;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface,
-        &format_count, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &format_count,
+		nullptr);
 
     if (format_count != 0)
     {
