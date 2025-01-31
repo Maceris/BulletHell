@@ -326,6 +326,18 @@ PipelineManager::~PipelineManager()
 	delete_resource(data->spot_lights, deletion_queue);
 }
 
+
+void PipelineManager::create_frame_buffers()
+{
+	//TODO(ches) implement here
+}
+
+void PipelineManager::destroy_frame_buffers()
+{
+	//TODO(ches) implement here
+}
+
+
 Pipeline* PipelineManager::get_pipeline(RenderConfig config)
 {
 	if (data->pipelines.contains(config))

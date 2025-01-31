@@ -11,16 +11,7 @@
 #include "graphics/render_constants.h"
 #include "graphics/scene/scene.h"
 #include "graphics/backend/base/pipeline_manager.h"
-#include "graphics/backend/opengl/stages/animation_render.h"
-#include "graphics/backend/opengl/stages/debug_render.h"
-#include "graphics/backend/opengl/stages/filter_render.h"
-#include "graphics/backend/opengl/stages/framebuffer_transition.h"
-#include "graphics/backend/opengl/stages/gui_render.h"
-#include "graphics/backend/opengl/stages/light_render.h"
-#include "graphics/backend/opengl/stages/model_matrix_update.h"
-#include "graphics/backend/opengl/stages/scene_render.h"
-#include "graphics/backend/opengl/stages/shadow_render.h"
-#include "graphics/backend/opengl/stages/skybox_render.h"
+#include "graphics/backend/vulkan/global_state.h"
 #include "graphics/frontend/instance.h"
 #include "memory/memory_util.h"
 
@@ -32,7 +23,6 @@ struct PipelineManager::Data
 	Data(const Data&) = delete;
 	Data& operator=(const Data&) = delete;
 	~Data();
-
 
 	std::map<RenderConfig, Pipeline*> pipelines;
 };
@@ -56,6 +46,16 @@ PipelineManager::PipelineManager(const Window& window,
 PipelineManager::~PipelineManager()
 {
 	
+}
+
+void PipelineManager::create_frame_buffers()
+{
+	//TODO(ches) implement this
+}
+
+void PipelineManager::destroy_frame_buffers()
+{
+	//TODO(ches) implement this
 }
 
 Pipeline* PipelineManager::get_pipeline(RenderConfig config)

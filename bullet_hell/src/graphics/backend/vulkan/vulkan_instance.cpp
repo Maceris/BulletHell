@@ -474,12 +474,10 @@ void Instance::recreate_swap_chain()
 {
     g_vk_state.swap_chain.last_swap_chain = g_vk_state.swap_chain.vulkan_swap_chain;
 
-    //TODO(ches) recreate swap chains
-
-    vkDeviceWaitIdle(g_vk_state.device.logical_device);
-    //TODO(ches) destroy_frame_buffers();
-
     const VkDevice& device = g_vk_state.device.logical_device;
+
+    vkDeviceWaitIdle(device);
+    pipeline_manager->destroy_frame_buffers();
 
     for (auto view : g_vk_state.swap_chain.image_views)
     {
@@ -492,8 +490,7 @@ void Instance::recreate_swap_chain()
     //TODO(ches) render_state->recreate_synchronization_objects();
 
     create_swap_chain();
-    //TODO(ches) create_frame_buffers();
-
+    pipeline_manager->create_frame_buffers();
 }
 
 void Instance::render(Scene& scene)

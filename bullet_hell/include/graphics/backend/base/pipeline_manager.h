@@ -21,6 +21,8 @@ public:
 	PipelineManager& operator=(const PipelineManager&) = delete;
 	~PipelineManager();
 
+	void create_frame_buffers();
+	void destroy_frame_buffers();
 	Pipeline* get_pipeline(RenderConfig config);
 	void resize(int width, int height);
 	void setup_data(Scene& scene);
