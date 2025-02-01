@@ -69,6 +69,11 @@ static void resize_callback(GLFWwindow* window, int width, int height)
 
 void Window::initialize()
 {
+    if (!glfwInit())
+    {
+        exit(EXIT_FAILURE);
+    }
+
     glfwSetErrorCallback(error_callback);
     
     glfwDefaultWindowHints();

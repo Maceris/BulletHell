@@ -87,14 +87,13 @@ bool GameLogic::initialize()
 
 	g_event_manager = ALLOC EventManager();
 
-	render_instance = std::make_unique<Instance>();
-	render_instance->initialize();
-
 	window = ALLOC Window();
 	TIME_START("Window Init");
 	window->initialize();
 	TIME_END("Window Init");
 
+	render_instance = std::make_unique<Instance>();
+	render_instance->initialize();
 	render_instance->create_swap_chain();
 	render_instance->initialize_pipeline_manager();
 

@@ -40,45 +40,52 @@ struct Device
     VkQueue present_queue = nullptr;
     QueueFamilyIndices indices;
     VkDescriptorPool descriptor_pool = nullptr;
+    SwapChainSupport swap_chain_support;
 };
 
-/// <summary>
-/// Check what kind of swap chain support the device has.
-/// </summary>
-/// <param name="device">The device we are checking.</param>
-/// <param name="surface">The surface we are trying to support.</param>
-/// <returns></returns>
-[[nodiscard]]
-SwapChainSupport check_swap_chain_support(const VkPhysicalDevice device,
-    const VkSurfaceKHR surface);
+namespace DeviceUtil
+{
+    /// <summary>
+    /// Check what kind of swap chain support the device has.
+    /// </summary>
+    /// <param name="device">The device we are checking.</param>
+    /// <param name="surface">The surface we are trying to support.</param>
+    /// <returns></returns>
+    [[nodiscard]]
+    SwapChainSupport check_swap_chain_support(const VkPhysicalDevice device,
+        const VkSurfaceKHR surface);
 
-/// <summary>
-/// Find all the queue family indices we care about for a device.
-/// </summary>
-/// <param name="device">The device we are checking.</param>
-/// <param name="surface">The surface we are trying to support.</param>
-/// <returns>What queue family indices we could find.</returns>
-[[nodiscard]]
-QueueFamilyIndices find_queue_families(const VkPhysicalDevice device,
-    const VkSurfaceKHR surface);
+    /// <summary>
+    /// Find all the queue family indices we care about for a device.
+    /// </summary>
+    /// <param name="device">The device we are checking.</param>
+    /// <param name="surface">The surface we are trying to support.</param>
+    /// <returns>What queue family indices we could find.</returns>
+    [[nodiscard]]
+    QueueFamilyIndices find_queue_families(const VkPhysicalDevice device,
+        const VkSurfaceKHR surface);
 
-/// <summary>
-/// Calculate a score to represent how much desireable a device is. Will
-/// be zero if it's not usable for us.
-/// </summary>
-/// <param name="device">The device we are rating.</param>
-/// <param name="surface">The surface we are trying to support.</param>
-/// <returns>A score for the device.</returns>
-[[nodiscard]]
-int rate_device(const VkPhysicalDevice device,
-    const VkSurfaceKHR surface);
+    /// <summary>
+    /// Calculate a score to represent how much desireable a device is. Will
+    /// be zero if it's not usable for us.
+    /// </summary>
+    /// <param name="device">The device we are rating.</param>
+    /// <param name="surface">The surface we are trying to support.</param>
+    /// <returns>A score for the device.</returns>
+    [[nodiscard]]
+    int rate_device(const VkPhysicalDevice device,
+        const VkSurfaceKHR surface);
 
-/// <summary>
-/// Checks if a device supports all the extensions we need.
-/// </summary>
-/// <param name="device">The device to check.</param>
-/// <returns>If it supports the required extensions.</returns>
-[[nodiscard]]
-bool supports_required_extensions(const VkPhysicalDevice device);
+    void set_up_device();
+
+    /// <summary>
+    /// Checks if a device supports all the extensions we need.
+    /// </summary>
+    /// <param name="device">The device to check.</param>
+    /// <returns>If it supports the required extensions.</returns>
+    [[nodiscard]]
+    bool supports_required_extensions(const VkPhysicalDevice device);
+
+}
 
 #endif

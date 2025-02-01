@@ -22,22 +22,6 @@
 
 Configuration Instance::configuration;
 
-#pragma region Constants
-/// <summary>
-/// The validation layers that we want to enable.
-/// </summary>
-const std::vector<const char*> VALIDATION_LAYERS = {
-    "VK_LAYER_KHRONOS_validation"
-};
-
-#if _DEBUG
-constexpr bool ENABLE_VALIDATION_LAYERS = true;
-#else
-constexpr bool ENABLE_VALIDATION_LAYERS = false;
-#endif
-
-#pragma endregion
-
 #pragma region Callbacks
 static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
     VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -256,11 +240,6 @@ Instance::Instance()
     //NOTE(ches) for the Vulkan diagnostic messages in our debug callback
     Logger::set_display_flags("Debug", FLAG_WRITE_TO_DEBUGGER);
 
-    if (!glfwInit())
-    {
-        exit(EXIT_FAILURE);
-    }
-
     if (!glfwVulkanSupported())
     {
         LOG_FATAL("Vulkan is not supported on this system!");
@@ -335,6 +314,9 @@ Instance::Instance()
 
 Instance::~Instance()
 {
+    vkDestroySurfaceKHR(g_vk_state.instance, g_vk_state.window_state.surface, 
+        nullptr);
+
 	safe_delete(pipeline);
 
 	ImGui_ImplGlfw_Shutdown();
@@ -348,8 +330,6 @@ void delete_resource(DeletionQueue::Entry entry)
 
 void Instance::initialize()
 {
-    //TODO(ches) create device
-
     if (glfwCreateWindowSurface(g_vk_state.instance,
         g_game_logic->window->handle,
         NULL, &g_vk_state.window_state.surface) != VK_SUCCESS)
@@ -357,17 +337,14 @@ void Instance::initialize()
         LOG_FATAL("Failed to create a window surface");
     }
 
-   /* g_vk_state.swap_chain_support = check_swap_chain_support(
-        g_vk_state.device.physical_device,
-        g_vk_state.window_state.surface);*/
+    DeviceUtil::set_up_device();
+
 }
 
 void Instance::create_swap_chain()
 {
-    //TODO(ches) create surface first
-
     const Device& device = g_vk_state.device;
-    const SwapChainSupport& support = g_vk_state.swap_chain_support;
+    const SwapChainSupport& support = device.swap_chain_support;
 
     VkExtent2D extent = select_extent(support.capabilities,
         g_vk_state.window_state.width, g_vk_state.window_state.height);
@@ -382,8 +359,8 @@ void Instance::create_swap_chain()
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface = g_vk_state.window_state.surface;
     create_info.minImageCount = image_count;
-    create_info.imageFormat = g_vk_state.window_state.surface_format->format;
-    create_info.imageColorSpace = g_vk_state.window_state.surface_format->colorSpace;
+    create_info.imageFormat = g_vk_state.window_state.surface_format.format;
+    create_info.imageColorSpace = g_vk_state.window_state.surface_format.colorSpace;
     create_info.imageExtent = extent;
     create_info.imageArrayLayers = 1;
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -393,8 +370,8 @@ void Instance::create_swap_chain()
     create_info.clipped = VK_TRUE;
     create_info.oldSwapchain = g_vk_state.swap_chain.last_swap_chain;
 
-    QueueFamilyIndices indices = find_queue_families(device.physical_device,
-        g_vk_state.window_state.surface);
+    QueueFamilyIndices indices = DeviceUtil::find_queue_families(
+        device.physical_device, g_vk_state.window_state.surface);
 
     uint32_t queue_family_indices[] = {
         indices.graphics_family.value(),
@@ -427,7 +404,7 @@ void Instance::create_swap_chain()
         g_vk_state.swap_chain.vulkan_swap_chain, &image_count,
         g_vk_state.swap_chain.images.data());
 
-    g_vk_state.swap_chain.image_format = g_vk_state.window_state.surface_format->format;
+    g_vk_state.swap_chain.image_format = g_vk_state.window_state.surface_format.format;
     g_vk_state.swap_chain.extent = extent;
 
     g_vk_state.swap_chain.image_views.resize(g_vk_state.swap_chain.images.size());
