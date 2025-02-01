@@ -350,6 +350,13 @@ void Instance::initialize()
 {
     //TODO(ches) create device
 
+    if (glfwCreateWindowSurface(g_vk_state.instance,
+        g_game_logic->window->handle,
+        NULL, &g_vk_state.window_state.surface) != VK_SUCCESS)
+    {
+        LOG_FATAL("Failed to create a window surface");
+    }
+
    /* g_vk_state.swap_chain_support = check_swap_chain_support(
         g_vk_state.device.physical_device,
         g_vk_state.window_state.surface);*/
