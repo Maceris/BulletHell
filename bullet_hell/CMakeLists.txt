@@ -72,6 +72,7 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/backend/opengl/stages/skybox_render.h
   ${HEADER_PATH}/graphics/backend/vulkan/device.h
   ${HEADER_PATH}/graphics/backend/vulkan/global_state.h
+  ${HEADER_PATH}/graphics/backend/vulkan/render_state.h
   ${HEADER_PATH}/graphics/backend/vulkan/swap_chain.h
   ${HEADER_PATH}/graphics/frontend/attachment.h
   ${HEADER_PATH}/graphics/frontend/backend_type.h
@@ -174,6 +175,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/vulkan/pipeline_manager.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/quad_mesh.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/render_buffers.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/render_state.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/shader.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/texture_loader.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/uniforms_map.cpp

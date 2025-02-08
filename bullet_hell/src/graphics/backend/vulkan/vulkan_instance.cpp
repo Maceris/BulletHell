@@ -314,6 +314,9 @@ Instance::Instance()
 
 Instance::~Instance()
 {
+    RenderUtil::destroy_synchronization_objects();
+    RenderUtil::destroy_command_buffers();
+
     vkDestroySurfaceKHR(g_vk_state.instance, g_vk_state.window_state.surface, 
         nullptr);
 
@@ -338,7 +341,8 @@ void Instance::initialize()
     }
 
     DeviceUtil::set_up_device();
-
+    RenderUtil::create_synchronization_objects();
+    RenderUtil::create_command_buffers();
 }
 
 void Instance::create_swap_chain()

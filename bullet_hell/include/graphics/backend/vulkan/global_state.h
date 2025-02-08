@@ -5,8 +5,10 @@
 #if BACKEND_CURRENT == BACKEND_VULKAN
 
 #include <atomic>
+#include <cstdint>
 
 #include "graphics/backend/vulkan/device.h"
+#include "graphics/backend/vulkan/render_state.h"
 #include "graphics/backend/vulkan/swap_chain.h"
 
 #include <vulkan/vulkan.h>
@@ -23,6 +25,8 @@ constexpr bool ENABLE_VALIDATION_LAYERS = false;
 const std::vector<const char*> VALIDATION_LAYERS = {
     "VK_LAYER_KHRONOS_validation"
 };
+
+constexpr uint32_t MAX_FRAMES_IN_FLIGHT = 2;
 
 struct WindowState
 {
@@ -43,6 +47,7 @@ struct VulkanState
     Device device;
     SwapChain swap_chain;
     WindowState window_state;
+    RenderState render_state;
 };
 
 /// <summary>
