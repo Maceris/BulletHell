@@ -34,8 +34,8 @@ struct SwapChainSupport
 
 struct Device
 {
-    VkPhysicalDevice physical_device = VK_NULL_HANDLE;
-    VkDevice logical_device = VK_NULL_HANDLE;
+    VkPhysicalDevice physical = VK_NULL_HANDLE;
+    VkDevice logical = VK_NULL_HANDLE;
     VkQueue graphics_queue = nullptr;
     VkQueue present_queue = nullptr;
     QueueFamilyIndices indices;

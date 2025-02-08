@@ -317,7 +317,7 @@ Instance::~Instance()
     RenderUtil::destroy_synchronization_objects();
     RenderUtil::destroy_command_buffers();
 
-    vkDestroySurfaceKHR(g_vk_state.instance, g_vk_state.window_state.surface, 
+    vkDestroySurfaceKHR(g_vk_state.instance, g_vk_state.window.surface, 
         nullptr);
 
 	safe_delete(pipeline);
@@ -335,7 +335,7 @@ void Instance::initialize()
 {
     if (glfwCreateWindowSurface(g_vk_state.instance,
         g_game_logic->window->handle,
-        NULL, &g_vk_state.window_state.surface) != VK_SUCCESS)
+        NULL, &g_vk_state.window.surface) != VK_SUCCESS)
     {
         LOG_FATAL("Failed to create a window surface");
     }
@@ -351,7 +351,7 @@ void Instance::create_swap_chain()
     const SwapChainSupport& support = device.swap_chain_support;
 
     VkExtent2D extent = select_extent(support.capabilities,
-        g_vk_state.window_state.width, g_vk_state.window_state.height);
+        g_vk_state.window.width, g_vk_state.window.height);
     uint32_t image_count = support.capabilities.minImageCount + 1;
     if (support.capabilities.maxImageCount > 0
         && image_count > support.capabilities.maxImageCount)
@@ -361,21 +361,21 @@ void Instance::create_swap_chain()
 
     VkSwapchainCreateInfoKHR create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    create_info.surface = g_vk_state.window_state.surface;
+    create_info.surface = g_vk_state.window.surface;
     create_info.minImageCount = image_count;
-    create_info.imageFormat = g_vk_state.window_state.surface_format.format;
-    create_info.imageColorSpace = g_vk_state.window_state.surface_format.colorSpace;
+    create_info.imageFormat = g_vk_state.window.surface_format.format;
+    create_info.imageColorSpace = g_vk_state.window.surface_format.colorSpace;
     create_info.imageExtent = extent;
     create_info.imageArrayLayers = 1;
     create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     create_info.preTransform = support.capabilities.currentTransform;
     create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    create_info.presentMode = g_vk_state.window_state.present_mode;
+    create_info.presentMode = g_vk_state.window.present_mode;
     create_info.clipped = VK_TRUE;
     create_info.oldSwapchain = g_vk_state.swap_chain.last_swap_chain;
 
     QueueFamilyIndices indices = DeviceUtil::find_queue_families(
-        device.physical_device, g_vk_state.window_state.surface);
+        device.physical, g_vk_state.window.surface);
 
     uint32_t queue_family_indices[] = {
         indices.graphics_family.value(),
@@ -395,20 +395,20 @@ void Instance::create_swap_chain()
         create_info.pQueueFamilyIndices = nullptr;
     }
 
-    if (vkCreateSwapchainKHR(device.logical_device, &create_info, nullptr,
-        &g_vk_state.swap_chain.vulkan_swap_chain) != VK_SUCCESS)
+    if (vkCreateSwapchainKHR(device.logical, &create_info, nullptr,
+        &g_vk_state.swap_chain.current_swap_chain) != VK_SUCCESS)
     {
         LOG_FATAL("Failed to create swap chain");
     }
 
-    vkGetSwapchainImagesKHR(device.logical_device,
-        g_vk_state.swap_chain.vulkan_swap_chain, &image_count, nullptr);
+    vkGetSwapchainImagesKHR(device.logical,
+        g_vk_state.swap_chain.current_swap_chain, &image_count, nullptr);
     g_vk_state.swap_chain.images.resize(image_count);
-    vkGetSwapchainImagesKHR(device.logical_device,
-        g_vk_state.swap_chain.vulkan_swap_chain, &image_count,
+    vkGetSwapchainImagesKHR(device.logical,
+        g_vk_state.swap_chain.current_swap_chain, &image_count,
         g_vk_state.swap_chain.images.data());
 
-    g_vk_state.swap_chain.image_format = g_vk_state.window_state.surface_format.format;
+    g_vk_state.swap_chain.image_format = g_vk_state.window.surface_format.format;
     g_vk_state.swap_chain.extent = extent;
 
     g_vk_state.swap_chain.image_views.resize(g_vk_state.swap_chain.images.size());
@@ -430,7 +430,7 @@ void Instance::create_swap_chain()
         create_info.subresourceRange.baseArrayLayer = 0;
         create_info.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(device.logical_device, &create_info, nullptr,
+        if (vkCreateImageView(device.logical, &create_info, nullptr,
             &g_vk_state.swap_chain.image_views[i]) != VK_SUCCESS)
         {
             LOG_FATAL("Failed to create image views for the swap chain");
@@ -460,9 +460,9 @@ void Instance::process_resources()
 
 void Instance::recreate_swap_chain()
 {
-    g_vk_state.swap_chain.last_swap_chain = g_vk_state.swap_chain.vulkan_swap_chain;
+    g_vk_state.swap_chain.last_swap_chain = g_vk_state.swap_chain.current_swap_chain;
 
-    const VkDevice& device = g_vk_state.device.logical_device;
+    const VkDevice& device = g_vk_state.device.logical;
 
     vkDeviceWaitIdle(device);
     pipeline_manager->destroy_frame_buffers();
@@ -473,7 +473,7 @@ void Instance::recreate_swap_chain()
     }
     g_vk_state.swap_chain.image_views.clear();
 
-    vkDestroySwapchainKHR(device, g_vk_state.swap_chain.vulkan_swap_chain, nullptr);
+    vkDestroySwapchainKHR(device, g_vk_state.swap_chain.current_swap_chain, nullptr);
 
     //TODO(ches) render_state->recreate_synchronization_objects();
 

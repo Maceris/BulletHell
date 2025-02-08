@@ -29,8 +29,8 @@ namespace DeviceUtil
 		SwapChainSupport& swap_chain_support = g_vk_state.device.swap_chain_support;
 
 		swap_chain_support =
-			check_swap_chain_support(g_vk_state.device.physical_device,
-				g_vk_state.window_state.surface);
+			check_swap_chain_support(g_vk_state.device.physical,
+				g_vk_state.window.surface);
 
 		if (swap_chain_support.present_modes.empty())
 		{
@@ -43,7 +43,7 @@ namespace DeviceUtil
 			if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
 			{
 				// NOTE(ches) VK_PRESENT_MODE_FIFO_KHR is guaranteed, and our default
-				g_vk_state.window_state.present_mode = VK_PRESENT_MODE_MAILBOX_KHR;
+				g_vk_state.window.present_mode = VK_PRESENT_MODE_MAILBOX_KHR;
 				break;
 			}
 		}
@@ -51,7 +51,7 @@ namespace DeviceUtil
 		LOG_ASSERT(swap_chain_support.formats.size() > 0
 			&& "We require available surface formats");
 
-		VkSurfaceFormatKHR& format = g_vk_state.window_state.surface_format;
+		VkSurfaceFormatKHR& format = g_vk_state.window.surface_format;
 
 		bool found_ideal_format = false;
 		for (const auto& choice : swap_chain_support.formats)
@@ -81,10 +81,10 @@ namespace DeviceUtil
 	void create_queues()
 	{
 		const uint32_t queue_index = 0;
-		vkGetDeviceQueue(g_vk_state.device.logical_device,
+		vkGetDeviceQueue(g_vk_state.device.logical,
 			g_vk_state.device.indices.present_family.value(),
 			queue_index, &g_vk_state.device.present_queue);
-		vkGetDeviceQueue(g_vk_state.device.logical_device,
+		vkGetDeviceQueue(g_vk_state.device.logical,
 			g_vk_state.device.indices.graphics_family.value(),
 			queue_index, &g_vk_state.device.graphics_queue);
 	}
@@ -97,7 +97,7 @@ namespace DeviceUtil
 	void select_logical_device()
 	{
 		g_vk_state.device.indices = find_queue_families(
-			g_vk_state.device.physical_device, g_vk_state.window_state.surface);
+			g_vk_state.device.physical, g_vk_state.window.surface);
 
 		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 		std::set<uint32_t> uniqueQueueFamilies = {
@@ -140,8 +140,8 @@ namespace DeviceUtil
 			create_info.enabledLayerCount = 0;
 		}
 
-		if (vkCreateDevice(g_vk_state.device.physical_device, &create_info,
-			nullptr, &g_vk_state.device.logical_device) != VK_SUCCESS)
+		if (vkCreateDevice(g_vk_state.device.physical, &create_info,
+			nullptr, &g_vk_state.device.logical) != VK_SUCCESS)
 		{
 			LOG_FATAL("Could not create a logical device");
 		}
@@ -170,7 +170,7 @@ namespace DeviceUtil
 		std::multimap<int, VkPhysicalDevice> candidates;
 		for (const auto& device : devices)
 		{
-			int score = rate_device(device, g_vk_state.window_state.surface);
+			int score = rate_device(device, g_vk_state.window.surface);
 			if (score > 0)
 			{
 				candidates.insert(std::make_pair(score, device));
@@ -181,7 +181,7 @@ namespace DeviceUtil
 			LOG_FATAL("No GPUs are suitable for this program");
 		}
 
-		g_vk_state.device.physical_device = candidates.rbegin()->second;
+		g_vk_state.device.physical = candidates.rbegin()->second;
 	}
 
 

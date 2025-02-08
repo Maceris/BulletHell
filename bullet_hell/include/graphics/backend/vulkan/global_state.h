@@ -46,8 +46,8 @@ struct VulkanState
 
     Device device;
     SwapChain swap_chain;
-    WindowState window_state;
-    RenderState render_state;
+    WindowState window;
+    RenderState render;
 };
 
 /// <summary>

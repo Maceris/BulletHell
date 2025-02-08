@@ -14,7 +14,7 @@
 /// </summary>
 struct SwapChain
 {
-	VkSwapchainKHR vulkan_swap_chain = VK_NULL_HANDLE;
+	VkSwapchainKHR current_swap_chain = VK_NULL_HANDLE;
 	std::vector<VkImage> images{};
 	std::vector<VkImageView> image_views{};
 	VkExtent2D extent{0, 0};
