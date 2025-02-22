@@ -2,6 +2,7 @@
 
 #if BACKEND_CURRENT == BACKEND_VULKAN
 
+#include <algorithm>
 #include <format>
 
 #include "revision.h"
@@ -475,7 +476,8 @@ void Instance::recreate_swap_chain()
 
     vkDestroySwapchainKHR(device, g_vk_state.swap_chain.current_swap_chain, nullptr);
 
-    //TODO(ches) render_state->recreate_synchronization_objects();
+    RenderUtil::destroy_synchronization_objects();
+    RenderUtil::create_synchronization_objects();
 
     create_swap_chain();
     pipeline_manager->create_frame_buffers();
