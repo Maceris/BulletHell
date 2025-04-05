@@ -12,7 +12,7 @@
 Texture TextureLoader::load(const char* buffer, ImageFormat format,
 	uint32_t width, uint32_t height)
 {
-
+	//TODO(ches) load textures
 	return Texture{ 0, width, height };
 }
 

@@ -329,7 +329,35 @@ Instance::~Instance()
 
 void delete_resource(DeletionQueue::Entry entry)
 {
-	
+    VkDevice device = g_vk_state.device.logical;
+    switch (entry.type)
+    {
+    case DeletionQueue::ResourceType::INVALID:
+        LOG_WARNING("Deleting invalid resource");
+        break;
+    case DeletionQueue::ResourceType::BUFFER:
+    {
+        Buffer* buffer = (Buffer*)entry.resource;
+        vkDestroyBuffer(device, (VkBuffer)buffer->handle,
+            nullptr);
+    }
+        break;
+    case DeletionQueue::ResourceType::FRAMEBUFFER:
+    {
+        Framebuffer* framebuffer = (Framebuffer*)entry.resource;
+        vkDestroyFramebuffer(device,
+            (VkFramebuffer)framebuffer->handle, nullptr);
+    }
+        break;
+    case DeletionQueue::ResourceType::TEXTURE:
+    {
+        Texture* image = (Texture*)entry.resource;
+        vkDestroyImage(device, (VkImage)image->handle, nullptr);
+        VkDeviceMemory memory = (VkDeviceMemory)image->memory_handle;
+        vkFreeMemory(device, memory, nullptr);
+    }
+        break;
+    }
 }
 
 void Instance::initialize()

@@ -223,7 +223,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/utilities/opengl_util.cpp
   ${SOURCE_PATH}/utilities/string_util.cpp
 )
-MESSAGE(STATUS "lib output dir: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 ADD_EXECUTABLE(BulletHell
   ${HEADER_FILES}
   ${COMMON_HEADERS}

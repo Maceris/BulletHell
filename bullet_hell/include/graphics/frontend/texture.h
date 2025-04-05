@@ -3,30 +3,33 @@
 #include <cstdint>
 
 using TextureHandle = uint64_t;
+using MemoryHandle = uint64_t;
 
 struct Texture
 {
 	const TextureHandle handle;
+	const MemoryHandle memory_handle;
 	const uint32_t width;
 	const uint32_t height;
 
-	/// <summary>
-	/// Load a texture from a buffer.
-	/// </summary>
-	/// <param name="buffer">The texture data to load from.</param>
-	/// <param name="width">The width of the texture in pixels.</param>
-	/// <param name="height">The height of the texture in pixels.</param>
-	Texture(const TextureHandle handle, const uint32_t width,
-		const uint32_t height)
+	Texture(const TextureHandle handle, const MemoryHandle memory_handle, 
+		const uint32_t width, const uint32_t height)
 		: handle{ handle }
+		, memory_handle{ handle }
 		, width{ width }
 		, height{ height }
+	{}
+
+	Texture(const TextureHandle handle, const uint32_t width,
+		const uint32_t height)
+		: Texture{handle, 0, width, height}
 	{}
 
 	Texture(const Texture&) = default;
 	Texture& operator=(const Texture&) = default;
 	Texture(Texture&&) = default;
 	Texture& operator=(Texture&&) = default;
+
 	/// <summary>
 	/// Does nothing important, the expectation is the backing resources are 
 	/// cleaned up via the deletion queue.
