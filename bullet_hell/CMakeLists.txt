@@ -74,6 +74,7 @@ SET(HEADER_FILES
   ${HEADER_PATH}/graphics/backend/vulkan/global_state.h
   ${HEADER_PATH}/graphics/backend/vulkan/render_state.h
   ${HEADER_PATH}/graphics/backend/vulkan/swap_chain.h
+  ${HEADER_PATH}/graphics/backend/vulkan/vk_util.h
   ${HEADER_PATH}/graphics/frontend/attachment.h
   ${HEADER_PATH}/graphics/frontend/backend_type.h
   ${HEADER_PATH}/graphics/frontend/buffer.h
@@ -179,6 +180,7 @@ SET(SOURCE_FILES
   ${SOURCE_PATH}/graphics/backend/vulkan/shader.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/texture_loader.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/uniforms_map.cpp
+  ${SOURCE_PATH}/graphics/backend/vulkan/vk_util.cpp
   ${SOURCE_PATH}/graphics/backend/vulkan/vulkan_instance.cpp
   ${SOURCE_PATH}/graphics/frontend/deletion_queue.cpp
   ${SOURCE_PATH}/graphics/frontend/shader_map.cpp

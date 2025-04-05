@@ -12,7 +12,7 @@ Buffer::Buffer(Type type)
 	: handle{0}
 	, type{type}
 {
-	GLuint buffer_id;
+	GLuint buffer_id = 0;
 	switch (type)
 	{
 	case Type::UNIFORM:
