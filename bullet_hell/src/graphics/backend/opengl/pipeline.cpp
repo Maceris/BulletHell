@@ -2,7 +2,6 @@
 
 #if BACKEND_CURRENT == BACKEND_OPENGL
 
-
 #include <vector>
 
 #include "debugging/timer.h"

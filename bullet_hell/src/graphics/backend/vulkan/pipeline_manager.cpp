@@ -51,6 +51,10 @@ PipelineManager::~PipelineManager()
 void PipelineManager::create_frame_buffers()
 {
 	//TODO(ches) implement this
+	std::vector<VkFramebuffer>& frame_buffers = g_vk_state.swap_chain.frame_buffers;
+	std::vector<VkImageView>& image_views = g_vk_state.swap_chain.image_views;
+
+	frame_buffers.resize(image_views.size());
 }
 
 void PipelineManager::destroy_frame_buffers()
@@ -74,17 +78,18 @@ Pipeline* PipelineManager::get_pipeline(RenderConfig config)
 
 void PipelineManager::resize(int width, int height)
 {
+	//TODO(ches) implement this
 }
 
 void PipelineManager::setup_data(Scene& scene)
 {
-	
+	//TODO(ches) implement this
 }
 
 Pipeline* PipelineManager::build_pipeline(RenderConfig config)
 {
 	Pipeline* result = ALLOC Pipeline();
-
+	//TODO(ches) implement this
 	return result;
 }
 

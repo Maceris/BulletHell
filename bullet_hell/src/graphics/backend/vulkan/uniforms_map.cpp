@@ -10,6 +10,7 @@
 #include "graphics/frontend/uniforms_map.h"
 #include "debugging/logger.h"
 
+//TODO(ches) fill this out
 
 struct UniformsMap::Data
 {

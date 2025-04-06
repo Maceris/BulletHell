@@ -20,6 +20,8 @@ struct SwapChain
 	VkExtent2D extent{0, 0};
 	VkFormat image_format = VK_FORMAT_UNDEFINED;
 	VkSwapchainKHR last_swap_chain = VK_NULL_HANDLE;
+
+	std::vector<VkFramebuffer> frame_buffers{};
 };
 
 #endif

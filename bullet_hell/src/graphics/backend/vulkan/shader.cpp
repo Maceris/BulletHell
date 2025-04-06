@@ -11,6 +11,8 @@
 #include "main/game_logic.h"
 #include "resource_cache/resource_cache.h"
 
+//TODO(ches) fill this out
+
 Shader::Shader(std::vector<Module> modules)
 	: handle{ }
 	, uniforms{ handle }

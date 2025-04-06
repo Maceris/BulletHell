@@ -18,6 +18,8 @@
 #include "graphics/graph/mesh_draw_data.h"
 #include "graphics/scene/scene.h"
 
+//TODO(ches) fill this out
+
 RenderBuffers::RenderBuffers()
 	: vbo_list{}
 	, buffers_populated{ false }
